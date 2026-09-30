@@ -51,7 +51,7 @@ class TestIllustrationPalette:
 
     def test_swatch_table_covers_every_preset_theme(self):
         """色板漏一个主题，选择器上就会少一枚方块。"""
-        assert set(PRESET_THEME_SWATCHES) == set(PRESET_THEMES)
+        assert set(PRESET_THEME_SWATCHES) == set(PRESET_THEMES) | {"auto"}
 
     def test_every_animation_phase_paints_without_swallowed_errors(
         self, qapp, tmp_path, monkeypatch, restore_clipboard_theme

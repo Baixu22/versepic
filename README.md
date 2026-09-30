@@ -591,7 +591,9 @@ ui/
 ├── apple_style.py           # Apple-style design tokens + QSS helpers (shared by clipboard & manage windows)
 ├── motion.py                # Motion helpers — fade/rise window transitions and hover animations
 │
+├── glass.py / glyphs.py / outline_icons.py  # Native glass and Lucide SVG rendering
 ├── fluent_lite/             # Fluent-style lightweight component library
+│   ├── button_base.py / popups.py / primitives.py  # Shared animated controls
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # buttons, cards, icons, inputs
 │   ├── labels.py / navigation.py / segmented.py      # labels, navigation, segmented controls
 │   ├── switch.py / theme.py / titlebar.py            # switch, theme, title bar

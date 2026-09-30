@@ -590,7 +590,9 @@ ui/
 ├── apple_style.py           # Apple スタイルのデザイントークンと QSS ヘルパー（クリップボード／管理ウィンドウ共用）
 ├── motion.py                # モーションヘルパー — ウィンドウのフェード／ライズとホバーアニメーション
 │
+├── glass.py / glyphs.py / outline_icons.py  # Native glass and Lucide SVG rendering
 ├── fluent_lite/             # Fluent スタイル軽量コンポーネントライブラリ
+│   ├── button_base.py / popups.py / primitives.py  # Shared animated controls
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # ボタン、カード、アイコン、入力欄
 │   ├── labels.py / navigation.py / segmented.py      # ラベル、ナビゲーション、セグメントコントロール
 │   ├── switch.py / theme.py / titlebar.py            # スイッチ、テーマ、タイトルバー

@@ -667,7 +667,9 @@ ui/
 ├── apple_style.py           # Apple 风格设计 token 与 QSS 助手（剪切板与管理窗口共用）
 ├── motion.py                # 动效助手 — 窗口淡入淡出/上浮与悬停动画
 │
+├── glass.py / glyphs.py / outline_icons.py  # Native glass and Lucide SVG rendering
 ├── fluent_lite/             # Fluent 风格轻量组件库
+│   ├── button_base.py / popups.py / primitives.py  # Shared animated controls
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # 按钮、卡片、图标、输入框
 │   ├── labels.py / navigation.py / segmented.py      # 标签、导航、分段控件
 │   ├── switch.py / theme.py / titlebar.py            # 开关、主题、标题栏

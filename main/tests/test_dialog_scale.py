@@ -308,7 +308,7 @@ def test_manage_dialog_scales_static_and_rebuilt_detail_controls(qapp):
         assert dialog.save_btn.property("dialog_scale_factor") == 1.5
         assert "font: 600 20px" in dialog.save_btn.styleSheet()
         assert not hasattr(dialog, "nav_title")
-        assert "font-size: 16px" in dialog.list_widget.styleSheet()
+        assert "font-size: 18px" in dialog.list_widget.styleSheet()
         assert "padding: 9px" in dialog.list_widget.styleSheet()
 
         first_name_input = dialog.group_name_input
