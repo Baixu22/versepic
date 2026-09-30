@@ -71,75 +71,47 @@ class UIThemeTokens:
     selected_text: str = "#FFFFFF"
 
     @property
+    def primary_foreground(self) -> str:
+        return "#171717" if self.is_dark else "#FAFAFA"
+
+    @property
+    def ring(self) -> str:
+        return "#A3A3A3" if self.is_dark else "#737373"
+
+    @property
     def is_dark(self) -> bool:
         return self.mode is UIThemeMode.DARK
 
 
-_COMMON = {
-    "accent": "#6F8FAB",
-    "accent_hover": "#627F99",
-    "accent_pressed": "#526D85",
-    "accent_strong": "#58748D",
-    "accent_strong_hover": "#4F6A82",
-    "accent_strong_pressed": "#465E73",
-}
-
+# Neutral UI chrome. Screenshot annotation colours remain in core.theme.
 LIGHT_TOKENS = UIThemeTokens(
     mode=UIThemeMode.LIGHT,
-    **_COMMON,
-    accent_soft="#DFE8EF",
-    accent_text="#465E73",
-    window="#EEF0F3",
-    window_top="#F5F6F8",
-    window_bottom="#ECEEF1",
-    surface="rgba(255, 255, 255, 0.92)",
-    surface_strong="rgba(255, 255, 255, 0.98)",
-    surface_subtle="rgba(248, 251, 253, 0.85)",
-    surface_hover="#FFFFFF",
-    text="#17201B",
-    text_muted="#68736D",
-    text_disabled="#9AA39D",
-    border="rgba(112, 130, 119, 0.20)",
-    border_hover="rgba(76, 101, 86, 0.34)",
-    window_border="#D3D7DC",
-    input_background="#FFFFFF",
-    popup_background="#FFFFFF",
-    popup_hover="#EAF2FA",
-    separator="rgba(98, 116, 105, 0.13)",
-    switch_off="#C4CCC6",
-    success="#3E9B63",
-    danger="#CF4F4B",
-    danger_soft="#FBECEB",
-    status_idle="#BCC5BF",
+    accent="#171717", accent_hover="#3D3D3D", accent_pressed="#525252",
+    accent_strong="#171717", accent_strong_hover="#3D3D3D", accent_strong_pressed="#525252",
+    accent_soft="#F1F1F1", accent_text="#171717",
+    window="#FAFAFA", window_top="#FAFAFA", window_bottom="#FAFAFA",
+    surface="#FFFFFF", surface_strong="#FFFFFF", surface_subtle="#F1F1F1", surface_hover="#F1F1F1",
+    text="#171717", text_muted="#737373", text_disabled="#A3A3A3",
+    border="#E7E7E7", border_hover="#A3A3A3", window_border="#D4D4D4",
+    input_background="#F1F1F1", popup_background="#FFFFFF", popup_hover="#F1F1F1",
+    separator="#E7E7E7", switch_off="#D4D4D4",
+    success="#16803C", danger="#B91C1C", danger_soft="#FEF2F2", status_idle="#A3A3A3",
+    selected_text="#FAFAFA",
 )
 
 DARK_TOKENS = UIThemeTokens(
     mode=UIThemeMode.DARK,
-    **_COMMON,
-    accent_soft="#31404C",
-    accent_text="#B9CCDD",
-    window="#1B1E22",
-    window_top="#24282D",
-    window_bottom="#191C20",
-    surface="rgba(43, 47, 52, 0.96)",
-    surface_strong="rgba(49, 54, 60, 0.99)",
-    surface_subtle="rgba(36, 40, 45, 0.92)",
-    surface_hover="#373C43",
-    text="#F2F4F6",
-    text_muted="#AEB5BD",
-    text_disabled="#737B84",
-    border="rgba(255, 255, 255, 0.12)",
-    border_hover="rgba(255, 255, 255, 0.28)",
-    window_border="#3B424A",
-    input_background="#2B2F34",
-    popup_background="#292D32",
-    popup_hover="#363B42",
-    separator="rgba(255, 255, 255, 0.10)",
-    switch_off="#626A73",
-    success="#4FAE74",
-    danger="#E0605B",
-    danger_soft="rgba(224, 96, 91, 0.14)",
-    status_idle="#5A6168",
+    accent="#E5E5E5", accent_hover="#E7E7E7", accent_pressed="#D4D4D4",
+    accent_strong="#E5E5E5", accent_strong_hover="#E7E7E7", accent_strong_pressed="#D4D4D4",
+    accent_soft="#262626", accent_text="#FAFAFA",
+    window="#0A0A0A", window_top="#0A0A0A", window_bottom="#0A0A0A",
+    surface="#171717", surface_strong="#202020", surface_subtle="#262626", surface_hover="#3D3D3D",
+    text="#FAFAFA", text_muted="#A3A3A3", text_disabled="#737373",
+    border="#2E2E2E", border_hover="#737373", window_border="#525252",
+    input_background="#262626", popup_background="#202020", popup_hover="#3D3D3D",
+    separator="#2E2E2E", switch_off="#525252",
+    success="#4ADE80", danger="#F87171", danger_soft="#3B2020", status_idle="#737373",
+    selected_text="#171717",
 )
 
 

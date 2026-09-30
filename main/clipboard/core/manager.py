@@ -29,6 +29,7 @@ except ImportError as e:
 from core.logger import T, log_debug, log_info, log_error, log_exception
 from .enums import GroupType
 from .models import ClipboardItem, Group
+from .tag_store import TagStore
 
 
 class ClipboardManager:
@@ -72,7 +73,8 @@ class ClipboardManager:
         self._initialized = True
         self._callback = None
         self._manager = None
-        
+        self._tag_store: Optional[TagStore] = None
+
         if PYCLIPBOARD_AVAILABLE:
             try:
                 self._manager = PyClipboardManager(self._resolve_db_path(db_path))
@@ -87,6 +89,24 @@ class ClipboardManager:
     def is_available(self) -> bool:
         """检查是否可用"""
         return self._manager is not None
+
+    @property
+    def tag_store(self) -> TagStore:
+        """标签库（与剪贴板库同目录）。"""
+        if self._tag_store is None:
+            self._tag_store = TagStore.instance(self.get_db_path())
+        return self._tag_store
+
+    def _attach_tags(self, items: List[ClipboardItem]) -> List[ClipboardItem]:
+        if not items:
+            return items
+        try:
+            mapping = self.tag_store.get_tags_for_items([item.id for item in items])
+            for item in items:
+                item.tags = mapping.get(item.id, [])
+        except Exception as e:
+            log_exception(e, T("挂载条目标签"))
+        return items
 
     def _resolve_db_path(self, db_path: Optional[str] = None) -> Optional[str]:
         """Return an explicit db path, or the saved clipboard db path."""
@@ -284,7 +304,8 @@ class ClipboardManager:
         
         try:
             result = self._manager.get_history(offset, limit, search, content_type, start_time, end_time)
-            return [ClipboardItem.from_py_item(item) for item in result.items]
+            items = [ClipboardItem.from_py_item(item) for item in result.items]
+            return self._attach_tags(items)
         except Exception as e:
             log_error(T("获取历史失败: {e}", e=e), "Clipboard")
             return []
@@ -310,7 +331,9 @@ class ClipboardManager:
         try:
             py_item = self._manager.get_item(item_id)
             if py_item:
-                return ClipboardItem.from_py_item(py_item)
+                item = ClipboardItem.from_py_item(py_item)
+                self._attach_tags([item])
+                return item
         except Exception as e:
             log_error(T("获取项失败: {e}", e=e), "Clipboard")
         return None
@@ -319,9 +342,13 @@ class ClipboardManager:
         """删除项"""
         if not self.is_available:
             return False
-        
+
         try:
             self._manager.delete_item(item_id)
+            try:
+                self.tag_store.delete_items([item_id])
+            except Exception:
+                pass
             return True
         except Exception as e:
             log_error(T("删除失败: {e}", e=e), "Clipboard")
@@ -557,7 +584,25 @@ class ClipboardManager:
         
         try:
             result = self._manager.get_by_group(group_id, offset, limit)
-            return [ClipboardItem.from_py_item(item) for item in result.items]
+            items = [ClipboardItem.from_py_item(item) for item in result.items]
+            return self._attach_tags(items)
         except Exception as e:
             log_error(T("按分组查询失败: {e}", e=e), "Clipboard")
             return []
+
+    # ==================== 标签 ====================
+
+    def list_tags(self):
+        return self.tag_store.list_tags()
+
+    def get_item_tags(self, item_id: int):
+        return self.tag_store.get_tags(item_id)
+
+    def ensure_tag(self, name: str, color: Optional[str] = None):
+        return self.tag_store.ensure_tag(name, color)
+
+    def toggle_item_tag(self, item_id: int, tag_id: int) -> bool:
+        return self.tag_store.toggle_tag_on_item(item_id, tag_id)
+
+    def delete_tag(self, tag_id: int) -> bool:
+        return self.tag_store.delete_tag(tag_id)

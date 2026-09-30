@@ -147,12 +147,9 @@ def apply_welcome_label_style(label: QLabel) -> None:
 # ToggleSwitch（兼容旧调用名，实际复用 fluent_lite 的统一控件）
 # ─────────────────────────────────────────
 class ToggleSwitch(SwitchButton):
-    toggled = Signal(bool)
-
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setFixedSize(dialog_scaled(44), dialog_scaled(24))
-        self.checkedChanged.connect(self.toggled.emit)
 
 
 # ─────────────────────────────────────────

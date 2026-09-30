@@ -60,6 +60,7 @@ def test_build_context_menu_for_grouped_text_item_uses_rule_table(monkeypatch):
         "paste",
         "special_paste_menu",
         "toggle_pin",
+        "tags_menu",
         "move_group_menu",
         "edit_item",
         "move_item_up",
@@ -69,7 +70,7 @@ def test_build_context_menu_for_grouped_text_item_uses_rule_table(monkeypatch):
     _assert_separators_are_normalized(ctx.actions)
 
     toggle_action = next(action for action in ctx.actions if action.key == "toggle_pin")
-    assert toggle_action.label == "Unpin"
+    assert toggle_action.label == "Unpin from Top"
 
     move_up_action = next(action for action in ctx.actions if action.key == "move_item_up")
     move_down_action = next(action for action in ctx.actions if action.key == "move_item_down")
@@ -110,6 +111,7 @@ def test_build_context_menu_for_file_item_includes_file_groups(monkeypatch):
         "paste",
         "special_paste_menu",
         "toggle_pin",
+        "tags_menu",
         "open_file_location",
         "move_group_menu",
         "delete_item",
@@ -117,7 +119,7 @@ def test_build_context_menu_for_file_item_includes_file_groups(monkeypatch):
     _assert_separators_are_normalized(ctx.actions)
 
     toggle_action = next(action for action in ctx.actions if action.key == "toggle_pin")
-    assert toggle_action.label == "Pin"
+    assert toggle_action.label == "Pin to Top"
 
     move_menu = next(action for action in ctx.actions if action.key == "move_group_menu")
     assert [child.key for child in move_menu.children] == ["move_to_group_21", "move_to_group_22"]
@@ -139,6 +141,8 @@ def test_build_context_menu_for_image_item_includes_save_as(monkeypatch):
     assert ctx is not None
     assert [action.key for action in ctx.actions if not action.is_separator] == [
         "paste",
+        "toggle_pin",
+        "tags_menu",
         "pin_image",
         "save_image_as",
         "delete_item",

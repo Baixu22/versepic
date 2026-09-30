@@ -41,6 +41,11 @@ class _ItemContextMenuState:
     visible_groups: List[Group]
     can_move_up: bool = False
     can_move_down: bool = False
+    available_tags: List = None  # List[Tag]
+
+    def __post_init__(self):
+        if self.available_tags is None:
+            self.available_tags = []
 
     @property
     def is_image_item(self) -> bool:
@@ -170,6 +175,31 @@ def _is_text_item(state: _ItemContextMenuState) -> bool:
     return state.clipboard_item.content_type == "text"
 
 
+def _build_tag_menu_children(state: _ItemContextMenuState) -> List[MenuAction]:
+    """标签子菜单：勾选已有标签 + 新建。"""
+    item = state.clipboard_item
+    # 控制器在菜单构建时注入 available_tags（见 ClipboardContextMenuController）
+    available = getattr(state, "available_tags", None) or []
+    current_ids = {t.id for t in (item.tags or [])}
+
+    children: List[MenuAction] = []
+    for tag in available:
+        children.append(
+            MenuAction(
+                label=tag.name,
+                key=f"toggle_tag_{tag.id}",
+                checkable=True,
+                checked=tag.id in current_ids,
+                translate_label=False,
+            )
+        )
+    if children:
+        children.append(MenuAction(label="", key="sep_tag_new", is_separator=True))
+    children.append(MenuAction(label="New Tag…", key="new_tag"))
+    children.append(MenuAction(label="Manage Tags…", key="manage_tags"))
+    return _normalize_menu_actions(children)
+
+
 _ITEM_CONTEXT_MENU_SPECS: Tuple[_ItemContextMenuSpec, ...] = (
     _ItemContextMenuSpec(key="paste", label="Paste"),
     _ItemContextMenuSpec(
@@ -179,17 +209,28 @@ _ITEM_CONTEXT_MENU_SPECS: Tuple[_ItemContextMenuSpec, ...] = (
         children_builder=_build_special_paste_menu_children,
     ),
     _ItemContextMenuSpec(key="sep_after_paste", is_separator=True),
-    _ItemContextMenuSpec(key="pin_image", label="Pin as Overlay", predicate=lambda state: state.is_image_item),
-    _ItemContextMenuSpec(key="save_image_as", label="Save as", predicate=lambda state: state.is_image_item),
+    # 历史置顶对所有类型开放；图片的「钉到屏幕」是另一件事，分开列。
     _ItemContextMenuSpec(
         key="toggle_pin",
-        predicate=lambda state: not state.is_image_item,
-        label_builder=lambda state: "Unpin" if state.clipboard_item.is_pinned else "Pin",
+        label_builder=lambda state: "Unpin from Top" if state.clipboard_item.is_pinned else "Pin to Top",
     ),
+    _ItemContextMenuSpec(
+        key="tags_menu",
+        label="Tags",
+        children_builder=lambda state: _build_tag_menu_children(state),
+    ),
+    _ItemContextMenuSpec(key="pin_image", label="Pin as Overlay", predicate=lambda state: state.is_image_item),
+    _ItemContextMenuSpec(key="save_image_as", label="Save as", predicate=lambda state: state.is_image_item),
     _ItemContextMenuSpec(
         key="open_file_location",
         label="Open File Location",
         predicate=lambda state: state.is_file_item,
+    ),
+    _ItemContextMenuSpec(key="sep_before_source", is_separator=True),
+    _ItemContextMenuSpec(
+        key="filter_by_source",
+        label="Filter by This Source",
+        predicate=lambda state: bool(state.clipboard_item.source_label or state.clipboard_item.source_app),
     ),
     _ItemContextMenuSpec(key="sep_before_groups", is_separator=True),
     _ItemContextMenuSpec(
@@ -275,6 +316,7 @@ class ClipboardContextMenuController:
             visible_groups=self._get_item_context_menu_groups(clipboard_item),
             can_move_up=can_up,
             can_move_down=can_down,
+            available_tags=self._controller.list_tags(),
         )
 
     def _build_item_context_menu_action(

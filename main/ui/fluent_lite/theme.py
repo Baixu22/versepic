@@ -11,20 +11,19 @@ from core.resource_manager import ResourceManager
 from core.ui_theme import get_ui_theme
 
 
-FONT_FAMILY = '"Segoe UI Variable", "Microsoft YaHei UI", "Segoe UI", sans-serif'
-# A restrained blue-grey accent.  Keeping this in one module prevents dialogs
-# from quietly drifting back to unrelated Material/Windows blues.
-ACCENT = "#6F8FAB"
-ACCENT_HOVER = "#627F99"
-ACCENT_PRESSED = "#526D85"
-ACCENT_SOFT = "#DFE8EF"
-ACCENT_SUBTLE = "rgba(111, 143, 171, 0.18)"
-FOCUS_RING = "rgba(111, 143, 171, 0.24)"
+FONT_FAMILY = '"Microsoft YaHei UI", "Segoe UI Variable Text", "Segoe UI", sans-serif'
+# Legacy names remain import-compatible; new code resolves ui_tokens(widget).
+ACCENT = "#171717"
+ACCENT_HOVER = "#303030"
+ACCENT_PRESSED = "#404040"
+ACCENT_SOFT = "#F0F0F0"
+ACCENT_SUBTLE = "rgba(0, 0, 0, 0.06)"
+FOCUS_RING = "#737373"
 
 # 输入类控件（下拉框、数字框、单行输入）的外框度量。要和它们排在同一列、
 # 看起来该是一家的控件——比如外观页那几个色块按钮——按这里取值，不要各写
 # 一套数字，否则改了一边就会高矮或圆角对不上。
-INPUT_RADIUS = 10
+INPUT_RADIUS = 18
 INPUT_CONTENT_HEIGHT = 26
 INPUT_PADDING_V = 4
 INPUT_PADDING_H = 11
@@ -66,6 +65,9 @@ def to_qicon(icon, widget=None) -> QIcon:
         return icon
     if icon is None:
         return QIcon()
+    render = getattr(icon, "render_icon", None)
+    if callable(render):
+        return render(ui_tokens(widget).text)
     icon_id = getattr(icon, "value", getattr(icon, "name", ""))
     preserve_color = str(icon_id).upper().endswith("WHITE")
     factory = getattr(icon, "icon", None)
@@ -94,6 +96,9 @@ def css_color(value: str) -> QColor:
 
 def tinted_icon(icon, color: str) -> QIcon:
     """Tint a FluentIcon or an SVG path to an explicit colour."""
+    render = getattr(icon, "render_icon", None)
+    if callable(render):
+        return render(color)
     path_getter = getattr(icon, "path", None)
     path = path_getter() if callable(path_getter) else str(icon)
     return _tinted_icon(path, color)

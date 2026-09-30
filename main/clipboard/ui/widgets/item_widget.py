@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 ClipboardItemWidget — 剪贴板列表项显示组件
 
@@ -122,10 +122,20 @@ class ClipboardItemWidget(QFrame):
         content_label.setMinimumWidth(0)
         top_layout.addWidget(content_label, 1)
 
-        # 置顶标记
+        # 置顶标记（与 delegate 一致，不用 emoji）
         if self.item.is_pinned:
-            pin_label = QLabel("📌")
+            pin_label = QLabel()
             pin_label.setObjectName("iconLabel")
+            pin_label.setFixedSize(14, 14)
+            try:
+                from core.resource_manager import ResourceManager
+                pin_label.setPixmap(
+                    ResourceManager.get_icon(
+                        ResourceManager.get_icon_path("fluent_icons/Pin.svg")
+                    ).pixmap(14, 14)
+                )
+            except Exception:
+                pin_label.setText("*")
             top_layout.addWidget(pin_label)
 
         layout.addLayout(top_layout)
@@ -137,7 +147,7 @@ class ClipboardItemWidget(QFrame):
             bottom_layout.addStretch()
 
             if self.item.source_app:
-                source_label = QLabel(self.item.source_app)
+                source_label = QLabel(self.item.source_label or self.item.source_app)
                 source_label.setObjectName("metaLabel")
                 source_label.setContentsMargins(0, 0, 0, 0)
                 bottom_layout.addWidget(source_label)

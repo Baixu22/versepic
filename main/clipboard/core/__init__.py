@@ -2,6 +2,22 @@
 
 from .enums import GroupType
 from .manager import ClipboardManager
-from .models import ClipboardItem, Group
+from .models import (
+    TAG_CHIP_COLORS,
+    ClipboardItem,
+    Group,
+    Tag,
+    source_app_short_name,
+)
+from .tag_store import TagStore
 
-__all__ = ["ClipboardItem", "ClipboardManager", "Group", "GroupType"]
+__all__ = [
+    "ClipboardItem",
+    "ClipboardManager",
+    "Group",
+    "GroupType",
+    "Tag",
+    "TagStore",
+    "TAG_CHIP_COLORS",
+    "source_app_short_name",
+]

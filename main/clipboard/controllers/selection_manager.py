@@ -145,16 +145,7 @@ class SelectionManager(QObject):
                 self._move_selection(1)
                 self.list_widget.setFocus()
                 return True
-            elif key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
-                self._activate_current()
-                return True
-            elif key == Qt.Key.Key_Right and pos == "top":
-                self.request_group_switch.emit(1)
-                return True
-            elif key == Qt.Key.Key_Left and pos == "top":
-                self.request_group_switch.emit(-1)
-                return True
-            # 其余键（文字输入、退格等）正常放行，不消费
+            # Text editing and IME confirmation stay with the search field.
             return False
 
         if obj == self.list_widget and event.type() == QEvent.Type.KeyPress:

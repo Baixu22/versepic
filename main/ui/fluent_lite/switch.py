@@ -1,36 +1,35 @@
-"""Animated accessible switch control implemented with pure PySide6."""
-
+"""Neutral animated switch with native button keyboard/accessibility semantics."""
 from PySide6.QtCore import Property, QEasingCurve, QPropertyAnimation, QRectF, Qt, Signal, QSize
-from PySide6.QtGui import QColor, QPainter
-from PySide6.QtWidgets import QWidget
+from PySide6.QtGui import QColor, QPainter, QPen
+from PySide6.QtWidgets import QAbstractButton, QApplication
 
+from core.ui_scale import widget_scaled as px
 from core.ui_theme import get_ui_theme
+from .theme import ui_tokens
 
-from .theme import ACCENT, ui_tokens
 
-
-class SwitchButton(QWidget):
+class SwitchButton(QAbstractButton):
     checkedChanged = Signal(bool)
 
     def __init__(self, parent=None, indicatorPos=None):
         super().__init__(parent)
-        self._checked = False
-        self._on_text = ""
-        self._off_text = ""
         self._progress = 0.0
+        self.setCheckable(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self._animation = QPropertyAnimation(self, b"progress", self)
         self._animation.setDuration(145)
         self._animation.setEasingCurve(QEasingCurve.Type.OutCubic)
-        self.setFixedSize(46, 26)
-        get_ui_theme().theme_changed.connect(self._on_theme_changed)
+        self.toggled.connect(self._on_toggled)
+        get_ui_theme().theme_changed.connect(self._apply_theme)
+        self._apply_theme()
 
-    def _on_theme_changed(self, _tokens):
+    def _apply_theme(self, *_):
+        self.setFixedSize(px(self, 40), px(self, 24))
         self.update()
 
     def sizeHint(self):
-        return QSize(46, 26)
+        return QSize(px(self, 40), px(self, 24))
 
     def _get_progress(self):
         return self._progress
@@ -41,60 +40,49 @@ class SwitchButton(QWidget):
 
     progress = Property(float, _get_progress, _set_progress)
 
-    def isChecked(self):
-        return self._checked
-
-    def setChecked(self, checked):
-        checked = bool(checked)
-        if self._checked == checked:
-            self._progress = 1.0 if checked else 0.0
-            self.update()
-            return
-        self._checked = checked
-        self._animate()
-        self.checkedChanged.emit(checked)
-
     def setOnText(self, text):
         self._on_text = str(text)
 
     def setOffText(self, text):
         self._off_text = str(text)
 
-    def _animate(self):
+    def _on_toggled(self, checked):
         self._animation.stop()
-        self._animation.setStartValue(self._progress)
-        self._animation.setEndValue(1.0 if self._checked else 0.0)
-        self._animation.start()
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton and self.rect().contains(event.position().toPoint()):
-            self.setChecked(not self._checked)
-            event.accept()
-            return
-        super().mouseReleaseEvent(event)
+        end = 1.0 if checked else 0.0
+        if not self.isVisible() or QApplication.instance().property("uiReducedMotion"):
+            self._set_progress(end)
+        else:
+            self._animation.setStartValue(self._progress)
+            self._animation.setEndValue(end)
+            self._animation.start()
+        self.checkedChanged.emit(checked)
 
     def keyPressEvent(self, event):
-        if event.key() in (Qt.Key.Key_Space, Qt.Key.Key_Return, Qt.Key.Key_Enter):
-            self.setChecked(not self._checked)
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and not event.isAutoRepeat():
+            self.click()
             event.accept()
             return
         super().keyPressEvent(event)
 
     def paintEvent(self, event):
+        t = ui_tokens(self)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        track = QRectF(0.5, 0.5, self.width() - 1, self.height() - 1)
-        off = QColor(ui_tokens(self).switch_off)
-        on = QColor(ACCENT)
-        r = int(off.red() + (on.red() - off.red()) * self._progress)
-        g = int(off.green() + (on.green() - off.green()) * self._progress)
-        b = int(off.blue() + (on.blue() - off.blue()) * self._progress)
         if not self.isEnabled():
-            r, g, b = 205, 211, 207
+            painter.setOpacity(.45)
+        margin = px(self, 2)
+        track = QRectF(margin, margin, self.width()-2*margin, self.height()-2*margin)
+        off, on = QColor(t.switch_off), QColor(t.accent)
+        color = QColor.fromRgbF(*(a+(b-a)*self._progress for a,b in zip(off.getRgbF(), on.getRgbF())))
         painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(r, g, b))
-        painter.drawRoundedRect(track, 13, 13)
-        knob = 20.0
-        x = 3.0 + (self.width() - knob - 6.0) * self._progress
-        painter.setBrush(QColor("#FFFFFF"))
-        painter.drawEllipse(QRectF(x, 3.0, knob, knob))
+        painter.setBrush(color)
+        painter.drawRoundedRect(track, track.height()/2, track.height()/2)
+        diameter = track.height()-4
+        x = track.left()+2 + (track.width()-diameter-4)*self._progress
+        knob = QColor(t.primary_foreground if self.isChecked() else "#FFFFFF")
+        painter.setBrush(knob)
+        painter.drawEllipse(QRectF(x, track.top()+2, diameter, diameter))
+        if self.hasFocus():
+            painter.setPen(QPen(QColor(t.ring), 1))
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.drawRoundedRect(QRectF(self.rect()).adjusted(.5,.5,-.5,-.5), self.height()/2, self.height()/2)

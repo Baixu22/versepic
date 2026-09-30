@@ -65,7 +65,20 @@ class FluentIcon(Enum):
     def path(self) -> str:
         return str(_ICON_DIR / f"{self.value}.svg")
 
+    def render_icon(self, color):
+        from ui.outline_icons import outline_icon
+        names = {
+            "COMMAND_PROMPT": "code", "CAMERA": "camera", "PASTE": "clipboard",
+            "HISTORY": "history", "INFO": "info", "DELETE": "trash",
+            "CLOSE": "close", "CANCEL": "close", "CHECK": "check", "SAVE": "save",
+            "FILTER": "filter", "FOLDER": "folder", "EDIT": "edit", "DOWNLOAD": "download",
+            "DOCUMENT": "file", "PIN": "pin", "SETTING": "settings", "SEARCH": "search",
+            "HIDE": "eye-off",
+        }
+        if self.name in names:
+            return outline_icon(names[self.name], color)
+        from .theme import _tinted_icon
+        return _tinted_icon(self.path(), color)
+
     def icon(self) -> QIcon:
-        # 走 ResourceManager：图标会被立即光栅化并缓存，
-        # 不再依赖 %TEMP% 里的源文件是否还在
-        return ResourceManager.get_icon(self.path())
+        return self.render_icon("#171717")

@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 剪贴板控制器 - 业务逻辑层
 
@@ -94,6 +94,8 @@ class ClipboardController(QObject):
         self._search_text: Optional[str] = None
         self._content_type: Optional[str] = None  # None, "text", "image", "file"
         self._time_range: Optional[Tuple[datetime, datetime]] = None
+        self._source_filter: Optional[str] = None  # 来源短名；None 表示不过滤
+        self._tag_filter_id: Optional[int] = None  # 标签 ID；None 表示不过滤
         
         # 设置
         self.auto_paste_enabled = True
@@ -261,6 +263,14 @@ class ClipboardController(QObject):
                 start_time=start_ts,
                 end_time=end_ts,
             )
+            if self._source_filter:
+                key = self._source_filter.lower()
+                items = [
+                    item for item in items
+                    if key in (item.source_label or "").lower()
+                    or key in (item.source_app or "").lower()
+                ]
+            items = self._filter_by_tag(items)
             return items, len(items)
 
         items = self.manager.get_by_group(
@@ -278,7 +288,38 @@ class ClipboardController(QObject):
                 or (item.title and search_lower in item.title.lower())
             ]
 
+        if self._source_filter:
+            key = self._source_filter.lower()
+            items = [
+                item for item in items
+                if key in (item.source_label or "").lower()
+                or key in (item.source_app or "").lower()
+            ]
+
+        items = self._filter_by_tag(items)
         return items, raw_count
+
+    def _filter_by_tag(self, items: List[ClipboardItem]) -> List[ClipboardItem]:
+        if not self._tag_filter_id:
+            return items
+        wanted = self._tag_filter_id
+        return [
+            item for item in items
+            if any(tag.id == wanted for tag in (item.tags or []))
+        ]
+
+    def set_tag_filter(self, tag_id: Optional[int]):
+        value = tag_id or None
+        if self._tag_filter_id != value:
+            self._tag_filter_id = value
+            self.load_history()
+
+    def clear_tag_filter(self):
+        self.set_tag_filter(None)
+
+    @property
+    def tag_filter_id(self) -> Optional[int]:
+        return self._tag_filter_id
     
     def check_scroll_load(self, scroll_value: int, scroll_max: int):
         """检查滚动位置，决定是否加载更多
@@ -322,7 +363,21 @@ class ClipboardController(QObject):
         if self._search_text != search:
             self._search_text = search
             self.load_history()
-    
+
+    def set_source_filter(self, source: Optional[str]):
+        """按来源应用短名筛选；传 None 清除。"""
+        value = (source or "").strip() or None
+        if self._source_filter != value:
+            self._source_filter = value
+            self.load_history()
+
+    def clear_source_filter(self):
+        self.set_source_filter(None)
+
+    @property
+    def source_filter(self) -> Optional[str]:
+        return self._source_filter
+
     def set_content_type_filter(self, filter_index: int):
         """设置内容类型筛选
         
@@ -351,6 +406,15 @@ class ClipboardController(QObject):
             self._time_range = None
             self._content_type = None
             self.load_history()
+
+    def clear_all_filters(self):
+        """清空搜索、类型、时间与来源筛选。"""
+        self._search_text = None
+        self._content_type = None
+        self._time_range = None
+        self._source_filter = None
+        self._tag_filter_id = None
+        self.load_history()
 
     @staticmethod
     def _parse_time_range_text(range_text: str) -> Optional[Tuple[datetime, datetime]]:
@@ -692,6 +756,39 @@ class ClipboardController(QObject):
         """切换置顶"""
         self.manager.toggle_pin(item_id)
         self.load_history()
+
+    # ==================== 标签 ====================
+
+    def list_tags(self):
+        try:
+            return self.manager.list_tags()
+        except Exception as e:
+            log_exception(e, T("读取标签"))
+            return []
+
+    def toggle_item_tag(self, item_id: int, tag_id: int) -> bool:
+        try:
+            applied = self.manager.toggle_item_tag(item_id, tag_id)
+            self.load_history()
+            return applied
+        except Exception as e:
+            log_exception(e, T("切换标签"))
+            return False
+
+    def create_and_toggle_tag(self, item_id: int, name: str, color: Optional[str] = None):
+        tag = self.manager.ensure_tag(name, color)
+        if tag is None:
+            return False
+        return self.toggle_item_tag(item_id, tag.id)
+
+    def delete_tag(self, tag_id: int) -> bool:
+        try:
+            ok = self.manager.delete_tag(tag_id)
+            self.load_history()
+            return ok
+        except Exception as e:
+            log_exception(e, T("删除标签"))
+            return False
     
     def move_to_group(self, item_id: int, group_id: Optional[int]) -> bool:
         """将项目移动到分组"""

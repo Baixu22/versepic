@@ -23,6 +23,49 @@ if TYPE_CHECKING:
     from pyclipboard import ClipboardItem as PyClipboardItem, Group as PyGroup
 
 
+def source_app_short_name(source_app: Optional[str]) -> str:
+    """来源应用显示名：完整路径 → exe 主名。
+
+    `C:\\...\\Code.exe` → `Code`；空/None → `""`。
+    只取文件名、去扩展名，避免完整路径把元数据行撑爆。
+    """
+    if not source_app:
+        return ""
+    name = source_app.replace("\\", "/").rsplit("/", 1)[-1]
+    if name.lower().endswith(".exe"):
+        name = name[:-4]
+    return name[:16]
+
+
+# 标签 Chip 色板（见 DESIGN_CLIPBOARD.md）。只允许这 8 色。
+TAG_CHIP_COLORS = (
+    "#6B7C8F",  # slate
+    "#5B8DB8",  # blue
+    "#4A9B8E",  # teal
+    "#6A9F5A",  # green
+    "#C4922A",  # amber
+    "#C47A6A",  # coral
+    "#8B7BB8",  # violet
+    "#B86B8B",  # rose
+)
+
+
+@dataclass
+class Tag:
+    """标签数据类。"""
+
+    id: int
+    name: str
+    color: Optional[str] = None  # 取值必须来自 TAG_CHIP_COLORS
+
+    @property
+    def chip_color(self) -> str:
+        if self.color in TAG_CHIP_COLORS:
+            return self.color
+        # 稳定映射：同名标签始终同色
+        return TAG_CHIP_COLORS[hash(self.name) % len(TAG_CHIP_COLORS)]
+
+
 @dataclass
 class ClipboardItem:
     """剪贴板项数据类。"""
@@ -39,6 +82,11 @@ class ClipboardItem:
     source_app: Optional[str] = None
     created_at: datetime = None
     updated_at: datetime = None
+    tags: list = None  # List[Tag]，UI 只读展示
+
+    def __post_init__(self):
+        if self.tags is None:
+            self.tags = []
 
     @classmethod
     def from_py_item(cls, item: "PyClipboardItem") -> "ClipboardItem":
@@ -55,7 +103,13 @@ class ClipboardItem:
             source_app=item.source_app,
             created_at=datetime.fromtimestamp(item.created_at) if item.created_at else None,
             updated_at=datetime.fromtimestamp(item.updated_at) if item.updated_at else None,
+            tags=[],
         )
+
+    @property
+    def source_label(self) -> str:
+        """元数据行用的来源短名。"""
+        return source_app_short_name(self.source_app)
 
     @property
     def display_text(self) -> str:
@@ -113,4 +167,4 @@ class Group:
         )
 
 
-__all__ = ["ClipboardItem", "Group"]
+__all__ = ["ClipboardItem", "Group", "Tag", "TAG_CHIP_COLORS", "source_app_short_name"]

@@ -10,14 +10,23 @@
 使用单例模式确保只有一个实例存在。
 """
 
+from dataclasses import replace as _replace_tokens
 from typing import Optional
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import (
+    QEasingCurve,
+    QParallelAnimationGroup,
+    QPropertyAnimation,
+    Qt,
+    QTimer,
+    Signal,
+)
 from PySide6.QtGui import QColor, QCursor
 from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QFrame,
+    QGraphicsOpacityEffect,
     QHBoxLayout,
     QListWidget,
     QListWidgetItem,
@@ -28,6 +37,7 @@ from PySide6.QtWidgets import (
 )
 from shiboken6 import isValid
 
+from ui.apple_style import apple_scrollbar_qss
 from ui.fluent_lite import (
     BodyLabel,
     CaptionLabel,
@@ -39,11 +49,14 @@ from ui.fluent_lite import (
     PrimaryPushButton,
     FluentTitleBar,
     FrostedFramelessDialog,
-    scrollbar_qss,
 )
+from ui.motion import cancel_motion, fade_hide, fade_show
+from ui.fluent_lite.theme import FONT_FAMILY
 from core import safe_event
 from core.ui_scale import configure_dialog_control, configure_dialog_controls
-from core.ui_theme import get_ui_theme
+from core.ui_theme import UIThemeMode, get_ui_theme
+from ..theme.themes import get_theme_manager
+from ..theme.theme_styles import management_palette, readable_accent, surface_palette
 from ui.dialogs import show_confirm_dialog, show_info_dialog, show_warning_dialog
 
 from ...core import ClipboardManager, Group, GroupType
@@ -84,6 +97,69 @@ from ..layout_scale import (
     scale_y,
 )
 from ..widgets.draggable_list_widget import DraggableListWidget
+
+
+def _apple_danger_button_qss(tokens) -> str:
+    """Delete as a light touch: tinted text that gains a danger wash on hover.
+
+    几何（高 28 / 圆角 10 / 内边距 4x18）与 PrimaryPushButton 完全对齐，
+    编辑态一排按钮共用同一套度量。
+    """
+    return f"""
+        QPushButton {{
+            color: {tokens.danger};
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: {scale_ui(18)}px;
+            min-height: {scale_ui(28)}px;
+            padding: {scale_ui(4)}px {scale_ui(18)}px;
+            font: {scale_ui(13)}px {FONT_FAMILY};
+        }}
+        QPushButton:hover {{ background: {tokens.danger_soft}; }}
+        QPushButton:pressed {{ background: {tokens.danger}; color: #FFFFFF; }}
+        QPushButton:disabled {{ color: {tokens.text_tertiary}; background: transparent; }}
+    """
+
+
+def _apple_ghost_button_qss(tokens) -> str:
+    """导航列 Close：无边框文字钮，hover 只给一层浅灰洗底。"""
+    return f"""
+        QPushButton {{
+            color: {tokens.text_secondary};
+            background: transparent;
+            border: none;
+            border-radius: {scale_ui(18)}px;
+            min-height: {scale_ui(28)}px;
+            padding: {scale_ui(4)}px {scale_ui(18)}px;
+            font: {scale_ui(13)}px {FONT_FAMILY};
+        }}
+        QPushButton:hover {{ background: {tokens.hover_bg}; color: {tokens.text}; }}
+        QPushButton:pressed {{ background: {tokens.accent_soft}; color: {tokens.text}; }}
+        QPushButton:disabled {{ color: {tokens.text_tertiary}; background: transparent; }}
+    """
+
+
+def _apple_nav_item_qss(tokens) -> str:
+    """macOS sidebar row: rounded pill painted by the button, accent text when selected."""
+    radius = scale_ui(18)
+    return f"""
+        QPushButton#FluentLiteNavItem {{
+            min-height: {scale_y(32)}px;
+            padding: {scale_y(2)}px {scale_x(12)}px;
+            text-align: left;
+            color: {tokens.text};
+            background: transparent;
+            border: none;
+            border-radius: {radius}px;
+            font: {scale_ui(13)}px {FONT_FAMILY};
+        }}
+        QPushButton#FluentLiteNavItem:hover {{ color: {tokens.text}; background: transparent; }}
+        QPushButton#FluentLiteNavItem:checked {{
+            color: {tokens.accent};
+            background: transparent;
+            font-weight: 600;
+        }}
+    """
 
 
 _manage_window_instance: Optional["ManageDialog"] = None
@@ -150,6 +226,12 @@ class ManageDialog(FrostedFramelessDialog):
         self.editing_group_id = None
         self.editing_item_id = None
         self._detail_form_token = 0
+        # Apple chrome: 12px window corners painted by FrostedFramelessDialog.
+        self._frosted_corner_radius = 12
+        self._crossfade_running = False
+        self._fade_done_pending = False
+        self._clipboard_theme_manager = get_theme_manager()
+        self._apple = management_palette(self._clipboard_theme_manager.get_current_theme())
 
         self._setup_titlebar()
 
@@ -180,6 +262,8 @@ class ManageDialog(FrostedFramelessDialog):
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose, False)
 
         self._setup_ui()
+        from ui.fluent_lite.popups import ToolTip
+        ToolTip.install(self)
         # Static Fluent controls are created once.  Opt them into the
         # standalone-window scale before any dynamic detail form is built.
         configure_dialog_controls(self)
@@ -187,11 +271,15 @@ class ManageDialog(FrostedFramelessDialog):
         self._center_on_screen()
         self._apply_ui_theme(get_ui_theme().tokens)
         get_ui_theme().theme_changed.connect(self._apply_ui_theme)
+        self._clipboard_theme_manager.theme_changed.connect(self._apply_clipboard_theme)
 
-    def _refresh_theme_scope(self, tokens=None):
+    def _apply_clipboard_theme(self, _theme):
+        self._apply_ui_theme(get_ui_theme().tokens)
+
+    def _refresh_theme_scope(self, tokens=None, subtree=None):
         """Reapply Fluent styles after controls have acquired this parent."""
         tokens = tokens or get_ui_theme().tokens
-        for widget in self.findChildren(QWidget):
+        for widget in (subtree or self).findChildren(QWidget):
             apply_theme = getattr(widget, "_apply_theme", None)
             if callable(apply_theme):
                 apply_theme(tokens)
@@ -203,101 +291,172 @@ class ManageDialog(FrostedFramelessDialog):
                 viewport = getattr(widget, "viewport", None)
                 (viewport() if callable(viewport) else widget).update()
 
+    def _apple_scope_tokens(self, tokens):
+        """Map the Apple palette onto the semantic ui_theme tokens.
+
+        Every nested Fluent-lite control resolves its colours through
+        ui_tokens(), which honours ``_ui_theme_tokens_override`` on an
+        ancestor — so the overrides below re-tint buttons, inputs, radios and
+        combo popups without forking their stylesheets.
+        """
+        theme = self._clipboard_theme_manager.get_current_theme()
+        dark = surface_palette(theme).dark
+        apple = management_palette(theme)
+        self._apple = apple
+        input_border = theme.colors.border_primary
+        self._input_border = input_border
+        self._ui_theme_tokens_override = _replace_tokens(
+            tokens,
+            mode=UIThemeMode.DARK if dark else UIThemeMode.LIGHT,
+            accent=theme.colors.accent_primary,
+            accent_hover=apple.accent_hover,
+            accent_pressed=apple.accent_pressed,
+            accent_soft=apple.accent_soft,
+            accent_strong=readable_accent(QColor(apple.accent), QColor("#171717" if dark else "#FAFAFA")).name(),
+            accent_strong_hover=readable_accent(QColor(apple.accent_hover), QColor("#171717" if dark else "#FAFAFA")).name(),
+            accent_strong_pressed=readable_accent(QColor(apple.accent_pressed), QColor("#171717" if dark else "#FAFAFA")).name(),
+            accent_text=apple.accent,
+            window=apple.window_bg,
+            window_top=apple.window_bg,
+            window_bottom=apple.window_bg,
+            window_border=apple.border,
+            surface=apple.card_bg,
+            surface_strong=apple.card_bg,
+            surface_subtle=apple.sidebar_bg,
+            surface_hover=apple.hover_bg,
+            text=apple.text,
+            text_muted=apple.text_secondary,
+            text_disabled=apple.text_tertiary,
+            border=input_border,
+            border_hover=apple.text_tertiary,
+            input_background=apple.sidebar_bg,
+            popup_background=apple.card_bg,
+            popup_hover=apple.hover_bg,
+            separator=apple.border,
+            success=apple.success,
+            danger=apple.danger,
+            danger_soft=apple.danger_soft,
+        )
+        return apple
+
     def _apply_ui_theme(self, tokens):
-        """Apply the same application theme used by the settings window."""
+        """Re-tint the window with the Apple palette for the current light/dark mode."""
+        apple = self._apple_scope_tokens(tokens)
         self._refresh_theme_scope(tokens)
-        error_background = "#4A2328" if tokens.is_dark else "#FFEBEE"
-        error_text = "#FF8A80" if tokens.is_dark else "#D32F2F"
-        error_hover = "#603036" if tokens.is_dark else "#FFCDD2"
         self.setStyleSheet(f"""
+            ManageDialog QWidget {{
+                font-family: {FONT_FAMILY};
+            }}
             QTextEdit {{
-                border: 1px solid {tokens.border};
-                border-radius: {scale_ui(6)}px;
-                padding: {scale_ui(8)}px;
+                border: 1px solid transparent;
+                border-radius: {scale_ui(18)}px;
+                padding: {scale_ui(12)}px;
                 font-size: {scale_ui(13)}px;
-                background: {tokens.input_background};
-                color: {tokens.text};
-                selection-background-color: {tokens.accent};
+                background: {apple.sidebar_bg};
+                color: {apple.text};
+                selection-background-color: {apple.accent};
+                selection-color: #FFFFFF;
             }}
             QTextEdit:focus {{
-                border-color: {tokens.accent};
-                background: {tokens.surface_strong};
+                border: 1px solid {apple.accent};
+                background: {apple.sidebar_bg};
             }}
-        """ + scrollbar_qss(self))
+        """ + apple_scrollbar_qss(apple))
 
         self.nav_column.setStyleSheet(
             "QWidget#ManageNavColumn {"
-            f"background: {tokens.surface_subtle};"
-            f"border-right: 1px solid {tokens.separator};"
-            f"border-radius: {scale_ui(12)}px 0 0 {scale_ui(12)}px;"
+            "background: transparent;"
+            "border: none;"
+            f"border-radius: {scale_ui(18)}px;"
             "}"
+        )
+        card_qss = (
+            f"background: {apple.card_bg};"
+            f"border: 1px solid {apple.border};"
+            f"border-radius: {scale_ui(24)}px;"
         )
         self.list_column.setStyleSheet(
-            "QWidget#ManageListColumn {"
-            f"background: {tokens.surface};"
-            f"border-right: 1px solid {tokens.separator};"
-            "}"
+            f"QWidget#ManageListColumn {{ background: transparent; "
+            f"border: none; border-right: 1px solid {apple.border}; }}"
         )
-        self.detail_column.setStyleSheet(
-            "QWidget#ManageDetailColumn {"
-            f"background: {tokens.surface_strong};"
-            f"border-radius: 0 {scale_ui(12)}px {scale_ui(12)}px 0;"
-            "}"
-        )
+        self.detail_column.setStyleSheet(f"QWidget#ManageDetailColumn {{{card_qss}}}")
         self.list_widget.setStyleSheet(f"""
             QListWidget {{
                 background: transparent;
                 border: none;
                 outline: none;
-                color: {tokens.text};
-                font-size: {scale_ui(11)}px;
+                color: {apple.text};
+                font-size: {scale_ui(12)}px;
             }}
             QListWidget::item {{
-                padding: {scale_y(5)}px {scale_x(12)}px;
-                border-bottom: 1px solid {tokens.separator};
-                color: {tokens.text};
+                padding: {scale_y(5)}px {scale_x(10)}px;
+                margin: 0 {scale_x(6)}px;
+                border: none;
+                border-radius: {scale_ui(18)}px;
+                color: {apple.text};
             }}
             QListWidget::item:selected {{
-                background: {tokens.accent_soft};
-                color: {tokens.text};
+                background: {apple.accent_soft};
+                color: {apple.accent};
             }}
             QListWidget::item:hover {{
-                background: {tokens.surface_hover};
+                background: {apple.hover_bg};
             }}
         """)
         self.detail_title.setStyleSheet(
-            f"color: {tokens.text}; font-size: {scale_ui(16)}px; "
-            "font-weight: 600; background: transparent;"
+            f"color: {apple.text}; font-size: {scale_ui(17)}px; "
+            f"font-weight: 600; font-family: {FONT_FAMILY}; background: transparent;"
         )
         self.detail_subtitle.setStyleSheet(
-            f"color: {tokens.text_muted}; font-size: {scale_ui(12)}px; "
+            f"color: {apple.text_secondary}; font-size: {scale_ui(12)}px; "
             "background: transparent;"
         )
         self.detail_separator.setStyleSheet(
-            f"background: {tokens.separator}; border: none;"
+            f"background: {apple.border}; border: none;"
         )
-        self.delete_btn.setStyleSheet(f"""
-            QPushButton {{
-                background: {error_background};
-                color: {error_text};
-                border: none;
-                border-radius: {scale_ui(6)}px;
-                padding: {scale_y(10)}px {scale_x(24)}px;
-                font-size: {scale_ui(13)}px;
-            }}
-            QPushButton:hover {{ background: {error_hover}; }}
-        """)
+        for key in ("group", "content", "import_export"):
+            nav_button = self.nav_interface.widget(key)
+            if nav_button is None:
+                continue
+            nav_button.set_fill_colors(
+                hover=apple.hover_bg,
+                checked=apple.accent_soft,
+                radius=scale_ui(18),
+            )
+            nav_button.setStyleSheet(_apple_nav_item_qss(apple))
         for row in range(self.list_widget.count()):
             item = self.list_widget.item(row)
             data = item.data(Qt.ItemDataRole.UserRole)
             if data and data[0] == "new" and self.current_mode == "content":
-                item.setBackground(QColor(tokens.accent_soft))
+                item.setBackground(QColor(apple.accent_soft))
         self._apply_dynamic_form_theme()
         self.update()
+
+    def _apply_action_button_theme(self):
+        """Delete/Close 的 Apple 样式要在每次表单重建后重放：
+
+        _finish_detail_form_setup() 里的 _refresh_theme_scope() 会调用按钮
+        自身的 _apply_theme（Fluent 基础样式）把它们重置，这里统一补回。"""
+        apple = self._apple
+        self.delete_btn.setStyleSheet(_apple_danger_button_qss(apple))
+        self.close_btn.setStyleSheet(_apple_ghost_button_qss(apple))
 
     def _apply_dynamic_form_theme(self):
         """Refresh controls that are rebuilt when the selected form changes."""
         tokens = get_ui_theme().tokens
+        apple = self._apple
+        self._apply_action_button_theme()
+        # Reapply hierarchy after dynamic forms acquire their scoped theme.
+        for label in self.detail_content.findChildren(BodyLabel):
+            size = label.property("headingSize") or 12
+            label.setStyleSheet(
+                f"background: transparent; color: {apple.text}; "
+                f"font: 500 {scale_ui(size)}px {FONT_FAMILY};"
+            )
+        self.list_title.setStyleSheet(
+            f"background: transparent; color: {apple.text_secondary}; "
+            f"font: 500 {scale_ui(12)}px {FONT_FAMILY};"
+        )
         icon_input = getattr(self, "icon_input", None)
         if _qt_object_is_valid(icon_input):
             apply_theme = getattr(icon_input, "_apply_theme", None)
@@ -312,10 +471,10 @@ class ManageDialog(FrostedFramelessDialog):
         if _qt_object_is_valid(icon_preview):
             icon_preview.setStyleSheet(f"""
                 QLabel {{
-                    font-size: {scale_ui(28)}px;
-                    background: {tokens.surface_subtle};
-                    border: 2px solid {tokens.border};
-                    border-radius: {scale_ui(8)}px;
+                    font-size: {scale_ui(22)}px;
+                    background: {apple.hover_bg};
+                    border: 1px solid {apple.border};
+                    border-radius: {scale_ui(18)}px;
                 }}
             """)
         for index, button in enumerate(
@@ -332,8 +491,7 @@ class ManageDialog(FrostedFramelessDialog):
         )
         if _qt_object_is_valid(import_export_separator):
             import_export_separator.setStyleSheet(
-                f"background: {tokens.separator}; "
-                f"margin: {scale_y(16)}px 0;"
+                f"background: {apple.border}; border: none;"
             )
 
     def _setup_titlebar(self):
@@ -359,12 +517,18 @@ class ManageDialog(FrostedFramelessDialog):
 
     def show_and_activate(self):
         """显示并激活窗口（独立窗口专用方法）"""
+        was_hidden = not self.isVisible() or self.isMinimized()
         if self.isMinimized():
             self.showNormal()
         else:
             self.show()
         self.raise_()
         self.activateWindow()
+        if was_hidden:
+            cancel_motion(self)
+            fade_show(self)
+        elif getattr(self, "_motion_closing", False):
+            cancel_motion(self)
 
     def refresh_after_external_change(self, deleted_group_id: Optional[int] = None):
         """外部数据变化后同步当前管理窗口，避免显示已删除的旧数据。"""
@@ -420,18 +584,44 @@ class ManageDialog(FrostedFramelessDialog):
         self.setUpdatesEnabled(True)
         self.show_and_activate()
 
+    def done(self, result):
+        """淡出后再真正结束对话框，保证 accept/reject 的返回值不变。
+
+        QDialog.accept()/reject() 都汇集到这里：首次进入先播放 fade_hide，
+        等动画结束窗口已经隐藏后再重新进入并走基类的完成逻辑。
+        """
+        if not self.isVisible() or getattr(self, "_motion_closing", False):
+            super().done(result)
+            return
+        self._fade_done_pending = True
+        fade_hide(self)
+
+        def _finish(r=result):
+            # 淡出期间窗口被重新打开时 cancel_motion 会清除 _fade_done_pending，
+            # 此时不再走基类 done()，避免把刚打开的对话框关掉。
+            if self._fade_done_pending:
+                self._fade_done_pending = False
+                super().done(r)
+
+        # fade_hide 时长 160ms：窗口隐藏后完成基类逻辑
+        QTimer.singleShot(170, _finish)
+
     @safe_event
     def closeEvent(self, event):
-        """关闭事件 - 只隐藏窗口，不销毁"""
-        self.hide()
+        """关闭事件 - 淡出后只隐藏窗口，不销毁"""
         event.ignore()
+        if not self.isVisible():
+            self.hide()
+            return
+        fade_hide(self)
 
     def _setup_ui(self):
         """设置三列布局"""
         main_layout = QHBoxLayout(self)
         title_height = self.titleBar.height() if getattr(self, "titleBar", None) else 32
         main_layout.setContentsMargins(scale_x(8), title_height + scale_y(4), scale_x(8), scale_y(8))
-        main_layout.setSpacing(0)
+        # 卡片列之间留出间距：列表/详情两张卡片各自带 1px 描边，贴在一起会双线。
+        main_layout.setSpacing(scale_x(10))
 
         self.nav_column = self._create_nav_column()
         main_layout.addWidget(self.nav_column)
@@ -446,18 +636,18 @@ class ManageDialog(FrostedFramelessDialog):
         """创建导航列（使用 Fluent NavigationInterface）"""
         widget = QWidget()
         widget.setObjectName("ManageNavColumn")
-        widget.setFixedWidth(scale_x(180))
+        widget.setFixedWidth(scale_x(168))
 
         layout = QVBoxLayout(widget)
         layout.setContentsMargins(0, scale_y(8), 0, scale_y(8))
         layout.setSpacing(scale_y(4))
 
         self.nav_interface = NavigationInterface(parent=widget, showMenuButton=False, showReturnButton=False, collapsible=False)
-        self.nav_interface.setExpandWidth(scale_x(168))
+        self.nav_interface.setExpandWidth(scale_x(156))
         self.nav_interface.setMinimumExpandWidth(0)
         self.nav_interface.expand(useAni=False)
-        self.nav_interface.setMinimumWidth(scale_x(168))
-        self.nav_interface.setMaximumWidth(scale_x(176))
+        self.nav_interface.setMinimumWidth(scale_x(156))
+        self.nav_interface.setMaximumWidth(scale_x(152))
 
         self.nav_interface.addItem(
             routeKey="group",
@@ -498,7 +688,7 @@ class ManageDialog(FrostedFramelessDialog):
         """创建列表列"""
         widget = QWidget()
         widget.setObjectName("ManageListColumn")
-        widget.setFixedWidth(scale_x(220))
+        widget.setFixedWidth(scale_x(208))
 
         layout = QVBoxLayout(widget)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -511,7 +701,7 @@ class ManageDialog(FrostedFramelessDialog):
         header_layout.setSpacing(scale_y(8))
 
         self.list_title = BodyLabel(self.tr("Group List"))
-        self.list_title.setStyleSheet(f"font-size: {scale_ui(11)}px; font-weight: 500; background: transparent;")
+        self.list_title.setStyleSheet(f"font-size: {scale_ui(12)}px; font-weight: 500; background: transparent;")
         header_layout.addWidget(self.list_title)
 
         self.group_combo = ComboBox()
@@ -537,11 +727,11 @@ class ManageDialog(FrostedFramelessDialog):
         widget.setObjectName("ManageDetailColumn")
 
         layout = QVBoxLayout(widget)
-        layout.setContentsMargins(scale_x(24), scale_y(20), scale_x(24), scale_y(20))
-        layout.setSpacing(scale_y(16))
+        layout.setContentsMargins(scale_ui(24), scale_ui(24), scale_ui(24), scale_ui(24))
+        layout.setSpacing(scale_ui(12))
 
         self.detail_title = BodyLabel(self.tr("New Group"))
-        self.detail_title.setStyleSheet(f"font-size: {scale_ui(16)}px; font-weight: 600;")
+        self.detail_title.setStyleSheet(f"font-size: {scale_ui(17)}px; font-weight: 600;")
         layout.addWidget(self.detail_title)
 
         self.detail_subtitle = CaptionLabel("")
@@ -565,7 +755,7 @@ class ManageDialog(FrostedFramelessDialog):
         self.detail_content.setStyleSheet("background: transparent;")
         self.detail_layout = QVBoxLayout(self.detail_content)
         self.detail_layout.setContentsMargins(0, 0, 0, 0)
-        self.detail_layout.setSpacing(scale_y(16))
+        self.detail_layout.setSpacing(scale_ui(12))
 
         scroll.setWidget(self.detail_content)
         layout.addWidget(scroll, 1)
@@ -590,7 +780,14 @@ class ManageDialog(FrostedFramelessDialog):
         return widget
 
     def _switch_mode(self, mode: str):
-        """切换模式"""
+        """切换模式（可见时列表/详情两列做 120ms 交叉淡入淡出）"""
+        if self.isVisible() and not self._crossfade_running:
+            self._crossfade_to_mode(mode)
+        else:
+            self._apply_mode(mode)
+
+    def _apply_mode(self, mode: str):
+        """重建两列内容，不带过渡动画。"""
         self.current_mode = mode
         self.nav_interface.setCurrentItem(mode)
 
@@ -612,6 +809,59 @@ class ManageDialog(FrostedFramelessDialog):
         elif mode == "import_export":
             self.list_column.hide()
             self._show_import_export_form()
+
+    _CROSSFADE_DURATION = 120
+
+    def _crossfade_to_mode(self, mode: str):
+        """两列先淡出并在中点换内容，再淡入；动画结束后移除效果恢复原生输入。"""
+        self._crossfade_running = True
+        targets = [self.list_column, self.detail_column]
+        effects = []
+        fade_out = QParallelAnimationGroup(self)
+        for target in targets:
+            effect = QGraphicsOpacityEffect(target)
+            effect.setOpacity(1.0)
+            target.setGraphicsEffect(effect)
+            effects.append(effect)
+            anim = QPropertyAnimation(effect, b"opacity", self)
+            anim.setDuration(self._CROSSFADE_DURATION // 2)
+            anim.setStartValue(1.0)
+            anim.setEndValue(0.0)
+            anim.setEasingCurve(QEasingCurve.Type.InCubic)
+            fade_out.addAnimation(anim)
+        fade_out.finished.connect(
+            lambda: self._crossfade_swap(mode, targets, effects)
+        )
+        fade_out.start()
+
+    def _crossfade_swap(self, mode: str, targets, effects):
+        try:
+            self._apply_mode(mode)
+        except Exception:
+            self._end_crossfade(targets)
+            raise
+        if not self.isVisible():
+            # 动画期间窗口被收起：直接收尾，不播淡入
+            self._end_crossfade(targets)
+            return
+        fade_in = QParallelAnimationGroup(self)
+        for effect in effects:
+            anim = QPropertyAnimation(effect, b"opacity", self)
+            anim.setDuration(self._CROSSFADE_DURATION // 2)
+            anim.setStartValue(0.0)
+            anim.setEndValue(1.0)
+            anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+            fade_in.addAnimation(anim)
+        fade_in.finished.connect(lambda: self._end_crossfade(targets))
+        fade_in.start()
+
+    def _end_crossfade(self, targets):
+        for target in targets:
+            try:
+                target.setGraphicsEffect(None)
+            except RuntimeError:
+                pass
+        self._crossfade_running = False
 
     def _select_group_in_combo(self, group_id: int):
         """在分组下拉框中选中指定分组"""
@@ -715,7 +965,7 @@ class ManageDialog(FrostedFramelessDialog):
 
         new_item = QListWidgetItem(self.tr("Add Content"))
         new_item.setData(Qt.ItemDataRole.UserRole, ("new", None))
-        new_item.setBackground(QColor(get_ui_theme().tokens.accent_soft))
+        new_item.setBackground(QColor(self._apple.accent_soft))
         self.list_widget.addItem(new_item)
 
         items = self.manager.get_by_group(self.selected_group_id, limit=50)
@@ -910,7 +1160,7 @@ class ManageDialog(FrostedFramelessDialog):
         # controls.  Mark only this subtree to avoid touching existing widgets
         # or compounding any geometry values.
         configure_dialog_controls(self.detail_content)
-        self._refresh_theme_scope()
+        self._refresh_theme_scope(subtree=self.detail_content)
         self._apply_dynamic_form_theme()
 
     def _is_current_detail_form_token(self, form_token: Optional[int]) -> bool:

@@ -26,7 +26,7 @@ class ThemeColors:
     # 文字色
     text_primary: str = "#333333"         # 主文字色
     text_secondary: str = "#666666"       # 次要文字色
-    text_tertiary: str = "#999999"        # 第三级文字色
+    text_tertiary: str = "#737373"        # 第三级文字色（浅底上仍可读）
     text_disabled: str = "#CCCCCC"        # 禁用文字色
     text_accent: str = "#58738C"          # 强调文字色
     
@@ -314,8 +314,117 @@ THEME_ORANGE = Theme(
 )
 
 
+# 8. Apple 浅色主题（macOS 风格）
+THEME_APPLE = Theme(
+    name="apple",
+    display_name="苹果（浅色）",
+    description="macOS 风格的浅色主题",
+    colors=ThemeColors(
+        bg_primary="#F6F6F8",
+        bg_secondary="#FFFFFF",
+        bg_tertiary="#EEEEF0",
+        bg_hover="#E8E8EA",
+        bg_selected="#DCEBFF",
+        bg_selected_highlight="rgba(0, 122, 255, 0.14)",
+
+        text_primary="#1D1D1F",
+        text_secondary="#6E6E73",
+        text_tertiary="#707075",
+        text_disabled="#C7C7CC",
+        text_accent="#007AFF",
+
+        border_primary="#D2D2D7",
+        border_secondary="#E5E5EA",
+        border_accent="#007AFF",
+        border_selected="#007AFF",
+
+        accent_primary="#007AFF",
+        accent_hover="#0066D6",
+        success="#34C759",
+        success_bg="#E8F8EC",
+        success_hover="#2CA94C",
+        error="#FF3B30",
+        error_bg="#FFEBE9",
+        error_hover="#FFCFCB",
+        warning="#FF9500",
+        warning_bg="#FFF3E0",
+
+        drag_drop_border="#34C759",
+        separator="#D2D2D7",
+        shortcut_key_color="#8E8E93",
+    )
+)
+
+# 9. Apple 深色主题（macOS 风格）
+THEME_APPLE_DARK = Theme(
+    name="apple-dark",
+    display_name="苹果（深色）",
+    description="macOS 风格的深色主题",
+    colors=ThemeColors(
+        bg_primary="#1C1C1E",
+        bg_secondary="#2C2C2E",
+        bg_tertiary="#242426",
+        bg_hover="#3A3A3C",
+        bg_selected="#1A3A5C",
+        bg_selected_highlight="rgba(10, 132, 255, 0.28)",
+
+        text_primary="#F5F5F7",
+        text_secondary="#A1A1A6",
+        text_tertiary="#7C7C80",
+        text_disabled="#48484A",
+        text_accent="#0A84FF",
+
+        border_primary="#3A3A3C",
+        border_secondary="#2C2C2E",
+        border_accent="#0A84FF",
+        border_selected="#0A84FF",
+
+        accent_primary="#0A84FF",
+        accent_hover="#2E96FF",
+        success="#30D158",
+        success_bg="#1C3A24",
+        success_hover="#28B54C",
+        error="#FF453A",
+        error_bg="#3A1B18",
+        error_hover="#4A2320",
+        warning="#FF9F0A",
+        warning_bg="#3A2C10",
+
+        drag_drop_border="#30D158",
+        separator="#3A3A3C",
+        shortcut_key_color="#7C7C80",
+    )
+)
+
+
+def _neutral_colors(dark: bool) -> ThemeColors:
+    """Bridge legacy theme IDs to the shared kit, without migrating saved settings."""
+    from core.ui_theme import DARK_TOKENS, LIGHT_TOKENS
+    t = DARK_TOKENS if dark else LIGHT_TOKENS
+    return ThemeColors(
+        bg_primary=t.window, bg_secondary=t.surface, bg_tertiary=t.surface_subtle,
+        bg_hover=t.surface_hover, bg_selected=t.accent_soft,
+        bg_selected_highlight=t.accent_soft,
+        text_primary=t.text, text_secondary=t.text_muted, text_tertiary=t.text_muted,
+        text_disabled=t.text_disabled, text_accent=t.accent_text,
+        border_primary=t.border, border_secondary=t.separator,
+        border_accent=t.ring, border_selected=t.ring,
+        accent_primary=t.accent, accent_hover=t.accent_hover,
+        success=t.success, success_bg=t.surface_subtle, success_hover=t.success,
+        error=t.danger, error_bg=t.danger_soft, error_hover=t.danger_soft,
+        drag_drop_border=t.ring, separator=t.separator, shortcut_key_color=t.text_muted,
+    )
+
+
+for _theme, _dark in ((THEME_APPLE, False), (THEME_APPLE_DARK, True), (THEME_LIGHT, False), (THEME_DARK, True)):
+    _theme.colors = _neutral_colors(_dark)
+THEME_APPLE.display_name = "中性浅色"
+THEME_APPLE_DARK.display_name = "中性深色"
+
 # 所有预设主题
 PRESET_THEMES = {
+    "apple": THEME_APPLE,
+    "apple-dark": THEME_APPLE_DARK,
     "light": THEME_LIGHT,
     "dark": THEME_DARK,
     "blue": THEME_BLUE,
@@ -325,6 +434,10 @@ PRESET_THEMES = {
     "orange": THEME_ORANGE,
 }
 
+# 「跟随系统」不是一套独立配色：按应用界面的深浅（设置 › 外观 › 界面主题）
+# 在 apple / apple-dark 之间切换，剪贴板和设置窗口因此始终同一深浅。
+THEME_AUTO_NAME = "auto"
+
 # 主题选择器上那枚双色小方块的取色。
 #
 # 它不是从 ThemeColors 里算出来的：blue/green/pink/purple/orange 五个确实等于
@@ -333,6 +446,9 @@ PRESET_THEMES = {
 # 主题，认不出「浅色」「深色」。所以这里按「选择器上看起来像什么」单独定，
 # 与运行时真正使用的主题色分开。
 PRESET_THEME_SWATCHES = {
+    THEME_AUTO_NAME: ("#1C1C1E", "#F6F6F8"),
+    "apple":       ("#171717", "#FAFAFA"),
+    "apple-dark":  ("#FAFAFA", "#171717"),
     "light":  ("#DDE3E9", "#FFFFFF"),
     "dark":   ("#1D1F20", "#1E1E1E"),
     "blue":   ("#6F8FAB", "#B9CAD7"),
@@ -357,20 +473,56 @@ class ThemeManager(QObject):
         super().__init__()
         self._custom_themes: Dict[str, Theme] = {}
         # 从设置中加载保存的主题
-        self._current_theme = self._load_saved_theme()
-    
-    def _load_saved_theme(self) -> Theme:
-        """从设置中加载保存的主题"""
+        self._current_name = self._load_saved_theme_name()
+        self._current_theme = self._resolve(self._current_name)
+        self._ui_theme_connected = False
+        self._connect_ui_theme()
+
+    def _load_saved_theme_name(self) -> str:
+        """从设置中加载保存的主题名"""
         try:
             from settings import get_tool_settings_manager
             config = get_tool_settings_manager()
             saved_theme_name = config.get_clipboard_theme()
-            if saved_theme_name in PRESET_THEMES:
-                return PRESET_THEMES[saved_theme_name]
+            if saved_theme_name == THEME_AUTO_NAME or saved_theme_name in PRESET_THEMES:
+                return saved_theme_name
         except Exception as e:
             log_exception(e, T("加载保存的主题"))
-        return THEME_LIGHT  # 默认使用浅色主题
-    
+        return THEME_AUTO_NAME
+
+    @staticmethod
+    def _ui_is_dark() -> bool:
+        try:
+            from core.ui_theme import get_ui_theme
+            return get_ui_theme().is_dark
+        except Exception:
+            return False
+
+    def _resolve(self, theme_name: str) -> Theme:
+        if theme_name == THEME_AUTO_NAME:
+            return THEME_APPLE_DARK if self._ui_is_dark() else THEME_APPLE
+        if theme_name in PRESET_THEMES:
+            return PRESET_THEMES[theme_name]
+        return self._custom_themes.get(theme_name, THEME_APPLE)
+
+    def _connect_ui_theme(self):
+        if self._ui_theme_connected:
+            return
+        try:
+            from core.ui_theme import get_ui_theme
+            get_ui_theme().theme_changed.connect(self._on_ui_theme_changed)
+            self._ui_theme_connected = True
+        except Exception as e:
+            log_exception(e, T("订阅界面深浅变化"))
+
+    def _on_ui_theme_changed(self, _tokens=None):
+        if self._current_name != THEME_AUTO_NAME:
+            return
+        resolved = self._resolve(THEME_AUTO_NAME)
+        if resolved is not self._current_theme:
+            self._current_theme = resolved
+            self.theme_changed.emit(resolved)
+
     def _save_theme(self, theme_name: str):
         """保存主题到设置"""
         try:
@@ -379,36 +531,34 @@ class ThemeManager(QObject):
             config.set_clipboard_theme(theme_name)
         except Exception as e:
             log_exception(e, T("保存主题设置"))
-    
+
     def get_current_theme(self) -> Theme:
-        """获取当前主题"""
+        """获取当前主题（「跟随系统」时返回按界面深浅解析出的那一套）"""
         return self._current_theme
-    
+
+    @property
+    def current_theme_name(self) -> str:
+        """用户选中的主题名；可能是 "auto"，与 get_current_theme().name 不同。"""
+        return self._current_name
+
     def set_theme(self, theme_name: str) -> bool:
         """
         设置主题
-        
+
         Args:
-            theme_name: 主题名称
-            
+            theme_name: 主题名称（"auto" 表示跟随系统深浅）
+
         Returns:
             bool: 是否成功
         """
-        # 先从预设主题中查找
-        if theme_name in PRESET_THEMES:
-            self._current_theme = PRESET_THEMES[theme_name]
-            self._save_theme(theme_name)  # 保存到设置
-            self.theme_changed.emit(self._current_theme)
-            return True
-        
-        # 再从自定义主题中查找
-        if theme_name in self._custom_themes:
-            self._current_theme = self._custom_themes[theme_name]
-            self._save_theme(theme_name)  # 保存到设置
-            self.theme_changed.emit(self._current_theme)
-            return True
-        
-        return False
+        if theme_name != THEME_AUTO_NAME and theme_name not in PRESET_THEMES \
+                and theme_name not in self._custom_themes:
+            return False
+        self._current_name = theme_name
+        self._current_theme = self._resolve(theme_name)
+        self._save_theme(theme_name)
+        self.theme_changed.emit(self._current_theme)
+        return True
     
     def notify_font_size_changed(self, size: int):
         """通知字体大小变更（供外部设置页面调用）"""

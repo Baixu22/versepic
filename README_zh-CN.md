@@ -284,6 +284,7 @@ clipboard/
 │   ├── models.py            # ClipboardItem / Group — 剪贴板数据模型
 │   ├── enums.py             # GroupType — 分组类型定义
 │   ├── text_transform.py    # 纯文本加工函数 — 供「特殊粘贴」调用，全部无副作用
+│   ├── tag_store.py         # TagStore — 标签定义与条目-标签映射存储
 │   └── __init__.py
 ├── services/                # 服务层 — 文件 payload、分组规则、导入导出、保存逻辑
 │   ├── file_payload_service.py   # file 类型 JSON payload 与旧格式兼容
@@ -663,6 +664,8 @@ ui/
 ├── arrow_settings_panel.py  # ArrowSettingsPanel — 箭头设置面板
 ├── number_settings_panel.py # 数字工具设置面板
 ├── mosaic_settings_panel.py # 马赛克工具设置面板
+├── apple_style.py           # Apple 风格设计 token 与 QSS 助手（剪切板与管理窗口共用）
+├── motion.py                # 动效助手 — 窗口淡入淡出/上浮与悬停动画
 │
 ├── fluent_lite/             # Fluent 风格轻量组件库
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # 按钮、卡片、图标、输入框

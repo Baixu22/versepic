@@ -25,26 +25,28 @@ def _input_qss(widget=None):
     QComboBox, QLineEdit, QSpinBox, QDoubleSpinBox {{
         min-height: {s(INPUT_CONTENT_HEIGHT)}px;
         padding: {s(INPUT_PADDING_V)}px {s(INPUT_PADDING_H)}px; color: {t.text};
-        background: {t.input_background}; border: 1px solid {t.border};
+        background: {t.input_background}; border: 1px solid transparent;
         border-radius: {s(INPUT_RADIUS)}px;
-        font: {s(13)}px {FONT_FAMILY}; selection-background-color: {ACCENT};
+        font: {s(13)}px {FONT_FAMILY}; selection-background-color: {t.accent};
+        selection-color: {t.selected_text};
     }}
     QComboBox:hover, QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover {{
-        border-color: {t.border_hover}; background: {t.surface_strong};
+        border-color: {t.border}; background: {t.input_background};
     }}
     QComboBox:focus, QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus {{
-        border: 1px solid {ACCENT}; background: {t.surface_strong};
+        border: 1px solid {t.ring}; background: {t.input_background};
     }}
     QComboBox:disabled, QLineEdit:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled {{
         color: {t.text_disabled}; background: {t.surface_subtle}; border-color: {t.border};
     }}
     QComboBox::drop-down {{ width: {s(24)}px; border: none; }}
+    QComboBox::down-arrow {{ image: none; }}
     QComboBox QAbstractItemView {{
         color: {t.text}; background: {t.popup_background}; border: 1px solid {t.border};
         border-radius: {s(INPUT_RADIUS)}px; padding: {s(5)}px; outline: none;
         selection-background-color: {t.accent_soft}; selection-color: {t.text};
     }}
-    QComboBox QAbstractItemView::item {{ min-height: {s(INPUT_CONTENT_HEIGHT)}px; padding: {s(3)}px {s(8)}px; }}
+    QComboBox QAbstractItemView::item {{ border-radius: {s(10)}px; min-height: {s(INPUT_CONTENT_HEIGHT)}px; padding: {s(3)}px {s(8)}px; }}
     QSpinBox::up-button, QDoubleSpinBox::up-button,
     QSpinBox::down-button, QDoubleSpinBox::down-button {{
         width: {s(18)}px; border: none; background: transparent;
@@ -76,26 +78,35 @@ class ComboBox(_ThemedInput, QComboBox):
         # out of line with the rest of its column.
         self.setMinimumWidth(min(_px(self, self.BASE_MIN_WIDTH), self.maximumWidth()))
 
-    def paintEvent(self, event):
-        """当前项居中显示。
+    def showPopup(self):
+        super().showPopup()
+        from ui.motion import cancel_motion, fade_show
+        popup = self.view().window()
+        cancel_motion(popup)
+        fade_show(popup, duration=120, rise_px=0)
 
-        设置页里的下拉框跟同组最宽的那个一样宽，「4px」这种短选项贴着左边
-        会在框里空出一大片。QComboBox 没有对齐属性，只能自己画这行字：先让
-        样式照常画出框和箭头（文字清空，否则会重复绘制），再往文字区居中补上。
-        """
+    def paintEvent(self, event):
+        """A left-aligned value and explicit outline chevron, including item icons."""
+        from PySide6.QtCore import QRect
+        from ui.outline_icons import outline_icon
         painter = QStylePainter(self)
         option = QStyleOptionComboBox()
         self.initStyleOption(option)
         text = option.currentText
         option.currentText = ""
         painter.drawComplexControl(QStyle.ComplexControl.CC_ComboBox, option)
-        if not text:
-            return
         tokens = ui_tokens(self)
-        painter.setPen(QColor(tokens.text if self.isEnabled() else tokens.text_disabled))
-        # 整个框内居中，而不是样式给的文字区：这套样式不画下拉箭头，按文字区
-        # 居中会凭空偏左半个箭头宽。
-        painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, text)
+        color = tokens.text if self.isEnabled() else tokens.text_disabled
+        painter.setPen(QColor(color))
+        side = _px(self, 16)
+        left = _px(self, 12)
+        if not option.currentIcon.isNull():
+            option.currentIcon.paint(painter, QRect(left, (self.height() - side) // 2, side, side))
+            left += side + _px(self, 8)
+        bounds = self.rect().adjusted(left, 0, -_px(self, 32), 0)
+        text = painter.fontMetrics().elidedText(text, Qt.TextElideMode.ElideRight, bounds.width())
+        painter.drawText(bounds, Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft, text)
+        outline_icon("chevron-down", color).paint(painter, QRect(self.width() - _px(self, 26), (self.height()-side)//2, side, side))
 
 
 class LineEdit(TextContextMenuMixin, _ThemedInput, _QLineEdit):
@@ -106,7 +117,25 @@ class LineEdit(TextContextMenuMixin, _ThemedInput, _QLineEdit):
 
 
 class TextEdit(TextContextMenuMixin, _QTextEdit):
-    """QTextEdit with the shared app context menu and caller-owned body style."""
+    """Multiline input with the same theme, selection and focus as LineEdit."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._apply_theme()
+        get_ui_theme().theme_changed.connect(self._apply_theme)
+
+    def _apply_theme(self, *_):
+        from .theme import scrollbar_qss
+        t = ui_tokens(self)
+        self.setStyleSheet(f"""
+            QTextEdit {{ color: {t.text}; background: {t.input_background};
+                border: 1px solid {t.border}; border-radius: {_px(self, INPUT_RADIUS)}px;
+                padding: {_px(self, 10)}px; font: {_px(self, 13)}px {FONT_FAMILY};
+                selection-background-color: {t.accent}; selection-color: {t.selected_text}; }}
+            QTextEdit:hover {{ border-color: {t.border_hover}; }}
+            QTextEdit:focus {{ border-color: {t.ring}; }}
+            QTextEdit:disabled {{ color: {t.text_disabled}; background: {t.surface_subtle}; }}
+        """ + scrollbar_qss(self))
 
 
 class SpinBox(_ThemedInput, _QSpinBox):

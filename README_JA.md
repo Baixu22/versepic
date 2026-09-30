@@ -267,6 +267,7 @@ clipboard/
 │   ├── models.py            # ClipboardItem / Group データモデル
 │   ├── enums.py             # GroupType 定義
 │   ├── text_transform.py    # プレーンテキスト変換 — 「特殊貼り付け」用の副作用のない純関数群
+│   ├── tag_store.py         # TagStore — タグ定義とアイテム-タグ対応の保存
 │   └── __init__.py
 ├── services/                # サービス層 — file payload、グループ規則、入出力、保存ロジック
 │   ├── file_payload_service.py   # file 型 JSON payload と旧形式互換
@@ -586,6 +587,8 @@ ui/
 ├── arrow_settings_panel.py  # ArrowSettingsPanel — 矢印設定パネル
 ├── number_settings_panel.py # 番号ツール設定パネル
 ├── mosaic_settings_panel.py # モザイクツール設定パネル
+├── apple_style.py           # Apple スタイルのデザイントークンと QSS ヘルパー（クリップボード／管理ウィンドウ共用）
+├── motion.py                # モーションヘルパー — ウィンドウのフェード／ライズとホバーアニメーション
 │
 ├── fluent_lite/             # Fluent スタイル軽量コンポーネントライブラリ
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # ボタン、カード、アイコン、入力欄

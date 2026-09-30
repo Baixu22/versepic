@@ -1948,6 +1948,22 @@ Replace it?</source>
         <source>Paste in Order</source>
         <translation>순서 유지 붙여넣기</translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <source>Pin to Top</source>
+        <translation>상단 고정</translation>
+    </message>
+    <message>
+        <source>Unpin from Top</source>
+        <translation>상단 고정 해제</translation>
+    </message>
+    <message>
+        <source>No clipboard history yet</source>
+        <translation>클립보드 기록이 아직 없습니다</translation>
+    </message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->

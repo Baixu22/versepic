@@ -246,7 +246,8 @@ class PreloadManager:
             self._steps.append(self._preload_screenshot_modules)
         if cfg.get_app_setting("preload_toolbar", True):
             self._steps.append(self._preload_toolbar_assets)
-        if cfg.get_app_setting("preload_ocr", True):
+        # OCR 默认懒加载（preload_ocr 默认 False）：模型 ~30MB，首次识别再载
+        if cfg.get_app_setting("preload_ocr", False):
             self._steps.append(self._preload_ocr_engine)
         if cfg.get_app_setting("preload_settings", True):
             self._steps.append(self.preload_settings)

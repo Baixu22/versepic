@@ -25,6 +25,7 @@ from clipboard.core import ClipboardItem, Group, GroupType
 from clipboard.ui.dialogs.manage_dialog import ManageDialog
 from core.i18n import I18nManager
 from core.ui_theme import DARK_TOKENS, LIGHT_TOKENS, get_ui_theme
+from ui.apple_style import DARK_APPLE, LIGHT_APPLE
 from ui.fluent_lite import LineEdit, TextEdit
 
 
@@ -200,18 +201,50 @@ class TestManageDialog:
             I18nManager.load_language(original_language)
             editor.deleteLater()
 
-    def test_management_surface_uses_application_theme(self, dialog):
+    def test_management_surface_uses_clipboard_theme(self, dialog, monkeypatch):
+        from clipboard.ui.theme.themes import get_theme_manager
+        from clipboard.ui.theme.theme_styles import management_palette, surface_palette
+        from ui.fluent_lite.theme import ui_tokens
+
         dlg, _manager = dialog
         theme = get_ui_theme()
+        clipboard_theme = get_theme_manager()
         original_mode = theme.mode
+        original_name = clipboard_theme.current_theme_name
+        monkeypatch.setattr(clipboard_theme, "_save_theme", lambda _name: None)
         try:
-            theme.set_mode("light", persist=False)
-            assert LIGHT_TOKENS.surface_subtle in dlg.nav_column.styleSheet()
+            # 全局与剪贴板相反时，管理页仍必须跟随剪贴板，包括动态表单与按钮。
+            for mode, name in (("dark", "apple"), ("light", "apple-dark"), ("dark", "blue")):
+                theme.set_mode(mode, persist=False)
+                clipboard_theme.set_theme(name)
+                current = clipboard_theme.get_current_theme()
+                palette = management_palette(current)
+                assert "background: transparent" in dlg.nav_column.styleSheet()
+                assert palette.border in dlg.list_column.styleSheet()
+                assert palette.card_bg in dlg.detail_column.styleSheet()
+                assert ui_tokens(dlg).window == current.colors.bg_primary
+                assert ui_tokens(dlg).is_dark == surface_palette(current).dark
+                # Primary actions must remain readable in the independently scoped theme.
+                from PySide6.QtGui import QColor
+                def luminance(value):
+                    c = QColor(value)
+                    channels = (c.redF(), c.greenF(), c.blueF())
+                    linear = [v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in channels]
+                    return sum(v * w for v, w in zip(linear, (0.2126, 0.7152, 0.0722)))
+                t = ui_tokens(dlg)
+                for background in (t.accent_strong, t.accent_strong_hover, t.accent_strong_pressed):
+                    a, b = sorted((luminance(background), luminance(t.primary_foreground)))
+                    assert (b + 0.05) / (a + 0.05) >= 4.5
+                dlg._show_new_group_form()
+                assert ui_tokens(dlg.group_name_input).text == current.colors.text_primary
+                assert palette.danger in dlg.delete_btn.styleSheet()
 
-            theme.set_mode("dark", persist=False)
-            assert DARK_TOKENS.surface_subtle in dlg.nav_column.styleSheet()
-            assert not hasattr(dlg, "_clipboard_theme_manager")
+            clipboard_theme.set_theme("auto")
+            for mode in ("light", "dark"):
+                theme.set_mode(mode, persist=False)
+                assert ui_tokens(dlg).is_dark == (mode == "dark")
         finally:
+            clipboard_theme.set_theme(original_name)
             theme.set_mode(original_mode.value, persist=False)
 
     def test_group_name_exists_respects_exclude_group(self, dialog):

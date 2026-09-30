@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+venv*/
+.venv/
+.ui_review/
+/assets/
+/build/
+/dist/
+/*.spec
+/release-artifacts/

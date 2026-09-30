@@ -7,7 +7,7 @@
 """
 
 from PySide6.QtCore import QTimer, Qt
-from PySide6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget
+from PySide6.QtWidgets import QSizePolicy, QGridLayout, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget
 
 from ui.fluent_lite import CaptionLabel, LineEdit
 from ui.fluent_lite.theme import ui_tokens
@@ -38,18 +38,20 @@ def create_group_icon_picker(dialog, current_icon: str = "📁"):
     input_row.addWidget(dialog.icon_input)
 
     preview_label = CaptionLabel(dialog.tr("Preview:"))
+    preview_label.setWordWrap(False)
+    preview_label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
     input_row.addWidget(preview_label)
 
     dialog.icon_preview = QLabel(current_icon)
-    dialog.icon_preview.setFixedSize(scale_ui(48), scale_ui(48))
+    dialog.icon_preview.setFixedSize(scale_ui(36), scale_ui(36))
     dialog.icon_preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
     tokens = ui_tokens(dialog)
     dialog.icon_preview.setStyleSheet(
         f"""
             QLabel {{
-                font-size: {scale_ui(28)}px;
+                font-size: {scale_ui(22)}px;
                 background: {tokens.surface_subtle};
-                border: 2px solid {tokens.border};
+                border: 1px solid {tokens.border};
                 border-radius: {scale_ui(8)}px;
             }}
         """
@@ -61,7 +63,7 @@ def create_group_icon_picker(dialog, current_icon: str = "📁"):
     group_order, emoji_groups = get_emoji_groups()
 
     tab_bar = QHBoxLayout()
-    tab_bar.setSpacing(0)
+    tab_bar.setSpacing(scale_x(4))
     tab_bar.setContentsMargins(0, scale_y(4), 0, 0)
     dialog._emoji_tab_buttons = []
     dialog._emoji_group_order = group_order
@@ -83,6 +85,7 @@ def create_group_icon_picker(dialog, current_icon: str = "📁"):
     dialog._emoji_scroll = QScrollArea()
     dialog._emoji_scroll.setWidgetResizable(True)
     dialog._emoji_scroll.setMinimumHeight(scale_y(110))
+    dialog._emoji_scroll.setMaximumHeight(scale_y(170))
     dialog._emoji_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
     # 滚动条不在这里写：管理窗口整体样式里的 scrollbar_qss 会级联下来，还随主题刷新
     dialog._emoji_scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
@@ -100,8 +103,8 @@ def emoji_tab_style(active: bool, dialog=None) -> str:
             QPushButton {{
                 color: {tokens.text};
                 background: {tokens.accent_soft}; border: none;
-                border-bottom: 2px solid {tokens.accent};
-                border-radius: 0px; font-size: {scale_ui(18)}px;
+                border: 1px solid {tokens.border};
+                border-radius: {scale_ui(6)}px; font-size: {scale_ui(18)}px;
                 padding: {scale_y(2)}px 0px;
             }}
         """
@@ -109,8 +112,8 @@ def emoji_tab_style(active: bool, dialog=None) -> str:
         QPushButton {{
             color: {tokens.text};
             background: transparent; border: none;
-            border-bottom: 2px solid transparent;
-            border-radius: 0px; font-size: {scale_ui(18)}px;
+            border: 1px solid transparent;
+            border-radius: {scale_ui(6)}px; font-size: {scale_ui(18)}px;
             padding: {scale_y(2)}px 0px;
         }}
         QPushButton:hover {{ background: {tokens.surface_hover}; }}
@@ -123,7 +126,7 @@ def emoji_btn_style(dialog=None) -> str:
     return f"""
         QPushButton {{
             background: transparent; border: none;
-            border-radius: {scale_ui(4)}px; font-size: {scale_ui(22)}px; padding: 0px;
+            border-radius: {scale_ui(4)}px; font-size: {scale_ui(18)}px; padding: 0px;
         }}
         QPushButton:hover {{
             background: {tokens.accent_soft};
@@ -144,7 +147,7 @@ def switch_emoji_group(dialog, group_idx: int):
     group_name = dialog._emoji_group_order[group_idx]
     emojis = dialog._emoji_groups[group_name]
 
-    btn_size = scale_ui(36)
+    btn_size = scale_ui(32)
     spacing = scale_ui(2)
     avail_w = dialog._emoji_scroll.viewport().width() - scale_x(4)
     if avail_w < btn_size * 2:

@@ -1,4 +1,4 @@
-﻿"""
+"""
 统一设置管理器 - 集中管理所有默认配置
 
 本文件是整个应用的配置中心，包含：
@@ -266,7 +266,7 @@ class ToolSettingsManager(QObject):
         "clipboard_font_size_options": [15, 16, 17, 18, 19, 20],  # 字体大小可选项
         "clipboard_line_height_padding": 8,   # 多行显示时的额外行高边距（像素，用于确保完整显示）
         "clipboard_display_lines": 1,          # 剪贴板项最大显示行数
-        "clipboard_theme": "light",            # 剪贴板窗口主题（light/dark/blue/green/pink/purple/orange）
+        "clipboard_theme": "auto",             # 剪贴板窗口主题（auto=跟随界面深浅/apple/apple-dark/light/dark/blue/green/pink/purple/orange）
         "clipboard_group_bar_position": "top", # 分组栏位置（right/left/top）
         "clipboard_preserve_search": False,    # 关闭时保留搜索栏内容
         "clipboard_db_path": "",               # 剪贴板数据库自定义路径（空=默认位置）
@@ -354,7 +354,8 @@ class ToolSettingsManager(QObject):
         # 启动预加载（重启生效）
         "preload_screenshot": True,
         "preload_toolbar": True,
-        "preload_ocr": True,
+        # OCR 模型约 30MB，默认懒加载：首次识别时才载入，降低常驻内存
+        "preload_ocr": False,
         "preload_settings": True,
         "preload_clipboard": True,
 

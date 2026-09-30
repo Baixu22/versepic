@@ -1738,6 +1738,48 @@ Replace it?</source>
 <!-- ========== Clipboard Window ========== -->
 <context>
     <name>ClipboardWindow</name>
+    <message><source>Apply</source><translation>应用</translation></message>
+    <message><source>Copied</source><translation>已复制</translation></message>
+    <message><source>More</source><translation>更多</translation></message>
+    <message><source>Just now</source><translation>刚刚</translation></message>
+    <message><source>{n} min ago</source><translation>{n} 分钟前</translation></message>
+    <message><source>Yesterday</source><translation>昨天</translation></message>
+    <message><source>MMM d</source><translation>M月d日</translation></message>
+    <message><source>MMM d, yyyy</source><translation>yyyy年M月d日</translation></message>
+    <message><source>{n} files</source><translation>{n} 个文件</translation></message>
+    <message><source>(no tags yet)</source><translation>（暂无标签）</translation></message>
+    <message><source>Any time</source><translation>全部时间</translation></message>
+    <message><source>Close (Esc)</source><translation>关闭（Esc）</translation></message>
+    <message><source>Closes after pasting. Click to keep it open</source><translation>粘贴后关闭，点击可保持打开</translation></message>
+    <message><source>Copy failed</source><translation>复制失败</translation></message>
+    <message><source>Custom dates</source><translation>自定义日期</translation></message>
+    <message><source>Delete tag:</source><translation>删除标签：</translation></message>
+    <message><source>End date must be on or after start date.</source><translation>结束日期不能早于开始日期。</translation></message>
+    <message><source>Filter</source><translation>筛选</translation></message>
+    <message><source>Last 30 days</source><translation>最近 30 天</translation></message>
+    <message><source>Last 7 days</source><translation>最近 7 天</translation></message>
+    <message><source>Manage Tags</source><translation>管理标签</translation></message>
+    <message><source>More filters</source><translation>更多筛选</translation></message>
+    <message><source>New Tag</source><translation>新建标签</translation></message>
+    <message><source>No records yet</source><translation>暂无记录</translation></message>
+    <message><source>No results for “{q}”</source><translation>未找到“{q}”的相关记录</translation></message>
+    <message><source>Nothing here yet</source><translation>这里暂无内容</translation></message>
+    <message><source>Nothing matches these filters</source><translation>没有符合筛选条件的记录</translation></message>
+    <message><source>PNG Image (*.png);;JPEG Image (*.jpg *.jpeg);;Bitmap Image (*.bmp);;WebP Image (*.webp);;PDF (*.pdf)</source><translation>PNG 图片 (*.png);;JPEG 图片 (*.jpg *.jpeg);;位图图片 (*.bmp);;WebP 图片 (*.webp);;PDF 文档 (*.pdf)</translation></message>
+    <message><source>Reset filters</source><translation>重置筛选</translation></message>
+    <message><source>Right-click any item and choose “Move to Group” to add it here.</source><translation>右键点击记录，选择“移动到分组”即可添加到这里。</translation></message>
+    <message><source>Search clipboard</source><translation>搜索剪贴板</translation></message>
+    <message><source>Source: {name}</source><translation>来源：{name}</translation></message>
+    <message><source>Stays open after pasting</source><translation>粘贴后保持打开</translation></message>
+    <message><source>Tag name:</source><translation>标签名称：</translation></message>
+    <message><source>Text, images and files you copy will show up here.</source><translation>复制的文字、图片和文件会显示在这里。</translation></message>
+    <message><source>This group is empty</source><translation>此分组暂无内容</translation></message>
+    <message><source>Today</source><translation>今天</translation></message>
+    <message><source>Try a different keyword, or clear the filters.</source><translation>试试其他关键词，或清除筛选条件。</translation></message>
+    <message><source>to</source><translation>至</translation></message>
+    <message><source>{n} found</source><translation>找到 {n} 条</translation></message>
+    <message><source>{n} items</source><translation>{n} 条记录</translation></message>
+    <message><source>↑↓ Select · Enter {action} · Space Preview</source><translation>↑↓ 选择 · 回车{action} · 空格预览</translation></message>
     <message>
         <source>Clipboard History</source>
         <translation>剪贴板历史</translation>
@@ -2028,11 +2070,28 @@ Replace it?</source>
         <source>Paste in Order</source>
         <translation>保持顺序粘贴</translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation>复制</translation>
+    </message>
+    <message>
+        <source>Pin to Top</source>
+        <translation>置顶</translation>
+    </message>
+    <message>
+        <source>Unpin from Top</source>
+        <translation>取消置顶</translation>
+    </message>
+    <message>
+        <source>No clipboard history yet</source>
+        <translation>暂无剪贴板历史</translation>
+    </message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
 <context>
     <name>ManageDialog</name>
+    <message><source>Created</source><translation>创建时间</translation></message>
     <message>
         <source>Clipboard Management</source>
         <translation>剪贴板管理</translation>
@@ -3451,6 +3510,12 @@ SOFTWARE.</translation></message>
 
 <context>
     <name>GroupBar</name>
+    <message><source>History</source><translation>历史记录</translation></message>
+    <message><source>More</source><translation>更多</translation></message>
+    <message><source>New Group</source><translation>新建分组</translation></message>
+    <message><source>All History</source><translation>全部历史</translation></message>
+    <message><source>Manage Groups…</source><translation>管理分组…</translation></message>
+    <message><source>Switch group</source><translation>切换分组</translation></message>
     <message>
         <source>Clipboard History</source>
         <translation>剪贴板历史</translation>
@@ -3919,5 +3984,11 @@ SOFTWARE.</translation></message>
         <source>Only in screenshot and pin windows</source>
         <translation>只在截图和钉图窗口里生效</translation>
     </message>
+</context>
+<context>
+    <name>ClipboardController</name>
+    <message><source>All items in the group will also be deleted.</source><translation>分组中的所有内容也将被删除。</translation></message>
+    <message><source>Are you sure you want to delete this group?</source><translation>确定要删除这个分组吗？</translation></message>
+    <message><source>Confirm Delete</source><translation>确认删除</translation></message>
 </context>
 </TS>

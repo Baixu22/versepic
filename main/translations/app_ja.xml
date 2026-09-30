@@ -1993,6 +1993,22 @@ Replace it?</source>
         <source>Paste in Order</source>
         <translation>順番を変えずに貼り付け</translation>
     </message>
+    <message>
+        <source>Copy</source>
+        <translation>コピー</translation>
+    </message>
+    <message>
+        <source>Pin to Top</source>
+        <translation>ピン留め</translation>
+    </message>
+    <message>
+        <source>Unpin from Top</source>
+        <translation>ピン留め解除</translation>
+    </message>
+    <message>
+        <source>No clipboard history yet</source>
+        <translation>クリップボード履歴はまだありません</translation>
+    </message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->

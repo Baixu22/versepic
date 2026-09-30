@@ -7,22 +7,28 @@
 
 import os
 import re
+from datetime import date, timedelta
 from time import perf_counter
 from typing import List, Optional
 
-from PySide6.QtCore import QDate, QEvent, QLocale, QPoint, QSettings, QTimer, Qt, Signal
-from PySide6.QtGui import QCursor
+from PySide6.QtCore import (
+    QDate, QEasingCurve, QEvent, QLocale, QPoint, QSettings, QSize, QTimer, Qt, Signal,
+    QVariantAnimation,
+)
+from PySide6.QtGui import QColor, QCursor, QFont, QFontMetrics, QIcon, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import (
     QApplication,
+    QButtonGroup,
     QCalendarWidget,
     QDateEdit,
     QFrame,
+    QGraphicsOpacityEffect,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QListWidget,
     QListWidgetItem,
     QMenu,
-    QPushButton,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -33,16 +39,19 @@ from core.logger import T, log_debug, log_exception
 from core.shortcut_manager import ShortcutHandler, ShortcutManager
 from ui.dialogs import show_confirm_dialog
 from ui.fluent_lite import LineEdit
+from ui import glass
+from ui.glyphs import glyph_icon, glyph_pixmap, svg_icon
+from ui.motion import apply_frost, fade_hide, fade_show, reset_opacity
 
 from ...controllers import ClipboardController, SelectionManager
 from ...core import ClipboardItem, ClipboardManager, GroupType
-from ..theme.theme_styles import ThemeStyleGenerator
+from ..theme.theme_styles import ThemeStyleGenerator, rgba, surface_palette
 from ..theme.themes import Theme, get_theme_manager
 from ..mixins.frameless_mixin import FramelessMixin
 from ..dialogs.manage_dialog import ManageDialog, get_manage_dialog
 from ..menus.item_context_menu import ClipboardItemContextMenu
 from ..widgets.group_bar import GroupBar
-from ..widgets.item_delegate import ClipboardItemDelegate, ROLE_ITEM_DATA, ROLE_ITEM_ID
+from ..widgets.item_delegate import ClipboardItemDelegate, ROLE_ITEM_DATA, ROLE_ITEM_ID, UI_FAMILIES
 from ..widgets.preview_popup import PreviewPopup
 
 
@@ -53,6 +62,36 @@ _DIRECT_PICK_BLOCKERS = (
     | Qt.KeyboardModifier.AltModifier
     | Qt.KeyboardModifier.MetaModifier
 )
+
+# Windows 上交给 DWM 做毛玻璃、圆角和阴影；Win11 系统圆角是 8px，Qt 侧跟随。
+# 其他平台退回 Qt 自绘：圆角 12，外侧留白给软阴影环。
+_NATIVE_GLASS = glass.is_supported()
+_WINDOW_RADIUS = 8 if glass.is_win11() else 12
+_SHADOW_MARGIN = 0 if _NATIVE_GLASS else 10
+# (外扩 px, alpha) 从外到内三层低透明描边近似投影
+_SHADOW_RINGS = ((5, 14), (3, 22), (1, 42))
+
+# 顶部工具栏：搜索行 + 筛选行。字号只用两档：14（搜索、正文）、13（控件）、11（底栏）
+_EDGE_X = 12            # 头部/底栏左右留白
+_SEARCH_H = 34
+_SEGMENT_H = 26
+_TOOL_BTN = 28
+_TOOL_ICON = 16
+_CONTROL_RADIUS = 13
+
+# 行尾快捷操作按钮几何
+_QUICK_BTN_SIZE = 28
+_QUICK_BTN_GAP = 2
+_QUICK_BTN_ICON_SIZE = 16
+_QUICK_BAR_RIGHT_MARGIN = 12
+
+# 悬停过渡驱动定时器参数（delegate 按时间推算进度）
+_HOVER_ANIM_MS = 230
+
+# 类型筛选：索引与 controller.set_content_type_filter 一致
+_TYPE_FILTERS = ("All", "Text", "Image", "File")
+# 时间筛选预设：(key, 天数)；None 表示不限时间
+_DATE_PRESETS = (("any", None), ("today", 0), ("7d", 6), ("30d", 29))
 
 
 class ClipboardShortcutHandler(ShortcutHandler):
@@ -85,6 +124,19 @@ class ClipboardShortcutHandler(ShortcutHandler):
         w = self._window
         key = event.key()
         modifiers = event.modifiers()
+        focus = QApplication.focusWidget()
+        if isinstance(focus, QLineEdit) and key not in (Qt.Key.Key_Escape,):
+            return False
+
+        if key == Qt.Key.Key_Space and focus is w.list_widget:
+            popup = PreviewPopup.instance()
+            if popup.isVisible():
+                popup.hide_preview()
+            else:
+                item = w.list_widget.currentItem()
+                if item is not None:
+                    w.selection_manager._show_preview_for_item(item)
+            return True
 
         if key == Qt.Key.Key_Escape:
             if hasattr(w, "selection_manager") and w.selection_manager._selected_index >= 0:
@@ -180,6 +232,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self._load_settings()
         self._load_window_geometry()
         self._setup_ui()
+        from ui.fluent_lite.popups import ToolTip
+        ToolTip.install(self)
         self._apply_opacity()
         self._setup_shortcuts()
 
@@ -196,6 +250,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
                 self.list_widget.clear()
         else:
             self._append_items(items)
+        self._update_empty_state()
+        self._update_scope_bar()
 
     def _on_item_inserted(self, item: ClipboardItem, row: int):
         """单条新内容插进列表：不重建、不滚动、不动选中项和预览。"""
@@ -204,6 +260,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         list_item.setData(ROLE_ITEM_DATA, item)
         self.list_widget.insertItem(row, list_item)
         self.selection_manager.shift_selection_after_insert(row)
+        self._update_scope_bar()
 
     def _on_item_moved_to_top(self, item_id: int, row: int):
         """条目移到最前：搬动已有的行，不重建列表。"""
@@ -246,14 +303,15 @@ class ClipboardWindow(QWidget, FramelessMixin):
             self._item_delegate.set_theme(self.current_theme)
             self._item_delegate.set_window_opacity(self.window_opacity)
         self._apply_opacity()
+        if self.isVisible():
+            self._apply_glass()
         self.group_bar.set_theme(self.current_theme)
         if hasattr(self, "search_input"):
-            has_text = bool(self.search_input.text().strip())
-            self._apply_search_input_style(has_text)
-            self._apply_clear_search_btn_style()
-            self._apply_menu_btn_style()
+            self._apply_toolbar_styles()
             self._apply_time_filter_styles()
+        self._refresh_quick_action_styles()
         self._refresh_list()
+        self._update_empty_state()
         log_debug(T("主题已切换到: {theme_name}", theme_name=self.current_theme.display_name), "Clipboard")
 
     def _load_settings(self):
@@ -296,23 +354,54 @@ class ClipboardWindow(QWidget, FramelessMixin):
             return
 
         self.setWindowTitle(self.tr("Clipboard History"))
+        self.title_label.setText(self.tr("Clipboard History"))
         self.start_date_edit.setToolTip(self.tr("Start date"))
         self.end_date_edit.setToolTip(self.tr("End date"))
-        self.apply_time_filter_btn.setToolTip(self.tr("Apply time filter"))
-        self.type_filter_btn.setToolTip(self.tr("Filter Type"))
-        self.clear_time_filter_btn.setToolTip(self.tr("Close filters"))
-        self.search_input.setPlaceholderText("🔍 " + self.tr("Search"))
-        self.clear_search_btn.setToolTip(self.tr("Clear search"))
+        self.filter_btn.setToolTip(self.tr("More filters"))
+        self.menu_btn.setToolTip(self.tr("Settings"))
+        self.close_btn.setToolTip(self.tr("Close (Esc)"))
+        self.keep_open_btn.setToolTip(
+            self.tr("Stays open after pasting") if self.keep_open_btn.isChecked()
+            else self.tr("Closes after pasting. Click to keep it open"))
+        self.search_input.setPlaceholderText(self.tr("Search clipboard"))
+        self.search_input.setAccessibleName(self.tr("Search clipboard"))
+        self._clear_search_action.setToolTip(self.tr("Clear search"))
+        self.reset_filter_btn.setText(self.tr("Reset filters"))
+        self.apply_time_filter_btn.setText(self.tr("Apply"))
+        self.time_filter_separator.setText(self.tr("to"))
+        action = self.tr("Paste") if self.config.get_clipboard_auto_paste() else self.tr("Copy")
+        self.keyboard_hint.setText(self.tr("↑↓ Select · Enter {action} · Space Preview").format(action=action))
+        if hasattr(self, "_quick_action_buttons"):
+            self._quick_action_buttons["copy"].setToolTip(self.tr("Copy"))
+            self._quick_action_buttons["more"].setToolTip(self.tr("More"))
 
-        self.type_filter_labels = [self.tr("All"), self.tr("Text"), self.tr("Image"), self.tr("File")]
-        for index, action in enumerate(self.type_filter_actions):
-            action.setText(self.type_filter_labels[index])
-        self._update_type_filter_button(self.type_filter_index)
+        self.type_filter_labels = [self.tr(label) for label in _TYPE_FILTERS]
+        # 选中时字重变粗：按粗体量好宽度再固定，切换选中不跳动
+        bold = QFont(self.font())
+        bold.setPixelSize(13)
+        bold.setWeight(QFont.Weight.Medium)
+        metrics = QFontMetrics(bold)
+        for index, button in enumerate(self.type_filter_buttons):
+            button.setText(self.type_filter_labels[index])
+            button.setFixedWidth(max(40, metrics.horizontalAdvance(button.text()) + 22))
+        self._update_date_menu_label()
+        self._update_scope_bar()
+        self._update_empty_state()
         if hasattr(self, "group_bar"):
             self.group_bar.refresh_buttons()
 
+    def _is_dark_theme(self) -> bool:
+        return surface_palette(self.current_theme).dark
+
+    def _apply_glass(self):
+        # DWM 只负责模糊背后的桌面（不带 Acrylic 噪点）；底色层由容器 QSS 画，
+        # 不透明度见 theme_styles.glass_tint_alpha，随「透明度」设置变化。
+        if not _NATIVE_GLASS or self._offscreen_warmup_in_progress:
+            return
+        self._glass_on = glass.enable_glass(self, dark=self._is_dark_theme(), mode=glass.MODE_BLUR)
+
     def _apply_opacity(self):
-        generator = ThemeStyleGenerator(self.current_theme)
+        generator = ThemeStyleGenerator(self.current_theme, glass=_NATIVE_GLASS)
 
         if hasattr(self, "container"):
             self.container.setStyleSheet(generator.generate_window_style(self.window_opacity))
@@ -320,18 +409,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
         if hasattr(self, "list_widget"):
             self.list_widget.setStyleSheet(generator.generate_list_widget_style(self.window_opacity))
 
-        if hasattr(self, "bottom_bar"):
-            self.bottom_bar.setStyleSheet(generator.generate_search_bar_style(self.window_opacity))
-
         if hasattr(self, "time_filter_bar"):
             self.time_filter_bar.setStyleSheet(generator.generate_time_filter_bar_style(self.window_opacity))
-
-        if hasattr(self, "group_bar") and self.group_bar.bar_widget is not None:
-            border_dir = {"left": "border-right:", "top": "border-bottom:", "right": "border-left:"}
-            bd = border_dir.get(getattr(self, "group_bar_position", "right"), "border-left:")
-            self.group_bar.bar_widget.setStyleSheet(
-                generator.generate_search_bar_style(self.window_opacity).replace("border-top:", bd)
-            )
 
     def _load_window_geometry(self):
         try:
@@ -371,31 +450,16 @@ class ClipboardWindow(QWidget, FramelessMixin):
             | Qt.WindowType.Tool
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        apply_frost(self)
         self.setMinimumSize(390, 400)
         self.resize(self._saved_width, self._saved_height)
 
         self.container = QFrame(self)
-        self.container.setStyleSheet(
-            """
-            QFrame#mainContainer {
-                background: #FFFFFF;
-                border: 1px solid #E0E0E0;
-                border-radius: 4px;
-            }
-            QToolTip {
-                background: #FFFFFF;
-                color: #333333;
-                border: 1px solid #E0E0E0;
-                border-radius: 4px;
-                padding: 4px 8px;
-                font-size: 12px;
-            }
-        """
-        )
         self.container.setObjectName("mainContainer")
 
         main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(0, 0, 0, 0)
+        m = _SHADOW_MARGIN
+        main_layout.setContentsMargins(m, m, m, m)
         main_layout.addWidget(self.container)
 
         self.content_layout = QHBoxLayout(self.container)
@@ -407,6 +471,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self.left_layout = QVBoxLayout(self.left_widget)
         self.left_layout.setContentsMargins(0, 0, 0, 0)
         self.left_layout.setSpacing(0)
+        self._build_toolbar()
 
         self.list_widget = QListWidget()
         self.list_widget.setStyleSheet(
@@ -456,6 +521,16 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self.list_widget.itemEntered.connect(self._on_delegate_item_entered)
         self.list_widget.viewport().installEventFilter(self)
 
+        # 行悬停过渡驱动：delegate 按时间推算进度，这里只定时刷帧
+        self._hover_anim_timer = QTimer(self)
+        self._hover_anim_timer.setInterval(16)
+        self._hover_anim_timer.timeout.connect(self.list_widget.viewport().update)
+
+        list_model = self.list_widget.model()
+        list_model.rowsInserted.connect(self._update_empty_state)
+        list_model.rowsRemoved.connect(self._update_empty_state)
+        list_model.modelReset.connect(self._update_empty_state)
+
         self.selection_manager = SelectionManager(self.list_widget, self._get_item_data)
         self.selection_manager.group_bar_position = self.group_bar_position
         self.selection_manager.item_activated.connect(self._on_paste_item)
@@ -470,126 +545,21 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
         self.left_layout.addWidget(self.list_widget, 1)
 
-        self.time_filter_bar = QWidget()
-        self.time_filter_bar.setFixedHeight(36)
-        self.time_filter_bar.hide()
-        time_filter_layout = QHBoxLayout(self.time_filter_bar)
-        time_filter_layout.setContentsMargins(8, 4, 8, 4)
-        time_filter_layout.setSpacing(5)
-
-        today = QDate.currentDate()
-        self.start_date_edit = QDateEdit(today.addDays(-7))
-        self.start_date_edit.setCalendarPopup(True)
-        self.start_date_edit.setDisplayFormat("yyyy/MM/dd")
-        self.start_date_edit.setFixedSize(114, 26)
-        self.start_date_edit.setToolTip(self.tr("Start date"))
-        self.start_date_edit.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
-        time_filter_layout.addWidget(self.start_date_edit)
-
-        self.time_filter_separator = QLabel("-")
-        self.time_filter_separator.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        time_filter_layout.addWidget(self.time_filter_separator)
-
-        self.end_date_edit = QDateEdit(today)
-        self.end_date_edit.setCalendarPopup(True)
-        self.end_date_edit.setDisplayFormat("yyyy/MM/dd")
-        self.end_date_edit.setFixedSize(114, 26)
-        self.end_date_edit.setToolTip(self.tr("End date"))
-        self.end_date_edit.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
-        time_filter_layout.addWidget(self.end_date_edit)
-        self._apply_date_filter_locale()
-
-        self.apply_time_filter_btn = QToolButton()
-        self.apply_time_filter_btn.setText("OK")
-        self.apply_time_filter_btn.setFixedSize(34, 26)
-        self.apply_time_filter_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.apply_time_filter_btn.setToolTip(self.tr("Apply time filter"))
-        self.apply_time_filter_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.apply_time_filter_btn.clicked.connect(self._apply_time_range_filter)
-        time_filter_layout.addWidget(self.apply_time_filter_btn)
-
-        time_filter_layout.addStretch(1)
-
-        self.type_filter_labels = [self.tr("All"), self.tr("Text"), self.tr("Image"), self.tr("File")]
-        self.type_filter_index = 0
-        self.type_filter_btn = QToolButton()
-        self.type_filter_btn.setFixedSize(66, 26)
-        self.type_filter_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.type_filter_btn.setToolTip(self.tr("Filter Type"))
-        self.type_filter_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.type_filter_btn.clicked.connect(self._show_type_filter_menu)
-        self.type_filter_menu = QMenu(self.type_filter_btn)
-        self.type_filter_actions = []
-        for idx, label in enumerate(self.type_filter_labels):
-            action = self.type_filter_menu.addAction(label)
-            action.setCheckable(True)
-            action.setChecked(idx == self.type_filter_index)
-            action.triggered.connect(lambda _checked=False, i=idx: self._set_type_filter(i))
-            self.type_filter_actions.append(action)
-        self._update_type_filter_button(0)
-        time_filter_layout.addWidget(self.type_filter_btn)
-
-        self.clear_time_filter_btn = QToolButton()
-        self.clear_time_filter_btn.setText("X")
-        self.clear_time_filter_btn.setFixedSize(26, 26)
-        self.clear_time_filter_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.clear_time_filter_btn.setToolTip(self.tr("Close filters"))
-        self.clear_time_filter_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.clear_time_filter_btn.clicked.connect(self._close_time_filter_bar)
-        time_filter_layout.addWidget(self.clear_time_filter_btn)
-        self.left_layout.addWidget(self.time_filter_bar)
-
-        self.bottom_bar = QWidget()
-        self.bottom_bar.setFixedHeight(36)
-        self.bottom_bar.setStyleSheet(
-            """
-            QWidget {
-                background: #FAFAFA;
-                border-top: 1px solid #E0E0E0;
-            }
-        """
-        )
-        bottom_layout = QHBoxLayout(self.bottom_bar)
-        bottom_layout.setContentsMargins(8, 4, 8, 4)
-        bottom_layout.setSpacing(8)
-
-        self.time_filter_toggle_btn = QToolButton()
-        self.time_filter_toggle_btn.setArrowType(Qt.ArrowType.UpArrow)
-        self.time_filter_toggle_btn.setFixedSize(28, 28)
-        self.time_filter_toggle_btn.setCheckable(True)
-        self.time_filter_toggle_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.time_filter_toggle_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.time_filter_toggle_btn.clicked.connect(self._toggle_time_filter_bar)
-        bottom_layout.addWidget(self.time_filter_toggle_btn)
-
-        self.search_input = LineEdit(use_default_style=False)
-        self.search_input.setPlaceholderText("🔍 " + self.tr("Search"))
-        self._apply_search_input_style()
-        self.search_input.textChanged.connect(self._on_search_changed)
-        self.search_input.textChanged.connect(self._update_search_background)
-        bottom_layout.addWidget(self.search_input, 1)
         self.selection_manager.set_search_input(self.search_input)
-
-        self.clear_search_btn = QPushButton("×")
-        self.clear_search_btn.setFixedSize(24, 24)
-        self.clear_search_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.clear_search_btn.setToolTip(self.tr("Clear search"))
-        self.clear_search_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self._apply_clear_search_btn_style()
-        self.clear_search_btn.clicked.connect(self._clear_search)
-        self.clear_search_btn.hide()
-        bottom_layout.addWidget(self.clear_search_btn)
-
-        self.menu_btn = QPushButton("⚙")
-        self.menu_btn.setFixedSize(28, 28)
-        self.menu_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.menu_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self._apply_menu_btn_style()
-        self.menu_btn.clicked.connect(self._show_main_menu)
-        bottom_layout.addWidget(self.menu_btn)
-
-        self._apply_time_filter_styles()
-
+        self.bottom_bar = QWidget()
+        self.bottom_bar.setObjectName("keyboardBar")
+        bottom_layout = QHBoxLayout(self.bottom_bar)
+        bottom_layout.setContentsMargins(_EDGE_X + 4, 7, _EDGE_X + 4, 8)
+        self.keyboard_hint = QLabel()
+        self.keyboard_hint.setObjectName("keyboardHint")
+        bottom_layout.addWidget(self.keyboard_hint)
+        bottom_layout.addStretch()
+        self.status_label = QLabel()
+        self.status_label.setObjectName("statusLabel")
+        bottom_layout.addWidget(self.status_label)
+        self._feedback_timer = QTimer(self)
+        self._feedback_timer.setSingleShot(True)
+        self._feedback_timer.timeout.connect(self._update_scope_bar)
         self.left_layout.addWidget(self.bottom_bar)
         self.content_layout.addWidget(self.left_widget, 1)
 
@@ -600,15 +570,249 @@ class ClipboardWindow(QWidget, FramelessMixin):
             position=self.group_bar_position,
             parent=self,
         )
-        self.group_bar.close_requested.connect(self.close)
         self.group_bar.group_switched.connect(self._on_group_switched)
         self.group_bar.sidebar_entered.connect(self._on_sidebar_entered)
         self.group_bar.sidebar_exited.connect(self._on_sidebar_exited)
         self.group_bar.manage_groups_requested.connect(self._on_add_group_clicked)
         self.group_bar.manage_items_requested.connect(self._on_add_item_clicked)
-        self.group_bar.build(self.content_layout, self.left_widget, self.left_layout)
+        self.group_bar.build(self.content_layout, self.left_widget, self.left_layout, top_index=1,
+                             top_host=self.scope_row)
+        self._apply_toolbar_styles()
+
+        self._create_quick_action_buttons()
+        self._create_empty_state()
+        self._update_empty_state()
 
         self._setup_mouse_tracking_recursive(self)
+
+    def _build_toolbar(self):
+        """头部两行：
+
+            [🔍 搜索剪贴板 ……………………]  📌  ···  ✕     ← 搜索即标题，空白处可拖动
+            全部  文本  图片  文件          分组 ⌄   ⚲     ← 类型分段 + 分组下拉 + 更多筛选
+        """
+        self.toolbar = QWidget()
+        self.toolbar.setObjectName("toolbar")
+        layout = QVBoxLayout(self.toolbar)
+        layout.setContentsMargins(_EDGE_X, 12, _EDGE_X - 4, 8)
+        layout.setSpacing(8)
+        header = QHBoxLayout()
+        header.setContentsMargins(0, 0, 0, 0)
+        header.setSpacing(2)
+        # 标题不再显示（窗口靠快捷键呼出，标题没有信息量），保留控件供窗口标题/无障碍名使用
+        self.title_label = QLabel()
+        self.title_label.setObjectName("clipboardTitle")
+        self.title_label.hide()
+        self.search_input = LineEdit(use_default_style=False)
+        self.search_input.setObjectName("recordSearch")
+        self.search_input.setFixedHeight(_SEARCH_H)
+        self.search_input.textChanged.connect(self._on_search_changed)
+        self.search_input.textChanged.connect(self._update_search_background)
+        self._search_action = self.search_input.addAction(QIcon(), QLineEdit.ActionPosition.LeadingPosition)
+        self._clear_search_action = self.search_input.addAction(QIcon(), QLineEdit.ActionPosition.TrailingPosition)
+        self._clear_search_action.triggered.connect(self._clear_search)
+        self._clear_search_action.setVisible(False)
+        header.addWidget(self.search_input, 1)
+        header.addSpacing(6)
+        self.keep_open_btn = QToolButton()
+        self.keep_open_btn.setCheckable(True)
+        self.keep_open_btn.setChecked(not self.config.get_clipboard_close_after_paste())
+        self.keep_open_btn.clicked.connect(lambda checked: self._toggle_close_after_paste(not checked))
+        self.menu_btn = QToolButton()
+        self.menu_btn.clicked.connect(self._show_main_menu)
+        self.close_btn = QToolButton()
+        self.close_btn.clicked.connect(self.close)
+        for button in (self.keep_open_btn, self.menu_btn, self.close_btn):
+            button.setObjectName("chromeButton")
+            button.setFixedSize(_TOOL_BTN, _TOOL_BTN)
+            button.setIconSize(QSize(_TOOL_ICON, _TOOL_ICON))
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            header.addWidget(button)
+        layout.addLayout(header)
+        types = QHBoxLayout()
+        types.setContentsMargins(0, 0, 0, 0)
+        types.setSpacing(2)
+        self.scope_row = types
+        self.type_filter_group = QButtonGroup(self)
+        self.type_filter_index = 0
+        self.type_filter_labels = [self.tr(label) for label in _TYPE_FILTERS]
+        self.type_filter_buttons = []
+        for index, label in enumerate(self.type_filter_labels):
+            button = QToolButton()
+            button.setObjectName("typeFilter")
+            button.setText(label)
+            button.setCheckable(True)
+            button.setChecked(index == 0)
+            button.setFixedHeight(_SEGMENT_H)
+            button.setCursor(Qt.CursorShape.PointingHandCursor)
+            self.type_filter_group.addButton(button, index)
+            self.type_filter_buttons.append(button)
+            types.addWidget(button)
+        self.type_filter_group.idClicked.connect(self._set_type_filter)
+        types.addStretch()
+        self.filter_btn = QToolButton()
+        self.filter_btn.setObjectName("chromeButton")
+        self.filter_btn.setCheckable(True)
+        self.filter_btn.setFixedSize(_TOOL_BTN, _SEGMENT_H)
+        self.filter_btn.setIconSize(QSize(_TOOL_ICON, _TOOL_ICON))
+        self.filter_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.filter_btn.clicked.connect(self._toggle_time_filter_bar)
+        # 分组下拉（GroupBar 顶部模式）会插在这个按钮之前
+        types.addWidget(self.filter_btn)
+        layout.addLayout(types)
+
+        self.time_filter_bar = QWidget()
+        self.time_filter_bar.setObjectName("filterPanel")
+        filter_layout = QVBoxLayout(self.time_filter_bar)
+        filter_layout.setContentsMargins(0, 0, 0, 6)
+        filter_layout.setSpacing(8)
+        presets = QHBoxLayout()
+        self.date_filter_btn = QToolButton()
+        self.date_filter_btn.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        self.date_menu = QMenu(self.date_filter_btn)
+        self.date_filter_btn.setMenu(self.date_menu)
+        self._date_preset = "any"
+        self._date_actions = []
+        for key, days in _DATE_PRESETS:
+            action = self.date_menu.addAction("")
+            action.setCheckable(True)
+            action.triggered.connect(lambda _checked=False, k=key, d=days: self._set_date_preset(k, d))
+            self._date_actions.append(action)
+        presets.addWidget(self.date_filter_btn)
+        presets.addStretch()
+        self.reset_filter_btn = QToolButton()
+        self.reset_filter_btn.clicked.connect(self._reset_filters)
+        presets.addWidget(self.reset_filter_btn)
+        filter_layout.addLayout(presets)
+        dates = QHBoxLayout()
+        dates.setSpacing(6)
+        today = QDate.currentDate()
+        self.start_date_edit = QDateEdit(today.addDays(-7))
+        self.end_date_edit = QDateEdit(today)
+        for edit in (self.start_date_edit, self.end_date_edit):
+            edit.setCalendarPopup(True)
+            edit.setDisplayFormat("yyyy/MM/dd")
+            edit.setMinimumWidth(108)
+            edit.setFixedHeight(28)
+            edit.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        dates.addWidget(self.start_date_edit, 1)
+        self.time_filter_separator = QLabel(self.tr("to"))
+        dates.addWidget(self.time_filter_separator)
+        dates.addWidget(self.end_date_edit, 1)
+        self.apply_time_filter_btn = QToolButton()
+        self.apply_time_filter_btn.setMinimumHeight(28)
+        self.apply_time_filter_btn.clicked.connect(self._apply_time_range_filter)
+        dates.addWidget(self.apply_time_filter_btn)
+        filter_layout.addLayout(dates)
+        self.filter_error = QLabel()
+        self.filter_error.setWordWrap(True)
+        self.filter_error.hide()
+        filter_layout.addWidget(self.filter_error)
+        self.time_filter_bar.hide()
+        layout.addWidget(self.time_filter_bar)
+        self._apply_date_filter_locale()
+        self.left_layout.addWidget(self.toolbar)
+
+    def _apply_toolbar_styles(self):
+        """头部与底栏的统一样式。
+
+        规则只有三条：控件字号 13、圆角 7、选中态 = 强调色软底 + 强调色字。
+        窗口级按钮（固定/更多/关闭/筛选）不用软底表示开关，只给图标上强调色，
+        避免与类型分段的「选中」混淆。
+        """
+        p = surface_palette(self.current_theme)
+        font = QFont()
+        font.setFamilies(UI_FAMILIES)
+        font.setPixelSize(13)
+        self.setFont(font)
+        r = _CONTROL_RADIUS
+        self.toolbar.setStyleSheet(f"""
+            QWidget#toolbar {{ background: transparent; border: none; border-bottom: 1px solid {rgba(p.hairline)}; }}
+            QLabel {{ background: transparent; color: {rgba(p.text_secondary)}; font-size: 13px; }}
+            QToolButton {{ background: transparent; color: {rgba(p.text_secondary)}; font-size: 13px;
+                border: 1px solid transparent; border-radius: {r}px; padding: 0 10px; }}
+            QToolButton:hover {{ background: {rgba(p.control_hover)}; color: {rgba(p.text)}; }}
+            QToolButton:pressed {{ background: {rgba(p.control_pressed)}; }}
+            QToolButton#typeFilter:checked {{ background: {rgba(p.accent_soft)}; color: {rgba(p.accent_text)};
+                font-weight: 500; }}
+            QToolButton#chromeButton {{ padding: 0; }}
+            QToolButton#chromeButton:checked {{ background: transparent; }}
+            QToolButton#chromeButton:checked:hover {{ background: {rgba(p.control_hover)}; }}
+            QToolButton:focus {{ border-color: {rgba(p.accent)}; }}
+            QToolButton::menu-indicator {{ image: none; }}
+        """)
+        self._apply_search_input_style()
+        self._search_action.setIcon(glyph_icon("magnifier", 16, p.text_tertiary.name()))
+        self._clear_search_action.setIcon(glyph_icon("close", 14, p.text_tertiary.name()))
+        self.menu_btn.setIcon(glyph_icon("more", 16, p.text_secondary.name()))
+        self.close_btn.setIcon(glyph_icon("close", 16, p.text_secondary.name()))
+        self.keep_open_btn.setIcon(svg_icon(
+            "fluent_icons/Pin.svg", 16, p.accent.name() if self.keep_open_btn.isChecked() else p.text_secondary.name()))
+        self.filter_btn.setIcon(svg_icon("fluent_icons/Filter.svg", 16, p.text_secondary.name()))
+        self.bottom_bar.setStyleSheet(f"""
+            QWidget#keyboardBar {{ background: transparent; border-top: 1px solid {rgba(p.hairline)}; }}
+            QLabel {{ color: {rgba(p.text_tertiary)}; background: transparent; border: none; font-size: 11px; }}
+        """)
+        self.date_menu.setStyleSheet(self._get_menu_style())
+        self._apply_time_filter_styles()
+        self._retranslate_ui()
+
+    def _set_date_preset(self, key, days):
+        self._date_preset = key
+        today = QDate.currentDate()
+        if days is None:
+            self.controller.set_time_range_text("")
+        else:
+            self.start_date_edit.setDate(today.addDays(-days))
+            self.end_date_edit.setDate(today)
+            self._apply_time_range_filter()
+            self._date_preset = key
+        self._update_date_menu_label()
+        self._update_scope_bar()
+
+    def _update_date_menu_label(self):
+        labels = [self.tr("Any time"), self.tr("Today"), self.tr("Last 7 days"), self.tr("Last 30 days")]
+        for (key, _), action, label in zip(_DATE_PRESETS, self._date_actions, labels):
+            action.setText(label)
+            action.setChecked(self._date_preset == key)
+        label = next((labels[i] for i, (key, _) in enumerate(_DATE_PRESETS) if key == self._date_preset), self.tr("Custom dates"))
+        self.date_filter_btn.setText(label)
+
+    def _update_scope_bar(self):
+        if not hasattr(self, "status_label"):
+            return
+        count = self.list_widget.count()
+        filters = bool(self.search_input.text().strip() or self.type_filter_index or self._date_preset != "any"
+                       or self.controller.source_filter or self.controller.tag_filter_id)
+        # 空列表不报「0 条」；有筛选时说「找到」，否则说「共」
+        if count == 0:
+            self.status_label.setText("")
+        elif filters:
+            self.status_label.setText(self.tr("{n} found").format(n=count))
+        else:
+            self.status_label.setText(self.tr("{n} items").format(n=count))
+        # 空状态里键盘提示没有意义，整条底栏收起
+        self.bottom_bar.setVisible(count > 0)
+        self.reset_filter_btn.setEnabled(filters)
+        p = surface_palette(self.current_theme)
+        self.filter_btn.setIcon(svg_icon("fluent_icons/Filter.svg", 16, p.accent.name() if filters else p.text_secondary.name()))
+        source = self.controller.source_filter
+        self.filter_btn.setToolTip(self.tr("Source: {name}").format(name=source) if source else self.tr("Filter"))
+        self._update_empty_state()
+
+    def _reset_filters(self):
+        if hasattr(self, "_search_timer"):
+            self._search_timer.stop()
+        self.search_input.blockSignals(True)
+        self.search_input.clear()
+        self.search_input.blockSignals(False)
+        self._clear_search_action.setVisible(False)
+        self._date_preset = "any"
+        self._update_type_filter_button(0)
+        self.filter_error.hide()
+        self.controller.clear_all_filters()
+        self._update_date_menu_label()
+        self._update_scope_bar()
 
     def _get_menu_style(self):
         return ThemeStyleGenerator(self.current_theme).generate_menu_style()
@@ -661,11 +865,9 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self._settings_menu.aboutToHide.connect(_on_menu_hide)
 
     def _toggle_time_filter_bar(self, checked: bool):
-        if not checked:
-            self._clear_time_and_type_filters()
+        PreviewPopup.instance().hide_preview()
         self.time_filter_bar.setVisible(checked)
-        self.time_filter_toggle_btn.setArrowType(Qt.ArrowType.DownArrow if checked else Qt.ArrowType.UpArrow)
-        self._apply_time_filter_styles()
+        self.filter_btn.setChecked(checked)
 
     def _apply_time_range_filter(self):
         start_text = self.start_date_edit.date().toString("yyyy/MM/dd")
@@ -679,9 +881,14 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self.end_date_edit.style().unpolish(self.end_date_edit)
         self.end_date_edit.style().polish(self.end_date_edit)
         self._apply_time_filter_styles()
+        self.filter_error.setText(self.tr("End date must be on or after start date."))
+        self.filter_error.setVisible(not ok)
+        if ok:
+            self._date_preset = "custom"
+            self._update_date_menu_label()
+            self._update_scope_bar()
 
     def _close_time_filter_bar(self):
-        self.time_filter_toggle_btn.setChecked(False)
         self._toggle_time_filter_bar(False)
 
     def _clear_time_and_type_filters(self):
@@ -690,18 +897,24 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self.end_date_edit.setDate(today)
         self.start_date_edit.setProperty("hasError", False)
         self.end_date_edit.setProperty("hasError", False)
-        if hasattr(self, "type_filter_btn"):
-            self._update_type_filter_button(0)
+        self._update_type_filter_button(0)
+        self._date_preset = "any"
+        self.filter_error.hide()
         self.controller.clear_time_and_type_filters()
+        self._update_date_menu_label()
+        self._update_scope_bar()
 
     def _toggle_paste_with_html(self, checked: bool):
         self.controller.set_paste_with_html(checked)
 
     def _toggle_auto_paste(self, checked: bool):
         self.controller.set_auto_paste(checked)
+        self._retranslate_ui()
 
     def _toggle_close_after_paste(self, checked: bool):
         self.config.set_clipboard_close_after_paste(checked)
+        self.keep_open_btn.setChecked(not checked)
+        self._apply_toolbar_styles()
 
     def _toggle_move_to_top_on_paste(self, checked: bool):
         self.controller.set_move_to_top_on_paste(checked)
@@ -758,6 +971,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
     def _refresh_list(self):
         PreviewPopup.instance().hide_preview()
         self.selection_manager.reset()
+        self._item_delegate.reset_hover()
+        self._hide_quick_actions()
 
         self.list_widget.setUpdatesEnabled(False)
         self.list_widget.clear()
@@ -812,6 +1027,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         scrollbar = self.list_widget.verticalScrollBar()
         maximum = scrollbar.maximum()
         self.controller.check_scroll_load(value, maximum)
+        self._reposition_quick_actions()
 
     def _on_scrollbar_range_changed(self, min_val: int, max_val: int):
         _ = (min_val, max_val)
@@ -845,12 +1061,19 @@ class ClipboardWindow(QWidget, FramelessMixin):
         row = self.list_widget.row(list_item)
         if row >= 0:
             self.selection_manager.set_hovered_index(row)
+            self._item_delegate.set_hovered_row(row)
+            if not self._hover_anim_timer.isActive():
+                self._hover_anim_timer.start()
+                QTimer.singleShot(_HOVER_ANIM_MS, self._hover_anim_timer.stop)
+            self._show_quick_actions_for_row(row)
 
         item_data = list_item.data(ROLE_ITEM_DATA)
         if item_data:
             popup = PreviewPopup.instance()
             pos = QCursor.pos()
-            popup.show_preview(item_data, pos, delay_ms=5)
+            if self.search_input.hasFocus() or QApplication.activePopupWidget() is not None:
+                return
+            popup.show_preview(item_data, pos, delay_ms=450, avoid_rect=self.frameGeometry())
 
     def _set_highlighted_item(self, item_id: Optional[int]):
         if self._item_delegate._highlighted_id != item_id:
@@ -858,47 +1081,287 @@ class ClipboardWindow(QWidget, FramelessMixin):
             self.list_widget.viewport().update()
 
     def _update_search_background(self, text: str):
-        if text.strip():
-            self._apply_search_input_style(has_text=True)
-            self.clear_search_btn.show()
-        else:
-            self._apply_search_input_style(has_text=False)
-            self.clear_search_btn.hide()
+        self._clear_search_action.setVisible(bool(text))
+        PreviewPopup.instance().hide_preview()
+        self._update_scope_bar()
 
     def _apply_search_input_style(self, has_text: bool = False):
-        style = ThemeStyleGenerator(self.current_theme).generate_search_input_style(has_text)
-        self.search_input.setStyleSheet(style)
+        p = surface_palette(self.current_theme)
+        fill = self.current_theme.colors.bg_tertiary
+        fill_focus = fill
+        self.search_input.setStyleSheet(f"""
+            QLineEdit {{ background: {fill}; color: {rgba(p.text)};
+                border: 1px solid transparent; border-radius: 17px; padding: 0 10px;
+                font-size: 14px; selection-background-color: {rgba(p.accent)}; selection-color: {self.current_theme.colors.bg_primary}; }}
+            QLineEdit:focus {{ background: {fill_focus}; border-color: {rgba(p.accent)}; }}
+        """)
 
-    def _apply_clear_search_btn_style(self):
-        style = ThemeStyleGenerator(self.current_theme).generate_clear_search_btn_style()
-        self.clear_search_btn.setStyleSheet(style)
-
-    def _apply_menu_btn_style(self):
-        style = ThemeStyleGenerator(self.current_theme).generate_menu_btn_style()
-        self.menu_btn.setStyleSheet(style)
+    def _set_menu_btn_icon(self, hovered: bool):
+        c = self.current_theme.colors
+        self.menu_btn.setIcon(glyph_icon("more", 16, c.text_primary if hovered else c.text_secondary))
 
     def _apply_time_filter_styles(self):
         generator = ThemeStyleGenerator(self.current_theme)
-        if hasattr(self, "time_filter_toggle_btn"):
-            self.time_filter_toggle_btn.setStyleSheet(generator.generate_filter_toggle_btn_style())
-        if hasattr(self, "start_date_edit"):
-            date_style = generator.generate_time_filter_date_edit_style()
-            calendar_style = generator.generate_time_filter_calendar_style()
-            self.start_date_edit.setStyleSheet(date_style)
-            self.end_date_edit.setStyleSheet(date_style)
-            self.start_date_edit.calendarWidget().setStyleSheet(calendar_style)
-            self.end_date_edit.calendarWidget().setStyleSheet(calendar_style)
-        if hasattr(self, "time_filter_separator"):
-            self.time_filter_separator.setStyleSheet(
-                f"background: transparent; border: none; color: {self.current_theme.colors.text_secondary};"
-            )
-        if hasattr(self, "apply_time_filter_btn"):
-            self.apply_time_filter_btn.setStyleSheet(generator.generate_time_filter_action_btn_style(primary=True))
-        if hasattr(self, "type_filter_btn"):
-            self.type_filter_btn.setStyleSheet(generator.generate_time_filter_type_btn_style())
-            self.type_filter_menu.setStyleSheet(generator.generate_menu_style())
-        if hasattr(self, "clear_time_filter_btn"):
-            self.clear_time_filter_btn.setStyleSheet(generator.generate_time_filter_action_btn_style(primary=True))
+        date_style = generator.generate_time_filter_date_edit_style()
+        calendar_style = generator.generate_time_filter_calendar_style()
+        for edit in (self.start_date_edit, self.end_date_edit):
+            edit.setStyleSheet(date_style)
+            edit.calendarWidget().setStyleSheet(calendar_style)
+        self.filter_error.setStyleSheet(f"color: {self.current_theme.colors.error}; font-size: 12px;")
+
+    # ========== 行尾快捷操作（复制 / 置顶 / 删除） ==========
+
+    def _create_quick_action_buttons(self):
+        self.quick_actions_bar = QWidget(self.list_widget.viewport())
+        layout = QHBoxLayout(self.quick_actions_bar)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(_QUICK_BTN_GAP)
+        self._quick_action_buttons = {}
+        self._quick_action_icons = {"copy": "fluent_icons/Copy.svg", "pin": "fluent_icons/Pin.svg"}
+        for key in ("copy", "pin", "more"):
+            btn = QToolButton(self.quick_actions_bar)
+            btn.setFixedSize(_QUICK_BTN_SIZE, _QUICK_BTN_SIZE)
+            btn.setCursor(Qt.CursorShape.PointingHandCursor)
+            btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+            btn.setIconSize(QSize(_QUICK_BTN_ICON_SIZE, _QUICK_BTN_ICON_SIZE))
+            btn.clicked.connect(lambda _checked=False, k=key: self._on_quick_action(k))
+            layout.addWidget(btn)
+            self._quick_action_buttons[key] = btn
+        self.quick_actions_bar.adjustSize()
+        self._quick_opacity_effect = QGraphicsOpacityEffect(self.quick_actions_bar)
+        self._quick_opacity_effect.setOpacity(0.0)
+        self.quick_actions_bar.setGraphicsEffect(self._quick_opacity_effect)
+        self._quick_action_row = -1
+        self._quick_action_item_id: Optional[int] = None
+        self._quick_fade = QVariantAnimation(self)
+        self._quick_fade.setDuration(140)
+        self._quick_fade.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self._quick_fade.valueChanged.connect(lambda v: self._quick_opacity_effect.setOpacity(float(v)))
+        self._quick_fade.finished.connect(self._on_quick_fade_finished)
+        self.quick_actions_bar.hide()
+        self._refresh_quick_action_styles()
+
+    def _refresh_quick_action_styles(self):
+        if not hasattr(self, "_quick_action_buttons"):
+            return
+        c = self.current_theme.colors
+        generator = ThemeStyleGenerator(self.current_theme)
+        is_dark = QColor(c.text_primary).value() >= 128
+        # 半透明磁贴：行内容半透地透出来但又有足够对比托住图标
+        tile_bg = "rgba(24, 24, 27, 0.96)" if is_dark else "rgba(255, 255, 255, 0.92)"
+        border = generator._hex_to_rgba(c.border_primary, 0.9)
+        accent_soft = generator._accent_soft()
+        accent_soft_pressed = generator._hex_to_rgba(c.accent_primary, 0.24)
+        qss = f"""
+            QToolButton {{
+                background: {tile_bg};
+                border: 1px solid {border};
+                border-radius: 8px;
+            }}
+            QToolButton:hover {{
+                background: {accent_soft};
+            }}
+            QToolButton:pressed {{
+                background: {accent_soft_pressed};
+            }}
+        """
+        self._quick_action_buttons["copy"].setToolTip(self.tr("Copy"))
+        self._quick_action_buttons["more"].setToolTip(self.tr("More"))
+        for key, btn in self._quick_action_buttons.items():
+            btn.setStyleSheet(qss)
+            if key in ("copy", "more"):
+                btn.setIcon(glyph_icon(key, _QUICK_BTN_ICON_SIZE, c.text_secondary))
+            else:
+                btn.setIcon(svg_icon(self._quick_action_icons[key], _QUICK_BTN_ICON_SIZE, c.text_secondary))
+
+    def _tinted_icon(self, svg_name: str, tint: str) -> QIcon:
+        try:
+            from core.resource_manager import ResourceManager
+
+            icon = ResourceManager.get_icon_by_name(svg_name)
+            source = icon.pixmap(26, 26)
+            if source.isNull():
+                return icon
+            tinted = QPixmap(source.size())
+            tinted.fill(Qt.GlobalColor.transparent)
+            painter = QPainter(tinted)
+            painter.drawPixmap(0, 0, source)
+            painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+            painter.fillRect(tinted.rect(), QColor(tint))
+            painter.end()
+            return QIcon(tinted)
+        except Exception as e:
+            log_exception(e, T("加载快捷操作图标"))
+            return QIcon()
+
+    def _on_quick_action(self, key: str):
+        item_id = self._quick_action_item_id
+        if item_id is None:
+            return
+        if key == "copy":
+            copied = self.manager.paste_item(item_id, self.controller.paste_with_html, False)
+            self.status_label.setText(self.tr("Copied") if copied else self.tr("Copy failed"))
+            self._feedback_timer.start(1600)
+        elif key == "pin":
+            self._toggle_pin(item_id)
+        elif key == "more":
+            row = self.list_widget.item(self._quick_action_row)
+            if row is not None:
+                self._show_context_menu(self.list_widget.visualItemRect(row).center())
+
+    def _show_quick_actions_for_row(self, row: int):
+        if not hasattr(self, "quick_actions_bar"):
+            return
+        if row < 0 or row >= self.list_widget.count():
+            self._hide_quick_actions()
+            return
+        item = self.list_widget.item(row)
+        rect = self.list_widget.visualItemRect(item) if item is not None else None
+        if item is None or rect is None or not rect.isValid():
+            self._hide_quick_actions()
+            return
+        item_data = item.data(ROLE_ITEM_DATA)
+        if not item_data:
+            self._hide_quick_actions()
+            return
+
+        self._quick_action_row = row
+        self._quick_action_item_id = item.data(ROLE_ITEM_ID)
+        pin_btn = self._quick_action_buttons["pin"]
+        pin_btn.setToolTip(self.tr("Unpin from Top") if item_data.is_pinned else self.tr("Pin to Top"))
+        pin_btn.setIcon(self._tinted_icon(
+            "fluent_icons/Pin.svg", self.current_theme.colors.accent_primary if item_data.is_pinned else self.current_theme.colors.text_secondary))
+
+        bar = self.quick_actions_bar
+        x = max(0, rect.right() + 1 - _QUICK_BAR_RIGHT_MARGIN - bar.width())
+        y = rect.top() + (rect.height() - bar.height()) // 2
+        self._item_delegate.set_action_reserve(row, bar.width() + 8)
+        self.list_widget.viewport().update()
+        bar.move(x, y)
+        if not bar.isVisible():
+            bar.show()
+        bar.raise_()
+        self._start_quick_fade(1.0)
+
+    def _start_quick_fade(self, target: float):
+        self._quick_fade.stop()
+        self._quick_fade.setStartValue(self._quick_opacity_effect.opacity())
+        self._quick_fade.setEndValue(target)
+        self._quick_fade.start()
+
+    def _on_quick_fade_finished(self):
+        if self._quick_opacity_effect.opacity() <= 0.01:
+            self.quick_actions_bar.hide()
+
+    def _hide_quick_actions(self):
+        self._item_delegate.set_action_reserve(-1, 0)
+        self.list_widget.viewport().update()
+        if not hasattr(self, "quick_actions_bar") or not self.quick_actions_bar.isVisible():
+            self._quick_action_row = -1
+            self._quick_action_item_id = None
+            return
+        self._quick_action_row = -1
+        self._quick_action_item_id = None
+        self._start_quick_fade(0.0)
+
+    def _hide_quick_actions_if_cursor_outside(self):
+        bar = getattr(self, "quick_actions_bar", None)
+        if bar is None or not bar.isVisible():
+            return
+        pos = self.list_widget.viewport().mapFromGlobal(QCursor.pos())
+        if not self.list_widget.viewport().rect().contains(pos):
+            self._hide_quick_actions()
+        elif not bar.geometry().adjusted(-4, -4, 4, 4).contains(pos):
+            self._hide_quick_actions()
+
+    def _reposition_quick_actions(self):
+        if getattr(self, "_quick_action_row", -1) >= 0:
+            row = self._quick_action_row
+            self._quick_action_row = -1
+            self._show_quick_actions_for_row(row)
+
+    # ========== 空态 ==========
+
+    def _create_empty_state(self):
+        self.empty_state = QWidget(self.list_widget.viewport())
+        self.empty_state.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.empty_state.setStyleSheet("background: transparent;")
+        layout = QVBoxLayout(self.empty_state)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(10)
+        self.empty_state_icon = QLabel()
+        self.empty_state_icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.empty_state_label = QLabel()
+        self.empty_state_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.empty_state_label.setText(self.tr("No records yet"))
+        self.empty_state_detail = QLabel()
+        self.empty_state_detail.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.empty_state_detail.setWordWrap(True)
+        layout.addWidget(self.empty_state_icon)
+        layout.addWidget(self.empty_state_label)
+        layout.addWidget(self.empty_state_detail)
+        self.empty_state.hide()
+
+    def _empty_state_pixmap(self) -> QPixmap:
+        size, dpr = 64, 2
+        pixmap = QPixmap(size * dpr, size * dpr)
+        pixmap.setDevicePixelRatio(dpr)
+        pixmap.fill(Qt.GlobalColor.transparent)
+        color = QColor(self.current_theme.colors.text_tertiary)
+        color.setAlpha(110)
+        pen = QPen(color, 3)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.drawRoundedRect(14, 12, 36, 42, 8, 8)   # 剪贴板板身
+        painter.drawRoundedRect(24, 8, 16, 8, 4, 4)     # 顶部夹子
+        painter.drawLine(21, 26, 43, 26)
+        painter.drawLine(21, 34, 43, 34)
+        painter.drawLine(21, 42, 36, 42)
+        painter.end()
+        return pixmap
+
+    def _update_empty_state(self):
+        if not hasattr(self, "empty_state"):
+            return
+        if self.list_widget.count() > 0 or not self.isVisible():
+            self.empty_state.hide()
+            return
+        c = self.current_theme.colors
+        self.empty_state_icon.setPixmap(self._empty_state_pixmap())
+        self.empty_state_label.setStyleSheet(
+            f"background: transparent; color: {c.text_primary}; font-size: 15px; font-weight: 500;"
+        )
+        self.empty_state_detail.setStyleSheet(
+            f"background: transparent; color: {c.text_secondary}; font-size: 13px;"
+        )
+        keyword = self.search_input.text().strip()
+        filtered = bool(keyword or self.type_filter_index or self._date_preset != "any"
+                        or self.controller.source_filter or self.controller.tag_filter_id)
+        if keyword:
+            shown = keyword if len(keyword) <= 12 else keyword[:11] + "…"
+            title = self.tr("No results for “{q}”").format(q=shown)
+            detail = self.tr("Try a different keyword, or clear the filters.")
+        elif filtered:
+            title, detail = self.tr("Nothing matches these filters"), self.tr("Try a different keyword, or clear the filters.")
+        elif self.controller.current_group_id is not None:
+            title = self.tr("This group is empty")
+            detail = self.tr("Right-click any item and choose “Move to Group” to add it here.")
+        else:
+            title = self.tr("Nothing here yet")
+            detail = self.tr("Text, images and files you copy will show up here.")
+        self.empty_state_label.setText(title)
+        self.empty_state_detail.setText(detail)
+        viewport = self.list_widget.viewport()
+        w, h = min(280, viewport.width() - 32), 150
+        x = max(0, (viewport.width() - w) // 2)
+        y = max(16, (viewport.height() - h) // 2 - 24)
+        self.empty_state.setGeometry(x, y, w, h)
+        self.empty_state.raise_()
+        self.empty_state.show()
 
     def _clear_search(self):
         self.search_input.clear()
@@ -906,26 +1369,16 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
     def _update_type_filter_button(self, index: int):
         self.type_filter_index = index
-        self.type_filter_btn.setText(f"{self.type_filter_labels[index]} ▾")
-        for action_index, action in enumerate(self.type_filter_actions):
-            action.setChecked(action_index == index)
-
-    def _show_type_filter_menu(self):
-        self.type_filter_menu.exec(self.type_filter_btn.mapToGlobal(QPoint(0, self.type_filter_btn.height())))
+        self.type_filter_buttons[index].setChecked(True)
 
     def _set_type_filter(self, index: int):
         self._update_type_filter_button(index)
         self.controller.set_content_type_filter(index)
+        self._update_scope_bar()
 
     def _on_group_switched(self, group_id):
         self.group_bar.switch_to_group(group_id)
-        is_quick_launch = False
-        if group_id is not None:
-            groups = self.controller.manager.get_groups()
-            g = next((group for group in groups if group.id == group_id), None)
-            is_quick_launch = g is not None and g.group_type == GroupType.FILE
-        self._item_delegate.set_hide_file_icon(is_quick_launch)
-        self.list_widget.viewport().update()
+        self._update_scope_bar()
 
     def _on_sidebar_entered(self):
         self.selection_manager.clear_selection()
@@ -1033,6 +1486,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
             "pin_image": lambda: self._create_pin_window(item_id),
             "save_image_as": lambda: self._save_image_as(item_id),
             "toggle_pin": lambda: self._toggle_pin(item_id),
+            "filter_by_source": lambda: self._filter_by_source(item_id),
             "open_file_location": lambda: self._open_file_location(item_id),
             "edit_item": lambda: self._edit_item(item_id),
             "move_item_up": lambda: self._move_item_order(item_id, -1),
@@ -1061,6 +1515,19 @@ class ClipboardWindow(QWidget, FramelessMixin):
         # 文件项特殊粘贴子菜单项
         if action_key.startswith("file_paste_"):
             return lambda: self._file_special_paste(item_id, action_key)
+
+        # 标签勾选
+        if action_key.startswith("toggle_tag_"):
+            try:
+                tag_id = int(action_key[len("toggle_tag_"):])
+            except ValueError:
+                return None
+            return lambda: self.controller.toggle_item_tag(item_id, tag_id)
+
+        if action_key == "new_tag":
+            return lambda: self._new_tag_for_item(item_id)
+        if action_key == "manage_tags":
+            return self._open_tag_manager
 
         return None
 
@@ -1094,6 +1561,40 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
     def _toggle_pin(self, item_id: int):
         self.controller.toggle_pin(item_id)
+
+    def _new_tag_for_item(self, item_id: int):
+        from PySide6.QtWidgets import QInputDialog
+        from clipboard.core.models import TAG_CHIP_COLORS
+
+        name, ok = QInputDialog.getText(self, self.tr("New Tag"), self.tr("Tag name:"))
+        if ok and name.strip():
+            self.controller.create_and_toggle_tag(
+                item_id, name.strip(), TAG_CHIP_COLORS[hash(name.strip()) % len(TAG_CHIP_COLORS)]
+            )
+
+    def _open_tag_manager(self):
+        tags = self.controller.list_tags()
+        from PySide6.QtWidgets import QInputDialog
+        names = [t.name for t in tags] or [self.tr("(no tags yet)")]
+        name, ok = QInputDialog.getItem(
+            self, self.tr("Manage Tags"), self.tr("Delete tag:"), names, 0, False
+        )
+        if ok and name and name != self.tr("(no tags yet)"):
+            tag = next((t for t in tags if t.name == name), None)
+            if tag is not None:
+                self.controller.delete_tag(tag.id)
+
+    def _filter_by_source(self, item_id: int):
+        """按来源应用筛选历史。"""
+        item = self.controller.get_item(item_id)
+        if item is None:
+            return
+        source = item.source_label or item.source_app
+        if not source:
+            return
+        self.controller.set_source_filter(source)
+        self.search_input.setText("")
+        self._load_history()
 
     def _create_pin_window(self, item_id: int):
         from .pin_window import create_pin_from_clipboard_item
@@ -1262,6 +1763,9 @@ class ClipboardWindow(QWidget, FramelessMixin):
             return
 
         PreviewPopup.instance().set_display_enabled(True)
+        # 隐藏动画可能还在收尾：先停掉，重置透明度和标志位再淡入
+        self._cancel_motion()
+        reset_opacity(self)
         self.setWindowOpacity(0)
 
         if hasattr(self, "_shortcut_handler") and self._shortcut_handler:
@@ -1273,6 +1777,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
         t_show_start = perf_counter()
         super().showEvent(event)
+        self._apply_glass()
 
         self.list_widget.setFocus()
         self._position_at_cursor()
@@ -1282,7 +1787,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
         log_debug(T("⏱️ 打开窗口耗时: {elapsed_ms:.1f} ms", elapsed_ms=(t_show_end - t_show_start) * 1000), "Clipboard")
 
     def _reveal_window(self):
-        self.setWindowOpacity(1)
+        fade_show(self)
+        self._update_empty_state()
 
     def _position_at_cursor(self):
         cursor_pos = QCursor.pos()
@@ -1315,6 +1821,15 @@ class ClipboardWindow(QWidget, FramelessMixin):
         # 先关闭预览入口。这样即使后续清理抛出异常，或队列中还有迟到的
         # 键盘/悬停事件，也不能在主窗口隐藏后重新拉起预览。
         PreviewPopup.instance().set_display_enabled(False)
+        # 浮层按钮随窗口一起收起，避免下次打开时残留在旧行上
+        if hasattr(self, "quick_actions_bar"):
+            self._quick_fade.stop()
+            self.quick_actions_bar.hide()
+            self._quick_opacity_effect.setOpacity(0.0)
+            self._quick_action_row = -1
+            self._quick_action_item_id = None
+        if hasattr(self, "_hover_anim_timer"):
+            self._hover_anim_timer.stop()
         self._fl_reset()
         self.controller.on_window_hide()
 
@@ -1326,9 +1841,21 @@ class ClipboardWindow(QWidget, FramelessMixin):
         active_popup = QApplication.activePopupWidget()
         if active_popup is not None:
             active_popup.close()
+        # 隐藏后裁剪工作集 + 清缩略图缓存，静默待机更省
+        try:
+            if hasattr(self, "_item_delegate"):
+                self._item_delegate.clear_thumb_cache()
+            from core.platform_utils import request_trim_working_set
+            request_trim_working_set(400)
+        except Exception:
+            pass
 
     @safe_event
     def closeEvent(self, event):
+        # 淡出动画进行中再次关闭：不重复清理，也不打断收尾
+        if getattr(self, "_motion_closing", False):
+            event.ignore()
+            return
         # closeEvent 后通常还会收到 hideEvent，但这里必须先禁用，覆盖关闭
         # 过程中保存设置等操作异常、导致后续语句未执行的情况。
         PreviewPopup.instance().set_display_enabled(False)
@@ -1339,13 +1866,76 @@ class ClipboardWindow(QWidget, FramelessMixin):
         if active_popup is not None:
             active_popup.close()
         self.closed.emit()
-        super().closeEvent(event)
+        # ignore 掉关闭事件：accepted 的顶层窗口会被框架立即隐藏，淡出就来不及播。
+        # 本窗口 close 语义等同隐藏（可复用的常驻 Tool 窗），收尾由 hide() 的
+        # 淡出动画完成，hideEvent 里的清理逻辑照旧执行。
+        event.ignore()
+        self.hide()
+        try:
+            from core.platform_utils import request_trim_working_set
+            request_trim_working_set(200)
+        except Exception:
+            pass
 
     @safe_event
     def changeEvent(self, event):
         super().changeEvent(event)
         if event.type() == QEvent.Type.ActivationChange and not self.isActiveWindow():
             QTimer.singleShot(100, self._check_and_hide)
+
+    def _cancel_motion(self):
+        """停掉进行中的入场/出场动画；阻断 finished，避免收尾逻辑误触发隐藏。"""
+        for anim in list(getattr(self, "_motion_anims", None) or []):
+            try:
+                anim.blockSignals(True)
+                anim.stop()
+            except RuntimeError:
+                pass
+        setattr(self, "_motion_anims", [])
+        setattr(self, "_motion_opening", False)
+        setattr(self, "_motion_closing", False)
+
+    def show(self):
+        """淡出动画途中再次显示：取消收尾并恢复不透明。
+
+        窗口淡出期间 isVisible() 仍为 True，Qt 的 show() 是空操作、不会再触发
+        showEvent，必须由这里拦住取消，否则收尾动画会把刚"唤回"的窗口藏掉。
+        """
+        if self.isVisible() and getattr(self, "_motion_closing", False):
+            self._cancel_motion()
+            reset_opacity(self)
+        super().show()
+
+    def hide(self):
+        """常规隐藏路由到淡出动画；动画收尾的 hide 走原生路径。"""
+        if self._offscreen_warmup_in_progress or not self.isVisible():
+            super().hide()
+            return
+        if getattr(self, "_motion_closing", False):
+            super().hide()
+            return
+        self._cancel_motion()
+        fade_hide(self)
+        if not getattr(self, "_motion_closing", False):
+            super().hide()
+
+    @safe_event
+    def paintEvent(self, event):
+        # 容器外侧的三层低透明描边，近似 macOS 浮层投影
+        if _SHADOW_MARGIN and not self._offscreen_warmup_in_progress and hasattr(self, "container"):
+            m = _SHADOW_MARGIN
+            target = self.rect().adjusted(m, m, -m, -m)
+            if target.width() > 0 and target.height() > 0:
+                painter = QPainter(self)
+                painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+                painter.setBrush(Qt.BrushStyle.NoBrush)
+                for spread, alpha in _SHADOW_RINGS:
+                    ring = target.adjusted(-spread, -spread, spread, spread)
+                    painter.setPen(QPen(QColor(0, 0, 0, alpha), 1))
+                    radius = _WINDOW_RADIUS + spread
+                    painter.drawRoundedRect(ring, radius, radius)
+                painter.end()
+        super().paintEvent(event)
 
     def _owns_window(self, window: Optional[QWidget]) -> bool:
         """Return whether *window* belongs to this clipboard window."""
@@ -1380,6 +1970,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
     def _is_draggable_area(self, widget, local_pos: QPoint) -> bool:
         _ = local_pos
+        if widget is self.toolbar or widget is self.title_label:
+            return True
         bar = getattr(self, "group_bar", None)
         if bar and bar.bar_widget is not None and widget is bar.bar_widget:
             return True
@@ -1405,6 +1997,11 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
         if event_type == QEvent.Type.Leave and obj is self.list_widget.viewport():
             self.selection_manager.clear_hovered_index()
+            self._item_delegate.set_hovered_row(-1)
+            if not self._hover_anim_timer.isActive():
+                self._hover_anim_timer.start()
+                QTimer.singleShot(_HOVER_ANIM_MS, self._hover_anim_timer.stop)
+            QTimer.singleShot(150, self._hide_quick_actions_if_cursor_outside)
             PreviewPopup.instance().hide_preview()
             selected_items = self.list_widget.selectedItems()
             if selected_items:
@@ -1412,6 +2009,13 @@ class ClipboardWindow(QWidget, FramelessMixin):
                 self._set_highlighted_item(selected_id)
             else:
                 self._set_highlighted_item(None)
+
+        if event_type == QEvent.Type.Resize and obj is self.list_widget.viewport():
+            self._update_empty_state()
+            QTimer.singleShot(0, self._reposition_quick_actions)
+
+        if event_type in (QEvent.Type.HoverEnter, QEvent.Type.HoverLeave) and obj is self.menu_btn:
+            self._set_menu_btn_icon(hovered=event_type == QEvent.Type.HoverEnter)
 
         if event_type == QEvent.Type.FocusIn and obj is self.list_widget:
             if not self.group_bar.sidebar_mode:

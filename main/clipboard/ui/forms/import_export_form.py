@@ -7,17 +7,19 @@
 """
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFrame, QHBoxLayout
+from PySide6.QtWidgets import QSizePolicy, QFrame, QHBoxLayout
 
 from ui.fluent_lite import BodyLabel, CaptionLabel, ComboBox, PrimaryPushButton
 from ui.fluent_lite.theme import ui_tokens
-from ..layout_scale import scale_ui, scale_y
+from ui.outline_icons import Icon
+from ..layout_scale import scale_ui, scale_x, scale_y
 
 
 def build_import_export_form(dialog):
     """构建导入导出表单。"""
     export_section = BodyLabel(dialog.tr("Export"))
     export_section.setStyleSheet(f"font-size: {scale_ui(14)}px; font-weight: 600; margin-top: {scale_y(8)}px;")
+    export_section.setProperty("headingSize", 14)
     dialog.detail_layout.addWidget(export_section)
 
     export_desc = CaptionLabel(dialog.tr("Export all saved content to CSV file"))
@@ -25,6 +27,8 @@ def build_import_export_form(dialog):
 
     encoding_layout = QHBoxLayout()
     encoding_label = CaptionLabel(dialog.tr("Encoding:"))
+    encoding_label.setWordWrap(False)
+    encoding_label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
     encoding_layout.addWidget(encoding_label)
 
     dialog.export_encoding_combo = ComboBox()
@@ -36,35 +40,45 @@ def build_import_export_form(dialog):
     encoding_layout.addStretch()
     dialog.detail_layout.addLayout(encoding_layout)
 
-    export_btn = PrimaryPushButton(dialog.tr("📤 Export to CSV"))
+    export_btn = PrimaryPushButton(dialog.tr("📤 Export to CSV").removeprefix("📤").strip(), icon=Icon.UPLOAD)
     export_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+    export_btn.setFixedWidth(scale_x(200))
     export_btn.clicked.connect(dialog._export_to_csv)
-    dialog.detail_layout.addWidget(export_btn)
+    # 紧凑按钮右对齐，避免整行的蓝色长条压过表单内容。
+    export_row = QHBoxLayout()
+    export_row.addStretch()
+    export_row.addWidget(export_btn)
+    dialog.detail_layout.addLayout(export_row)
 
     line = QFrame()
     dialog.import_export_separator = line
     line.setFrameShape(QFrame.Shape.HLine)
     line.setStyleSheet(
-        f"background: {ui_tokens(dialog).separator}; "
-        f"margin: {scale_y(16)}px 0;"
+        f"background: {ui_tokens(dialog).separator}; border: none;"
     )
     line.setFixedHeight(1)
     dialog.detail_layout.addWidget(line)
 
     import_section = BodyLabel(dialog.tr("Import"))
     import_section.setStyleSheet(f"font-size: {scale_ui(14)}px; font-weight: 600; margin-top: {scale_y(8)}px;")
+    import_section.setProperty("headingSize", 14)
     dialog.detail_layout.addWidget(import_section)
 
     import_desc = CaptionLabel(dialog.tr("Import content from CSV file (Group, Content, Title)"))
     dialog.detail_layout.addWidget(import_desc)
 
-    import_btn = PrimaryPushButton(dialog.tr("📥 Import from CSV"))
+    import_btn = PrimaryPushButton(dialog.tr("📥 Import from CSV").removeprefix("📥").strip(), icon=Icon.DOWNLOAD)
     import_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+    import_btn.setFixedWidth(scale_x(200))
     import_btn.clicked.connect(dialog._import_from_csv)
-    dialog.detail_layout.addWidget(import_btn)
+    import_row = QHBoxLayout()
+    import_row.addStretch()
+    import_row.addWidget(import_btn)
+    dialog.detail_layout.addLayout(import_row)
 
     format_section = BodyLabel(dialog.tr("CSV Format"))
     format_section.setStyleSheet(f"font-size: {scale_ui(14)}px; font-weight: 600; margin-top: {scale_y(24)}px;")
+    format_section.setProperty("headingSize", 14)
     dialog.detail_layout.addWidget(format_section)
 
     format_desc = CaptionLabel(

@@ -20,23 +20,24 @@ def _base_style(widget=None) -> str:
     s = lambda value: _px(widget, value)
     return f"""
     QPushButton {{ min-height: {s(28)}px; padding: {s(4)}px {s(16)}px; color: {t.text};
-     background: {t.surface}; border: 1px solid {t.border}; border-radius: {s(10)}px;
+     background: {t.surface}; border: 1px solid {t.border}; border-radius: {s(18)}px;
      font: {s(13)}px {FONT_FAMILY}; outline: none; }}
     QPushButton:hover {{ background: {t.surface_strong}; border-color: {t.border_hover}; }}
     QPushButton:pressed {{ background: {t.surface_subtle}; padding-top: {s(5)}px; padding-bottom: {s(3)}px; }}
-    QPushButton:focus {{ border-color: {ACCENT}; }}
+    QPushButton:focus {{ border-color: {t.accent}; }}
     QPushButton:disabled {{ color: {t.text_disabled}; background: {t.surface_subtle}; border-color: {t.border}; }}
     """
 
 
 def _primary_style(widget=None) -> str:
+    t = ui_tokens(widget)
     s = lambda value: _px(widget, value)
     return f"""
     QPushButton {{ min-height: {s(28)}px; padding: {s(4)}px {s(18)}px; color: white;
-     background: {ACCENT}; border: 1px solid rgba(255,255,255,.34); border-radius: {s(10)}px;
+     background: {t.accent_strong}; border: 1px solid rgba(255,255,255,.34); border-radius: {s(18)}px;
      font: 600 {s(13)}px {FONT_FAMILY}; outline: none; }}
-    QPushButton:hover {{ background: {ACCENT_HOVER}; border-color: {ACCENT_HOVER}; }}
-    QPushButton:pressed {{ background: {ACCENT_PRESSED}; border-color: {ACCENT_PRESSED}; padding-top: {s(5)}px; padding-bottom: {s(3)}px; }}
+    QPushButton:hover {{ background: {t.accent_strong_hover}; border-color: {t.accent_strong_hover}; }}
+    QPushButton:pressed {{ background: {t.accent_strong_pressed}; border-color: {t.accent_strong_pressed}; padding-top: {s(5)}px; padding-bottom: {s(3)}px; }}
     QPushButton:disabled {{ color: rgba(255,255,255,.84); background: #687D8F; border-color: #687D8F; }}
     """
 
@@ -46,7 +47,7 @@ def _transparent_style(widget=None) -> str:
     s = lambda value: _px(widget, value)
     return f"""
     QPushButton {{ min-height: {s(28)}px; padding: {s(4)}px {s(12)}px; color: {t.text_muted};
-     background: transparent; border: 1px solid transparent; border-radius: {s(10)}px;
+     background: transparent; border: 1px solid transparent; border-radius: {s(18)}px;
      font: {s(13)}px {FONT_FAMILY}; outline: none; }}
     QPushButton:hover {{ color: {t.text}; background: {t.surface_subtle}; }}
     QPushButton:pressed {{ background: {t.surface}; }}
@@ -151,14 +152,19 @@ class ColorSwatchButton(PushButton):
         """
 
 
-class PrimaryPushButton(PushButton):
-    def _style_sheet(self):
-        return _primary_style(self)
+from .button_base import Button
 
 
-class TransparentPushButton(PushButton):
-    def _style_sheet(self):
-        return _transparent_style(self)
+class PrimaryPushButton(Button):
+    def __init__(self, text="", parent=None, icon=None):
+        text, parent, icon = _button_args(text, parent, icon)
+        super().__init__(text, parent, variant="primary", icon=icon)
+
+
+class TransparentPushButton(Button):
+    def __init__(self, text="", parent=None, icon=None):
+        text, parent, icon = _button_args(text, parent, icon)
+        super().__init__(text, parent, variant="ghost", icon=icon)
 
 
 class HyperlinkButton(TransparentPushButton):

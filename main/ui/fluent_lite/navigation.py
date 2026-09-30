@@ -1,20 +1,81 @@
 """Lightweight route-based sidebar navigation."""
 
 from enum import Enum
+from typing import Optional
 
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import QRectF, QSize, Qt
+from PySide6.QtGui import QColor, QIcon, QPainter
 from PySide6.QtWidgets import QButtonGroup, QPushButton, QVBoxLayout, QWidget
 
 from core.ui_scale import dialog_scaled
 from core.ui_theme import get_ui_theme
+from ui.motion import HoverAnimator
 
-from .theme import ACCENT, FONT_FAMILY, tinted_icon, to_qicon, ui_tokens
+from .theme import ACCENT, FONT_FAMILY, css_color, tinted_icon, to_qicon, ui_tokens
 
 
 class NavigationItemPosition(Enum):
     TOP = 0
     BOTTOM = 1
+
+
+class NavigationItemButton(QPushButton):
+    """Nav item whose pill background fades in/out over 150ms on hover.
+
+    The stylesheet keeps owning text, icon and border colours; this widget
+    only paints the rounded fill before the base class draws the label, so
+    hovering eases through the fill colour instead of snapping.  Colours are
+    supplied through :meth:`set_fill_colors` and default to the Fluent-lite
+    sidebar look, keeping other pages pixel-identical to the old QSS fill.
+    """
+
+    def __init__(self, text="", parent=None):
+        super().__init__(text, parent)
+        self._hover_fill: Optional[QColor] = None
+        self._checked_fill: Optional[QColor] = None
+        self._fill_radius = dialog_scaled(11)
+        self._hover_animator = HoverAnimator(self, duration=150)
+        self._selection_animator = HoverAnimator(self, duration=160)
+        self.toggled.connect(lambda selected: self._selection_animator.enter() if selected else self._selection_animator.leave())
+
+    def set_fill_colors(self, hover: str = None, checked: str = None, radius=None):
+        """Restyle the painted fill; None colours fall back to no extra fill."""
+        self._hover_fill = css_color(hover) if hover else None
+        self._checked_fill = css_color(checked) if checked else None
+        if radius is not None:
+            self._fill_radius = int(radius)
+        self.update()
+
+    def enterEvent(self, event):
+        self._hover_animator.enter()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        self._hover_animator.leave()
+        super().leaveEvent(event)
+
+    def paintEvent(self, event):
+        fill = self._fill_color()
+        if fill is not None:
+            painter = QPainter(self)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(fill)
+            rect = QRectF(self.rect()).adjusted(0.5, 0.5, -0.5, -0.5)
+            painter.drawRoundedRect(rect, self._fill_radius, self._fill_radius)
+            painter.end()
+        super().paintEvent(event)
+
+    def _fill_color(self):
+        selected = self._selection_animator.value()
+        hovered = self._hover_animator.value()
+        if self._checked_fill is None or self._hover_fill is None:
+            return None
+        hover = QColor(self._hover_fill)
+        hover.setAlphaF(hover.alphaF() * hovered)
+        checked = self._checked_fill
+        return QColor.fromRgbF(*(a + (b - a) * selected for a, b in zip(hover.getRgbF(), checked.getRgbF())))
+
 
 
 class NavigationInterface(QWidget):
@@ -39,7 +100,7 @@ class NavigationInterface(QWidget):
         get_ui_theme().theme_changed.connect(self._apply_theme)
 
     def addItem(self, routeKey, icon, text, onClick, position=NavigationItemPosition.TOP, tooltip=None):
-        button = QPushButton(str(text), self)
+        button = NavigationItemButton(str(text), self)
         button.setObjectName("FluentLiteNavItem")
         button.setCheckable(True)
         button.setIconSize(QSize(dialog_scaled(18), dialog_scaled(18)))
@@ -64,14 +125,17 @@ class NavigationInterface(QWidget):
 
     def _style_button(self, button):
         t = ui_tokens(button)
+        # The fill itself is painted by NavigationItemButton so hovering can
+        # fade; the stylesheet background stays transparent on every state.
+        button.set_fill_colors(t.surface_hover, t.accent_soft, radius=dialog_scaled(6))
         button.setStyleSheet(f"""
-            QPushButton#FluentLiteNavItem {{ min-height: {dialog_scaled(40)}px; padding: {dialog_scaled(2)}px {dialog_scaled(13)}px; text-align: left;
-                color: {t.text}; background: transparent; border: 1px solid transparent; border-radius: {dialog_scaled(11)}px;
+            QPushButton#FluentLiteNavItem {{ min-height: {dialog_scaled(32)}px; padding: {dialog_scaled(2)}px {dialog_scaled(12)}px; text-align: left;
+                color: {t.text_muted}; background: transparent; border: 1px solid transparent; border-radius: {dialog_scaled(6)}px;
                 font: {dialog_scaled(13)}px {FONT_FAMILY}; }}
-            QPushButton#FluentLiteNavItem:hover {{ color: {t.text}; background: {t.surface_strong}; }}
-            QPushButton#FluentLiteNavItem:checked {{ color: {t.accent_text}; background: {t.accent_soft};
-                border: 1px solid transparent; border-left: 4px solid {ACCENT};
-                padding-left: {dialog_scaled(10)}px; font-weight: 600; }}
+            QPushButton#FluentLiteNavItem:hover {{ color: {t.text}; background: transparent; }}
+            QPushButton#FluentLiteNavItem:checked {{ color: {t.accent_text}; background: transparent; font-weight: 600; }}
+            QPushButton#FluentLiteNavItem:focus {{ border-color: {t.ring}; }}
+            QPushButton#FluentLiteNavItem:disabled {{ color: {t.text_disabled}; }}
         """)
 
     def _apply_icon(self, route_key):

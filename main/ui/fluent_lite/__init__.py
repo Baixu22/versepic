@@ -68,6 +68,8 @@ class RadioButton(_QRadioButton):
         self.initStyleOption(option)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        if not self.isEnabled():
+            painter.setOpacity(0.45)
 
         indicator = self.style().subElementRect(
             QStyle.SubElement.SE_RadioButtonIndicator, option, self
@@ -89,12 +91,16 @@ class RadioButton(_QRadioButton):
 
         center, outer = self._indicator_ellipse(indicator)
         tokens = ui_tokens(self)
-        painter.setPen(QColor(ACCENT if self.isChecked() or self.underMouse() else tokens.border_hover))
-        painter.setBrush(QColor(ACCENT if self.isChecked() else tokens.input_background))
+        painter.setPen(QColor(tokens.accent if self.isChecked() or self.underMouse() else tokens.border_hover))
+        painter.setBrush(QColor(tokens.accent if self.isChecked() else tokens.input_background))
         painter.drawEllipse(outer)
+        if self.hasFocus():
+            painter.setPen(QColor(tokens.ring))
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.drawRoundedRect(QRectF(self.rect()).adjusted(.5, .5, -.5, -.5), 3, 3)
         if self.isChecked():
             painter.setPen(Qt.PenStyle.NoPen)
-            painter.setBrush(QColor("#FFFFFF"))
+            painter.setBrush(QColor(tokens.primary_foreground))
             dot_diameter = float(_px(self, 6))
             dot_radius = dot_diameter / 2.0
             painter.drawEllipse(

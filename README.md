@@ -268,6 +268,7 @@ clipboard/
 │   ├── models.py            # ClipboardItem / Group models
 │   ├── enums.py             # GroupType definitions
 │   ├── text_transform.py    # Plain-text transforms — pure functions behind "paste special"
+│   ├── tag_store.py         # TagStore — tag definitions and item-tag mappings
 │   └── __init__.py
 ├── services/                # Service layer — file payloads, group rules, import/export, save logic
 │   ├── file_payload_service.py   # file payload JSON + legacy format compatibility
@@ -587,6 +588,8 @@ ui/
 ├── arrow_settings_panel.py  # ArrowSettingsPanel — arrow settings panel
 ├── number_settings_panel.py # number tool settings panel
 ├── mosaic_settings_panel.py # mosaic tool settings panel
+├── apple_style.py           # Apple-style design tokens + QSS helpers (shared by clipboard & manage windows)
+├── motion.py                # Motion helpers — fade/rise window transitions and hover animations
 │
 ├── fluent_lite/             # Fluent-style lightweight component library
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # buttons, cards, icons, inputs
