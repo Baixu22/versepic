@@ -529,8 +529,14 @@ def test_translation_windows_get_the_slot_label(settings):
     assert manager._backend_name() == expected
 
 
-def test_settings_page_offers_every_slot_and_saves_the_one_edited(qapp, settings):
+def test_settings_page_offers_every_slot_and_saves_the_one_edited(qapp, settings, monkeypatch):
     from ui.settings_ui.dialog import SettingsDialog
+
+    # An installed instance may own the hotkeys; this test only saves provider fields.
+    monkeypatch.setattr(
+        "core.shortcut_manager.HotkeySystem.check_hotkey_availability",
+        lambda _self, _hotkey: True,
+    )
 
     dialog = SettingsDialog(config_manager=settings)
     combo = dialog.translation_provider_combo
