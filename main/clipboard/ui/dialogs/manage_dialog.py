@@ -252,7 +252,7 @@ class ManageDialog(FrostedFramelessDialog):
             from core.resource_manager import ResourceManager
             import os
 
-            icon_path = ResourceManager.get_resource_path("svg/托盘.svg")
+            icon_path = ResourceManager.get_resource_path("svg/versepic.png")
             if os.path.exists(icon_path):
                 from PySide6.QtGui import QIcon
 

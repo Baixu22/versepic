@@ -1,6 +1,6 @@
 [project]
-name = "jietuba"
-version = "1.0.0"
+name = "versepic"
+version = "2.1.0"
 description = "截图 & 剪切板管理软件 - 基于 PySide6 和 Rust 的 Windows 平台截图和剪贴板管理工具"
 requires-python = "==3.11.*"
 license = {text = "MIT"}
@@ -29,7 +29,7 @@ dev = [
 ]
 
 [project.scripts]
-jietuba = "main.core.bootstrap:run"
+versepic = "main.core.bootstrap:run"
 
 [tool.pytest.ini_options]
 testpaths = ["main/tests"]

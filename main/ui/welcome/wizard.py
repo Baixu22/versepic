@@ -333,7 +333,7 @@ class WelcomeWizard(FrostedFramelessDialog):
         self._brand_icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
         try:
             from core.resource_manager import ResourceManager
-            icon = QIcon(ResourceManager.get_resource_path("svg/托盘.svg"))
+            icon = QIcon(ResourceManager.get_resource_path("svg/versepic.png"))
             if not icon.isNull():
                 self._brand_icon.setPixmap(icon.pixmap(dialog_scaled(24), dialog_scaled(24)))
         except Exception as e:

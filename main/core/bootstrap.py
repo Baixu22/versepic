@@ -512,7 +512,7 @@ def run():
     pin_bundled_resources()
 
     # 4. Windows 任务栏图标（必须在 QApplication 创建之前）
-    set_app_user_model_id("jietuba.app")
+    set_app_user_model_id("versepic.app")
 
     # 5. 单实例检查
     ensure_single_instance()

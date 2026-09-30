@@ -21,7 +21,7 @@ from core.logger import (
 )
 
 # ── 全局版本号 ────────────────────────────────────────────
-APP_VERSION = "2.0.7"
+APP_VERSION = "2.1.0"
 
 
 def create_fallback_app_icon():
@@ -58,7 +58,7 @@ def create_app_icon():
     用户看到的现象是"双击没有任何反应"。
     """
     from core.resource_manager import ResourceManager
-    icon_path = ResourceManager.get_resource_path("svg/托盘.svg")
+    icon_path = ResourceManager.get_resource_path("svg/versepic.png")
 
     if os.path.exists(icon_path):
         # 先渲染再判空：文件存在但 SVG 损坏时 pixmap 为空，
@@ -273,7 +273,7 @@ class MainApp(QObject):
             return
 
         # 更新 tooltip
-        self.tray_icon.setToolTip(self.tr("jietuba - Click to screenshot"))
+        self.tray_icon.setToolTip(self.tr("jietuba - Click to screenshot").replace("jietuba", "VersePic").replace("截图吧", "VersePic"))
 
         # 重建菜单
         self.tray_icon.setContextMenu(self._create_tray_menu())
@@ -409,7 +409,7 @@ class MainApp(QObject):
         icon = create_app_icon()
         self.tray_icon.setIcon(icon)
 
-        self.tray_icon.setToolTip(self.tr("jietuba - Click to screenshot"))
+        self.tray_icon.setToolTip(self.tr("jietuba - Click to screenshot").replace("jietuba", "VersePic").replace("截图吧", "VersePic"))
 
         # Menu
         self.tray_icon.setContextMenu(self._create_tray_menu())

@@ -174,7 +174,7 @@ class FloatingToolbar(QWidget):
         from core.resource_manager import ResourceManager
 
         self.manual_capture_btn = QPushButton()
-        self.manual_capture_btn.setIcon(ResourceManager.get_icon(ResourceManager.get_resource_path("svg/托盘.svg")))
+        self.manual_capture_btn.setIcon(ResourceManager.get_icon(ResourceManager.get_resource_path("svg/versepic.png")))
         self._icon_buttons.append(self.manual_capture_btn)
         self.manual_capture_btn.setToolTip(self.tr("Take screenshot manually"))
         self.manual_capture_btn.clicked.connect(self.manual_capture.emit)

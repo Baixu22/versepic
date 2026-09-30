@@ -135,7 +135,7 @@ def create_about_page(dialog) -> QScrollArea:
     github_card = SettingCard(
         FluentIcon.GITHUB,
         dialog.tr("Source Code"),
-        "github.com/1003129155/jietuba",
+        "github.com/Baixu22/versepic",
         parent=group,
     )
     link_btn = HyperlinkButton(

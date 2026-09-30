@@ -88,7 +88,7 @@ class SettingsDialog(FrostedFramelessDialog):
         # 自定义 Fluent 标题栏（在 setWindowTitle 之前，以接收信号）
         self._setup_titlebar()
 
-        self.setWindowTitle("jietuba")
+        self.setWindowTitle("VersePic")
         self.resize(dialog_scaled(1050), dialog_scaled(750))
         self.setFont(QFont(DEFAULT_FONT_FAMILY, dialog_scaled(11)))
         self.setObjectName("SettingsDialog")
@@ -112,7 +112,7 @@ class SettingsDialog(FrostedFramelessDialog):
         # 设置窗口图标
         try:
             from core.resource_manager import ResourceManager
-            icon_path = ResourceManager.get_resource_path("svg/托盘.svg")
+            icon_path = ResourceManager.get_resource_path("svg/versepic.png")
             if os.path.exists(icon_path):
                 self.setWindowIcon(QIcon(icon_path))
         except Exception as e:
@@ -156,7 +156,7 @@ class SettingsDialog(FrostedFramelessDialog):
 
         try:
             from core.resource_manager import ResourceManager
-            icon_path = ResourceManager.get_resource_path("svg/托盘.svg")
+            icon_path = ResourceManager.get_resource_path("svg/versepic.png")
             if os.path.exists(icon_path):
                 pm = QIcon(icon_path).pixmap(dialog_scaled(36), dialog_scaled(36))
                 logo_icon_lbl.setPixmap(pm)
@@ -167,7 +167,7 @@ class SettingsDialog(FrostedFramelessDialog):
         text_box = QVBoxLayout()
         text_box.setContentsMargins(0, 0, 0, 0)
         text_box.setSpacing(dialog_scaled(2))
-        app_name_lbl = BodyLabel(self.tr("jietuba"))
+        app_name_lbl = BodyLabel("VersePic")
         apply_theme_text_style(app_name_lbl, 16, bold=True)
         app_desc_lbl = QLabel(self.tr("Settings"))
         apply_theme_text_style(app_desc_lbl, 13, caption=True)
@@ -1282,7 +1282,7 @@ class SettingsDialog(FrostedFramelessDialog):
             from PySide6.QtGui import QPixmap, QIcon, QPainter
             from core.resource_manager import ResourceManager
 
-            _icon_path = ResourceManager.get_resource_path("svg/托盘.svg")
+            _icon_path = ResourceManager.get_resource_path("svg/versepic.png")
             if not os.path.exists(_icon_path):
                 return
 

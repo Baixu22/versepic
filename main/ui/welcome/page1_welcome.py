@@ -223,7 +223,7 @@ class _WelcomeIllus(IllustrationArea):
         try:
             from core.resource_manager import ResourceManager
             import os
-            path = ResourceManager.get_resource_path("svg/托盘.svg")
+            path = ResourceManager.get_resource_path("svg/versepic.png")
             if os.path.exists(path):
                 px = QIcon(path).pixmap(dialog_scaled(25), dialog_scaled(25))
                 self._icon_lbl.setPixmap(px)

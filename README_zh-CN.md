@@ -1,120 +1,61 @@
-**[中文](README_zh-CN.md)** | [English](README.md) | [日本語](README_JA.md)
 
-# 截图吧 — Windows 截图、OCR、钉图、翻译与剪贴板工具
+<p align="center"><img src="docs/images/versepic-icon.png" width="104" alt="VersePic icon"></p>
 
-[![build](https://img.shields.io/github/actions/workflow/status/1003129155/jietuba/ci.yml?branch=master2&label=build&style=flat-square)](https://github.com/1003129155/jietuba/actions/workflows/ci.yml) [![license](https://img.shields.io/github/license/1003129155/jietuba?style=flat-square)](LICENSE) [![release](https://img.shields.io/github/v/release/1003129155/jietuba?style=flat-square)](https://github.com/1003129155/jietuba/releases/latest) ![platform](https://img.shields.io/badge/Windows-x64%20%7C%20ARM64-0078D4?style=flat-square)
+# VersePic
 
-[下载 Windows 版](https://github.com/1003129155/jietuba/releases/latest) · [源码运行](#source-setup) · [开发与测试](#development)
+[English](README.md) · [简体中文](README_zh-CN.md) · [日本語](README_JA.md)
 
-![jietuba_gif_20260404_000903](https://github.com/user-attachments/assets/5318b991-b0de-46a2-9c0e-d75eeae2a827)
+面向 Windows 的截图与剪贴板工作台。截取、标注、贴图和整理复制内容，在一个轻量界面中完成。
 
-## 项目简介
+## 主要功能
 
-截图吧是一款免费开源的 Windows 截图工具：区域与窗口截图、滚动长截图拼接、标注、OCR 文字识别、翻译、钉图、GIF 录制、二维码/条形码识别、PDF 导出，以及完整的剪贴板历史管理。所有功能本地运行。
+- **截图与标注**：区域／窗口截图、滚动长截图、箭头、形状、文字与马赛克。
+- **贴图参考**：将图片固定在屏幕上，支持缩放、继续标注与 OCR。
+- **剪贴板历史**：检索文字、图片和文件，使用分组、标签、类型与日期筛选整理内容。
+- **内容管理**：创建分组、编辑常用内容、导入与导出 CSV 文本。
+- **识别与输出**：本地 PP-OCR、可配置翻译服务、GIF 录制、条码识别和 PDF 导出。
+- **统一界面**：中性深浅色、圆角组件、Lucide 图标和简短交互动效。
 
-界面使用 PySide6 构建，图像处理、剪贴板操作和 OCR 由 Rust 实现，支持 Windows x86_64 与 ARM64。
+## 应用截图
 
-提供可直接运行的 Windows 发行包，也支持从源码运行。
+以下为真实应用界面，使用隔离的演示数据，不包含个人剪贴板内容。
 
----
+| 剪贴板 | 内容管理 |
+| --- | --- |
+| ![剪贴板](docs/images/clipboard.png) | ![管理页面](docs/images/manage.png) |
 
-## 核心亮点
-
-"截图 ⇄ 剪贴板 ⇄ 钉图"三向互通的顺滑体验
-
-- **任意来源自动入史**：不只是自己截的图，复制的任何文本/图片/文件/html，都会自动进入同一份剪贴板历史，可分组永久保存一键导出多设备共享
-
-- **历史 → 钉图 → 继续工作**：历史记录里的任何一张图，都能一键“钉”回屏幕最前端。随时拿来对照、缩放、继续标注、重新 OCR。
-
-- **功能打磨到细节**：滚动截图支持上下左右全方向毫秒级精准拼接，多屏幕、多 DPI感知无缝截图，导出各种编码图片。各功能都比肩付费软件甚至更好。
-
-
-- **内存占用**：有严格的运行内存设计，连续复杂使用场景下常驻内存也占用可以被压到非常低水平（往往仅在十几 MB 甚至几 MB 级别）
-
-- **流畅 UI**：优化各种吃配置的场景，减少cpu占用让低配电脑也可以流畅使用
-
-- **数据安全**：功能完全本地运行，无数据收集、无偷偷联网，数据全部保存在本地；翻译是唯一需要联网的功能，仅在你主动使用时调用你自己选择的第三方翻译 API
-
----
+![深色管理页面](docs/images/manage-dark.png)
 
 ## 下载与使用
 
-普通用户可以直接使用对应架构的 Windows x86_64 或 ARM64 发行包，无需安装 Python、Rust 或配置开发环境。
+1. 在 [Releases](https://github.com/Baixu22/versepic/releases) 下载 Windows x64 ZIP。仓库为私有，需要有访问权限的 GitHub 账号。
+2. 完整解压，运行 **versepic.exe**，保持 **models/** 与程序在同一目录。
+3. 从系统托盘打开截图、剪贴板及设置；快捷键可在设置中调整。
 
-1. 打开 [Releases 下载页](https://github.com/1003129155/jietuba/releases/latest)，根据设备下载以 `-x64.zip` 或 `-arm64.zip` 结尾的程序包。
-2. 完整解压压缩包，保留 `jietuba_pp.exe` 和同级的 `models/` 目录。
-3. 双击 `jietuba_pp.exe` 启动程序。OCR 所需模型已随程序包提供。
-4. 程序尚未进行数字签名，通过浏览器下载后，Windows 可能显示运行警告。出现提示时，点击“更多信息”，再选择“仍要运行”即可启动。
+压缩包已包含两份 OCR 模型，无需安装 Python。当前提供 x64 版本；ARM64 属于源码构建目标，本次未提供经过验证的 ARM64 安装包。程序未签名。私有仓库无法被应用匿名查询更新，请直接使用 Releases 页面。
 
----
+## 数据与兼容性
 
-<a id="source-setup"></a>
+剪贴板内容与 OCR 在本机处理。翻译会将选定文字发送至你配置的服务。为兼容已有数据，暂时保留旧版设置／数据目录标识，品牌改名不会清空历史。CSV 导出针对已保存文本，不等同于完整图片或数据库备份。
 
-## 从源码运行
+## 开发与打包
 
-所有运行依赖均通过 [requirements.txt](requirements.txt) 统一安装。
+源码以 Windows、Python 3.11 为目标；本次本地包使用 Python 3.12 构建。请为当前架构安装匹配的原生扩展。
 
-### 一键安装
-
-1. 先安装与系统架构一致的 Python 3.11（x64 或 ARM64，包含 Python Launcher）
-2. 下载并解压或克隆本仓库，在项目根目录双击 [setup.bat](setup.bat)。
-
-### 手动安装
-
-先安装与系统架构一致的 Python 3.11（x64 或 ARM64，包含 Python Launcher），再在项目根目录打开 Windows 命令提示符（CMD），依次执行：
-
-**1. 创建并激活虚拟环境**
-
-```bat
-py -3.11 -m venv venv311
-call venv311\Scripts\activate.bat
+```powershell
+py -3.11 -m venv .venv
+.venv/Scripts/python -m pip install -r requirements.txt
+.venv/Scripts/python -m pip install -r requirements-dev.txt
+.venv/Scripts/python main/main_app.py
+.venv/Scripts/python -m pytest main/tests -q
+.venv/Scripts/python build_with_ocr_onefile.py
 ```
 
-**2. 安装全部运行依赖**
+依赖中的原生模块包括 pyclipboard、longstitch、gifrecorder、ppocr_rust；Rust 源码位于 rust_libs/，模型位于 models/。源码构建原生扩展的方法见 [.github/workflows/build.yml](.github/workflows/build.yml)。产物为 **dist/versepic.exe** 与 **dist/models/**，发布时必须一起打包。
 
-```bat
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
+## 致谢与许可
 
-**3. 运行程序**
-
-```bat
-cd main
-python main_app.py
-```
-
-OCR 模型已放在仓库的 [models/](models/) 目录中，包括 `PP-OCRv6_det_small.onnx` 和 `PP-OCRv6_rec_small.onnx`，保留该目录即可使用。
-
-### Rust 扩展包
-
-以下四个包已包含在 `requirements.txt` 中，会在安装运行依赖时一并安装。它们可以独立使用，源码位于 [rust_libs/](rust_libs/)。PyPI 发行名与 Python 的 import 名对应如下：
-
-| pip 包名 | import 名 | 版本 | 功能 |
-|------|------|------|------|
-| [`j-gif`](https://pypi.org/project/j-gif/) | `gifrecorder` | 0.3.1 | GIF/视频合成编码器 |
-| [`j-stitch`](https://pypi.org/project/j-stitch/) | `longstitch` | 0.4.0 | 长截图拼接算法 |
-| [`j-clipboard`](https://pypi.org/project/j-clipboard/) | `pyclipboard` | 0.4.2 | 剪贴板底层操作 |
-| [`j-ppocr`](https://pypi.org/project/j-ppocr/) | `ppocr_rust` | 0.2.0 | PP-OCR (PaddleOCR) ONNX 文字识别引擎（纯 Rust + ONNX Runtime，需 det/rec 模型） |
-
-预编译包面向 Windows x86_64 和 ARM64；各包的 Python 版本声明均为 `>=3.11`，Rust 绑定均启用了 `abi3-py311`，详见各包的 `pyproject.toml` 和 `Cargo.toml`。
-
----
-
-<a id="development"></a>
-
-## 开发与测试
-
-在项目根目录、已激活的虚拟环境中安装开发依赖并运行测试：
-
-```bat
-python -m pip install -r requirements-dev.txt
-python -m pytest main/tests -c main/tests/pytest.ini
-```
-
-[测试目录](main/tests/)包含截图、剪贴板、马赛克、钉图缩放、GIF 回放、OCR 文字层等模块的单元测试与集成测试。[CI 配置](.github/workflows/ci.yml)在 Windows x86_64 与 ARM64 的 Python 3.11 环境中执行测试及覆盖率检查，并在 x86_64 上执行静态检查；运行结果可在 [GitHub Actions](https://github.com/1003129155/jietuba/actions/workflows/ci.yml) 查看。
-
-构建 Windows 发行包可运行 `python build_with_ocr_onefile.py`，产物为 `dist/jietuba_pp.exe` 和 `dist/models/`。自动发行流程见 [build.yml](.github/workflows/build.yml)，会分别生成 x64 与 ARM64 压缩包。
+基于 [Jietuba](https://github.com/1003129155/jietuba) 开发，保留原作者版权及 [MIT 许可](LICENSE)。界面图标使用 [Lucide](https://lucide.dev)，附带其[许可](svg/lucide/LICENSE)。VersePic 应用图标由指定图像 API 生成并适配为 PNG／ICO。
 
 ---
 
@@ -264,7 +205,6 @@ capture/
 
 类似 Ditto 的剪贴板历史管理系统，现已拆分为 controllers、core、services、ui 四层结构，支持文本、图片、HTML、文件等类型。
 不仅能保存截图历史，还提供独立的三栏管理窗口用于维护分组与内容，并可从历史记录生成钉图。
-![jietuba_gif_20260404_001128](https://github.com/user-attachments/assets/b0a116e8-d944-43c9-b895-e6fc10d8c08a)
 
 <details>
 <summary>展开目录结构</summary>
@@ -385,7 +325,6 @@ core/
 ### gif/ — GIF 录制模块
 
 屏幕录制、编辑、回放和导出为 GIF/视频。
-<img width="766" height="630" alt="image" src="https://github.com/user-attachments/assets/8653fffb-b419-4584-ab4b-9fe95bb9f246" />
 
 <details>
 <summary>展开目录结构</summary>
@@ -421,7 +360,6 @@ gif/
 ### ocr/ — OCR 文字识别模块
 
 支持 PP-OCR 引擎的文字识别管理。
-<img width="580" height="505" alt="image" src="https://github.com/user-attachments/assets/60a16100-5edc-4543-9a35-daf05b1e244e" />
 
 <details>
 <summary>展开目录结构</summary>
@@ -445,7 +383,6 @@ ocr/
 ### pin/ — 钉图模块
 
 将截图固定在屏幕上，支持编辑、缩放、OCR识别、翻译等。
-<img width="737" height="657" alt="image" src="https://github.com/user-attachments/assets/827b912c-11ac-4692-b3f6-826561957615" />
 <details>
 <summary>展开目录结构</summary>
 
@@ -506,7 +443,6 @@ settings/
 ### stitch/ — 长截图拼接模块
 
 滚动截图和自动拼接功能。
-![jietuba_gif_20260404_001930](https://github.com/user-attachments/assets/a9720f08-5128-447d-b425-6d0640272e6a)
 <details>
 <summary>展开目录结构</summary>
 

@@ -23,6 +23,7 @@ class FakeReleaseChecker(QObject):
 
 def _create_page(monkeypatch, qapp):
     FakeReleaseChecker.instances.clear()
+    monkeypatch.setattr(page_about, "APP_VERSION", "2.0.7")
     monkeypatch.setattr(page_about, "GitHubReleaseChecker", FakeReleaseChecker)
     dialog = QDialog()
     page = page_about.create_about_page(dialog)

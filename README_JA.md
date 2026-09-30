@@ -1,121 +1,18 @@
-[中文](README_zh-CN.md) | [English](README.md) | **[日本語](README_JA.md)**
 
-# jietuba — Windows 向けスクリーンショット・OCR・ピン留め・翻訳・クリップボードツール
+<p align="center"><img src="docs/images/versepic-icon.png" width="104" alt="VersePic icon"></p>
 
-[![build](https://img.shields.io/github/actions/workflow/status/1003129155/jietuba/ci.yml?branch=master2&label=build&style=flat-square)](https://github.com/1003129155/jietuba/actions/workflows/ci.yml) [![license](https://img.shields.io/github/license/1003129155/jietuba?style=flat-square)](LICENSE) [![release](https://img.shields.io/github/v/release/1003129155/jietuba?style=flat-square)](https://github.com/1003129155/jietuba/releases/latest) ![platform](https://img.shields.io/badge/Windows-x64%20%7C%20ARM64-0078D4?style=flat-square)
+# VersePic
 
-[Windows 版をダウンロード](https://github.com/1003129155/jietuba/releases/latest) · [ソースから実行](#source-setup) · [開発とテスト](#development)
+[English](README.md) · [简体中文](README_zh-CN.md) · [日本語](README_JA.md)
 
-![jietuba demo](https://github.com/user-attachments/assets/5318b991-b0de-46a2-9c0e-d75eeae2a827)
+Windows 向けスクリーンショット・クリップボード管理アプリ。ローカル OCR、注釈、画像ピン留め、履歴検索、グループ管理を統合しています。
 
-## 概要
+最新のインストール手順、対応環境、データの扱いとビルド方法は [English README](README.md) を参照してください。現在の配布は Windows x64 です。プライベートリポジトリの Releases にはアクセス権が必要です。
 
-jietuba は Windows 向けの無料・オープンソースのスクリーンショットツールです。領域/ウィンドウキャプチャ、スクロール（長い）スクリーンショット、注釈、OCR 文字認識、翻訳、画像のピン留め、GIF 録画、QR コード/バーコード読み取り、PDF エクスポート、そして完全なクリップボード履歴管理を備えています。すべてローカルで動作します。
+![Clipboard](docs/images/clipboard.png)
+![Manage](docs/images/manage-dark.png)
 
-UI は PySide6、画像処理・クリップボード操作・OCR は Rust で実装しています。Windows x86_64 および ARM64 に対応。
-
-すぐに使える Windows 版の配布パッケージと、ソースからの実行方法を用意しています。
-
----
-
-## 主な特長
-
-「スクリーンショット ⇄ クリップボード ⇄ ピン留め」がなめらかにつながる三方向連携。
-
-- **コピー元を問わず自動で履歴に**：自分で撮ったスクリーンショットだけでなく、コピーしたテキスト・画像・ファイル・HTMLはすべて同じクリップボード履歴に自動で入ります。グループ分けして永久保存でき、ワンクリックでエクスポート、複数デバイス間で共有できます
-
-- **履歴 → ピン留め → 作業を継続**：履歴内のどの画像もワンクリックで画面最前面にピン留めできます。いつでも見比べたり、拡大縮小したり、注釈を続けたり、再OCRもできます
-
-- **細部まで磨き込まれた機能**：スクロールキャプチャは上下左右全方向をミリ秒単位で正確に結合。マルチモニター・マルチDPI環境でもシームレスにキャプチャし、さまざまなエンコードの画像をエクスポートできます。各機能は有料ソフトに匹敵するか、それ以上です
-
-- **メモリ使用量**：厳格なメモリ設計により、連続した複雑な操作でも常駐メモリを非常に低いレベルに抑えられます（多くの場合、わずか十数MB、場合によっては数MBレベル）
-
-- **快適なUI**：負荷の高いシーンを最適化し、CPU使用率も低減。低スペックPCでも快適に動作します
-
-- **データの安全性**：すべての機能が端末上だけで完結し、データ収集も裏でのネット通信もありません。データはすべてローカルに保存されます。唯一ネット接続が必要なのは翻訳機能で、これもユーザーが自分で選んだ翻訳APIを能動的に使ったときだけ通信します
-
----
-
-## ダウンロードと起動
-
-Windows x86_64 版および ARM64 版の配布パッケージは、そのまま実行できます。Python、Rust、開発環境のインストールは不要です。
-
-1. [Releases ページ](https://github.com/1003129155/jietuba/releases/latest)を開き、端末に合わせて `-x64.zip` または `-arm64.zip` で終わるファイルをダウンロードします。
-2. ZIP 全体を展開し、`jietuba_pp.exe` と `models/` フォルダを同じ階層に置きます。
-3. `jietuba_pp.exe` をダブルクリックして起動します。OCR モデルは配布パッケージに同梱されています。
-4. アプリにはデジタル署名がないため、ブラウザーからダウンロードすると Windows の警告が表示される場合があります。表示された場合は「詳細情報」をクリックし、「実行」を選択すると起動できます。
-
----
-
-<a id="source-setup"></a>
-
-## ソースから実行
-
-実行に必要な依存パッケージは、すべて [requirements.txt](requirements.txt) で一括インストールできます。
-
-### ワンクリックセットアップ
-
-1. Windows のシステム構成に合った Python 3.11（x64 または ARM64、Python Launcher を含む）をインストールします。
-2. 本リポジトリをダウンロード・展開するかクローンし、プロジェクトルートの [setup.bat](setup.bat) をダブルクリックします。
-
-### 手動セットアップ
-
-Windows のシステム構成に合った Python 3.11（x64 または ARM64、Python Launcher を含む）をインストールしてから、プロジェクトルートで Windows コマンドプロンプト（CMD）を開き、順に実行してください。
-
-**1. 仮想環境の作成と有効化**
-
-```bat
-py -3.11 -m venv venv311
-call venv311\Scripts\activate.bat
-```
-
-**2. 実行時依存パッケージのインストール**
-
-```bat
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-**3. アプリの実行**
-
-```bat
-cd main
-python main_app.py
-```
-
-OCR モデルの `PP-OCRv6_det_small.onnx` と `PP-OCRv6_rec_small.onnx` は、リポジトリの [models/](models/) に同梱されています。OCR を使う際は、このディレクトリをそのまま保持してください。
-
-### Rust 拡張パッケージ
-
-以下の 4 パッケージは `requirements.txt` に含まれ、実行時依存パッケージと一緒にインストールされます。個別のライブラリとしても利用でき、ソースコードは [rust_libs/](rust_libs/) にあります。PyPI の配布名と Python の import 名の対応は次のとおりです。
-
-| pip パッケージ名 | import 名 | バージョン | 機能 |
-|------|------|------|------|
-| [`j-gif`](https://pypi.org/project/j-gif/) | `gifrecorder` | 0.3.1 | GIF/動画合成エンコーダー |
-| [`j-stitch`](https://pypi.org/project/j-stitch/) | `longstitch` | 0.4.0 | 長いスクリーンショット結合アルゴリズム |
-| [`j-clipboard`](https://pypi.org/project/j-clipboard/) | `pyclipboard` | 0.4.2 | クリップボード操作 |
-| [`j-ppocr`](https://pypi.org/project/j-ppocr/) | `ppocr_rust` | 0.2.0 | PP-OCR (PaddleOCR) ONNX 文字認識エンジン（純 Rust + ONNX Runtime、det/rec モデルが必要） |
-
-ビルド済み wheel は Windows x86_64 および ARM64 向けです。各パッケージの Python バージョン指定は `>=3.11` で、Rust バインディングでは `abi3-py311` を有効にしています。詳細は各パッケージの `pyproject.toml` と `Cargo.toml` を参照してください。
-
----
-
-<a id="development"></a>
-
-## 開発とテスト
-
-仮想環境を有効にした状態で、プロジェクトルートから開発用依存パッケージをインストールし、テストを実行します。
-
-```bat
-python -m pip install -r requirements-dev.txt
-python -m pytest main/tests -c main/tests/pytest.ini
-```
-
-[テストディレクトリ](main/tests/)には、キャプチャ、クリップボード、モザイク編集、ピン留め画像のズーム、GIF 再生、OCR テキストレイヤーなどのユニットテスト・統合テストがあります。[CI 設定](.github/workflows/ci.yml)では Windows x86_64 と ARM64 の Python 3.11 環境でテストとカバレッジ検査を実行し、x86_64 では静的解析も行います。実行結果は [GitHub Actions](https://github.com/1003129155/jietuba/actions/workflows/ci.yml) で確認できます。
-
-Windows 版のビルドは `python build_with_ocr_onefile.py` で実行できます。生成物は `dist/jietuba_pp.exe` と `dist/models/` です。[自動リリースワークフロー](.github/workflows/build.yml)では、x64 と ARM64 のアーカイブを個別に生成します。
-
----
+Jietuba を基に開発。元の著作権と [MIT ライセンス](LICENSE) を保持し、UI アイコンには [Lucide](svg/lucide/LICENSE) を使用しています。
 
 ## ディレクトリ構造
 
@@ -195,7 +92,6 @@ barcode/
 ### canvas/ — キャンバスモジュール
 
 シーン管理、ビューレンダリング、アイテム選択、アンドゥ/リドゥ機能を備えたグラフィックス編集キャンバスシステム。
-![jietuba_gif_20260404_000903](https://github.com/user-attachments/assets/5318b991-b0de-46a2-9c0e-d75eeae2a827)
 
 <details>
 <summary>ディレクトリ構造を表示</summary>
@@ -247,7 +143,6 @@ capture/
 
 Ditto風のクリップボード履歴マネージャーで、controllers・core・services・ui の4層構成に再編されています。
 テキスト、画像、HTML、ファイルに対応し、グループと内容を管理する独立した3ペイン管理ウィンドウも備えています。
-![jietuba_gif_20260404_001128](https://github.com/user-attachments/assets/b0a116e8-d944-43c9-b895-e6fc10d8c08a)
 
 <details>
 <summary>ディレクトリ構造を表示</summary>
@@ -356,7 +251,6 @@ core/
 ### gif/ — GIF録画モジュール
 
 画面録画、編集、再生、GIF/動画エクスポート。
-<img width="766" height="630" alt="image" src="https://github.com/user-attachments/assets/8653fffb-b419-4584-ab4b-9fe95bb9f246" />
 <details>
 <summary>ディレクトリ構造を表示</summary>
 
@@ -384,7 +278,6 @@ gif/
 
 PP-OCR による文字認識管理。
 
-<img width="580" height="505" alt="image" src="https://github.com/user-attachments/assets/60a16100-5edc-4543-9a35-daf05b1e244e" />
 
 <details>
 <summary>ディレクトリ構造を表示</summary>
@@ -406,7 +299,6 @@ ocr/
 
 スクリーンショットを画面にピン留め。編集、ズーム、OCR、翻訳対応。
 
-<img width="737" height="657" alt="image" src="https://github.com/user-attachments/assets/827b912c-11ac-4692-b3f6-826561957615" />
 
 <details>
 <summary>ディレクトリ構造を表示</summary>
@@ -449,7 +341,6 @@ settings/
 ---
 
 ### stitch/ — 長いスクリーンショット結合モジュール
-![jietuba_gif_20260404_001930](https://github.com/user-attachments/assets/a9720f08-5128-447d-b425-6d0640272e6a)
 
 <details>
 <summary>ディレクトリ構造を表示</summary>

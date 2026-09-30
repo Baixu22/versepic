@@ -1,119 +1,67 @@
-[中文](README_zh-CN.md) | **[English](README.md)** | [日本語](README_JA.md)
 
-# jietuba — Screenshot, OCR, Pin, Translation & Clipboard Tool for Windows
+<p align="center"><img src="docs/images/versepic-icon.png" width="104" alt="VersePic icon"></p>
 
-[![build](https://img.shields.io/github/actions/workflow/status/1003129155/jietuba/ci.yml?branch=master2&label=build&style=flat-square)](https://github.com/1003129155/jietuba/actions/workflows/ci.yml) [![license](https://img.shields.io/github/license/1003129155/jietuba?style=flat-square)](LICENSE) [![release](https://img.shields.io/github/v/release/1003129155/jietuba?style=flat-square)](https://github.com/1003129155/jietuba/releases/latest) ![platform](https://img.shields.io/badge/Windows-x64%20%7C%20ARM64-0078D4?style=flat-square)
+# VersePic
 
-[Download for Windows](https://github.com/1003129155/jietuba/releases/latest) · [Run from Source](#source-setup) · [Development and Tests](#development)
+[English](README.md) · [简体中文](README_zh-CN.md) · [日本語](README_JA.md)
 
-![jietuba demo](https://github.com/user-attachments/assets/5318b991-b0de-46a2-9c0e-d75eeae2a827)
+A focused Windows workspace for screenshots, clipboard history and visual references. Capture a detail, annotate it, keep it on screen, and retrieve it later without breaking your flow.
 
-## Overview
+## What you can do
 
-jietuba is a free, open-source screenshot tool for Windows: region and window capture, scrolling (long) screenshots, annotation, OCR text recognition, translation, image pinning, GIF recording, QR code and barcode scanning, PDF export, and a full clipboard history manager. Everything runs locally.
+- **Capture and annotate:** region/window capture, scrolling screenshots, shapes, arrows, text and mosaic.
+- **Keep references visible:** pin images above other windows, zoom and annotate them.
+- **Find copied content:** search text, images and files; use groups, tags, type/date filters and reusable snippets.
+- **Manage your library:** create groups, edit saved content, and import/export text content as CSV.
+- **Read and share:** local PP-OCR recognition, configured translation services, GIF recording, barcode scanning and PDF export.
+- **A quieter interface:** neutral light/dark surfaces, rounded controls, official Lucide icons and short interaction transitions.
 
-The interface is built with PySide6; image processing, clipboard access, and OCR are implemented in Rust. Runs on Windows x86_64 and ARM64.
+## App screenshots
 
-Download a ready-to-run Windows release or run the application from source.
+Screenshots below show real application windows with isolated demonstration data, not personal clipboard contents.
 
----
+| Clipboard | Manage |
+| --- | --- |
+| ![Clipboard](docs/images/clipboard.png) | ![Management](docs/images/manage.png) |
 
-## Highlights
+![Dark management](docs/images/manage-dark.png)
 
-A smooth, three-way "screenshot ⇄ clipboard ⇄ pin" workflow.
+## Download and run
 
-- **Anything you copy lands in history** — not just your own screenshots: any text, image, file, or HTML you copy goes automatically into the same clipboard history, ready to group, save permanently, export in one click, and share across devices
+1. Open [Releases](https://github.com/Baixu22/versepic/releases). This private repository requires an authorized GitHub account.
+2. Download the Windows x64 ZIP and extract the entire archive.
+3. Run **versepic.exe**. Keep **models/** beside the executable; both OCR models are included.
+4. Open the system tray icon to capture, open clipboard history, or change settings and shortcuts.
 
-- **History → pin → keep working** — pin any image from history back to the top of the screen with one click. Bring it up anytime to compare, zoom, keep annotating, or re-run OCR
+No Python installation is needed for the packaged build. The executable is unsigned. This release is x64; ARM64 is a source/build target, not a tested binary supplied by this release. In-app update checks cannot anonymously read a private repository: use its Releases page.
 
-- **Polished down to the details** — scroll capture stitches precisely in all four directions within milliseconds; seamless capture across multiple monitors and mixed DPI; export images in various encodings. Every feature rivals paid software — or does even better
+## Data and compatibility
 
-- **Memory footprint** — a strict runtime memory design keeps resident memory very low even under continuous, complex usage (often just a dozen MB or even a few MB)
+Clipboard history and OCR processing stay on the device. Translation uses the provider you configure and sends the selected text to that provider. Existing Jietuba settings/data identifiers are retained for compatibility; branding changes do not create an empty replacement library. CSV export covers saved text, not a complete image/database backup.
 
-- **Smooth UI** — demanding scenarios are optimized and CPU usage reduced, so even low-end machines run smoothly
+## Build from source
 
-- **Data safety** — everything runs entirely on your machine: no data collection, no silent network calls, all data stays local. Translation is the one feature that needs the internet, and only when you actively use it, calling whichever third-party translation API you've chosen
+The project targets Windows and Python 3.11; the local release was built with Python 3.12. Install matching native wheels for your architecture.
 
----
-
-## Download and Run
-
-The Windows x86_64 and ARM64 releases are ready to run. You do not need to install Python, Rust, or a development environment.
-
-1. Open the [Releases page](https://github.com/1003129155/jietuba/releases/latest) and download the archive ending in `-x64.zip` or `-arm64.zip` for your device.
-2. Extract the entire archive, keeping `jietuba_pp.exe` and the `models/` folder together.
-3. Double-click `jietuba_pp.exe` to start. The OCR models are included in the archive.
-4. The application is not digitally signed, so Windows may display a warning after you download it through a browser. If prompted, click **More info**, then **Run anyway** to start the application.
-
----
-
-<a id="source-setup"></a>
-
-## Run from Source
-
-All runtime dependencies install through [requirements.txt](requirements.txt).
-
-### One-Click Setup
-
-1. Install Python 3.11 for your Windows architecture (x64 or ARM64), including the Python Launcher.
-2. Download and extract or clone this repository, then double-click [setup.bat](setup.bat) in the project root.
-
-### Manual Setup
-
-Install Python 3.11 for your Windows architecture (x64 or ARM64), including the Python Launcher, then open Windows Command Prompt (CMD) in the project root and run these steps:
-
-**1. Create and activate a virtual environment**
-
-```bat
-py -3.11 -m venv venv311
-call venv311\Scripts\activate.bat
+```powershell
+py -3.11 -m venv .venv
+.venv/Scripts/python -m pip install -r requirements.txt
+.venv/Scripts/python -m pip install -r requirements-dev.txt
+.venv/Scripts/python main/main_app.py
 ```
 
-**2. Install all runtime dependencies**
+Native modules `pyclipboard`, `longstitch`, `gifrecorder` and `ppocr_rust` are supplied by the packages in requirements.txt; their Rust sources are under rust_libs/. Keep the bundled models/ directory. For source-built native wheels, follow the build steps in [.github/workflows/build.yml](.github/workflows/build.yml).
 
-```bat
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+```powershell
+.venv/Scripts/python -m pytest main/tests -q
+.venv/Scripts/python build_with_ocr_onefile.py
 ```
 
-**3. Run the application**
+Build output: **dist/versepic.exe** and **dist/models/**. Package them together. Local UI reviews and build outputs are excluded from Git.
 
-```bat
-cd main
-python main_app.py
-```
+## Credits and license
 
-The repository includes `PP-OCRv6_det_small.onnx` and `PP-OCRv6_rec_small.onnx` in [models/](models/). Keep that directory in place for OCR.
-
-### Rust Extension Packages
-
-These four packages are included in `requirements.txt` and install with the runtime dependencies. They can also be used independently; their source code is in [rust_libs/](rust_libs/). Their PyPI distribution names map to Python import names as follows:
-
-| pip name | import name | Version | Description |
-|------|------|------|------|
-| [`j-gif`](https://pypi.org/project/j-gif/) | `gifrecorder` | 0.3.1 | GIF/video composition encoder |
-| [`j-stitch`](https://pypi.org/project/j-stitch/) | `longstitch` | 0.4.0 | Long screenshot stitching algorithm |
-| [`j-clipboard`](https://pypi.org/project/j-clipboard/) | `pyclipboard` | 0.4.2 | Low-level clipboard operations |
-| [`j-ppocr`](https://pypi.org/project/j-ppocr/) | `ppocr_rust` | 0.2.0 | PP-OCR (PaddleOCR) ONNX text recognition (pure Rust + ONNX Runtime, needs det/rec models) |
-
-The available prebuilt wheels target Windows x86_64 and ARM64. Each package declares `>=3.11` and enables `abi3-py311` in its Rust bindings; see each package's `pyproject.toml` and `Cargo.toml`.
-
----
-
-<a id="development"></a>
-
-## Development and Tests
-
-From the project root, with the virtual environment activated, install development dependencies and run the tests:
-
-```bat
-python -m pip install -r requirements-dev.txt
-python -m pytest main/tests -c main/tests/pytest.ini
-```
-
-The [test directory](main/tests/) contains unit and integration tests for capture, clipboard operations, mosaic editing, pin zoom, GIF playback, OCR text layers, and other modules. The [CI workflow](.github/workflows/ci.yml) runs tests and coverage checks on Windows x86_64 and ARM64 with Python 3.11, plus static analysis on x86_64. Results are available in [GitHub Actions](https://github.com/1003129155/jietuba/actions/workflows/ci.yml).
-
-To build a Windows release, run `python build_with_ocr_onefile.py`. It produces `dist/jietuba_pp.exe` and `dist/models/`. The automated [release workflow](.github/workflows/build.yml) creates separate x64 and ARM64 archives.
+VersePic builds on [Jietuba](https://github.com/1003129155/jietuba). Original copyright and the [MIT license](LICENSE) are retained. UI icons are [Lucide](https://lucide.dev), with its [license](svg/lucide/LICENSE) included. The VersePic app mark was generated using the configured image API and adapted into PNG/ICO assets.
 
 ---
 
@@ -195,7 +143,6 @@ barcode/
 ### canvas/ — Canvas Module
 
 Graphics editing canvas system with scene management, view rendering, item selection, and undo/redo.
-![jietuba_gif_20260404_000903](https://github.com/user-attachments/assets/5318b991-b0de-46a2-9c0e-d75eeae2a827)
 
 <details>
 <summary>Expand directory structure</summary>
@@ -248,7 +195,6 @@ capture/
 
 Ditto-like clipboard history manager, now organized into controllers, core, services, and ui layers.
 Supports text, images, HTML, files, a dedicated three-pane management window, and pin creation from history items.
-![jietuba_gif_20260404_001128](https://github.com/user-attachments/assets/b0a116e8-d944-43c9-b895-e6fc10d8c08a)
 
 <details>
 <summary>Expand directory structure</summary>
@@ -357,7 +303,6 @@ core/
 ### gif/ — GIF Recording Module
 
 Screen recording, editing, playback, and export to GIF/video.
-<img width="766" height="630" alt="image" src="https://github.com/user-attachments/assets/8653fffb-b419-4584-ab4b-9fe95bb9f246" />
 <details>
 <summary>Expand directory structure</summary>
 
@@ -385,7 +330,6 @@ gif/
 
 Text recognition management powered by PP-OCR.
 
-<img width="580" height="505" alt="image" src="https://github.com/user-attachments/assets/60a16100-5edc-4543-9a35-daf05b1e244e" />
 
 <details>
 <summary>Expand directory structure</summary>
@@ -407,7 +351,6 @@ ocr/
 
 Pin screenshots on screen with editing, zoom, OCR, and translation.
 
-<img width="737" height="657" alt="image" src="https://github.com/user-attachments/assets/827b912c-11ac-4692-b3f6-826561957615" />
 
 <details>
 <summary>Expand directory structure</summary>
@@ -450,7 +393,6 @@ settings/
 ---
 
 ### stitch/ — Long Screenshot Stitching Module
-![jietuba_gif_20260404_001930](https://github.com/user-attachments/assets/a9720f08-5128-447d-b425-6d0640272e6a)
 
 <details>
 <summary>Expand directory structure</summary>

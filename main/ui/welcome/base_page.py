@@ -28,7 +28,7 @@ BG_ILLUS = "#F3F7FA"
 BG_SUBTLE = "#F7F9FB"
 BORDER = "#DDE5EC"
 RADIUS = 16
-PRODUCT_NAME = "Jietuba"
+PRODUCT_NAME = "VersePic"
 
 
 @dataclass(frozen=True)
@@ -101,7 +101,7 @@ def welcome_theme() -> WelcomeTheme:
 def brand_text(text: str) -> str:
     """将翻译文件中的历史产品名统一成当前英文品牌写法。"""
     result = str(text)
-    for legacy_name in ("截图吧", "JieTuBa", "JieTuba", "JIETUBA"):
+    for legacy_name in ("截图吧", "JieTuBa", "JieTuba", "JIETUBA", "Jietuba", "jietuba"):
         result = result.replace(legacy_name, PRODUCT_NAME)
     return result
 

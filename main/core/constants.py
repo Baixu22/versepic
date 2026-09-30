@@ -114,9 +114,9 @@ def normalize_text_font_family(font_family: str | None, language_code: str | Non
     return get_default_text_font_for_language(language_code)
 
 # 项目主页（欢迎页与设置“关于”页共用）
-PROJECT_GITHUB_URL = "https://github.com/1003129155/jietuba"
+PROJECT_GITHUB_URL = "https://github.com/Baixu22/versepic"
 PROJECT_RELEASES_LATEST_URL = f"{PROJECT_GITHUB_URL}/releases/latest"
 PROJECT_LATEST_RELEASE_API_URL = (
-    "https://api.github.com/repos/1003129155/jietuba/releases/latest"
+    "https://api.github.com/repos/Baixu22/versepic/releases/latest"
 )
  
