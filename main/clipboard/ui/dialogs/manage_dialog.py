@@ -14,24 +14,24 @@ from dataclasses import replace as _replace_tokens
 from typing import Optional
 
 from PySide6.QtCore import (
-    QEasingCurve,
-    QParallelAnimationGroup,
-    QPropertyAnimation,
+    QCoreApplication,
+    QSignalBlocker,
     Qt,
     QTimer,
     Signal,
 )
-from PySide6.QtGui import QColor, QCursor
+from PySide6.QtGui import QColor, QCursor, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
     QFrame,
-    QGraphicsOpacityEffect,
     QHBoxLayout,
     QListWidget,
     QListWidgetItem,
     QPushButton,
     QScrollArea,
+    QSizePolicy,
+    QSplitter,
     QVBoxLayout,
     QWidget,
 )
@@ -47,11 +47,17 @@ from ui.fluent_lite import (
     NavigationItemPosition,
     PushButton as FluentPushButton,
     PrimaryPushButton,
+    Button,
     FluentTitleBar,
     FrostedFramelessDialog,
 )
 from ui.motion import cancel_motion, fade_hide, fade_show
-from ui.fluent_lite.theme import FONT_FAMILY
+from ui.fluent_lite.labels import PageHeader
+from ui.fluent_lite.theme import (
+    FONT_FAMILY, SURFACE_RADIUS, WORKSPACE_MARGIN,
+    WORKSPACE_PADDING, WORKSPACE_SIDEBAR_WIDTH, WORKSPACE_HEADER_HEIGHT,
+)
+from ui.outline_icons import Icon
 from core import safe_event
 from core.ui_scale import configure_dialog_control, configure_dialog_controls
 from core.ui_theme import UIThemeMode, get_ui_theme
@@ -78,88 +84,22 @@ from ...services.manage_dialog_service import save_file_content, save_group, sav
 from ..forms.file_content_form import build_edit_file_content_form, build_file_content_form
 from ..forms.group_form import build_edit_group_form, build_new_group_form
 from ..forms.group_icon_picker import (
-    create_group_icon_picker,
-    emoji_btn_style,
-    emoji_tab_style,
+    first_grapheme,
     on_icon_input_changed,
     on_preset_icon_clicked,
-    switch_emoji_group,
 )
 from ..forms.import_export_form import build_import_export_form
 from ..forms.text_content_form import build_edit_text_content_form, build_text_content_form
 from ..layout_scale import (
+    field_gap,
     manage_dialog_height,
     manage_dialog_min_height,
     manage_dialog_min_width,
     manage_dialog_width,
     scale_ui,
-    scale_x,
-    scale_y,
 )
 from ..widgets.draggable_list_widget import DraggableListWidget
-
-
-def _apple_danger_button_qss(tokens) -> str:
-    """Delete as a light touch: tinted text that gains a danger wash on hover.
-
-    几何（高 28 / 圆角 10 / 内边距 4x18）与 PrimaryPushButton 完全对齐，
-    编辑态一排按钮共用同一套度量。
-    """
-    return f"""
-        QPushButton {{
-            color: {tokens.danger};
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: {scale_ui(18)}px;
-            min-height: {scale_ui(28)}px;
-            padding: {scale_ui(4)}px {scale_ui(18)}px;
-            font: {scale_ui(13)}px {FONT_FAMILY};
-        }}
-        QPushButton:hover {{ background: {tokens.danger_soft}; }}
-        QPushButton:pressed {{ background: {tokens.danger}; color: #FFFFFF; }}
-        QPushButton:disabled {{ color: {tokens.text_tertiary}; background: transparent; }}
-    """
-
-
-def _apple_ghost_button_qss(tokens) -> str:
-    """导航列 Close：无边框文字钮，hover 只给一层浅灰洗底。"""
-    return f"""
-        QPushButton {{
-            color: {tokens.text_secondary};
-            background: transparent;
-            border: none;
-            border-radius: {scale_ui(18)}px;
-            min-height: {scale_ui(28)}px;
-            padding: {scale_ui(4)}px {scale_ui(18)}px;
-            font: {scale_ui(13)}px {FONT_FAMILY};
-        }}
-        QPushButton:hover {{ background: {tokens.hover_bg}; color: {tokens.text}; }}
-        QPushButton:pressed {{ background: {tokens.accent_soft}; color: {tokens.text}; }}
-        QPushButton:disabled {{ color: {tokens.text_tertiary}; background: transparent; }}
-    """
-
-
-def _apple_nav_item_qss(tokens) -> str:
-    """macOS sidebar row: rounded pill painted by the button, accent text when selected."""
-    radius = scale_ui(18)
-    return f"""
-        QPushButton#FluentLiteNavItem {{
-            min-height: {scale_y(32)}px;
-            padding: {scale_y(2)}px {scale_x(12)}px;
-            text-align: left;
-            color: {tokens.text};
-            background: transparent;
-            border: none;
-            border-radius: {radius}px;
-            font: {scale_ui(13)}px {FONT_FAMILY};
-        }}
-        QPushButton#FluentLiteNavItem:hover {{ color: {tokens.text}; background: transparent; }}
-        QPushButton#FluentLiteNavItem:checked {{
-            color: {tokens.accent};
-            background: transparent;
-            font-weight: 600;
-        }}
-    """
+from ..widgets.manage_list_delegate import GROUP_LABEL_ROLE, PREVIEW_ROLE, ManageListDelegate
 
 
 _manage_window_instance: Optional["ManageDialog"] = None
@@ -226,9 +166,9 @@ class ManageDialog(FrostedFramelessDialog):
         self.editing_group_id = None
         self.editing_item_id = None
         self._detail_form_token = 0
-        # Apple chrome: 12px window corners painted by FrostedFramelessDialog.
-        self._frosted_corner_radius = 12
-        self._crossfade_running = False
+        self._clean_state = None
+        self._dirty = False
+        # The management window retains its independently selected clipboard theme.
         self._fade_done_pending = False
         self._clipboard_theme_manager = get_theme_manager()
         self._apple = management_palette(self._clipboard_theme_manager.get_current_theme())
@@ -267,7 +207,9 @@ class ManageDialog(FrostedFramelessDialog):
         # Static Fluent controls are created once.  Opt them into the
         # standalone-window scale before any dynamic detail form is built.
         configure_dialog_controls(self)
-        self._switch_mode("group")
+        self._apply_mode("group")
+        QShortcut(QKeySequence("Ctrl+S"), self, activated=self._on_save_clicked)
+        QShortcut(QKeySequence("Ctrl+N"), self, activated=self._new_entry)
         self._center_on_screen()
         self._apply_ui_theme(get_ui_theme().tokens)
         get_ui_theme().theme_changed.connect(self._apply_ui_theme)
@@ -311,7 +253,7 @@ class ManageDialog(FrostedFramelessDialog):
             accent=theme.colors.accent_primary,
             accent_hover=apple.accent_hover,
             accent_pressed=apple.accent_pressed,
-            accent_soft=apple.accent_soft,
+            accent_soft=theme.colors.bg_selected,
             accent_strong=readable_accent(QColor(apple.accent), QColor("#171717" if dark else "#FAFAFA")).name(),
             accent_strong_hover=readable_accent(QColor(apple.accent_hover), QColor("#171717" if dark else "#FAFAFA")).name(),
             accent_strong_pressed=readable_accent(QColor(apple.accent_pressed), QColor("#171717" if dark else "#FAFAFA")).name(),
@@ -329,7 +271,7 @@ class ManageDialog(FrostedFramelessDialog):
             text_disabled=apple.text_tertiary,
             border=input_border,
             border_hover=apple.text_tertiary,
-            input_background=apple.sidebar_bg,
+            input_background=apple.card_bg,
             popup_background=apple.card_bg,
             popup_hover=apple.hover_bg,
             separator=apple.border,
@@ -347,99 +289,66 @@ class ManageDialog(FrostedFramelessDialog):
             ManageDialog QWidget {{
                 font-family: {FONT_FAMILY};
             }}
-            QTextEdit {{
-                border: 1px solid transparent;
-                border-radius: {scale_ui(18)}px;
-                padding: {scale_ui(12)}px;
-                font-size: {scale_ui(13)}px;
-                background: {apple.sidebar_bg};
-                color: {apple.text};
-                selection-background-color: {apple.accent};
-                selection-color: #FFFFFF;
-            }}
-            QTextEdit:focus {{
-                border: 1px solid {apple.accent};
-                background: {apple.sidebar_bg};
-            }}
         """ + apple_scrollbar_qss(apple))
 
         self.nav_column.setStyleSheet(
             "QWidget#ManageNavColumn {"
             "background: transparent;"
             "border: none;"
-            f"border-radius: {scale_ui(18)}px;"
+            f"border-radius: {scale_ui(SURFACE_RADIUS)}px;"
             "}"
         )
         card_qss = (
             f"background: {apple.card_bg};"
             f"border: 1px solid {apple.border};"
-            f"border-radius: {scale_ui(24)}px;"
+            f"border-radius: {scale_ui(SURFACE_RADIUS)}px;"
         )
         self.list_column.setStyleSheet(
             f"QWidget#ManageListColumn {{ background: transparent; "
             f"border: none; border-right: 1px solid {apple.border}; }}"
         )
-        self.detail_column.setStyleSheet(f"QWidget#ManageDetailColumn {{{card_qss}}}")
+        self.content_card.setStyleSheet(f"QWidget#ManageContentCard {{{card_qss}}}")
+        self.workspace_splitter.setStyleSheet(
+            f"QSplitter::handle {{ background: transparent; }}"
+            f"QSplitter::handle:hover {{ background: {apple.border}; border-radius: {scale_ui(2)}px; }}"
+        )
+        self.detail_column.setStyleSheet("QWidget#ManageDetailColumn { background: transparent; border: none; }")
         self.list_widget.setStyleSheet(f"""
             QListWidget {{
                 background: transparent;
                 border: none;
                 outline: none;
                 color: {apple.text};
-                font-size: {scale_ui(12)}px;
-            }}
-            QListWidget::item {{
-                padding: {scale_y(5)}px {scale_x(10)}px;
-                margin: 0 {scale_x(6)}px;
-                border: none;
-                border-radius: {scale_ui(18)}px;
-                color: {apple.text};
-            }}
-            QListWidget::item:selected {{
-                background: {apple.accent_soft};
-                color: {apple.accent};
-            }}
-            QListWidget::item:hover {{
-                background: {apple.hover_bg};
+                font-size: {scale_ui(13)}px;
             }}
         """)
-        self.detail_title.setStyleSheet(
-            f"color: {apple.text}; font-size: {scale_ui(17)}px; "
-            f"font-weight: 600; font-family: {FONT_FAMILY}; background: transparent;"
-        )
+        self.detail_title._apply_theme()
         self.detail_subtitle.setStyleSheet(
-            f"color: {apple.text_secondary}; font-size: {scale_ui(12)}px; "
+            f"color: {apple.text_secondary}; font-size: {scale_ui(13)}px; "
             "background: transparent;"
         )
         self.detail_separator.setStyleSheet(
             f"background: {apple.border}; border: none;"
         )
-        for key in ("group", "content", "import_export"):
-            nav_button = self.nav_interface.widget(key)
-            if nav_button is None:
-                continue
-            nav_button.set_fill_colors(
-                hover=apple.hover_bg,
-                checked=apple.accent_soft,
-                radius=scale_ui(18),
-            )
-            nav_button.setStyleSheet(_apple_nav_item_qss(apple))
+        self.footer_separator.setStyleSheet(self.detail_separator.styleSheet())
+        self.nav_interface._apply_theme()
+        nav_width = max(scale_ui(WORKSPACE_SIDEBAR_WIDTH), *(button.sizeHint().width() for button in self.nav_interface._items.values()))
+        self.nav_column.setFixedWidth(nav_width)
+        self.titleBar.hBoxLayout.setContentsMargins(scale_ui(12), 0, 0, 0)
         for row in range(self.list_widget.count()):
             item = self.list_widget.item(row)
             data = item.data(Qt.ItemDataRole.UserRole)
-            if data and data[0] == "new" and self.current_mode == "content":
-                item.setBackground(QColor(apple.accent_soft))
+            if data and data[0] == "new":
+                item.setIcon(Icon.PLUS.render_icon(apple.text_secondary))
+            elif data and data[0] == "item":
+                item.setIcon(Icon.FILE.render_icon(apple.text_secondary))
         self._apply_dynamic_form_theme()
         self.update()
 
     def _apply_action_button_theme(self):
-        """Delete/Close 的 Apple 样式要在每次表单重建后重放：
+        """Action variants resolve colours from the same local scope as every control."""
+        self.delete_btn.setVariant("destructive-ghost")
 
-        _finish_detail_form_setup() 里的 _refresh_theme_scope() 会调用按钮
-        自身的 _apply_theme（Fluent 基础样式）把它们重置，这里统一补回。"""
-        apple = self._apple
-        self.delete_btn.setStyleSheet(_apple_danger_button_qss(apple))
-        self.close_btn.setStyleSheet(_apple_ghost_button_qss(apple))
 
     def _apply_dynamic_form_theme(self):
         """Refresh controls that are rebuilt when the selected form changes."""
@@ -448,15 +357,21 @@ class ManageDialog(FrostedFramelessDialog):
         self._apply_action_button_theme()
         # Reapply hierarchy after dynamic forms acquire their scoped theme.
         for label in self.detail_content.findChildren(BodyLabel):
-            size = label.property("headingSize") or 12
+            size = label.property("headingSize") or 14
+            weight = 600 if label.property("headingSize") else 500
             label.setStyleSheet(
                 f"background: transparent; color: {apple.text}; "
-                f"font: 500 {scale_ui(size)}px {FONT_FAMILY};"
+                f"font: {weight} {scale_ui(size)}px {FONT_FAMILY};"
             )
         self.list_title.setStyleSheet(
-            f"background: transparent; color: {apple.text_secondary}; "
-            f"font: 500 {scale_ui(12)}px {FONT_FAMILY};"
+            f"background: transparent; color: {apple.text}; "
+            f"font: 500 {scale_ui(13)}px {FONT_FAMILY};"
         )
+        for option in self.detail_content.findChildren(QWidget, "GroupTypeOption"):
+            option._apply_theme()
+        icon_button = getattr(self, "icon_picker_button", None)
+        if _qt_object_is_valid(icon_button):
+            icon_button._apply_theme()
         icon_input = getattr(self, "icon_input", None)
         if _qt_object_is_valid(icon_input):
             apply_theme = getattr(icon_input, "_apply_theme", None)
@@ -464,27 +379,7 @@ class ManageDialog(FrostedFramelessDialog):
                 apply_theme(tokens)
             icon_input.setStyleSheet(
                 icon_input.styleSheet()
-                + f"QLineEdit {{ font-size: {scale_ui(18)}px; "
-                  f"min-width: {scale_x(120)}px; max-width: {scale_x(150)}px; }}"
-            )
-        icon_preview = getattr(self, "icon_preview", None)
-        if _qt_object_is_valid(icon_preview):
-            icon_preview.setStyleSheet(f"""
-                QLabel {{
-                    font-size: {scale_ui(22)}px;
-                    background: {apple.hover_bg};
-                    border: 1px solid {apple.border};
-                    border-radius: {scale_ui(18)}px;
-                }}
-            """)
-        for index, button in enumerate(
-            getattr(self, "_emoji_tab_buttons", [])
-        ):
-            button.setStyleSheet(
-                emoji_tab_style(
-                    index == getattr(self, "_emoji_current_idx", 0),
-                    self,
-                )
+                + f"QLineEdit {{ font-size: {scale_ui(20)}px; padding: 0px; }}"
             )
         import_export_separator = getattr(
             self, "import_export_separator", None
@@ -559,6 +454,9 @@ class ManageDialog(FrostedFramelessDialog):
 
     def open_group_editor(self, group_id: int):
         """打开并定位到指定分组的编辑界面"""
+        if not self._confirm_discard():
+            return
+        self._dirty = False
         self.setUpdatesEnabled(False)
         if self.current_mode != "group":
             self._switch_mode("group")
@@ -572,6 +470,9 @@ class ManageDialog(FrostedFramelessDialog):
 
     def open_item_editor(self, item_id: int, group_id: Optional[int]):
         """打开并定位到指定内容的编辑界面"""
+        if not self._confirm_discard():
+            return
+        self._dirty = False
         self.setUpdatesEnabled(False)
         if self.current_mode != "content":
             self._switch_mode("content")
@@ -590,6 +491,9 @@ class ManageDialog(FrostedFramelessDialog):
         QDialog.accept()/reject() 都汇集到这里：首次进入先播放 fade_hide，
         等动画结束窗口已经隐藏后再重新进入并走基类的完成逻辑。
         """
+        if self.isVisible() and not self._confirm_discard():
+            return
+        self._discard_draft()
         if not self.isVisible() or getattr(self, "_motion_closing", False):
             super().done(result)
             return
@@ -610,258 +514,275 @@ class ManageDialog(FrostedFramelessDialog):
     def closeEvent(self, event):
         """关闭事件 - 淡出后只隐藏窗口，不销毁"""
         event.ignore()
+        if not self._confirm_discard():
+            return
+        self._discard_draft()
         if not self.isVisible():
             self.hide()
             return
         fade_hide(self)
 
     def _setup_ui(self):
-        """设置三列布局"""
         main_layout = QHBoxLayout(self)
-        title_height = self.titleBar.height() if getattr(self, "titleBar", None) else 32
-        main_layout.setContentsMargins(scale_x(8), title_height + scale_y(4), scale_x(8), scale_y(8))
-        # 卡片列之间留出间距：列表/详情两张卡片各自带 1px 描边，贴在一起会双线。
-        main_layout.setSpacing(scale_x(10))
-
+        main_layout.setContentsMargins(scale_ui(WORKSPACE_MARGIN), self.titleBar.height() + scale_ui(WORKSPACE_MARGIN), scale_ui(WORKSPACE_MARGIN), scale_ui(WORKSPACE_MARGIN))
+        main_layout.setSpacing(scale_ui(WORKSPACE_MARGIN))
         self.nav_column = self._create_nav_column()
         main_layout.addWidget(self.nav_column)
-
+        self.content_card = QWidget()
+        self.content_card.setObjectName("ManageContentCard")
+        card_layout = QHBoxLayout(self.content_card)
+        card_layout.setContentsMargins(1, 1, 1, 1)
+        card_layout.setSpacing(0)
+        self.workspace_splitter = QSplitter(Qt.Orientation.Horizontal, self.content_card)
+        self.workspace_splitter.setChildrenCollapsible(False)
+        self.workspace_splitter.setHandleWidth(scale_ui(5))
+        self.workspace_splitter.setOpaqueResize(False)
         self.list_column = self._create_list_column()
-        main_layout.addWidget(self.list_column)
-
         self.detail_column = self._create_detail_column()
-        main_layout.addWidget(self.detail_column, 1)
+        self.detail_column.setMinimumWidth(scale_ui(360))
+        self.workspace_splitter.addWidget(self.list_column)
+        self.workspace_splitter.addWidget(self.detail_column)
+        self.workspace_splitter.setStretchFactor(0, 0)
+        self.workspace_splitter.setStretchFactor(1, 1)
+        self.workspace_splitter.setSizes([scale_ui(240), scale_ui(560)])
+        card_layout.addWidget(self.workspace_splitter)
+        main_layout.addWidget(self.content_card, 1)
 
-    def _create_nav_column(self) -> QWidget:
-        """创建导航列（使用 Fluent NavigationInterface）"""
+    def _create_nav_column(self):
         widget = QWidget()
         widget.setObjectName("ManageNavColumn")
-        widget.setFixedWidth(scale_x(168))
-
+        widget.setFixedWidth(scale_ui(WORKSPACE_SIDEBAR_WIDTH))
         layout = QVBoxLayout(widget)
-        layout.setContentsMargins(0, scale_y(8), 0, scale_y(8))
-        layout.setSpacing(scale_y(4))
-
-        self.nav_interface = NavigationInterface(parent=widget, showMenuButton=False, showReturnButton=False, collapsible=False)
-        self.nav_interface.setExpandWidth(scale_x(156))
-        self.nav_interface.setMinimumExpandWidth(0)
-        self.nav_interface.expand(useAni=False)
-        self.nav_interface.setMinimumWidth(scale_x(156))
-        self.nav_interface.setMaximumWidth(scale_x(152))
-
-        self.nav_interface.addItem(
-            routeKey="group",
-            icon=FluentIcon.FOLDER,
-            text=self.tr("Group Management"),
-            onClick=lambda: self._switch_mode("group"),
-            position=NavigationItemPosition.TOP,
-        )
-        self.nav_interface.addItem(
-            routeKey="content",
-            icon=FluentIcon.EDIT,
-            text=self.tr("Content Manager"),
-            onClick=lambda: self._switch_mode("content"),
-            position=NavigationItemPosition.TOP,
-        )
-        self.nav_interface.addItem(
-            routeKey="import_export",
-            icon=FluentIcon.DOWNLOAD,
-            text=self.tr("Import/Export"),
-            onClick=lambda: self._switch_mode("import_export"),
-            position=NavigationItemPosition.TOP,
-        )
-
+        layout.setContentsMargins(0, scale_ui(6), 0, 0)
+        self.nav_interface = NavigationInterface(widget)
+        for key, icon, text in (("group", FluentIcon.FOLDER, "Group Management"),
+                                ("content", FluentIcon.EDIT, "Content Manager"),
+                                ("import_export", FluentIcon.DOWNLOAD, "Import/Export")):
+            self.nav_interface.addItem(key, icon, self.tr(text), lambda checked=False, k=key: self._switch_mode(k), NavigationItemPosition.TOP)
         layout.addWidget(self.nav_interface, 1)
-
-        close_btn = FluentPushButton(self.tr("Close"))
-        self.close_btn = close_btn
-        close_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        close_btn.clicked.connect(self.close)
-        close_btn_layout = QHBoxLayout()
-        close_btn_layout.setContentsMargins(scale_x(8), 0, scale_x(8), 0)
-        close_btn_layout.addWidget(close_btn)
-        layout.addLayout(close_btn_layout)
-
         return widget
 
-    def _create_list_column(self) -> QWidget:
-        """创建列表列"""
+    def _create_list_column(self):
         widget = QWidget()
         widget.setObjectName("ManageListColumn")
-        widget.setFixedWidth(scale_x(208))
-
+        widget.setMinimumWidth(scale_ui(208))
+        widget.setMaximumWidth(scale_ui(400))
         layout = QVBoxLayout(widget)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-
-        header = QWidget()
-        header.setStyleSheet("background: transparent;")
-        header_layout = QVBoxLayout(header)
-        header_layout.setContentsMargins(scale_x(12), scale_y(12), scale_x(12), scale_y(8))
-        header_layout.setSpacing(scale_y(8))
-
+        layout.setContentsMargins(0, 0, 0, scale_ui(8))
+        layout.setSpacing(scale_ui(8))
+        self.list_header = QWidget()
+        self.list_header.setFixedHeight(scale_ui(WORKSPACE_HEADER_HEIGHT))
+        header = QHBoxLayout(self.list_header)
+        header.setContentsMargins(scale_ui(16), 0, scale_ui(10), 0)
         self.list_title = BodyLabel(self.tr("Group List"))
-        self.list_title.setStyleSheet(f"font-size: {scale_ui(12)}px; font-weight: 500; background: transparent;")
-        header_layout.addWidget(self.list_title)
-
+        header.addWidget(self.list_title, 1)
+        self.list_count = CaptionLabel("")
+        self.list_count.setWordWrap(False)
+        self.list_count.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        header.addWidget(self.list_count)
+        self.new_btn = Button(parent=self.list_header, variant="ghost", size="icon-sm", icon=Icon.PLUS)
+        self.new_btn.setAutoDefault(False)
+        self.new_btn.clicked.connect(self._new_entry)
+        header.addWidget(self.new_btn)
+        layout.addWidget(self.list_header)
         self.group_combo = ComboBox()
+        self.group_combo.setAccessibleName(self.tr("Group"))
         self.group_combo.currentIndexChanged.connect(self._on_group_combo_changed)
-        self.group_combo.hide()
-        header_layout.addWidget(self.group_combo)
-
-        layout.addWidget(header)
-
+        combo_row = QHBoxLayout()
+        combo_row.setContentsMargins(scale_ui(10), 0, scale_ui(10), 0)
+        combo_row.addWidget(self.group_combo)
+        layout.addLayout(combo_row)
         self.list_widget = DraggableListWidget()
         self.list_widget.setDragDropMode(QListWidget.DragDropMode.InternalMove)
         self.list_widget.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.list_widget.setSelectionMode(QListWidget.SelectionMode.SingleSelection)
-        self.list_widget.itemClicked.connect(self._on_list_item_clicked)
+        self._list_delegate = ManageListDelegate(self.list_widget)
+        self.list_widget.setItemDelegate(self._list_delegate)
+        self.list_widget.setMouseTracking(True)
+        self.list_widget.viewport().setMouseTracking(True)
+        self.list_widget.currentItemChanged.connect(self._on_current_item_changed)
         self.list_widget.model().rowsMoved.connect(self._on_list_reordered)
         layout.addWidget(self.list_widget, 1)
-
+        self.load_more_btn = Button(self.tr("Load more"), widget, variant="ghost", size="sm")
+        self.load_more_btn.setAutoDefault(False)
+        self.load_more_btn.clicked.connect(self._load_more_content)
+        self.load_more_btn.hide()
+        layout.addWidget(self.load_more_btn)
         return widget
 
-    def _create_detail_column(self) -> QWidget:
-        """创建详情列"""
+    def _create_detail_column(self):
         widget = QWidget()
         widget.setObjectName("ManageDetailColumn")
-
         layout = QVBoxLayout(widget)
-        layout.setContentsMargins(scale_ui(24), scale_ui(24), scale_ui(24), scale_ui(24))
-        layout.setSpacing(scale_ui(12))
-
-        self.detail_title = BodyLabel(self.tr("New Group"))
-        self.detail_title.setStyleSheet(f"font-size: {scale_ui(17)}px; font-weight: 600;")
+        layout.setContentsMargins(scale_ui(WORKSPACE_PADDING), 0, scale_ui(WORKSPACE_PADDING), scale_ui(16))
+        layout.setSpacing(0)
+        self.detail_title = PageHeader(self.tr("New Group"))
         layout.addWidget(self.detail_title)
-
+        self.detail_separator = QFrame()
+        self.detail_separator.setFixedHeight(1)
+        layout.addWidget(self.detail_separator)
+        # Kept as semantic metadata for the group type; descriptions live with each choice.
         self.detail_subtitle = CaptionLabel("")
-        self.detail_subtitle.setStyleSheet(f"font-size: {scale_ui(12)}px;")
         self.detail_subtitle.setWordWrap(True)
+        self.detail_subtitle.setContentsMargins(0, scale_ui(14), 0, 0)
         self.detail_subtitle.hide()
         layout.addWidget(self.detail_subtitle)
-
-        line = QFrame()
-        self.detail_separator = line
-        line.setFrameShape(QFrame.Shape.HLine)
-        line.setFixedHeight(1)
-        layout.addWidget(line)
-
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setStyleSheet("QScrollArea { background: transparent; border: none; }")
-
         self.detail_content = QWidget()
         self.detail_content.setStyleSheet("background: transparent;")
         self.detail_layout = QVBoxLayout(self.detail_content)
-        self.detail_layout.setContentsMargins(0, 0, 0, 0)
-        self.detail_layout.setSpacing(scale_ui(12))
-
+        self.detail_layout.setContentsMargins(0, scale_ui(20), 0, scale_ui(20))
+        self.detail_layout.setSpacing(field_gap())
         scroll.setWidget(self.detail_content)
         layout.addWidget(scroll, 1)
-
-        self.btn_layout = QHBoxLayout()
-        self.btn_layout.setSpacing(scale_x(12))
-        self.btn_layout.addStretch()
-
+        self.footer_separator = QFrame()
+        self.footer_separator.setFixedHeight(1)
+        layout.addWidget(self.footer_separator)
+        self.footer = QWidget()
+        self.btn_layout = QHBoxLayout(self.footer)
+        self.btn_layout.setContentsMargins(0, scale_ui(12), 0, 0)
+        self.btn_layout.setSpacing(scale_ui(12))
         self.delete_btn = FluentPushButton(self.tr("Delete"))
-        self.delete_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.delete_btn.setAutoDefault(False)
         self.delete_btn.clicked.connect(self._on_delete_clicked)
-        self.delete_btn.hide()
         self.btn_layout.addWidget(self.delete_btn)
-
+        self.status_label = CaptionLabel("")
+        self.btn_layout.addWidget(self.status_label, 1)
+        self.discard_btn = Button(QCoreApplication.translate("SettingsDialog", "Cancel"), variant="outline")
+        self.discard_btn.setAutoDefault(False)
+        self.discard_btn.clicked.connect(self._discard_draft)
+        self.discard_btn.hide()
+        self.btn_layout.addWidget(self.discard_btn)
         self.save_btn = PrimaryPushButton(self.tr("Save"))
-        self.save_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.save_btn.setAutoDefault(False)
+        self.save_btn.setDefault(True)
+        self.save_btn.setToolTip("Ctrl+S")
         self.save_btn.clicked.connect(self._on_save_clicked)
+        for button in (self.save_btn, self.discard_btn):
+            button.setMinimumWidth(scale_ui(88))
         self.btn_layout.addWidget(self.save_btn)
-
-        layout.addLayout(self.btn_layout)
-
+        layout.addWidget(self.footer)
         return widget
 
-    def _switch_mode(self, mode: str):
-        """切换模式（可见时列表/详情两列做 120ms 交叉淡入淡出）"""
-        if self.isVisible() and not self._crossfade_running:
-            self._crossfade_to_mode(mode)
-        else:
-            self._apply_mode(mode)
+    def _switch_mode(self, mode):
+        if mode == self.current_mode:
+            self.nav_interface.setCurrentItem(mode)
+            return
+        if not self._confirm_discard():
+            self.nav_interface.setCurrentItem(self.current_mode)
+            return
+        self._apply_mode(mode)
 
-    def _apply_mode(self, mode: str):
-        """重建两列内容，不带过渡动画。"""
+    def _apply_mode(self, mode):
         self.current_mode = mode
         self.nav_interface.setCurrentItem(mode)
-
+        self.footer.setVisible(mode != "import_export")
+        self.footer_separator.setVisible(mode != "import_export")
+        self.list_column.setVisible(mode != "import_export")
+        self.group_combo.setVisible(mode == "content")
         if mode == "group":
-            self.list_column.show()
+            self.new_btn.setEnabled(True)
             self.list_title.setText(self.tr("Group List"))
-            self.group_combo.hide()
-            self.list_widget.show()
+            self.new_btn.setToolTip(self.tr("New Group") + " (Ctrl+N)")
             self._refresh_group_list()
-            self._show_new_group_form()
+            self._restore_editor("group", self.editing_group_id)
         elif mode == "content":
-            self.list_column.show()
             self.list_title.setText(self.tr("Content List"))
-            self.group_combo.show()
-            self.list_widget.show()
+            self.new_btn.setToolTip(self.tr("Add Content") + " (Ctrl+N)")
             self._refresh_group_combo()
             self._refresh_content_list()
-            self._show_new_content_form()
-        elif mode == "import_export":
-            self.list_column.hide()
+            self._restore_editor("item", self.editing_item_id)
+        else:
             self._show_import_export_form()
+        self.new_btn.setAccessibleName(self.new_btn.toolTip())
 
-    _CROSSFADE_DURATION = 120
+    def _restore_editor(self, kind, entry_id):
+        for row in range(self.list_widget.count()):
+            item = self.list_widget.item(row)
+            if item.data(Qt.ItemDataRole.UserRole) == (kind, entry_id):
+                with QSignalBlocker(self.list_widget):
+                    self.list_widget.setCurrentItem(item)
+                self._on_list_item_clicked(item)
+                return
+        with QSignalBlocker(self.list_widget):
+            self.list_widget.setCurrentRow(-1)
+        if kind == "group":
+            self._show_new_group_form()
+        else:
+            self._show_new_content_form()
 
-    def _crossfade_to_mode(self, mode: str):
-        """两列先淡出并在中点换内容，再淡入；动画结束后移除效果恢复原生输入。"""
-        self._crossfade_running = True
-        targets = [self.list_column, self.detail_column]
-        effects = []
-        fade_out = QParallelAnimationGroup(self)
-        for target in targets:
-            effect = QGraphicsOpacityEffect(target)
-            effect.setOpacity(1.0)
-            target.setGraphicsEffect(effect)
-            effects.append(effect)
-            anim = QPropertyAnimation(effect, b"opacity", self)
-            anim.setDuration(self._CROSSFADE_DURATION // 2)
-            anim.setStartValue(1.0)
-            anim.setEndValue(0.0)
-            anim.setEasingCurve(QEasingCurve.Type.InCubic)
-            fade_out.addAnimation(anim)
-        fade_out.finished.connect(
-            lambda: self._crossfade_swap(mode, targets, effects)
-        )
-        fade_out.start()
-
-    def _crossfade_swap(self, mode: str, targets, effects):
-        try:
-            self._apply_mode(mode)
-        except Exception:
-            self._end_crossfade(targets)
-            raise
-        if not self.isVisible():
-            # 动画期间窗口被收起：直接收尾，不播淡入
-            self._end_crossfade(targets)
+    def _new_entry(self):
+        if self.current_mode == "import_export" or not self._confirm_discard():
             return
-        fade_in = QParallelAnimationGroup(self)
-        for effect in effects:
-            anim = QPropertyAnimation(effect, b"opacity", self)
-            anim.setDuration(self._CROSSFADE_DURATION // 2)
-            anim.setStartValue(0.0)
-            anim.setEndValue(1.0)
-            anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-            fade_in.addAnimation(anim)
-        fade_in.finished.connect(lambda: self._end_crossfade(targets))
-        fade_in.start()
+        with QSignalBlocker(self.list_widget):
+            self.list_widget.setCurrentRow(-1)
+        if self.current_mode == "group":
+            self._show_new_group_form()
+            self.group_name_input.setFocus()
+        else:
+            self._show_new_content_form()
+            if _qt_object_is_valid(getattr(self, "title_input", None)):
+                self.title_input.setFocus()
 
-    def _end_crossfade(self, targets):
-        for target in targets:
-            try:
-                target.setGraphicsEffect(None)
-            except RuntimeError:
-                pass
-        self._crossfade_running = False
+    def _form_state(self):
+        values = []
+        for name in ("group_name_input", "icon_input", "title_input", "file_path_input", "content_edit"):
+            control = getattr(self, name, None)
+            if _qt_object_is_valid(control):
+                values.append((name, control.document().isModified() if hasattr(control, "document") else control.text()))
+        for name in ("radio_normal", "radio_file", "radio_hidden"):
+            control = getattr(self, name, None)
+            if _qt_object_is_valid(control):
+                values.append((name, control.isChecked()))
+        return tuple(values)
+
+    def _update_dirty(self, *_):
+        self._dirty = self._clean_state is not None and self._form_state() != self._clean_state
+        self.status_label.setText(self.tr("Unsaved changes") if self._dirty else "")
+        self.discard_btn.setVisible(self._dirty)
+        editing = self.editing_group_id if self.current_mode == "group" else self.editing_item_id
+        self.save_btn.setEnabled(self._dirty or editing is None)
+
+    def _mark_saved(self):
+        editor = getattr(self, "content_edit", None)
+        if _qt_object_is_valid(editor):
+            editor.document().setModified(False)
+        self._clean_state = self._form_state()
+        self._dirty = False
+        self._update_dirty()
+        self.status_label.setText(self.tr("Saved"))
+
+    def _discard_draft(self):
+        if not self._dirty:
+            return
+        if self.current_mode == "group":
+            if self.editing_group_id is not None:
+                self._show_edit_group_form(self.editing_group_id)
+            else:
+                self._show_new_group_form()
+        elif self.current_mode == "content":
+            if self.editing_item_id is not None:
+                self._show_edit_content_form(self.editing_item_id)
+            else:
+                self._show_new_content_form()
+
+    def _confirm_discard(self):
+        if not self._dirty:
+            return True
+        return show_confirm_dialog(self, self.tr("Unsaved changes"), self.tr("Discard changes and continue?"))
+
+    def _on_current_item_changed(self, current, previous):
+        if current is None:
+            return
+        if not self._confirm_discard():
+            with QSignalBlocker(self.list_widget):
+                self.list_widget.setCurrentItem(previous)
+            return
+        self._on_list_item_clicked(current)
 
     def _select_group_in_combo(self, group_id: int):
         """在分组下拉框中选中指定分组"""
@@ -881,7 +802,8 @@ class ManageDialog(FrostedFramelessDialog):
             item = self.list_widget.item(i)
             data = item.data(Qt.ItemDataRole.UserRole) if item else None
             if data and data[0] == item_type and data[1] == item_id:
-                self.list_widget.setCurrentRow(i)
+                with QSignalBlocker(self.list_widget):
+                    self.list_widget.setCurrentRow(i)
                 self.list_widget.scrollToItem(item)
                 return
 
@@ -908,13 +830,17 @@ class ManageDialog(FrostedFramelessDialog):
             self.group_combo.setCurrentIndex(idx)
             self.selected_group_id = self.group_combo.currentData()
 
+        self.group_combo.setEnabled(bool(groups))
         self.group_combo.blockSignals(False)
 
     def _on_group_combo_changed(self, index: int):
         """分组下拉框改变"""
+        if not self._confirm_discard():
+            self._select_group_in_combo(self.selected_group_id)
+            return
         self.selected_group_id = self.group_combo.currentData()
         self._refresh_content_list()
-        self._show_new_content_form()
+        self._restore_editor("item", None)
 
     def _refresh_group_list(self):
         """刷新分组列表（分组管理模式）"""
@@ -925,26 +851,31 @@ class ManageDialog(FrostedFramelessDialog):
             if data and data[0] == "group":
                 saved_group_id = data[1]
 
+        blocker = QSignalBlocker(self.list_widget)
         self.list_widget.clear()
 
-        new_item = QListWidgetItem(self.tr("New Group"))
-        new_item.setData(Qt.ItemDataRole.UserRole, ("new", None))
-        self.list_widget.addItem(new_item)
 
         groups = self.manager.get_groups()
+        self.load_more_btn.hide()
+        self.list_count.setText(str(len(groups)))
         restored_selection = False
         for i, group in enumerate(groups):
             icon = get_group_display_icon(group.icon, group.group_type == GroupType.FILE, is_hidden=(group.group_type == GroupType.HIDDEN))
             item = QListWidgetItem(f"{icon} {group.name}")
+            # 文字仍带 emoji 前缀（外部按 text() 读分组名），但 delegate 认 GROUP_LABEL_ROLE：
+            # emoji 画进固定图标槽、名字画进文字槽，于是和上面 PLUS 行左边缘对齐。
+            item.setData(GROUP_LABEL_ROLE, (icon, group.name))
+            item.setToolTip(group.name)
             item.setData(Qt.ItemDataRole.UserRole, ("group", group.id))
             self.list_widget.addItem(item)
 
             if saved_group_id is not None and group.id == saved_group_id:
-                self.list_widget.setCurrentRow(i + 1)
+                self.list_widget.setCurrentRow(i)
                 restored_selection = True
 
         if not restored_selection:
-            self.list_widget.setCurrentRow(0)
+            self.list_widget.setCurrentRow(-1)
+        del blocker
 
     def _refresh_content_list(self):
         """刷新内容列表（内容管理模式）"""
@@ -955,37 +886,51 @@ class ManageDialog(FrostedFramelessDialog):
             if data and data[0] == "item":
                 saved_item_id = data[1]
 
+        blocker = QSignalBlocker(self.list_widget)
         self.list_widget.clear()
+        self.list_count.setText("0")
+        self.load_more_btn.hide()
 
         if self.selected_group_id is None:
-            item = QListWidgetItem(self.tr("(Please select a group first)"))
-            item.setData(Qt.ItemDataRole.UserRole, (None, None))
-            self.list_widget.addItem(item)
             return
 
-        new_item = QListWidgetItem(self.tr("Add Content"))
-        new_item.setData(Qt.ItemDataRole.UserRole, ("new", None))
-        new_item.setBackground(QColor(self._apple.accent_soft))
-        self.list_widget.addItem(new_item)
-
-        items = self.manager.get_by_group(self.selected_group_id, limit=50)
+        items = self.manager.get_by_group(self.selected_group_id, limit=51)
+        self._has_more_content = len(items) > 50
+        self.load_more_btn.setVisible(self._has_more_content)
+        self.list_count.setText(str(min(len(items), 50)) + ("+" if self._has_more_content else ""))
         restored_selection = False
-        for i, item in enumerate(items):
-            if item.title:
-                display = item.title
-            else:
-                preview = item.content[:30] + "..." if len(item.content) > 30 else item.content
-                display = preview.replace("\n", " ")
-            list_item = QListWidgetItem(f"{display}")
-            list_item.setData(Qt.ItemDataRole.UserRole, ("item", item.id))
-            self.list_widget.addItem(list_item)
+        for i, item in enumerate(items[:50]):
+            self._append_content_row(item)
 
             if saved_item_id is not None and item.id == saved_item_id:
-                self.list_widget.setCurrentRow(i + 1)
+                self.list_widget.setCurrentRow(i)
                 restored_selection = True
 
         if not restored_selection:
-            self.list_widget.setCurrentRow(0)
+            self.list_widget.setCurrentRow(-1)
+        del blocker
+
+    def _append_content_row(self, item):
+        display = item.title or " ".join(item.content[:160].split())
+        row = QListWidgetItem(display)
+        row.setData(Qt.ItemDataRole.UserRole, ("item", item.id))
+        row.setData(PREVIEW_ROLE, " ".join(item.content[:256].split())[:160])
+        row.setToolTip(display)
+        row.setIcon(Icon.FILE.render_icon(self._apple.text_secondary))
+        self.list_widget.addItem(row)
+        return row
+
+    def _load_more_content(self):
+        if self.current_mode != "content" or self.selected_group_id is None:
+            return
+        offset = self.list_widget.count()
+        items = self.manager.get_by_group(self.selected_group_id, offset=offset, limit=51)
+        with QSignalBlocker(self.list_widget):
+            for item in items[:50]:
+                self._append_content_row(item)
+        self._has_more_content = len(items) > 50
+        self.load_more_btn.setVisible(self._has_more_content)
+        self.list_count.setText(str(self.list_widget.count()) + ("+" if self._has_more_content else ""))
 
     def _on_list_item_clicked(self, item: QListWidgetItem):
         """列表项点击"""
@@ -1027,12 +972,12 @@ class ManageDialog(FrostedFramelessDialog):
 
         log_debug(T("当前有 {count} 个分组", count=len(groups)), "GroupDrag")
 
-        if old_index <= 0 or old_index > len(groups):
+        if old_index < 0 or old_index >= len(groups):
             log_error(T("索引越界: old_index={old_index}", old_index=old_index), "GroupDrag")
             return
 
-        old_pos = old_index - 1
-        new_pos = new_index - 1 if new_index > 0 else 0
+        old_pos = old_index
+        new_pos = new_index
 
         if old_pos < 0 or old_pos >= len(groups):
             log_error(T("调整后索引越界: old_pos={old_pos}", old_pos=old_pos), "GroupDrag")
@@ -1079,12 +1024,12 @@ class ManageDialog(FrostedFramelessDialog):
 
         log_debug(T("当前分组有 {count} 个内容", count=len(items)), "ItemDrag")
 
-        if old_index <= 0 or old_index > len(items):
+        if old_index < 0 or old_index >= len(items):
             log_error(T("索引越界: old_index={old_index}, items count={items_count}", old_index=old_index, items_count=len(items)), "ItemDrag")
             return
 
-        old_pos = old_index - 1
-        new_pos = new_index - 1 if new_index > 0 else 0
+        old_pos = old_index
+        new_pos = new_index
 
         if old_pos < 0 or old_pos >= len(items):
             log_error(T("调整后索引越界: old_pos={old_pos}", old_pos=old_pos), "ItemDrag")
@@ -1119,16 +1064,29 @@ class ManageDialog(FrostedFramelessDialog):
     def _clear_detail_layout(self):
         """清空详情区域"""
         self._detail_form_token += 1
-        self.icon_buttons = []
+        self._clean_state = None
+        self._dirty = False
+        self.status_label.clear()
+        popup = getattr(self, "_icon_popup", None)
+        if _qt_object_is_valid(popup):
+            popup.hide()
+            popup.deleteLater()
+        self._icon_popup = None
+        type_group = getattr(self, "_group_type_btn_group", None)
+        if _qt_object_is_valid(type_group):
+            type_group.deleteLater()
         for attr in (
+            "title_input",
+            "content_edit",
+            "file_path_input",
+            "file_drop_zone",
+            "icon_picker_button",
             "group_name_input",
             "icon_input",
-            "icon_preview",
             "radio_normal",
             "radio_file",
             "radio_hidden",
             "_group_type_btn_group",
-            "_emoji_scroll",
         ):
             widget = getattr(self, attr, None)
             if _qt_object_is_valid(widget):
@@ -1137,9 +1095,6 @@ class ManageDialog(FrostedFramelessDialog):
                 except Exception:
                     pass
             setattr(self, attr, None)
-        self._emoji_tab_buttons = []
-        self._emoji_group_order = []
-        self._emoji_groups = {}
 
         def clear_layout(layout):
             while layout.count():
@@ -1155,6 +1110,11 @@ class ManageDialog(FrostedFramelessDialog):
 
     def _finish_detail_form_setup(self):
         """Apply window scaling and theme to a freshly rebuilt detail form."""
+        # 末尾收一个弹簧：表单比详情区矮时，多出来的高度会被有伸缩余量的
+        # 控件（标签、输入框）平分，于是「标签-输入框」的间距被撑到和
+        # 「字段组之间」一样宽，成对关系就看不出来了。让弹簧吃掉余量，
+        # 表单顶部对齐、各字段保持紧凑节奏。
+        self.detail_layout.addStretch()
         # Detail forms are destroyed and recreated when the selection or mode
         # changes, so the one-time setup in __init__ cannot cover these new
         # controls.  Mark only this subtree to avoid touching existing widgets
@@ -1162,6 +1122,19 @@ class ManageDialog(FrostedFramelessDialog):
         configure_dialog_controls(self.detail_content)
         self._refresh_theme_scope(subtree=self.detail_content)
         self._apply_dynamic_form_theme()
+        for button in self.detail_content.findChildren(QPushButton):
+            button.setAutoDefault(False)
+        self._clean_state = self._form_state()
+        self._dirty = False
+        for name in ("group_name_input", "icon_input", "title_input", "file_path_input", "content_edit"):
+            control = getattr(self, name, None)
+            if _qt_object_is_valid(control):
+                control.textChanged.connect(self._update_dirty)
+        for name in ("radio_normal", "radio_file", "radio_hidden"):
+            control = getattr(self, name, None)
+            if _qt_object_is_valid(control):
+                control.toggled.connect(self._update_dirty)
+        self._update_dirty()
 
     def _is_current_detail_form_token(self, form_token: Optional[int]) -> bool:
         return form_token is None or form_token == self._detail_form_token
@@ -1202,58 +1175,14 @@ class ManageDialog(FrostedFramelessDialog):
         if not _qt_object_is_valid(getattr(self, "radio_file", None)):
             return
 
-        is_file_group = self.radio_file.isChecked()
-        is_hidden = _qt_object_is_valid(getattr(self, "radio_hidden", None)) and self.radio_hidden.isChecked()
-
-        if is_hidden:
-            if self.editing_group_id is None:
-                self.detail_title.setText(self.tr("New Hidden Group"))
-            else:
-                self.detail_title.setText(self.tr("Edit Hidden Group"))
-            subtitle = self.tr("Hidden groups are not displayed on the clipboard panel; changing to normal group restores visibility")
-        elif is_file_group:
-            if self.editing_group_id is None:
-                self.detail_title.setText(self.tr("New Quick Launch Group"))
-            else:
-                self.detail_title.setText(self.tr("Edit Quick Launch Group"))
-            subtitle = self.tr("Quick launch groups only allow file or folder paths; selecting an item opens them")
-        else:
-            if self.editing_group_id is None:
-                self.detail_title.setText(self.tr("New General Group"))
-            else:
-                self.detail_title.setText(self.tr("Edit General Group"))
-            subtitle = self.tr("General groups allow any content; selecting an item pastes content or files to the target")
-        self._set_detail_subtitle(subtitle)
-
-    def _create_emoji_picker(self, current_icon: str = "📁"):
-        """创建 emoji 选择器（输入框 + 预览 + 分组标签页 + 可滚动网格）"""
-        create_group_icon_picker(self, current_icon)
-
-    def _emoji_tab_style(self, active: bool) -> str:
-        """返回 emoji 分组 tab 按钮样式"""
-        return emoji_tab_style(active, self)
-
-    def _emoji_btn_style(self) -> str:
-        """返回 emoji 网格按钮样式"""
-        return emoji_btn_style(self)
-
-    def _switch_emoji_group(self, group_idx: int, form_token: Optional[int] = None):
-        """切换 emoji 分组"""
-        if not self._is_current_detail_form_token(form_token):
-            return
-        if not _qt_object_is_valid(getattr(self, "_emoji_scroll", None)):
-            return
-        if not getattr(self, "_emoji_tab_buttons", None):
-            return
-        switch_emoji_group(self, group_idx)
+        self.detail_title.setText(self.tr("New Group") if self.editing_group_id is None else self.tr("Edit Group"))
+        self._set_detail_subtitle(self.tr("Name this group and choose how its contents are used."))
 
     def _on_icon_input_changed(self, text: str, form_token: Optional[int] = None):
         """输入框内容变化时更新预览（只保留第一个 emoji）"""
         if not self._is_current_detail_form_token(form_token):
             return
         if not _qt_object_is_valid(getattr(self, "icon_input", None)):
-            return
-        if not _qt_object_is_valid(getattr(self, "icon_preview", None)):
             return
         on_icon_input_changed(self, text)
 
@@ -1262,8 +1191,6 @@ class ManageDialog(FrostedFramelessDialog):
         if not self._is_current_detail_form_token(form_token):
             return
         if not _qt_object_is_valid(getattr(self, "icon_input", None)):
-            return
-        if not _qt_object_is_valid(getattr(self, "icon_preview", None)):
             return
         on_preset_icon_clicked(self, icon)
 
@@ -1315,16 +1242,25 @@ class ManageDialog(FrostedFramelessDialog):
         """显示新建内容表单"""
         self._clear_detail_layout()
         self.detail_title.setText(self.tr("Add Content"))
-        self._set_detail_subtitle("")
+        self._set_detail_subtitle(self.tr("Save reusable text or file paths in this group."))
         self.delete_btn.hide()
         self.save_btn.show()
         self.save_btn.setText(self.tr("Add"))
         self.editing_item_id = None
+        has_group = self.selected_group_id is not None
+        self.footer.setVisible(has_group)
+        self.footer_separator.setVisible(has_group)
+        self.new_btn.setEnabled(has_group)
 
         if self.selected_group_id is None:
             hint = CaptionLabel(self.tr("Please select a group above, or create a group first"))
             self.detail_layout.addWidget(hint)
-            self.detail_layout.addStretch()
+            create = Button(self.tr("New Group"), variant="outline", icon=Icon.PLUS)
+            create.clicked.connect(lambda: self._switch_mode("group"))
+            row = QHBoxLayout()
+            row.addWidget(create)
+            row.addStretch()
+            self.detail_layout.addLayout(row)
             self._finish_detail_form_setup()
             return
 
@@ -1368,7 +1304,7 @@ class ManageDialog(FrostedFramelessDialog):
         """显示编辑内容表单"""
         self._clear_detail_layout()
         self.detail_title.setText(self.tr("Edit Content"))
-        self._set_detail_subtitle("")
+        self._set_detail_subtitle(self.tr("Edit the content, then save your changes."))
         self.delete_btn.show()
         self.save_btn.show()
         self.save_btn.setText(self.tr("Save"))
@@ -1397,29 +1333,19 @@ class ManageDialog(FrostedFramelessDialog):
         """显示导入导出表单"""
         self._clear_detail_layout()
         self.detail_title.setText(self.tr("Import/Export"))
-        self._set_detail_subtitle("")
+        self._set_detail_subtitle(self.tr("Transfer saved text and file paths using CSV."))
         self.delete_btn.hide()
         self.save_btn.hide()
 
         build_import_export_form(self)
         self._finish_detail_form_setup()
 
-    def _select_icon(self, btn: QPushButton):
-        """选择图标（旧方法，保留兼容）"""
-        for b in self.icon_buttons:
-            b.setChecked(b == btn)
-
     def _get_selected_icon(self) -> str:
         """获取选中的图标（优先从输入框获取，确保只有一个字符）"""
         if _qt_object_is_valid(getattr(self, "icon_input", None)):
-            text = self.icon_input.text().strip()
+            text = first_grapheme(self.icon_input.text())
             if text:
-                for char in text:
-                    if not char.isspace():
-                        return char
-        for btn in self.icon_buttons:
-            if btn.isChecked():
-                return btn.text()
+                return text
         return "📁"
 
     def _get_delete_group_confirm_message(self) -> str:
@@ -1436,7 +1362,7 @@ class ManageDialog(FrostedFramelessDialog):
         """保存按钮点击"""
         if self.current_mode == "group":
             self._save_group()
-        else:
+        elif self.current_mode == "content":
             self._save_content()
 
     def _save_group(self):
@@ -1466,12 +1392,15 @@ class ManageDialog(FrostedFramelessDialog):
             show_warning_dialog(self, self.tr("Failed"), message)
             return
 
+        self.editing_group_id = result.entity_id
         self.group_added.emit()
         self.data_changed.emit()
         self._refresh_group_list()
-        if result.action == "created":
-            self.group_name_input.clear()
-            self.list_widget.setCurrentRow(0)
+        self._select_list_item("group", result.entity_id)
+        self._update_group_form_header()
+        self.delete_btn.show()
+        self.save_btn.setText(self.tr("Save"))
+        self._mark_saved()
 
     def _save_content(self):
         """保存内容"""
@@ -1506,17 +1435,7 @@ class ManageDialog(FrostedFramelessDialog):
             show_warning_dialog(self, self.tr("Failed"), error_messages.get(result.error, self.tr("Failed to update content")))
             return
 
-        if result.action == "created":
-            if hasattr(self, "title_input"):
-                self.title_input.clear()
-            if hasattr(self, "file_path_input"):
-                self.file_path_input.clear()
-            self.selected_file_path = None
-            self.list_widget.setCurrentRow(0)
-
-        self.content_added.emit(self.selected_group_id)
-        self.data_changed.emit()
-        self._refresh_content_list()
+        self._finish_content_save(result.entity_id)
 
     def _save_text_content(self):
         """保存文本类型内容（原有逻辑）"""
@@ -1538,15 +1457,18 @@ class ManageDialog(FrostedFramelessDialog):
             show_warning_dialog(self, self.tr("Failed"), error_messages.get(result.error, self.tr("Failed to update content")))
             return
 
-        if result.action == "created":
-            self.content_edit.clear()
-            if hasattr(self, "title_input"):
-                self.title_input.clear()
-            self.list_widget.setCurrentRow(0)
+        self._finish_content_save(result.entity_id)
 
+    def _finish_content_save(self, item_id):
+        self.editing_item_id = item_id
         self.content_added.emit(self.selected_group_id)
         self.data_changed.emit()
         self._refresh_content_list()
+        self._select_list_item("item", item_id)
+        self.detail_title.setText(self.tr("Edit Content"))
+        self.delete_btn.show()
+        self.save_btn.setText(self.tr("Save"))
+        self._mark_saved()
 
     def _on_delete_clicked(self):
         """删除按钮点击"""

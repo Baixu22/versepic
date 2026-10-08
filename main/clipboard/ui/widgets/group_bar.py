@@ -9,7 +9,7 @@
 
 from typing import List, Optional, Tuple
 
-from PySide6.QtCore import QPoint, QRectF, QSize, Qt, QTimer, Signal
+from PySide6.QtCore import QPoint, QRectF, Qt, QTimer, Signal
 from PySide6.QtGui import QAction, QColor, QCursor, QFont, QFontMetrics, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QBoxLayout, QHBoxLayout, QMenu, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 

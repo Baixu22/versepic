@@ -261,6 +261,7 @@ exe = EXE(
     a.datas,
     [],
     name='{EXE_NAME}',
+    manifest='versepic.manifest',
     icon='svg/versepic.ico',
     debug=False,
     bootloader_ignore_signals=False,

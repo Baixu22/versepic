@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 选区信息面板 —— 纯 UI 层
 
@@ -13,6 +13,9 @@
 """
 
 from __future__ import annotations
+
+from core.ui_theme import get_ui_theme
+from ui.fluent_lite.theme import tinted_icon
 
 from PySide6.QtCore import Qt, QPoint, QRectF, QSize, Signal
 from PySide6.QtGui import QColor, QPainter, QPen, QBrush, QCursor
@@ -40,7 +43,7 @@ class SelectionInfoPanel(QWidget):
     _BORDER_COLOR = QColor(255, 255, 255, 140)
 
     # 基准尺寸（100% 下的实际像素）
-    BASE_RADIUS = 7
+    BASE_RADIUS = 12
     BASE_HEIGHT = 34
     BASE_MARGIN_ABOVE = 7   # 面板底部到选区顶部的间距
     BASE_BTN = 26
@@ -58,6 +61,7 @@ class SelectionInfoPanel(QWidget):
         self.hide()
         # 改比例后自行重算尺寸（连接随本部件销毁自动断开）
         get_ui_scale().scale_changed.connect(self.apply_scale)
+        get_ui_theme().theme_changed.connect(self.apply_scale)
 
     # ------------------------------------------------------------------
     # UI
@@ -121,7 +125,8 @@ class SelectionInfoPanel(QWidget):
         btn.setToolTip(self.tr(tip))
         try:
             path = ResourceManager.get_icon_path(svg)
-            btn.setIcon(ResourceManager.get_icon(path))
+            btn.setProperty("icon_source", path)
+            btn.setIcon(tinted_icon(path, get_ui_theme().tokens.text))
         except Exception as e:
             log_exception(e, T("加载按钮图标"))
             btn.setText(tip[:2])  # 找不到图标时用文字兜底
@@ -137,21 +142,26 @@ class SelectionInfoPanel(QWidget):
         self._row_layout.setContentsMargins(scaled(10), 0, scaled(5), 0)
         self._row_layout.setSpacing(scaled(7))
         self._info_label.setStyleSheet(
-            f"color: #D0D0D0; font-size: {scaled(self.BASE_FONT)}px; background: transparent;"
+            f"color: {get_ui_theme().tokens.text}; font-size: {scaled(self.BASE_FONT)}px; background: transparent;"
         )
         btn_sz = scaled(self.BASE_BTN)
         icon_sz = scaled(self.BASE_ICON)
-        radius = scaled(4)
+        radius = scaled(8)
         padding = scaled(2)
         for btn in self._buttons:
+            if btn.property("icon_source"):
+                btn.setIcon(tinted_icon(btn.property("icon_source"), get_ui_theme().tokens.text))
             btn.setFixedSize(btn_sz, btn_sz)
             btn.setIconSize(QSize(icon_sz, icon_sz))
             btn.setStyleSheet(f"""
                 QPushButton {{ background: transparent; border: none;
                                border-radius: {radius}px; padding: {padding}px; }}
-                QPushButton:hover {{ background: rgba(255,255,255,40); }}
-                QPushButton:checked {{ background: rgba(64,224,208,80); }}
+                QPushButton:hover {{ background: {get_ui_theme().tokens.surface_hover}; }}
+                QPushButton:checked {{ background: {get_ui_theme().tokens.accent_soft}; }}
             """)
+        self._sep.setStyleSheet(f"background: {get_ui_theme().tokens.border};")
+        if self._last_rect is not None:
+            self.update_info_text(self._last_rect)
         self._sep.setFixedSize(1, scaled(self.BASE_SEP_HEIGHT))
         self._label_spacer.changeSize(scaled(5), 0,
                                       QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
@@ -229,8 +239,8 @@ class SelectionInfoPanel(QWidget):
 
     def update_info_text(self, rect: QRectF):
         """更新坐标 + 尺寸文字"""
-        from core.theme import get_theme
-        theme_hex = get_theme().theme_color_hex
+        self._last_rect = QRectF(rect)
+        theme_hex = get_ui_theme().tokens.text
         x, y = int(rect.x()), int(rect.y())
         w, h = int(rect.width()), int(rect.height())
         self._info_label.setText(
@@ -247,12 +257,12 @@ class SelectionInfoPanel(QWidget):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         # 白色描边
-        p.setPen(QPen(self._BORDER_COLOR, 1))
-        p.setBrush(QBrush(self._BG))
+        p.setPen(QPen(QColor(get_ui_theme().tokens.border), 1))
+        p.setBrush(QBrush(QColor(get_ui_theme().tokens.surface)))
         # 往内缩 0.5px，避免描边被裁切
         r = self.rect().adjusted(1, 1, -1, -1)
         radius = scaled(self.BASE_RADIUS)
         p.drawRoundedRect(r, radius, radius)
         p.end()
         super().paintEvent(event)
- 
+

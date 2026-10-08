@@ -8,7 +8,7 @@ from shiboken6 import isValid
 from core.ui_scale import widget_scaled as px
 from core.ui_theme import get_ui_theme
 from ui.motion import fade_show, cancel_motion
-from .theme import FONT_FAMILY, ui_tokens
+from .theme import FONT_FAMILY, MOTION_FAST, POPUP_RADIUS, menu_qss, ui_tokens
 
 
 class Menu(QMenu):
@@ -21,19 +21,10 @@ class Menu(QMenu):
     def showEvent(self, event):
         super().showEvent(event)
         cancel_motion(self)
-        fade_show(self, duration=120, rise_px=0)
+        fade_show(self, duration=MOTION_FAST, rise_px=0)
 
     def _apply_theme(self, *_):
-        t = ui_tokens(self)
-        self.setStyleSheet(f"""
-            QMenu {{ color: {t.text}; background-color: {t.popup_background};
-                border: 1px solid {t.border}; border-radius: {px(self, 14)}px;
-                padding: {px(self,4)}px; font: {px(self,13)}px {FONT_FAMILY}; }}
-            QMenu::item {{ border-radius: {px(self,10)}px; padding: {px(self,7)}px {px(self,32)}px {px(self,7)}px {px(self,24)}px; }}
-            QMenu::item:selected {{ color: {t.text}; background-color: {t.popup_hover}; }}
-            QMenu::item:disabled {{ color: {t.text_disabled}; }}
-            QMenu::separator {{ height: 1px; margin: {px(self,4)}px; background: {t.separator}; }}
-        """)
+        self.setStyleSheet(menu_qss(self))
 
 
 class ToolTip(QObject):
@@ -46,8 +37,22 @@ class ToolTip(QObject):
         self._timer = QTimer(self)
         self._timer.setSingleShot(True)
         self._timer.timeout.connect(self.hide)
-        QApplication.instance().installEventFilter(self)
+        self._listening = False
+        root.installEventFilter(self)
+        self._listen(root.isVisible())
         get_ui_theme().theme_changed.connect(self.hide)
+
+    def _listen(self, enabled):
+        # Hidden/cached windows must not process every event in the application.
+        # The root filter remains installed so showing the window reactivates its tooltips.
+        if enabled == self._listening:
+            return
+        app = QApplication.instance()
+        if enabled:
+            app.installEventFilter(self)
+        else:
+            app.removeEventFilter(self)
+        self._listening = enabled
 
     @classmethod
     def install(cls, root):
@@ -76,11 +81,14 @@ class ToolTip(QObject):
             foreground = clipboard_theme.colors.bg_primary
         self.label.setStyleSheet(f"""QLabel#KitToolTip {{
             color: {foreground}; background-color: {background};
-            border: 1px solid {t.border_hover}; border-radius: {px(widget,10)}px;
+            border: 1px solid {t.border_hover}; border-radius: {px(widget,POPUP_RADIUS)}px;
             padding: {px(widget,6)}px {px(widget,9)}px;
             font: {px(widget,12)}px {FONT_FAMILY}; }}""")
         self.label.setMaximumWidth(px(widget, 320))
         self.label.setText(widget.toolTip())
+        self.label.ensurePolished()
+        text_width = max(self.label.fontMetrics().horizontalAdvance(line) for line in widget.toolTip().splitlines())
+        self.label.setWordWrap(text_width + px(widget, 18) + 2 > px(widget, 320))
         self.label.adjustSize()
         # Anchor to the control so pointer movement does not shift the tooltip.
         anchor = widget.mapToGlobal(QPoint(widget.width() // 2, widget.height()))
@@ -95,7 +103,7 @@ class ToolTip(QObject):
         self._owner = weakref.ref(widget)
         cancel_motion(self.label)
         self.label.show()
-        fade_show(self.label, duration=120, rise_px=0)
+        fade_show(self.label, duration=MOTION_FAST, rise_px=0)
         self._timer.start(4500)
 
     def hide(self, *_):
@@ -107,11 +115,20 @@ class ToolTip(QObject):
 
     def eventFilter(self, obj, event):
         kind = event.type()
+        if obj is self.root:
+            if kind == QEvent.Type.Show:
+                self._listen(True)
+            elif kind in (QEvent.Type.Hide, QEvent.Type.Destroy):
+                self._listen(False)
         owner = self._owner() if self._owner else None
-        if kind in (QEvent.Type.Hide, QEvent.Type.Leave, QEvent.Type.Destroy) and (obj is owner or obj is self.root):
+        if kind in (QEvent.Type.Hide, QEvent.Type.Leave, QEvent.Type.Destroy, QEvent.Type.FocusOut) and (obj is owner or obj is self.root):
             self.hide()
         if kind in (QEvent.Type.MouseButtonPress, QEvent.Type.KeyPress, QEvent.Type.WindowDeactivate):
             self.hide()
+        if (kind == QEvent.Type.FocusIn and hasattr(obj, "toolTip")
+                and (obj is self.root or self.root.isAncestorOf(obj))
+                and event.reason() in (Qt.FocusReason.TabFocusReason, Qt.FocusReason.BacktabFocusReason)):
+            self.showFor(obj)
         if kind == QEvent.Type.ToolTip and hasattr(obj, "toolTip"):
             if obj is self.root or self.root.isAncestorOf(obj):
                 self.showFor(obj, event.globalPos())

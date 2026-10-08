@@ -1,6 +1,6 @@
 """Shared Fluent title bar for the application's standalone windows."""
 
-from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtCore import QEvent, QPointF, QRectF, QSize, Qt
 from PySide6.QtGui import QColor, QPainter, QPen
 from PySide6.QtWidgets import QLabel
 from qframelesswindow import TitleBar, TitleBarButton
@@ -126,6 +126,8 @@ class FluentTitleBar(TitleBar):
             "background: transparent;"
         )
         self._apply_caption_colors()
+        if hasattr(self, "_window_icon"):
+            self.setIcon(self._window_icon)
 
     def _apply_caption_colors(self):
         """Caption-button colours, as a single overridable source.
@@ -151,5 +153,12 @@ class FluentTitleBar(TitleBar):
         self.titleLabel.setText(str(title))
 
     def setIcon(self, icon):
+        self._window_icon = icon
         side = _px(self, 16)
-        self.iconLabel.setPixmap(icon.pixmap(side, side))
+        self.iconLabel.setPixmap(icon.pixmap(QSize(side, side), self.devicePixelRatioF()))
+
+    def event(self, event):
+        result = super().event(event)
+        if event.type() == QEvent.Type.DevicePixelRatioChange and hasattr(self, "_window_icon"):
+            self.setIcon(self._window_icon)
+        return result

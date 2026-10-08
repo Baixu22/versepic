@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout
 
 from ui.fluent_lite import BodyLabel, LineEdit, PushButton as FluentPushButton
 from ui.fluent_lite.theme import ui_tokens
-from ..layout_scale import scale_ui, scale_x, scale_y
+from ..layout_scale import field_group_gap, scale_ui, scale_x, scale_y
 
 
 class FileDropZone(QFrame):
@@ -36,9 +36,9 @@ class FileDropZone(QFrame):
         self._apply_theme()
 
     def _apply_theme(self, tokens=None):
-        tokens = tokens or ui_tokens(self)
+        tokens = ui_tokens(self)
         self._default_style = (
-            "QFrame {"
+            "FileDropZone {"
             f"border: 2px dashed {tokens.border_hover};"
             f"border-radius: {scale_ui(10)}px;"
             f"background: {tokens.surface_subtle};"
@@ -50,7 +50,7 @@ class FileDropZone(QFrame):
             "}"
         )
         self._hover_style = (
-            "QFrame {"
+            "FileDropZone {"
             f"border: 2px dashed {tokens.accent};"
             f"border-radius: {scale_ui(10)}px;"
             f"background: {tokens.accent_soft};"
@@ -127,6 +127,7 @@ def build_file_content_form(dialog, add_stretch: bool = True):
     dialog.title_input.setPlaceholderText(dialog.tr("Enter title..."))
     dialog.detail_layout.addWidget(dialog.title_input)
 
+    dialog.detail_layout.addSpacing(field_group_gap())
     file_label = BodyLabel(dialog.tr("File Path"))
     dialog.detail_layout.addWidget(file_label)
 

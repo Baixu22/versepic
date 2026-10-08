@@ -4,6 +4,7 @@ Source assets and ISC attribution: svg/lucide. Keep the legacy Icon API so
 all callers use the same upstream library without a web runtime.
 """
 from enum import Enum
+from functools import lru_cache
 
 from PySide6.QtCore import QByteArray, QRectF, Qt
 from PySide6.QtGui import QColor, QIcon, QIconEngine, QPainter, QPixmap
@@ -105,18 +106,22 @@ class _OutlineEngine(QIconEngine):
     def __init__(self, name, color):
         super().__init__()
         self.name, self.color = name, QColor(color).name()
+        self._renderers = {}
 
     def clone(self):
         return _OutlineEngine(self.name, self.color)
 
     def paint(self, painter, rect, mode, state):
-        color = self.color
-        opacity = ' opacity="0.45"' if mode == QIcon.Mode.Disabled else ''
-        body = PATHS[self.name].replace("currentColor", color)
-        svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" '
-               f'fill="none" stroke="{color}" stroke-width="2" '
-               f'stroke-linecap="round" stroke-linejoin="round"{opacity}>{body}</svg>')
-        renderer = QSvgRenderer(QByteArray(svg.encode()))
+        disabled = mode == QIcon.Mode.Disabled
+        renderer = self._renderers.get(disabled)
+        if renderer is None:
+            opacity = ' opacity="0.45"' if disabled else ''
+            body = PATHS[self.name].replace("currentColor", self.color)
+            svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" '
+                   f'fill="none" stroke="{self.color}" stroke-width="2" '
+                   f'stroke-linecap="round" stroke-linejoin="round"{opacity}>{body}</svg>')
+            renderer = QSvgRenderer(QByteArray(svg.encode()))
+            self._renderers[disabled] = renderer
         renderer.render(painter, QRectF(rect))
 
     def pixmap(self, size, mode, state):
@@ -128,6 +133,7 @@ class _OutlineEngine(QIconEngine):
         return image
 
 
+@lru_cache(maxsize=128)
 def outline_icon(name, color="#171717"):
     if name not in PATHS:
         raise ValueError(f"Unknown outline icon: {name}")

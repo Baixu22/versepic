@@ -69,8 +69,8 @@ def test_magnifier_picks_up_a_changed_theme_color_on_session_reuse(qapp):
 
     parent = QWidget()
     overlay = MagnifierOverlay(parent, scene=None, view=None)
-    assert overlay._pen_teal_2.color().name() == "#40e0d0"
-    assert overlay._brush_crosshair.color().red() == QColor("#40E0D0").red()
+    assert overlay._pen_teal_2.color().name() == theme.theme_color.name()
+    assert overlay._brush_crosshair.color().red() == theme.theme_color.red()
 
     # 会话之间：用户在设置里换了主题色
     theme.set_theme_color(QColor("#FF0000"))

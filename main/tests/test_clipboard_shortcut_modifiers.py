@@ -40,6 +40,9 @@ class _Window:
     def _on_paste_item(self, item_id):
         self.pasted.append(item_id)
 
+    def _expand_search(self):
+        self.search_input.setFocus()
+
 
 @pytest.fixture
 def handler(monkeypatch):
@@ -62,6 +65,21 @@ def test_ctrl_v_is_not_a_direct_pick(handler):
 
     assert shortcut.handle_key(_Event(Qt.Key.Key_V, Qt.KeyboardModifier.ControlModifier)) is False
     assert window.pasted == []
+
+
+def test_escape_collapses_focused_search_before_closing(qtbot, monkeypatch):
+    from PySide6.QtWidgets import QLineEdit
+    edit = QLineEdit("query")
+    qtbot.addWidget(edit)
+    window = _Window()
+    window.search_input = edit
+    window.collapsed = False
+    window._collapse_search = lambda: setattr(window, "collapsed", True)
+    window.list_widget = SimpleNamespace(setFocus=lambda: None)
+    monkeypatch.setattr(QApplication, "focusWidget", staticmethod(lambda: edit))
+    assert ClipboardShortcutHandler(window).handle_key(_Event(Qt.Key.Key_Escape))
+    assert window.collapsed
+    assert edit.text() == ""
 
 
 def test_bare_digit_picks_an_item(handler):

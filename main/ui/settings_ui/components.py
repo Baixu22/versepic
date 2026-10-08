@@ -14,7 +14,7 @@ from core.ui_theme import get_ui_theme
 from ui.fluent_lite import (
     SwitchButton, SimpleCardWidget, SwitchSettingCard as _SwitchSettingCard, SettingCardGroup as _SettingCardGroupBase,
 )
-from ui.fluent_lite.theme import css_color, tinted_icon
+from ui.fluent_lite.theme import css_color, menu_qss, tinted_icon
 
 
 # 四个全局功能各有固定色相，饱和度压低，和蓝灰强调色放在一起不跳；
@@ -34,23 +34,23 @@ def theme_color(light: str, dark: str) -> str:
 
 
 def theme_surface_color() -> str:
-    return theme_color("#FAFBFC", "#202124")
+    return get_ui_theme().tokens.surface
 
 
 def theme_border_color() -> str:
-    return theme_color("rgba(255, 255, 255, 0.76)", "rgba(255, 255, 255, 0.08)")
+    return get_ui_theme().tokens.border
 
 
 def theme_input_background() -> str:
-    return theme_color("rgba(255, 255, 255, 0.78)", "#2B2D31")
+    return get_ui_theme().tokens.input_background
 
 
 def theme_popup_background() -> str:
-    return theme_color("#FFFFFF", "#2A2C30")
+    return get_ui_theme().tokens.popup_background
 
 
 def theme_popup_hover_background() -> str:
-    return theme_color("#EAF2FA", "#36393F")
+    return get_ui_theme().tokens.surface_hover
 
 
 def theme_text_style(font_size: int = 14, bold: bool = False, extra: str = "") -> str:
@@ -92,24 +92,7 @@ def refresh_theme_widget_styles(root: QWidget):
 
 
 def theme_menu_style() -> str:
-    return f"""
-        QMenu {{
-            background-color: {theme_popup_background()};
-            color: {get_ui_theme().tokens.text};
-            border: 1px solid {theme_border_color()};
-            border-radius: {dialog_scaled(6)}px;
-            padding: {dialog_scaled(4)}px 0;
-        }}
-        QMenu::item {{
-            padding: {dialog_scaled(6)}px {dialog_scaled(20)}px;
-            font-size: {dialog_scaled(14)}px;
-            color: {get_ui_theme().tokens.text};
-            background: transparent;
-        }}
-        QMenu::item:selected {{
-            background-color: {theme_popup_hover_background()};
-        }}
-    """
+    return menu_qss(scale=dialog_scaled)
 
 
 class SettingCardGroup(_SettingCardGroupBase):

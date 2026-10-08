@@ -8,7 +8,8 @@ from PySide6.QtWidgets import (
     QAbstractButton, QWidget, QPushButton, QApplication
 )
 from core.resource_manager import ResourceManager
-from core.theme import get_theme
+from core.ui_theme import get_ui_theme
+from ui.fluent_lite.theme import tinted_icon
 from core.ui_scale import get_ui_scale, scaled, scaled_f
 from core import log_debug, safe_event
 from core.logger import log_exception, T
@@ -49,8 +50,6 @@ class _DragHandle(QWidget):
         _paint_end_strip(self, dots=self._manual_mode)
 
 
-_GRIP_DOT_COLOR = QColor(0x5F, 0x63, 0x68)
-_GRIP_DOT_COLOR_IDLE = QColor(0xB4, 0xB8, 0xBE)
 
 
 def _paint_end_strip(widget, *, dots):
@@ -60,7 +59,7 @@ def _paint_end_strip(widget, *, dots):
     """
     painter = QPainter(widget)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    _paint_vertical_dots(painter, widget.rect(), _GRIP_DOT_COLOR if dots else _GRIP_DOT_COLOR_IDLE)
+    _paint_vertical_dots(painter, widget.rect(), QColor(get_ui_theme().tokens.text_muted if dots else get_ui_theme().tokens.text_disabled))
     painter.end()
 
 
@@ -91,7 +90,7 @@ class _MoreHandle(QAbstractButton):
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        _paint_vertical_dots(painter, self.rect(), _GRIP_DOT_COLOR)
+        _paint_vertical_dots(painter, self.rect(), QColor(get_ui_theme().tokens.text_muted))
         painter.end()
 
 
@@ -110,23 +109,23 @@ def _button_qss():
     同一份，否则按钮一挪进弹层就变回系统默认外观。
     margin 让悬停、选中底色内缩成圆角块，不贴工具栏上下边。
     """
-    tc = get_theme().theme_color
+    t = get_ui_theme().tokens
     return f"""
         QPushButton {{
             background-color: transparent;
             border: none;
-            border-radius: {scaled(5)}px;
+            border-radius: {scaled(10)}px;
             margin: {scaled(3)}px;
             padding: 0px;
         }}
         QPushButton:hover {{
-            background-color: rgba(0, 0, 0, 0.06);
+            background-color: {t.surface_hover};
         }}
         QPushButton:pressed {{
-            background-color: rgba(0, 0, 0, 0.12);
+            background-color: {t.surface_subtle};
         }}
         QPushButton:checked {{
-            background-color: rgba({tc.red()}, {tc.green()}, {tc.blue()}, 0.3);
+            background-color: {t.accent_soft};
         }}
     """
 
@@ -159,11 +158,13 @@ class _MorePopup(QWidget):
         """按当前比例刷新自身尺寸；网格布局在下次 set_buttons 时用新的 cell 重算"""
         self.setStyleSheet(_button_qss() + f"""
             QPushButton#more_adjust {{
-                color: #5F6368;
+                color: {get_ui_theme().tokens.text_muted};
                 font-size: {scaled(self.BASE_ADJUST_FONT)}px;
                 padding: 0px {scaled(8)}px;
             }}
         """)
+        from ui.fluent_lite import FluentIcon
+        self.adjust_btn.setIcon(FluentIcon.SETTING.render_icon(get_ui_theme().tokens.text))
         icon = scaled(self.BASE_ADJUST_ICON)
         self.adjust_btn.setIconSize(QSize(icon, icon))
 
@@ -211,8 +212,8 @@ class Toolbar(QWidget):
     BASE_BTN_WIDTH = 40      # 工具按钮宽
     BASE_BTN_HEIGHT = 40     # 所有按钮高（也是工具栏高度）
     BASE_WIDE_WIDTH = 45     # 功能按钮宽（长截图、保存、结束截图、确定等）
-    BASE_ICON_WIDE = 32      # 功能按钮图标
-    BASE_ICON_TOOL = 29      # 工具按钮图标
+    BASE_ICON_WIDE = 24      # 功能按钮图标
+    BASE_ICON_TOOL = 24      # 工具按钮图标
     HANDLE_WIDTH_RATIO = 0.32   # 拖动手柄宽 / 工具栏高
     BASE_RIGHT_NUDGE = 4     # 自动定位时整体右移，目视微调，不是算出来的
 
@@ -228,6 +229,7 @@ class Toolbar(QWidget):
     long_screenshot_clicked = Signal()  # 长截图按钮
     screenshot_translate_clicked = Signal()  # 截图翻译按钮
     text_recognize_clicked = Signal()  # 文字识别按钮
+    smart_redact_clicked = Signal()
     scan_code_clicked = Signal()  # 扫码按钮
     gif_record_clicked = Signal()  # GIF录制按钮
     color_changed = Signal(QColor)  # 颜色改变
@@ -268,6 +270,8 @@ class Toolbar(QWidget):
         self.current_color = QColor(255, 0, 0)  # 默认红色
         
         self.init_ui()
+        from ui.fluent_lite.popups import ToolTip
+        ToolTip.install(self)
         
     def init_ui(self):
         """初始化UI"""
@@ -312,6 +316,8 @@ class Toolbar(QWidget):
             self.text_recognize_clicked.emit)
         self.scan_code_btn = self._add_button(
             "scan_code", "svg/扫码.svg", "Scan QR code / barcode", wide, self.scan_code_clicked.emit)
+        self.smart_redact_btn = self._add_button(
+            "smart_redact", "svg/马赛克.svg", "Smart redact", wide, self.smart_redact_clicked.emit)
         self.gif_btn = self._add_button(
             "gif", "svg/gif.svg", "GIF recording", wide, self.gif_record_clicked.emit)
         # 复制按钮只在钉图里摆出来，截图的排布里没有它
@@ -383,6 +389,7 @@ class Toolbar(QWidget):
 
         # 改比例后自行重算尺寸（连接随本部件销毁自动断开）
         get_ui_scale().scale_changed.connect(self.apply_scale)
+        get_ui_theme().theme_changed.connect(self.apply_scale)
 
     # ========================================================================
     # 按钮排布与「…」弹层
@@ -396,7 +403,8 @@ class Toolbar(QWidget):
         """
         button = QPushButton(self)
         button.setToolTip(self.tr(tooltip))
-        button.setIcon(cached_icon(icon))
+        button.setProperty("toolbar_icon_source", icon)
+        button.setIcon(tinted_icon(resource_path(icon), get_ui_theme().tokens.text))
         button.setCheckable(checkable)
         # 按钮不接受键盘焦点，防止 Space/Enter 等按键通过按钮意外触发逻辑
         button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -414,6 +422,10 @@ class Toolbar(QWidget):
         # 按钮样式里的内缩和圆角也跟着比例走，改比例时整份重挂
         self.setStyleSheet("#toolbar_root { background-color: transparent; border: none; }"
                            + _button_qss())
+        for button in self._buttons.values():
+            source = button.property("toolbar_icon_source")
+            if source:
+                button.setIcon(tinted_icon(resource_path(source), get_ui_theme().tokens.text))
         self._btn_height = scaled(self.BASE_BTN_HEIGHT)
         handle_w = scaled(self.BASE_BTN_HEIGHT * self.HANDLE_WIDTH_RATIO)
         self.drag_handle.setGeometry(0, 0, handle_w, self._btn_height)

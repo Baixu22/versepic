@@ -15,21 +15,26 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt, Signal
 from ui.dialogs import show_info_dialog, show_warning_dialog
-from PySide6.QtGui import QColor, QFont, QIcon
+from PySide6.QtGui import QColor, QIcon
 
 from ui.fluent_lite import (
     NavigationInterface, NavigationItemPosition,
-    FluentIcon, BodyLabel,
-    PushButton as FluentPushButton,
+    FluentIcon,
     PrimaryPushButton, TransparentPushButton,
     FrostedFramelessDialog,
 )
 from ui.fluent_lite import FluentTitleBar, scrollbar_qss
-from ui.fluent_lite.theme import ACCENT
+from ui.fluent_lite.labels import PageHeader
+from ui.fluent_lite.primitives import Separator
+from ui.fluent_lite.theme import (
+    ACCENT, SURFACE_RADIUS, WORKSPACE_MARGIN, WORKSPACE_PADDING,
+    WORKSPACE_SIDEBAR_WIDTH, CONTROL_HEIGHT, ui_font,
+)
+from ui.fluent_lite.button_base import Button
 
 from core import log_info, safe_event
 from core.logger import log_exception, T
-from core.constants import CSS_FONT_FAMILY, DEFAULT_FONT_FAMILY
+from core.constants import CSS_FONT_FAMILY
 from core.ui_scale import configure_dialog_control, configure_dialog_controls, dialog_scaled
 from settings.tool_settings import SMART_SELECTION_MODES
 
@@ -47,7 +52,7 @@ from .page_about import create_about_page
 from .components import (
     theme_surface_color,
     theme_input_background, theme_popup_background,
-    theme_popup_hover_background, theme_text_style, theme_menu_style, theme_color, refresh_theme_widget_styles,
+    theme_popup_hover_background, theme_menu_style, theme_color, refresh_theme_widget_styles,
     apply_theme_text_style,
 )
 
@@ -69,6 +74,7 @@ class SettingsDialog(FrostedFramelessDialog):
     """现代化设置对话框 - Fluent 风格（无系统标题栏）"""
 
     wizard_requested = Signal()
+    settings_applied = Signal()
 
     def __init__(self, config_manager=None, current_hotkey="ctrl+shift+a", parent=None):
         super().__init__(parent)
@@ -89,8 +95,9 @@ class SettingsDialog(FrostedFramelessDialog):
         self._setup_titlebar()
 
         self.setWindowTitle("VersePic")
-        self.resize(dialog_scaled(1050), dialog_scaled(750))
-        self.setFont(QFont(DEFAULT_FONT_FAMILY, dialog_scaled(11)))
+        self.setMinimumSize(dialog_scaled(820), dialog_scaled(580))
+        self.resize(dialog_scaled(1040), dialog_scaled(720))
+        self.setFont(ui_font(dialog_scaled(14)))
         self.setObjectName("SettingsDialog")
 
         self._setup_ui()
@@ -102,12 +109,8 @@ class SettingsDialog(FrostedFramelessDialog):
         title_bar = FluentTitleBar(self)
         configure_dialog_control(title_bar)
         self.setTitleBar(title_bar)
-        title_bar.iconLabel.hide()
-        title_bar.titleLabel.hide()
-        title_bar.setFixedHeight(title_bar.buttonLayout.sizeHint().height())
-        title_bar.hBoxLayout.setContentsMargins(0, 0, 0, 0)
-        title_bar.maxBtn.hide()
-        title_bar.setDoubleClickEnabled(False)
+        title_bar.hBoxLayout.setContentsMargins(dialog_scaled(WORKSPACE_MARGIN), 0, 0, 0)
+        title_bar.setDoubleClickEnabled(True)
 
         # 设置窗口图标
         try:
@@ -123,84 +126,35 @@ class SettingsDialog(FrostedFramelessDialog):
     # ================================================================
 
     def _setup_ui(self):
-        sidebar_width = dialog_scaled(212)
-        title_bar_height = self.titleBar.height() if getattr(self, 'titleBar', None) else dialog_scaled(32)
-
+        s = dialog_scaled
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(
-            dialog_scaled(10), title_bar_height + dialog_scaled(6), dialog_scaled(10), dialog_scaled(10)
+            s(WORKSPACE_MARGIN), self.titleBar.height() + s(WORKSPACE_MARGIN),
+            s(WORKSPACE_MARGIN), s(WORKSPACE_MARGIN),
         )
-        main_layout.setSpacing(dialog_scaled(10))
+        main_layout.setSpacing(s(WORKSPACE_MARGIN))
 
-        # 1. 左侧面板
         left_panel = QWidget()
+        self.left_panel = left_panel
         left_panel.setObjectName("SettingsLeftPanel")
-        left_panel.setFixedWidth(sidebar_width)
         left_v = QVBoxLayout(left_panel)
-        left_v.setContentsMargins(dialog_scaled(10), dialog_scaled(6), dialog_scaled(10), dialog_scaled(10))
-        left_v.setSpacing(dialog_scaled(8))
-
-        # logo 区
-        logo_area = QWidget()
-        logo_area.setFixedHeight(dialog_scaled(78))
-        logo_layout = QHBoxLayout(logo_area)
-        logo_layout.setContentsMargins(
-            dialog_scaled(12), dialog_scaled(10), dialog_scaled(12), dialog_scaled(10)
-        )
-        logo_layout.setSpacing(dialog_scaled(10))
-        logo_layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
-
-        logo_icon_lbl = QLabel()
-        logo_icon_lbl.setFixedSize(dialog_scaled(36), dialog_scaled(36))
-        logo_icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        try:
-            from core.resource_manager import ResourceManager
-            icon_path = ResourceManager.get_resource_path("svg/versepic.png")
-            if os.path.exists(icon_path):
-                pm = QIcon(icon_path).pixmap(dialog_scaled(36), dialog_scaled(36))
-                logo_icon_lbl.setPixmap(pm)
-        except Exception as e:
-            log_exception(e, T("加载 Logo 图标"))
-        logo_layout.addWidget(logo_icon_lbl, 0, Qt.AlignmentFlag.AlignVCenter)
-
-        text_box = QVBoxLayout()
-        text_box.setContentsMargins(0, 0, 0, 0)
-        text_box.setSpacing(dialog_scaled(2))
-        app_name_lbl = BodyLabel("VersePic")
-        apply_theme_text_style(app_name_lbl, 16, bold=True)
-        app_desc_lbl = QLabel(self.tr("Settings"))
-        apply_theme_text_style(app_desc_lbl, 13, caption=True)
-        text_box.addWidget(app_name_lbl)
-        text_box.addWidget(app_desc_lbl)
-        logo_layout.addLayout(text_box, 1)
-        left_v.addWidget(logo_area)
-
-        # logo 右键菜单 → 开发者选项
-        logo_area.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        logo_area.customContextMenuRequested.connect(self._show_logo_context_menu)
-
+        left_v.setContentsMargins(0, s(6), 0, 0)
         self.nav_list = self._create_navigation(left_panel)
+        left_panel.setFixedWidth(max(s(WORKSPACE_SIDEBAR_WIDTH), *(button.sizeHint().width() for button in self.nav_list._items.values())))
         left_v.addWidget(self.nav_list, 1)
         main_layout.addWidget(left_panel)
+        self.titleBar.iconLabel.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.titleBar.iconLabel.customContextMenuRequested.connect(self._show_logo_context_menu)
 
-        # 2. 右侧内容区
         right_area = QWidget()
         self.right_area = right_area
         right_area.setObjectName("SettingsRightArea")
         right_layout = QVBoxLayout(right_area)
-        right_layout.setContentsMargins(
-            dialog_scaled(24), dialog_scaled(16), dialog_scaled(24), dialog_scaled(18)
-        )
-        right_layout.setSpacing(dialog_scaled(14))
+        right_layout.setContentsMargins(s(WORKSPACE_PADDING), 1, s(WORKSPACE_PADDING), s(16))
+        right_layout.setSpacing(0)
 
-        self.content_title = QLabel(self.tr("Shortcut Settings"))
-        apply_theme_text_style(
-            self.content_title, 21, bold=True,
-            extra=(
-                f"padding: 0 {dialog_scaled(6)}px {dialog_scaled(2)}px {dialog_scaled(6)}px;"
-            ),
-        )
+        self.content_title = PageHeader(self.tr("Shortcut Settings"))
+        configure_dialog_control(self.content_title)
 
         self.content_stack = QStackedWidget()
         self.content_stack.addWidget(create_hotkey_page(self))           # 0
@@ -218,8 +172,12 @@ class SettingsDialog(FrostedFramelessDialog):
         configure_dialog_controls(self.content_stack)
 
         right_layout.addWidget(self.content_title)
-        right_layout.addWidget(self.content_stack)
-        right_layout.setStretchFactor(self.content_stack, 1)
+        right_layout.addWidget(Separator(right_area))
+        right_layout.addSpacing(s(20))
+        right_layout.addWidget(self.content_stack, 1)
+        right_layout.addSpacing(s(16))
+        right_layout.addWidget(Separator(right_area))
+        right_layout.addSpacing(s(12))
         right_layout.addLayout(self._create_button_area())
         main_layout.addWidget(right_area, 1)
 
@@ -231,11 +189,6 @@ class SettingsDialog(FrostedFramelessDialog):
         """创建左侧导航栏"""
         nav = NavigationInterface(parent=parent, showMenuButton=False, showReturnButton=False, collapsible=False)
         nav.setObjectName("SettingsNavigation")
-        nav.setExpandWidth(dialog_scaled(188))
-        nav.setMinimumExpandWidth(0)
-        nav.expand(useAni=False)
-        nav.setMinimumWidth(dialog_scaled(188))
-        nav.setMaximumWidth(dialog_scaled(196))
 
         self._nav_items = [
             ("shortcuts", FluentIcon.COMMAND_PROMPT, self.tr("Shortcuts"), 0, NavigationItemPosition.TOP),
@@ -342,7 +295,7 @@ class SettingsDialog(FrostedFramelessDialog):
             }}
             QComboBox QAbstractItemView {{
                 border: 1px solid {border_color}; background: {popup_bg};
-                selection-background-color: {ACCENT}; selection-color: white;
+                selection-background-color: {popup_hover}; selection-color: {text_color};
                 font-family: {CSS_FONT_FAMILY};
                 font-size: {s(13)}px; color: {text_color}; outline: none;
             }}
@@ -353,7 +306,7 @@ class SettingsDialog(FrostedFramelessDialog):
                 background-color: {popup_hover}; color: {text_color};
             }}
             QComboBox QAbstractItemView::item:selected {{
-                background-color: {ACCENT}; color: white;
+                background-color: {popup_hover}; color: {text_color};
             }}
         """
 
@@ -375,6 +328,9 @@ class SettingsDialog(FrostedFramelessDialog):
 
         if stack_index in title_map:
             self.content_title.setText(title_map[stack_index])
+            self._footer_reset_btn.setText(
+                self.tr("Reset Capture Settings") if stack_index == 1 else self.tr("Reset This Page")
+            )
             self.content_stack.setCurrentIndex(stack_index)
             if route_key:
                 self._set_current_nav(route_key)
@@ -402,6 +358,7 @@ class SettingsDialog(FrostedFramelessDialog):
     def _open_developer_page(self):
         self.content_stack.setCurrentIndex(7)
         self.content_title.setText(self.tr("Developer Options"))
+        self._footer_reset_btn.setText(self.tr("Reset This Page"))
         self.nav_list.clearCurrentItem()
         self._refresh_after_page_change()
 
@@ -465,28 +422,29 @@ class SettingsDialog(FrostedFramelessDialog):
         # The footer sits outside content_stack, so its controls are not
         # covered by the sweep in _setup_ui and have to opt in themselves.
         reset_btn = TransparentPushButton(self.tr("Reset This Page"))
+        self._footer_reset_btn = reset_btn
         configure_dialog_control(reset_btn)
         reset_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         reset_btn.setIcon(FluentIcon.SYNC)
         reset_btn.clicked.connect(self._reset_current_page)
 
-        cancel_btn = FluentPushButton(self.tr("Cancel"))
+        cancel_btn = Button(self.tr("Cancel"), variant="outline")
         configure_dialog_control(cancel_btn)
         self._footer_cancel_btn = cancel_btn
-        cancel_btn.setFixedHeight(s(42))
-        cancel_btn.setMinimumWidth(s(120))
+        cancel_btn.setFixedHeight(s(CONTROL_HEIGHT))
+        cancel_btn.setMinimumWidth(s(88))
         cancel_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         cancel_btn.clicked.connect(self.reject)
 
         ok_btn = PrimaryPushButton(self.tr("Apply"))
         configure_dialog_control(ok_btn)
         self._footer_ok_btn = ok_btn
-        ok_btn.setFixedHeight(s(42))
-        ok_btn.setMinimumWidth(s(120))
+        ok_btn.setFixedHeight(s(CONTROL_HEIGHT))
+        ok_btn.setMinimumWidth(s(88))
         ok_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         ok_btn.setIcon(FluentIcon.CHECK)
         ok_btn.setBaseIconSize(16)
-        ok_btn.clicked.connect(self.accept)
+        ok_btn.clicked.connect(self.apply_settings)
         self._apply_footer_styles()
 
         layout.addWidget(reset_btn)
@@ -496,58 +454,16 @@ class SettingsDialog(FrostedFramelessDialog):
         return layout
 
     def _apply_footer_styles(self):
-        from core.ui_theme import get_ui_theme
-        t = get_ui_theme().tokens
-        s = dialog_scaled
-        cancel_btn = getattr(self, "_footer_cancel_btn", None)
-        if cancel_btn is not None:
-            cancel_btn.setStyleSheet(f"""
-                QPushButton {{
-                    min-height: {s(40)}px;
-                    padding: 0 {s(22)}px;
-                    color: {t.text};
-                    background: {t.surface};
-                    border: 1px solid {t.border_hover};
-                    border-radius: {s(12)}px;
-                    font-size: {s(15)}px;
-                    font-weight: 500;
-                    outline: none;
-                }}
-                QPushButton:hover {{
-                    background: {t.surface_hover};
-                }}
-                QPushButton:pressed {{
-                    background: {t.surface_subtle};
-                }}
-            """)
-        ok_btn = getattr(self, "_footer_ok_btn", None)
-        if ok_btn is not None:
-            ok_btn.setStyleSheet(f"""
-                QPushButton {{
-                    min-height: {s(40)}px;
-                    padding: 0 {s(22)}px;
-                    color: #FFFFFF;
-                    background: {t.accent_strong};
-                    border: 1px solid {t.accent_strong};
-                    border-radius: {s(12)}px;
-                    font-size: {s(15)}px;
-                    font-weight: 600;
-                    outline: none;
-                }}
-                QPushButton:hover {{
-                    background: {t.accent_strong_hover};
-                    border-color: {t.accent_strong_hover};
-                }}
-                QPushButton:pressed {{
-                    background: {t.accent_strong_pressed};
-                    border-color: {t.accent_strong_pressed};
-                }}
-                QPushButton:disabled {{
-                    color: rgba(255, 255, 255, 0.72);
-                    background: #687D8F;
-                    border-color: #687D8F;
-                }}
-            """)
+        buttons = (getattr(self, "_footer_cancel_btn", None),
+                   getattr(self, "_footer_ok_btn", None))
+        if any(button is None for button in buttons):
+            return
+        for button in buttons:
+            button._apply_theme()
+            button.setFixedHeight(dialog_scaled(CONTROL_HEIGHT))
+        width = max(dialog_scaled(88), *(button.sizeHint().width() for button in buttons))
+        for button in buttons:
+            button.setFixedWidth(width)
 
     # ================================================================
     # 重置页面
@@ -794,6 +710,14 @@ class SettingsDialog(FrostedFramelessDialog):
     # ================================================================
     # 保存（accept）
     # ================================================================
+
+    def apply_settings(self):
+        """Save and notify the application while leaving the editor open."""
+        self._keep_open_on_apply = True
+        try:
+            self.accept()
+        finally:
+            self._keep_open_on_apply = False
 
     def accept(self):
         """保存所有设置"""
@@ -1062,7 +986,10 @@ class SettingsDialog(FrostedFramelessDialog):
         self._settings_snapshot = self._snapshot_settings()
         self._skip_unsaved_close_prompt = True
         try:
-            super().accept()
+            if getattr(self, "_keep_open_on_apply", False):
+                self.settings_applied.emit()
+            else:
+                super().accept()
         finally:
             self._skip_unsaved_close_prompt = False
 
@@ -1092,12 +1019,12 @@ class SettingsDialog(FrostedFramelessDialog):
                 /* 侧栏直接坐在窗口底色上，不再单独成块。 */
                 background-color: transparent;
                 border: none;
-                border-radius: 12px;
+                border-radius: {dialog_scaled(SURFACE_RADIUS)}px;
             }}
             QWidget#SettingsRightArea {{
                 background: {theme_surface_color()};
                 border: 1px solid {tokens.separator};
-                border-radius: 12px;
+                border-radius: {dialog_scaled(SURFACE_RADIUS)}px;
             }}
             QLabel {{
                 color: {tokens.text};
@@ -1112,18 +1039,14 @@ class SettingsDialog(FrostedFramelessDialog):
         self._apply_dialog_stylesheet()
         refresh_theme_widget_styles(self)
         self._apply_footer_styles()
-        input_style = self._get_input_style()
         # 翻译凭据的输入框是按声明动态建的，从 provider_field_widgets 取。
         # 上面那张手写清单里 azure/baidu 一直缺席，切主题时它们不跟着变。
         for widget in getattr(self, "provider_field_widgets", {}).values():
             if hasattr(widget, "setEchoMode"):
-                widget.setStyleSheet(input_style)
-        self.content_title.setStyleSheet(
-            theme_text_style(
-                21, bold=True,
-                extra="padding: 0 6px 2px 6px;"
-            )
-        )
+                widget._apply_theme()
+        from .page_translation import _update_provider_groups
+        _update_provider_groups(self)
+        self.content_title._apply_theme()
         self.update()
 
     @safe_event

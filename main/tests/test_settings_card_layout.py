@@ -27,8 +27,12 @@ def _pages(dialog, qapp):
     """逐页切换并交出页面。"""
     for index in range(dialog.content_stack.count()):
         dialog.content_stack.setCurrentIndex(index)
-        qapp.processEvents()
-        yield dialog.content_stack.widget(index)
+        sections = ('general', 'magnifier', 'saving') if index == 1 else (None,)
+        for section in sections:
+            if section is not None:
+                dialog.capture_sections.setCurrentItem(section)
+            qapp.processEvents()
+            yield dialog.content_stack.widget(index)
 
 
 def _visible_cards(root):
@@ -49,6 +53,8 @@ def test_one_group_shares_one_control_column(dialog, qapp):
     ceiling = dialog_scaled(SettingCard.CONTROL_COLUMN_MAX)
     for page in _pages(dialog, qapp):
         for group in page.findChildren(SettingCardGroup):
+            if not group.isVisibleTo(page):
+                continue
             cards = _visible_cards(group)
             if not cards:
                 continue

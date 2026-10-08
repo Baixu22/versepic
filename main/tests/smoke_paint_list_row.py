@@ -32,7 +32,7 @@ from PySide6.QtWidgets import QStyleOptionViewItem  # noqa: E402
 
 def ensure_cjk_font() -> None:
     """确保字库里有微软雅黑；极简环境可手动加载系统 ttc。"""
-    app = QApplication.instance() or QApplication([])
+    _app = QApplication.instance() or QApplication([])  # Keep the Qt application alive while using its fonts.
     if "Microsoft YaHei UI" in QFontDatabase.families() or "Microsoft YaHei" in QFontDatabase.families():
         return
     for path in (
@@ -95,7 +95,7 @@ def build_samples() -> list[ClipboardItem]:
 
 
 def paint_preview(out_path: str) -> None:
-    app = QApplication.instance() or QApplication([])
+    _app = QApplication.instance() or QApplication([])  # Own the application through rendering.
     ensure_cjk_font()
     theme = get_theme_manager().get_current_theme()
     delegate = ClipboardItemDelegate(theme=theme, display_lines=15, show_metadata=True)

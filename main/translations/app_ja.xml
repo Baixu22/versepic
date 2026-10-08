@@ -510,8 +510,8 @@ Replace it?</source>
         <translation>圧縮品質 (1-100)。JPG と WebP にのみ影響します。</translation>
     </message>
     <message>
-        <source>💡 Hint: Even with auto-save off, it will be copied to clipboard.</source>
-        <translation>💡 ヒント: 自動保存をオフにしても、クリップボードにコピーされます。</translation>
+        <source>With auto-save off, the screenshot is still copied to the clipboard.</source>
+        <translation>自動保存をオフにしても、スクリーンショットはクリップボードにコピーされます。</translation>
     </message>
     <message>
         <source>Select Screenshot Save Folder</source>
@@ -1843,11 +1843,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation>このグループを削除してもよろしいですか？</translation>
+        <translation>このグループを削除しますか？</translation>
     </message>
     <message>
         <source>All items in the group will also be deleted.</source>
-        <translation>グループ内のすべてのアイテムも削除されます。</translation>
+        <translation>グループ内のすべての項目も削除されます。この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?\nAll items in the group will also be deleted.</source>
@@ -1855,7 +1855,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this item?</source>
-        <translation>削除してもよろしいですか？</translation>
+        <translation>この項目を削除しますか？この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Delete Group</source>
@@ -1934,8 +1934,10 @@ Replace it?</source>
         <translation>クリアの確認</translation>
     </message>
     <message>
-        <source>Are you sure you want to clear all clipboard history?\nThis action cannot be undone.</source>
-        <translation>すべてのクリップボード履歴をクリアしてもよろしいですか？\nこの操作は元に戻せません。</translation>
+        <source>Are you sure you want to clear all clipboard history?
+This action cannot be undone.</source>
+        <translation>クリップボードの履歴を消去しますか？
+この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Paste</source>
@@ -2009,11 +2011,51 @@ Replace it?</source>
         <source>No clipboard history yet</source>
         <translation>クリップボード履歴はまだありません</translation>
     </message>
+    <message>
+        <source>Pinned</source>
+        <translation>固定済み</translation>
+    </message>
+    <message>
+        <source>Unknown source</source>
+        <translation>取得元不明</translation>
+    </message>
+    <message>
+        <source>Default order</source>
+        <translation>標準の順序</translation>
+    </message>
+    <message>
+        <source>Newest first</source>
+        <translation>新しい順</translation>
+    </message>
+    <message>
+        <source>Oldest first</source>
+        <translation>古い順</translation>
+    </message>
+    <message>
+        <source>Most used</source>
+        <translation>使用回数順</translation>
+    </message>
+    <message>
+        <source>Manual order</source>
+        <translation>手動の順序</translation>
+    </message>
+    <message>
+        <source>Pinned items always come first</source>
+        <translation>固定した履歴は常に先頭に表示</translation>
+    </message>
+    <message>
+        <source>Use Move Up / Move Down in the context menu</source>
+        <translation>右クリックメニューの「上へ」「下へ」で並べ替え</translation>
+    </message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
 <context>
     <name>ManageDialog</name>
+    <message><source>Load more</source><translation>さらに読み込む</translation></message>
+    <message><source>Unsaved changes</source><translation>未保存の変更があります</translation></message>
+    <message><source>Discard changes and continue?</source><translation>変更を破棄して続行しますか？</translation></message>
+    <message><source>Saved</source><translation>保存しました</translation></message>
     <message>
         <source>Clipboard Management</source>
         <translation>クリップボード管理</translation>
@@ -2132,15 +2174,15 @@ Replace it?</source>
     </message>
     <message>
         <source>General groups allow any content; selecting an item pastes content or files to the target</source>
-        <translation>任意の内容を追加できます。選択すると内容やファイルを貼り付けます</translation>
+        <translation>テキスト、画像、ファイルを保存して、再びコピーや貼り付けができます。</translation>
     </message>
     <message>
         <source>Quick launch groups only allow file or folder paths; selecting an item opens them</source>
-        <translation>ファイルまたはフォルダーのパスのみ追加できます。選択すると直接開きます</translation>
+        <translation>ファイルやフォルダーのパスを保存し、クリックして開けます。</translation>
     </message>
     <message>
         <source>Quick launch groups only accept file items; left-click opens the file directly</source>
-        <translation>クイック起動グループはファイル項目のみ受け付けます。左クリックでファイルを直接開きます</translation>
+        <translation>このグループにはファイルやフォルダーのパスのみ保存できます。クリックで開きます。</translation>
     </message>
     <message>
         <source>Enter or paste emoji...</source>
@@ -2296,11 +2338,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation>このグループを削除してもよろしいですか？</translation>
+        <translation>このグループを削除しますか？</translation>
     </message>
     <message>
         <source>All items in the group will also be deleted.</source>
-        <translation>グループ内のすべてのアイテムも削除されます。</translation>
+        <translation>グループ内のすべての項目も削除されます。この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?\nAll items in the group will also be deleted.</source>
@@ -2308,7 +2350,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this item?</source>
-        <translation>このアイテムを削除してもよろしいですか？</translation>
+        <translation>この項目を削除しますか？この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Failed to delete item</source>
@@ -2329,7 +2371,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Export all saved content to CSV file</source>
-        <translation>保存されたすべてのコンテンツをCSVファイルにエクスポート</translation>
+        <translation>グループ内のテキストを CSV に書き出します。画像やファイルは含まれません。</translation>
     </message>
     <message>
         <source>Encoding:</source>
@@ -2345,7 +2387,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Import content from CSV file (Group, Content, Title)</source>
-        <translation>CSVファイルからコンテンツをインポート（グループ、内容、タイトル）</translation>
+        <translation>CSV からグループ名ごとにテキストを読み込みます。同名のグループに追加されます。</translation>
     </message>
     <message>
         <source>📥 Import from CSV</source>
@@ -2505,8 +2547,10 @@ Replace it?</source>
         <translation>クリアの確認</translation>
     </message>
     <message>
-        <source>Are you sure you want to clear all clipboard history?\nThis action cannot be undone.</source>
-        <translation>すべてのクリップボード履歴をクリアしてもよろしいですか？\nこの操作は元に戻せません。</translation>
+        <source>Are you sure you want to clear all clipboard history?
+This action cannot be undone.</source>
+        <translation>クリップボードの履歴を消去しますか？
+この操作は元に戻せません。</translation>
     </message>
     <message>
         <source>Also delete saved content in groups</source>
@@ -3484,11 +3528,11 @@ SOFTWARE.</translation></message>
     <name>StandardDialog</name>
     <message>
         <source>Yes</source>
-        <translation>はい</translation>
+        <translation>確認</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>いいえ</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3506,6 +3550,10 @@ SOFTWARE.</translation></message>
     <message>
         <source>富文本预览</source>
         <translation>リッチテキストプレビュー</translation>
+    </message>
+    <message>
+        <source>Preview shortened; copy the item for its full content.</source>
+        <translation>プレビューを省略しました。全内容はコピーして確認できます。</translation>
     </message>
 </context>
 
@@ -3901,6 +3949,98 @@ SOFTWARE.</translation></message>
     <message>
         <source>Only in screenshot and pin windows</source>
         <translation>スクリーンショットとピン留め画像のウィンドウでのみ有効</translation>
+    </message>
+</context>
+<context>
+    <name>TextRecognitionWindow</name>
+    <message><source>Merge lines</source><translation>改行を結合</translation></message>
+    <message><source>Clean spacing</source><translation>空白を整理</translation></message>
+    <message><source>Restore original</source><translation>元に戻す</translation></message>
+    <message><source>Translate</source><translation>翻訳</translation></message>
+    <message><source>Search web</source><translation>ウェブ検索</translation></message>
+    <message><source>Save…</source><translation>保存…</translation></message>
+    <message><source>Save text file…</source><translation>テキストを保存…</translation></message>
+    <message><source>Save to history</source><translation>履歴に保存</translation></message>
+    <message><source>Saved</source><translation>保存しました</translation></message>
+    <message><source>Save failed</source><translation>保存に失敗しました</translation></message>
+</context>
+<context>
+    <name>RedactionWindow</name>
+    <message><source>Save…</source><translation>保存…</translation></message>
+    <message><source>Saved</source><translation>保存しました</translation></message>
+    <message><source>Save failed</source><translation>保存に失敗しました</translation></message>
+    <message><source>Smart redact</source><translation>機密情報を隠す</translation></message>
+    <message><source>Phone numbers</source><translation>電話番号</translation></message>
+    <message><source>Email addresses</source><translation>メールアドレス</translation></message>
+    <message><source>Keywords, separated by commas</source><translation>キーワード（カンマ区切り）</translation></message>
+    <message><source>Matched lines are covered in full. Uncheck to keep; drag on the image to cover more.</source><translation>一致した行全体を隠します。チェックを外すと表示、画像をドラッグすると範囲を追加できます。</translation></message>
+    <message><source>Copy redacted image</source><translation>加工済み画像をコピー</translation></message>
+    <message><source>Manual area</source><translation>手動の範囲</translation></message>
+    <message><source>%1 areas covered</source><translation>%1 個の範囲を非表示</translation></message>
+    <message><source>Recognizing...</source><translation>認識中…</translation></message>
+    <message><source>Copied</source><translation>コピーしました</translation></message>
+</context>
+<context>
+    <name>ClipboardWindow</name>
+    <message><source>Smart redact</source><translation>機密情報を隠す</translation></message>
+    <message><source>Recognize text</source><translation>文字認識</translation></message>
+    <message><source>Unable to load image</source><translation>画像を読み込めません</translation></message>
+</context>
+<context>
+    <name>Toolbar</name>
+    <message><source>Smart redact</source><translation>機密情報を隠す</translation></message>
+</context>
+<context>
+    <name>ToolbarLayoutDialog</name>
+    <message><source>Smart redact</source><translation>機密情報を隠す</translation></message>
+</context>
+<context><name>ClipboardWindow</name><message><source>Indexing image text…</source><translation>画像の文字を索引中…</translation></message></context>
+
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>General</source>
+        <translation>一般</translation>
+    </message>
+    <message>
+        <source>Saving and Pins</source>
+        <translation>保存とピン留め</translation>
+    </message>
+</context>
+
+<context>
+    <name>ManageDialog</name>
+    <message>
+        <source>Name this group and choose how its contents are used.</source>
+        <translation>グループ名とコンテンツの使い方を設定します。</translation>
+    </message>
+    <message>
+        <source>Save reusable text or file paths in this group.</source>
+        <translation>よく使うテキストやファイルパスをこのグループに保存します。</translation>
+    </message>
+    <message>
+        <source>Edit the content, then save your changes.</source>
+        <translation>コンテンツを編集したら、変更を保存してください。</translation>
+    </message>
+    <message>
+        <source>Transfer saved text and file paths using CSV.</source>
+        <translation>保存したテキストやファイルパスを CSV で入出力します。</translation>
+    </message>
+</context>
+
+<context>
+    <name>ClipboardWindow</name>
+    <message>
+        <source>Search: {query}</source>
+        <translation>検索：{query}</translation>
+    </message>
+</context>
+
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Reset Capture Settings</source>
+        <translation>キャプチャ設定をリセット</translation>
     </message>
 </context>
 </TS>

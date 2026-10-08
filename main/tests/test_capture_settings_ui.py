@@ -18,6 +18,35 @@ def _manager(tmp_path):
     return ToolSettingsManager(qsettings=qsettings)
 
 
+def test_capture_sections_preserve_edits_and_support_keyboard(qapp, qtbot, tmp_path):
+    from PySide6.QtCore import Qt
+
+    dialog = SimpleNamespace(
+        config_manager=_manager(tmp_path), tr=lambda text: text,
+        _change_save_dir=lambda: None, _open_save_dir=lambda: None,
+    )
+    page = create_capture_page(dialog)
+    qtbot.addWidget(page)
+    page.resize(700, 540)
+    page.show()
+    sections = dialog.capture_sections
+    dialog.double_click_copy_close_toggle.setChecked(False)
+    sections._items['general'].setFocus()
+    qtbot.keyClick(sections._items['general'], Qt.Key.Key_Right)
+    assert sections.currentItem() == 'magnifier'
+    assert dialog.magnifier_enabled_toggle.isVisible()
+    assert not dialog.double_click_copy_close_toggle.isVisible()
+    dialog.magnifier_enabled_toggle.setChecked(False)
+    sections.setCurrentItem('saving')
+    assert dialog.save_toggle.isVisible()
+    dialog.save_toggle.setChecked(True)
+    sections.setCurrentItem('general')
+    assert not dialog.double_click_copy_close_toggle.isChecked()
+    assert not dialog.magnifier_enabled_toggle.isChecked()
+    assert dialog.save_toggle.isChecked()
+    assert dialog.capture_stack.currentIndex() == 0
+
+
 @pytest.mark.parametrize("enabled", [True, False])
 def test_capture_page_reads_double_click_toggle(qapp, tmp_path, enabled):
     manager = _manager(tmp_path)
@@ -263,13 +292,13 @@ def test_double_click_setting_translations_exist_and_load(qapp):
         },
         "zh": {
             "Capture Behavior": "截图行为",
-            "Double-click to Copy and Close": "双击复制并关闭",
+            "Double-click to Copy and Close": "双击完成截图",
             "Double-click the selected screenshot to copy it to the clipboard and close the capture.":
-                "双击已选截图时复制到剪贴板并关闭截图。",
-            "Enable Ctrl Cross-Tool Selection": "启用 Ctrl 跨工具选择",
+                "双击选区，复制截图并退出。",
+            "Enable Ctrl Cross-Tool Selection": "按住 Ctrl 跨工具编辑",
             "Hold Ctrl and click any editable annotation to adjust it without switching tools.":
                 "按住 Ctrl 点击任意可编辑标注，无需切换工具即可调整。",
-            "Keep Text Annotations on Top": "文字标注始终置顶",
+            "Keep Text Annotations on Top": "文字始终置顶",
             "Keep text above other annotations, including ones drawn later.":
                 "让文字保持在其他标注上方，包括之后绘制的标注。",
             "Automatically Wrap Text": "文字自动换行",
@@ -335,10 +364,10 @@ def test_clipboard_file_reference_setting_translations_exist_and_load(qapp):
                 "paste the screenshot too. Requires Auto-save Screenshots to be enabled.",
         },
         "zh": {
-            "Write File Path to Clipboard": "写入文件路径到剪贴板",
+            "Write File Path to Clipboard": "同时复制文件引用",
             "Lets tools that only recognize a file path (e.g. some terminal apps) "
             "paste the screenshot too. Requires Auto-save Screenshots to be enabled.":
-                "让只认文件路径的工具（如部分终端程序）也能粘贴截图。需要开启\"自动保存截图\"。",
+                "自动保存开启时，可将截图作为文件粘贴到支持的应用。",
         },
         "ja": {
             "Write File Path to Clipboard": "クリップボードにファイルパスを書き込む",

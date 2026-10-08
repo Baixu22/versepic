@@ -18,6 +18,15 @@ _tr = make_tr("SystemTray")
 
 
 class CustomTrayMenu(QMenu):
+    def __init__(self, *args):
+        super().__init__(*args)
+        from core.ui_theme import get_ui_theme
+        self.aboutToShow.connect(self._apply_theme)
+        get_ui_theme().theme_changed.connect(self._apply_theme)
+
+    def _apply_theme(self, *_):
+        self.setStyleSheet(_menu_style())
+
     @safe_event
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:
@@ -71,30 +80,28 @@ def create_tray_menu(app) -> QMenu:
 
 
 def _menu_style() -> str:
-    from core.theme import get_theme
     from core.ui_theme import get_ui_theme
 
-    tc = get_theme().theme_color_hex
     t = get_ui_theme().tokens
     return f"""
         QMenu {{
             background-color: {t.popup_background};
             border: 1px solid {t.border};
-            border-radius: 4px;
+            border-radius: 12px;
             padding: 4px;
             font-family: {CSS_FONT_FAMILY_UI};
             font-size: 9pt;
             color: {t.text};
         }}
         QMenu::item {{
-            padding: 6px 12px;
-            border-radius: 3px;
+            padding: 8px 16px;
+            border-radius: 8px;
             color: {t.text};
             background-color: transparent;
         }}
         QMenu::item:selected {{
-            background-color: {tc};
-            color: #ffffff;
+            background-color: {t.popup_hover};
+            color: {t.text};
         }}
         QMenu::item:disabled {{
             color: {t.text_disabled};
@@ -126,7 +133,7 @@ def _add_pin_actions(menu: QMenu, app):
         menu.addAction(pins_action)
         return
 
-    pins_menu = QMenu(pins_title, menu)
+    pins_menu = CustomTrayMenu(pins_title, menu)
     pins_menu.setStyleSheet(_menu_style())
 
     move_center_action = QAction(_tr("Move all pins to center"), app)

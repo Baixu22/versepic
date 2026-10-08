@@ -8,6 +8,7 @@
 """
 
 import json
+import zlib
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional, TYPE_CHECKING
@@ -63,7 +64,7 @@ class Tag:
         if self.color in TAG_CHIP_COLORS:
             return self.color
         # 稳定映射：同名标签始终同色
-        return TAG_CHIP_COLORS[hash(self.name) % len(TAG_CHIP_COLORS)]
+        return TAG_CHIP_COLORS[zlib.crc32(self.name.encode("utf-8")) % len(TAG_CHIP_COLORS)]
 
 
 @dataclass
@@ -83,6 +84,7 @@ class ClipboardItem:
     created_at: datetime = None
     updated_at: datetime = None
     tags: list = None  # List[Tag]，UI 只读展示
+    ocr_text: str = ""  # 本地检索元数据，不替代图片内容或粘贴格式。
 
     def __post_init__(self):
         if self.tags is None:
@@ -120,6 +122,9 @@ class ClipboardItem:
             text = self.content.replace("\n", " ").strip()
             return text[:100] + "..." if len(text) > 100 else text
         if self.content_type == "image":
+            if self.ocr_text:
+                text = self.ocr_text.replace("\n", " ").strip()
+                return text[:100] + "…" if len(text) > 100 else text
             return self.content.strip("[]")
         if self.content_type == "file":
             try:

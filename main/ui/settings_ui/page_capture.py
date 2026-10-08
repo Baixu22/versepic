@@ -1,13 +1,14 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """截图设置页 — Fluent Design"""
 import importlib.util
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QStackedWidget
 from core.ui_scale import dialog_scaled
 from ui.fluent_lite import (
     SwitchSettingCard, SettingCard as FSettingCard,
     FluentIcon, ComboBox, CaptionLabel,
-    PushButton,
+    PushButton, SegmentedWidget,
 )
 from settings import color_formats
 from settings.tool_settings import SMART_SELECTION_MODES
@@ -16,15 +17,15 @@ from .components import SettingCardGroup
 
 def create_capture_page(dialog) -> QWidget:
     """截图設定 ─ 交互行为 + 智能选区 + 放大镜 + 保存设置 + 钉图"""
-    scroll = QScrollArea()
-    scroll.setWidgetResizable(True)
-    scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
-
     view = QWidget()
     view.setStyleSheet("background: transparent;")
     layout = QVBoxLayout(view)
-    layout.setContentsMargins(0, 0, dialog_scaled(10), 0)
-    layout.setSpacing(dialog_scaled(20))
+    layout.setContentsMargins(0, 0, 0, 0)
+    layout.setSpacing(dialog_scaled(16))
+    dialog.capture_sections = SegmentedWidget(view)
+    dialog.capture_stack = QStackedWidget(view)
+    layout.addWidget(dialog.capture_sections, 0, Qt.AlignmentFlag.AlignLeft)
+    layout.addWidget(dialog.capture_stack, 1)
 
     # ── 截图交互 ──────────────────────────────────────
     grp_behavior = SettingCardGroup(dialog.tr("Capture Behavior"), view)
@@ -71,8 +72,6 @@ def create_capture_page(dialog) -> QWidget:
     dialog.text_always_on_top_toggle = text_top_card
     grp_behavior.addSettingCard(text_top_card)
 
-    layout.addWidget(grp_behavior)
-
     # ── 智能选区 ──────────────────────────────────────
     grp_smart = SettingCardGroup(dialog.tr("Smart Selection"), view)
 
@@ -109,8 +108,6 @@ def create_capture_page(dialog) -> QWidget:
     smart_anim_card.setChecked(dialog.config_manager.get_smart_selection_animation())
     dialog.smart_animation_toggle = smart_anim_card
     grp_smart.addSettingCard(smart_anim_card)
-
-    layout.addWidget(grp_smart)
 
     # ── 放大镜 ────────────────────────────────────────
     grp_magnifier = SettingCardGroup(dialog.tr("Magnifier"), view)
@@ -169,8 +166,6 @@ def create_capture_page(dialog) -> QWidget:
     dialog.magnifier_color_formats_btn = manage_btn
     fmt_card.addControl(manage_btn)
     grp_magnifier.addSettingCard(fmt_card)
-
-    layout.addWidget(grp_magnifier)
 
     # ── 截图保存 ──────────────────────────────────────
     grp_save = SettingCardGroup(dialog.tr("Save Settings"), view)
@@ -239,8 +234,6 @@ def create_capture_page(dialog) -> QWidget:
     fmt_card.addControl(dialog.screenshot_format_combo)
     grp_save.addSettingCard(fmt_card)
 
-    layout.addWidget(grp_save)
-
     # ── 钉图 ──────────────────────────────────────────
     # 自动开工具栏和自动 OCR 都是「钉完图之后自动做什么」，归在一处。
     grp_pin = SettingCardGroup(dialog.tr("Pin Settings"), view)
@@ -294,19 +287,37 @@ def create_capture_page(dialog) -> QWidget:
         )
         grp_pin.addSettingCard(no_ocr_card)
 
-    layout.addWidget(grp_pin)
-
-    # 提示
+    # 保存提示紧邻保存设置，避免跨越整个页面才能找到。
     hint = CaptionLabel(
-        dialog.tr("💡 Hint: Even with auto-save off, it will be copied to clipboard."),
+        dialog.tr("With auto-save off, the screenshot is still copied to the clipboard."),
         view,
     )
-    hint.setStyleSheet("padding: 5px;")
-    layout.addWidget(hint)
-
-    layout.addStretch()
-    scroll.setWidget(view)
-    return scroll
+    sections = (
+        ("general", dialog.tr("General"), (grp_behavior, grp_smart)),
+        ("magnifier", dialog.tr("Magnifier"), (grp_magnifier,)),
+        ("saving", dialog.tr("Saving and Pins"), (grp_save, hint, grp_pin)),
+    )
+    for key, title, widgets in sections:
+        scroll = QScrollArea(dialog.capture_stack)
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        scroll.setStyleSheet("QScrollArea { border: none; background: transparent; }")
+        scroll.setAccessibleName(title)
+        section = QWidget()
+        section_layout = QVBoxLayout(section)
+        section_layout.setContentsMargins(0, 0, dialog_scaled(10), 0)
+        section_layout.setSpacing(dialog_scaled(16))
+        for widget in widgets:
+            section_layout.addWidget(widget)
+        section_layout.addStretch()
+        scroll.setWidget(section)
+        dialog.capture_stack.addWidget(scroll)
+        dialog.capture_sections.addItem(key, title)
+    section_keys = [key for key, _, _ in sections]
+    dialog.capture_sections.currentItemChanged.connect(
+        lambda key: dialog.capture_stack.setCurrentIndex(section_keys.index(key))
+    )
+    return view
  
 
 

@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 描边/阴影 —— 独立逻辑模块
 
@@ -13,6 +13,8 @@ UI 组件：
 """
 
 from __future__ import annotations
+
+from core.ui_theme import get_ui_theme
 
 from PySide6.QtCore import (
     Qt, QRectF, QRect, QTimer, QPoint,
@@ -59,7 +61,7 @@ class BorderShadowPopup(QWidget):
     _BG = QColor(30, 30, 30, 230)
 
     # 基准尺寸（100% 下的实际像素）
-    BASE_RADIUS = 6
+    BASE_RADIUS = 12
     BASE_WIDTH = 200
     BASE_COLOR_BLOCK = 18
     BASE_VALUE_LABEL_WIDTH = 28
@@ -81,11 +83,11 @@ class BorderShadowPopup(QWidget):
         self.hide()
         # 改比例后自行重算尺寸（连接随本部件销毁自动断开）
         get_ui_scale().scale_changed.connect(self.apply_scale)
+        get_ui_theme().theme_changed.connect(self.apply_scale)
 
     @staticmethod
     def _get_theme_hex() -> str:
-        from core.theme import get_theme
-        return get_theme().theme_color_hex
+        return get_ui_theme().tokens.text
 
     # ------------------------------------------------------------------
     # UI 构建
@@ -207,10 +209,10 @@ class BorderShadowPopup(QWidget):
             color_block.setFixedSize(block, block)
 
         self._size_label.setStyleSheet(
-            f"color: #AAAAAA; font-size: {scaled(12)}px; background: transparent;")
+            f"color: {get_ui_theme().tokens.text_muted}; font-size: {scaled(12)}px; background: transparent;")
         self._slider.setStyleSheet(f"""
             QSlider::groove:horizontal {{
-                height: {scaled(4)}px; background: #555; border-radius: {scaled(2)}px;
+                height: {scaled(4)}px; background: {get_ui_theme().tokens.border}; border-radius: {scaled(2)}px;
             }}
             QSlider::handle:horizontal {{
                 width: {scaled(12)}px; height: {scaled(12)}px; margin: {-scaled(4)}px 0;
@@ -222,13 +224,13 @@ class BorderShadowPopup(QWidget):
         """)
         self._label_val.setFixedWidth(scaled(self.BASE_VALUE_LABEL_WIDTH))
         self._label_val.setStyleSheet(
-            f"color: #D0D0D0; font-size: {scaled(12)}px; background: transparent;")
+            f"color: {get_ui_theme().tokens.text}; font-size: {scaled(12)}px; background: transparent;")
         indicator = scaled(14)
         self._chk_persist.setStyleSheet(f"""
-            QCheckBox {{ color: #AAAAAA; font-size: {scaled(11)}px;
+            QCheckBox {{ color: {get_ui_theme().tokens.text_muted}; font-size: {scaled(11)}px;
                          background: transparent; spacing: {scaled(4)}px; }}
             QCheckBox::indicator {{ width: {indicator}px; height: {indicator}px;
-                                    border: 1px solid #666; border-radius: {scaled(3)}px;
+                                    border: 1px solid {get_ui_theme().tokens.border_hover}; border-radius: {scaled(3)}px;
                                     background: transparent; }}
             QCheckBox::indicator:checked {{ background: {theme_hex};
                                             border-color: {theme_hex}; }}
@@ -244,8 +246,8 @@ class BorderShadowPopup(QWidget):
         radius = scaled(4)
         font_px = scaled(12)
         _ACTIVE = f"""
-            background: rgba(64,224,208,50);
-            border: 1px solid rgba(64,224,208,120);
+            background: {get_ui_theme().tokens.accent_soft};
+            border: 1px solid {get_ui_theme().tokens.border_hover};
             border-radius: {radius}px;
         """
         _INACTIVE = f"""
@@ -260,11 +262,11 @@ class BorderShadowPopup(QWidget):
             if mode == self._current_mode:
                 group.setStyleSheet(_ACTIVE)
                 label.setStyleSheet(
-                    f"color: #FFFFFF; font-size: {font_px}px; background: transparent;")
+                    f"color: {get_ui_theme().tokens.text}; font-size: {font_px}px; background: transparent;")
             else:
                 group.setStyleSheet(_INACTIVE)
                 label.setStyleSheet(
-                    f"color: #999999; font-size: {font_px}px; background: transparent;")
+                    f"color: {get_ui_theme().tokens.text_muted}; font-size: {font_px}px; background: transparent;")
 
     # ------------------------------------------------------------------
     # 状态访问
@@ -400,7 +402,7 @@ class BorderShadowPopup(QWidget):
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         p.setPen(Qt.PenStyle.NoPen)
-        p.setBrush(QBrush(self._BG))
+        p.setBrush(QBrush(QColor(get_ui_theme().tokens.surface)))
         radius = scaled(self.BASE_RADIUS)
         p.drawRoundedRect(self.rect(), radius, radius)
         p.end()

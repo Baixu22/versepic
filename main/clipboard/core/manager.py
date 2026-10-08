@@ -74,6 +74,8 @@ class ClipboardManager:
         self._callback = None
         self._manager = None
         self._tag_store: Optional[TagStore] = None
+        self._image_text_store = None
+        self._image_indexer = None
 
         if PYCLIPBOARD_AVAILABLE:
             try:
@@ -106,7 +108,39 @@ class ClipboardManager:
                 item.tags = mapping.get(item.id, [])
         except Exception as e:
             log_exception(e, T("挂载条目标签"))
+        if any(item.content_type == "image" for item in items):
+            try:
+                self.image_text_store.attach(items)
+            except Exception as e:
+                log_exception(e, "Read image text index")
         return items
+
+    @property
+    def image_text_store(self):
+        from .image_text import ImageTextStore
+        if self._image_text_store is None:
+            self._image_text_store = ImageTextStore(self.get_db_path())
+        return self._image_text_store
+
+    def start_image_indexing(self):
+        from PySide6.QtCore import QCoreApplication
+        from .image_text import ImageTextIndexer
+        if not self.is_available or QCoreApplication.instance() is None:
+            return None
+        try:
+            if self._image_indexer is None:
+                self._image_indexer = ImageTextIndexer(self, QCoreApplication.instance())
+            self._image_indexer.kick()
+        except Exception as exc:
+            log_error(f"Image text indexing unavailable: {type(exc).__name__}", "Clipboard")
+            return None
+        return self._image_indexer
+
+    def stop_image_indexing(self):
+        if self._image_indexer is not None:
+            self._image_indexer.stop()
+            self._image_indexer = None
+        self._image_text_store = None
 
     def _resolve_db_path(self, db_path: Optional[str] = None) -> Optional[str]:
         """Return an explicit db path, or the saved clipboard db path."""
@@ -129,6 +163,8 @@ class ClipboardManager:
             return False
 
         import gc
+
+        self.stop_image_indexing()
 
         was_monitoring = self.is_monitoring() or getattr(self, "_resume_monitoring_after_reset", False)
         self._resume_monitoring_after_reset = False
@@ -153,6 +189,8 @@ class ClipboardManager:
     def release_storage(self) -> bool:
         """Stop monitoring and drop the current Rust backend before file migration."""
         import gc
+
+        self.stop_image_indexing()
 
         was_monitoring = self.is_monitoring()
         self._resume_monitoring_after_reset = was_monitoring
@@ -286,7 +324,8 @@ class ClipboardManager:
                     search: Optional[str] = None,
                     content_type: Optional[str] = None,
                     start_time: Optional[int] = None,
-                    end_time: Optional[int] = None) -> List[ClipboardItem]:
+                    end_time: Optional[int] = None,
+                    sort_order: str = "default") -> List[ClipboardItem]:
         """
         获取剪贴板历史
         
@@ -303,6 +342,11 @@ class ClipboardManager:
             return []
         
         try:
+            if (search and search.strip()) or sort_order != "default":
+                ids = self.image_text_store.search_ids(
+                    search, offset, limit, content_type, start_time, end_time, sort_order)
+                py_items = [self._manager.get_item(item_id) for item_id in ids]
+                return self._attach_tags([ClipboardItem.from_py_item(item) for item in py_items if item is not None])
             result = self._manager.get_history(offset, limit, search, content_type, start_time, end_time)
             items = [ClipboardItem.from_py_item(item) for item in result.items]
             return self._attach_tags(items)

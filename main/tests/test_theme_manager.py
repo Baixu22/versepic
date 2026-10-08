@@ -41,10 +41,11 @@ class TestThemeManager:
         assert a is c
 
     def test_default_theme_color(self):
-        """默认主题色应为 #40E0D0"""
+        """默认截图主题色应跟随界面主题"""
         from core.theme import get_theme
         tm = get_theme()
-        assert tm.theme_color_hex == "#40E0D0"
+        from core.ui_theme import get_ui_theme
+        assert tm.theme_color_hex == get_ui_theme().tokens.accent.upper()
 
     def test_default_mask_color(self):
         """默认遮罩色"""
@@ -81,7 +82,8 @@ class TestThemeManager:
         tm.set_theme_color(QColor("#FF0000"))
         tm.set_mask_color(QColor(100, 100, 100))
         tm.reset_to_defaults()
-        assert tm.theme_color_hex == "#40E0D0"
+        from core.ui_theme import get_ui_theme
+        assert tm.theme_color_hex == get_ui_theme().tokens.accent.upper()
         assert tm.mask_color.red() == 0
 
     def test_theme_color_returns_copy(self):

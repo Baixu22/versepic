@@ -17,6 +17,7 @@ Windows 系统 DPI 为两套界面缩放选择一个最接近的初始档位。
 import math
 
 from PySide6.QtCore import QObject, Signal
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QWidget
 
 
@@ -120,11 +121,10 @@ class UIScaleManager:
 
 
 def recommended_scale_percent(system_dpi=None) -> int:
-    """按系统缩放区间选择保守的首次运行档位（96 DPI = 100%）。
+    """按系统缩放选择最接近的首次运行档位（96 DPI = 100%）。
 
-    系统缩放不超过 100% 时使用 100%；大于 100% 且不超过 150% 时
-    使用 125%；超过 150% 时使用 150%。这样不会让中等高 DPI 屏幕上的
-    固定尺寸窗口被等比例放得过大。
+    Qt 使用物理像素，界面尺寸必须补足系统比例；150% 屏幕也使用
+    150%，避免字体和按钮比系统应用小。当前支持的最大档位是 150%。
     """
     if system_dpi is None:
         try:
@@ -139,11 +139,7 @@ def recommended_scale_percent(system_dpi=None) -> int:
         percent = UIScaleManager.DEFAULT_PERCENT
     if not math.isfinite(percent) or percent <= 0:
         percent = UIScaleManager.DEFAULT_PERCENT
-    if percent > 150:
-        return 150
-    if percent > 100:
-        return 125
-    return 100
+    return UIScaleManager.normalize_percent(max(100, percent))
 
 
 def apply_first_run_scale_defaults(config_manager, system_dpi=None):
@@ -306,6 +302,10 @@ def configure_dialog_control(widget) -> None:
     marker when regenerating their own base stylesheet.
     """
     widget.setProperty("dialog_scale_factor", get_dialog_scale().factor)
+    font = widget.font()
+    font.setStyleStrategy(QFont.StyleStrategy.PreferAntialias | QFont.StyleStrategy.PreferOutline)
+    font.setHintingPreference(QFont.HintingPreference.PreferFullHinting)
+    widget.setFont(font)
     apply_theme = getattr(widget, "_apply_theme", None)
     if callable(apply_theme):
         apply_theme()

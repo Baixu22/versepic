@@ -7,7 +7,6 @@
 
 import os
 import re
-from datetime import date, timedelta
 from time import perf_counter
 from typing import List, Optional
 
@@ -37,10 +36,11 @@ from PySide6.QtWidgets import (
 from core import safe_event
 from core.logger import T, log_debug, log_exception
 from core.shortcut_manager import ShortcutHandler, ShortcutManager
+from core.ui_theme import RADIUS_MD, RADIUS_XL
 from ui.dialogs import show_confirm_dialog
 from ui.fluent_lite import LineEdit
 from ui import glass
-from ui.glyphs import glyph_icon, glyph_pixmap, svg_icon
+from ui.glyphs import glyph_icon, svg_icon
 from ui.motion import apply_frost, fade_hide, fade_show, reset_opacity
 
 from ...controllers import ClipboardController, SelectionManager
@@ -64,25 +64,27 @@ _DIRECT_PICK_BLOCKERS = (
 )
 
 # Windows 上交给 DWM 做毛玻璃、圆角和阴影；Win11 系统圆角是 8px，Qt 侧跟随。
-# 其他平台退回 Qt 自绘：圆角 12，外侧留白给软阴影环。
+# 其他平台退回 Qt 自绘：圆角用共享刻度里的窗口档，外侧留白给软阴影环。
 _NATIVE_GLASS = glass.is_supported()
-_WINDOW_RADIUS = 8 if glass.is_win11() else 12
+_WINDOW_RADIUS = RADIUS_MD if glass.is_win11() else RADIUS_XL
 _SHADOW_MARGIN = 0 if _NATIVE_GLASS else 10
 # (外扩 px, alpha) 从外到内三层低透明描边近似投影
 _SHADOW_RINGS = ((5, 14), (3, 22), (1, 42))
 
-# 顶部工具栏：搜索行 + 筛选行。字号只用两档：14（搜索、正文）、13（控件）、11（底栏）
+# 顶部工具栏：搜索行 + 筛选行。字号：15（搜索、正文、控件）、12（底栏）
 _EDGE_X = 12            # 头部/底栏左右留白
-_SEARCH_H = 34
-_SEGMENT_H = 26
-_TOOL_BTN = 28
-_TOOL_ICON = 16
-_CONTROL_RADIUS = 13
+_SEARCH_H = 44
+_SEGMENT_H = 38
+_TOOL_BTN = 40
+_TOOL_ICON = 22
+# 工具按钮圆角跟着共享刻度走，不再单写 16：16px 在 34px 的按钮上接近胶囊，
+# 和内容管理、设置页里同尺寸的图标按钮放在一起会明显更圆。
+_CONTROL_RADIUS = RADIUS_MD
 
 # 行尾快捷操作按钮几何
-_QUICK_BTN_SIZE = 28
+_QUICK_BTN_SIZE = 36
 _QUICK_BTN_GAP = 2
-_QUICK_BTN_ICON_SIZE = 16
+_QUICK_BTN_ICON_SIZE = 20
 _QUICK_BAR_RIGHT_MARGIN = 12
 
 # 悬停过渡驱动定时器参数（delegate 按时间推算进度）
@@ -139,6 +141,11 @@ class ClipboardShortcutHandler(ShortcutHandler):
             return True
 
         if key == Qt.Key.Key_Escape:
+            if focus is w.search_input:
+                w.search_input.clear()
+                w._collapse_search()
+                w.list_widget.setFocus()
+                return True
             if hasattr(w, "selection_manager") and w.selection_manager._selected_index >= 0:
                 w.selection_manager.reset()
                 return True
@@ -154,7 +161,7 @@ class ClipboardShortcutHandler(ShortcutHandler):
             return True
 
         if key == Qt.Key.Key_F and modifiers == Qt.KeyboardModifier.ControlModifier:
-            w.search_input.setFocus()
+            w._expand_search()
             return True
 
         if modifiers & _DIRECT_PICK_BLOCKERS:
@@ -205,6 +212,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self.controller.load_completed.connect(self._on_load_completed)
         self.controller.item_inserted.connect(self._on_item_inserted)
         self.controller.item_moved_to_top.connect(self._on_item_moved_to_top)
+        self._image_indexer = None
+        self._image_indexing = False
 
         self.selected_item_id: Optional[int] = None
         self._is_loading = False
@@ -378,7 +387,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self.type_filter_labels = [self.tr(label) for label in _TYPE_FILTERS]
         # 选中时字重变粗：按粗体量好宽度再固定，切换选中不跳动
         bold = QFont(self.font())
-        bold.setPixelSize(13)
+        bold.setPixelSize(15)
         bold.setWeight(QFont.Weight.Medium)
         metrics = QFontMetrics(bold)
         for index, button in enumerate(self.type_filter_buttons):
@@ -387,6 +396,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self._update_date_menu_label()
         self._update_scope_bar()
         self._update_empty_state()
+        self._layout_search()
         if hasattr(self, "group_bar"):
             self.group_bar.refresh_buttons()
 
@@ -394,14 +404,13 @@ class ClipboardWindow(QWidget, FramelessMixin):
         return surface_palette(self.current_theme).dark
 
     def _apply_glass(self):
-        # DWM 只负责模糊背后的桌面（不带 Acrylic 噪点）；底色层由容器 QSS 画，
-        # 不透明度见 theme_styles.glass_tint_alpha，随「透明度」设置变化。
-        if not _NATIVE_GLASS or self._offscreen_warmup_in_progress:
-            return
-        self._glass_on = glass.enable_glass(self, dark=self._is_dark_theme(), mode=glass.MODE_BLUR)
+        # Qt owns the alpha surface. DWM blur on a layered/animated window
+        # can composite differently during a move and after it settles.
+        if _NATIVE_GLASS and not self._offscreen_warmup_in_progress:
+            glass.disable_glass(self)
 
     def _apply_opacity(self):
-        generator = ThemeStyleGenerator(self.current_theme, glass=_NATIVE_GLASS)
+        generator = ThemeStyleGenerator(self.current_theme, glass=False)
 
         if hasattr(self, "container"):
             self.container.setStyleSheet(generator.generate_window_style(self.window_opacity))
@@ -417,12 +426,12 @@ class ClipboardWindow(QWidget, FramelessMixin):
             from settings import get_tool_settings_manager
 
             config = get_tool_settings_manager()
-            default_width = config.get_app_setting("clipboard_window_width", 450)
-            default_height = config.get_app_setting("clipboard_window_height", 600)
+            default_width = config.get_app_setting("clipboard_window_width", 600)
+            default_height = config.get_app_setting("clipboard_window_height", 720)
         except Exception as e:
             log_exception(e, T("加载剪贴板窗口几何设置"))
-            default_width = 450
-            default_height = 600
+            default_width = 600
+            default_height = 720
 
         self._saved_x = self._qsettings.value("window/x", None)
         self._saved_y = self._qsettings.value("window/y", None)
@@ -451,7 +460,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         apply_frost(self)
-        self.setMinimumSize(390, 400)
+        self.setMinimumSize(560, 480)
         self.resize(self._saved_width, self._saved_height)
 
         self.container = QFrame(self)
@@ -599,20 +608,47 @@ class ClipboardWindow(QWidget, FramelessMixin):
         header = QHBoxLayout()
         header.setContentsMargins(0, 0, 0, 0)
         header.setSpacing(2)
-        # 标题不再显示（窗口靠快捷键呼出，标题没有信息量），保留控件供窗口标题/无障碍名使用
-        self.title_label = QLabel()
+        self.search_host = QWidget(self.toolbar)
+        self.search_host.setFixedHeight(max(_SEARCH_H, _TOOL_BTN))
+        self.search_host.installEventFilter(self)
+        header.addWidget(self.search_host, 1)
+        self.title_label = QLabel(self.search_host)
         self.title_label.setObjectName("clipboardTitle")
-        self.title_label.hide()
-        self.search_input = LineEdit(use_default_style=False)
+        self.title_label.setTextFormat(Qt.TextFormat.PlainText)
+        self.title_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.search_input = LineEdit(self.search_host, use_default_style=False)
         self.search_input.setObjectName("recordSearch")
         self.search_input.setFixedHeight(_SEARCH_H)
+        self.search_input.hide()
+        self.search_input.installEventFilter(self)
+        self.search_btn = QToolButton(self.search_host)
+        self.search_btn.clicked.connect(self._expand_search)
+        self.search_btn.setObjectName("chromeButton")
+        self.search_btn.setFixedSize(_TOOL_BTN, _TOOL_BTN)
+        self.search_btn.setIconSize(QSize(_TOOL_ICON, _TOOL_ICON))
+        self.search_btn.setToolTip(self.tr("Search clipboard"))
+        self.search_btn.installEventFilter(self)
+        self._search_progress = 0.0
+        self._search_animation = QVariantAnimation(self)
+        self._search_animation.setDuration(200)
+        self._search_animation.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self._search_animation.valueChanged.connect(self._layout_search)
+        self._search_animation.finished.connect(self._finish_search_animation)
+        self._search_hover_timer = QTimer(self)
+        self._search_hover_timer.setSingleShot(True)
+        self._search_hover_timer.setInterval(450)
+        self._search_hover_timer.timeout.connect(lambda: self._expand_search(focus=False))
+        self._search_idle_timer = QTimer(self)
+        self._search_idle_timer.setSingleShot(True)
+        self._search_idle_timer.setInterval(5000)
+        self._search_idle_timer.timeout.connect(self._collapse_search)
         self.search_input.textChanged.connect(self._on_search_changed)
         self.search_input.textChanged.connect(self._update_search_background)
+        self.search_input.textChanged.connect(lambda _text: self._search_idle_timer.start())
         self._search_action = self.search_input.addAction(QIcon(), QLineEdit.ActionPosition.LeadingPosition)
         self._clear_search_action = self.search_input.addAction(QIcon(), QLineEdit.ActionPosition.TrailingPosition)
         self._clear_search_action.triggered.connect(self._clear_search)
         self._clear_search_action.setVisible(False)
-        header.addWidget(self.search_input, 1)
         header.addSpacing(6)
         self.keep_open_btn = QToolButton()
         self.keep_open_btn.setCheckable(True)
@@ -633,6 +669,13 @@ class ClipboardWindow(QWidget, FramelessMixin):
         types.setContentsMargins(0, 0, 0, 0)
         types.setSpacing(2)
         self.scope_row = types
+        self.type_filter_rail = QWidget(self.toolbar)
+        self.type_filter_rail.setObjectName("typeFilterRail")
+        self.type_filter_rail.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
+        segments = QHBoxLayout(self.type_filter_rail)
+        segments.setContentsMargins(3, 3, 3, 3)
+        segments.setSpacing(2)
+        types.addWidget(self.type_filter_rail)
         self.type_filter_group = QButtonGroup(self)
         self.type_filter_index = 0
         self.type_filter_labels = [self.tr(label) for label in _TYPE_FILTERS]
@@ -643,13 +686,19 @@ class ClipboardWindow(QWidget, FramelessMixin):
             button.setText(label)
             button.setCheckable(True)
             button.setChecked(index == 0)
-            button.setFixedHeight(_SEGMENT_H)
+            button.setFixedHeight(_SEGMENT_H - 6)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.type_filter_group.addButton(button, index)
             self.type_filter_buttons.append(button)
-            types.addWidget(button)
+            segments.addWidget(button)
         self.type_filter_group.idClicked.connect(self._set_type_filter)
         types.addStretch()
+        self.sort_btn = QToolButton()
+        self.sort_btn.setObjectName("sortButton")
+        self.sort_btn.setFixedHeight(_SEGMENT_H)
+        self.sort_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.sort_btn.clicked.connect(self._show_sort_menu)
+        types.addWidget(self.sort_btn)
         self.filter_btn = QToolButton()
         self.filter_btn.setObjectName("chromeButton")
         self.filter_btn.setCheckable(True)
@@ -716,25 +765,30 @@ class ClipboardWindow(QWidget, FramelessMixin):
     def _apply_toolbar_styles(self):
         """头部与底栏的统一样式。
 
-        规则只有三条：控件字号 13、圆角 7、选中态 = 强调色软底 + 强调色字。
+        类型筛选与公共 SegmentedWidget 共用浅底轨道、实体选中项的视觉层级。
         窗口级按钮（固定/更多/关闭/筛选）不用软底表示开关，只给图标上强调色，
         避免与类型分段的「选中」混淆。
         """
         p = surface_palette(self.current_theme)
         font = QFont()
         font.setFamilies(UI_FAMILIES)
-        font.setPixelSize(13)
+        font.setPixelSize(15)
+        font.setStyleStrategy(QFont.StyleStrategy.PreferAntialias | QFont.StyleStrategy.PreferOutline)
+        font.setHintingPreference(QFont.HintingPreference.PreferFullHinting)
         self.setFont(font)
         r = _CONTROL_RADIUS
         self.toolbar.setStyleSheet(f"""
             QWidget#toolbar {{ background: transparent; border: none; border-bottom: 1px solid {rgba(p.hairline)}; }}
-            QLabel {{ background: transparent; color: {rgba(p.text_secondary)}; font-size: 13px; }}
-            QToolButton {{ background: transparent; color: {rgba(p.text_secondary)}; font-size: 13px;
+            QLabel {{ background: transparent; color: {rgba(p.text_secondary)}; font-size: 15px; }}
+            QLabel#clipboardTitle {{ color: {rgba(p.text)}; font-size: 16px; font-weight: 500; }}
+            QWidget#typeFilterRail {{ background: {rgba(p.control)}; border: none; border-radius: {r + 2}px; }}
+            QToolButton {{ background: transparent; color: {rgba(p.text_secondary)}; font-size: 15px;
                 border: 1px solid transparent; border-radius: {r}px; padding: 0 10px; }}
             QToolButton:hover {{ background: {rgba(p.control_hover)}; color: {rgba(p.text)}; }}
             QToolButton:pressed {{ background: {rgba(p.control_pressed)}; }}
-            QToolButton#typeFilter:checked {{ background: {rgba(p.accent_soft)}; color: {rgba(p.accent_text)};
-                font-weight: 500; }}
+            QToolButton#typeFilter {{ border-radius: {r - 2}px; }}
+            QToolButton#typeFilter:checked {{ background: {self.current_theme.colors.bg_secondary}; color: {rgba(p.text)};
+                border-color: {rgba(p.hairline)}; font-weight: 500; }}
             QToolButton#chromeButton {{ padding: 0; }}
             QToolButton#chromeButton:checked {{ background: transparent; }}
             QToolButton#chromeButton:checked:hover {{ background: {rgba(p.control_hover)}; }}
@@ -742,16 +796,17 @@ class ClipboardWindow(QWidget, FramelessMixin):
             QToolButton::menu-indicator {{ image: none; }}
         """)
         self._apply_search_input_style()
-        self._search_action.setIcon(glyph_icon("magnifier", 16, p.text_tertiary.name()))
+        self._search_action.setIcon(glyph_icon("magnifier", _TOOL_ICON, p.text_tertiary.name()))
+        self.search_btn.setIcon(glyph_icon("magnifier", _TOOL_ICON, p.text_secondary.name()))
         self._clear_search_action.setIcon(glyph_icon("close", 14, p.text_tertiary.name()))
-        self.menu_btn.setIcon(glyph_icon("more", 16, p.text_secondary.name()))
-        self.close_btn.setIcon(glyph_icon("close", 16, p.text_secondary.name()))
+        self.menu_btn.setIcon(glyph_icon("more", _TOOL_ICON, p.text_secondary.name()))
+        self.close_btn.setIcon(glyph_icon("close", _TOOL_ICON, p.text_secondary.name()))
         self.keep_open_btn.setIcon(svg_icon(
-            "fluent_icons/Pin.svg", 16, p.accent.name() if self.keep_open_btn.isChecked() else p.text_secondary.name()))
-        self.filter_btn.setIcon(svg_icon("fluent_icons/Filter.svg", 16, p.text_secondary.name()))
+            "fluent_icons/Pin.svg", _TOOL_ICON, p.accent.name() if self.keep_open_btn.isChecked() else p.text_secondary.name()))
+        self.filter_btn.setIcon(svg_icon("fluent_icons/Filter.svg", _TOOL_ICON, p.text_secondary.name()))
         self.bottom_bar.setStyleSheet(f"""
             QWidget#keyboardBar {{ background: transparent; border-top: 1px solid {rgba(p.hairline)}; }}
-            QLabel {{ color: {rgba(p.text_tertiary)}; background: transparent; border: none; font-size: 11px; }}
+            QLabel {{ color: {rgba(p.text_tertiary)}; background: transparent; border: none; font-size: 12px; }}
         """)
         self.date_menu.setStyleSheet(self._get_menu_style())
         self._apply_time_filter_styles()
@@ -782,6 +837,13 @@ class ClipboardWindow(QWidget, FramelessMixin):
         if not hasattr(self, "status_label"):
             return
         count = self.list_widget.count()
+        in_history = self.controller.current_group_id is None
+        sort_labels = {"default": self.tr("Default order"), "newest": self.tr("Newest first"),
+                       "oldest": self.tr("Oldest first"), "frequent": self.tr("Most used")}
+        self.sort_btn.setText(sort_labels[self.controller.sort_order] + " ▾" if in_history else self.tr("Manual order"))
+        self.sort_btn.setEnabled(in_history)
+        self.sort_btn.setToolTip(self.tr("Pinned items always come first") if in_history
+                                 else self.tr("Use Move Up / Move Down in the context menu"))
         filters = bool(self.search_input.text().strip() or self.type_filter_index or self._date_preset != "any"
                        or self.controller.source_filter or self.controller.tag_filter_id)
         # 空列表不报「0 条」；有筛选时说「找到」，否则说「共」
@@ -792,6 +854,9 @@ class ClipboardWindow(QWidget, FramelessMixin):
         else:
             self.status_label.setText(self.tr("{n} items").format(n=count))
         # 空状态里键盘提示没有意义，整条底栏收起
+        if getattr(self, "_image_indexing", False):
+            prefix = self.status_label.text()
+            self.status_label.setText((prefix + " · " if prefix else "") + self.tr("Indexing image text…"))
         self.bottom_bar.setVisible(count > 0)
         self.reset_filter_btn.setEnabled(filters)
         p = surface_palette(self.current_theme)
@@ -799,6 +864,19 @@ class ClipboardWindow(QWidget, FramelessMixin):
         source = self.controller.source_filter
         self.filter_btn.setToolTip(self.tr("Source: {name}").format(name=source) if source else self.tr("Filter"))
         self._update_empty_state()
+
+    def _show_sort_menu(self):
+        menu = QMenu(self)
+        menu.setStyleSheet(self._get_menu_style())
+        for key, label in (("default", self.tr("Default order")), ("newest", self.tr("Newest first")),
+                           ("oldest", self.tr("Oldest first")), ("frequent", self.tr("Most used"))):
+            action = menu.addAction(label)
+            action.setCheckable(True)
+            action.setChecked(self.controller.sort_order == key)
+            action.triggered.connect(lambda _checked=False, order=key: self.controller.set_sort_order(order))
+        menu.addSeparator()
+        menu.addAction(self.tr("Pinned items always come first")).setEnabled(False)
+        menu.exec(self.sort_btn.mapToGlobal(QPoint(0, self.sort_btn.height())))
 
     def _reset_filters(self):
         if hasattr(self, "_search_timer"):
@@ -1038,7 +1116,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
         if hasattr(self, "_search_timer"):
             self._search_timer.stop()
         else:
-            self._search_timer = QTimer()
+            self._search_timer = QTimer(self)
             self._search_timer.setSingleShot(True)
             self._search_timer.timeout.connect(lambda: self.controller.set_search_text(self.search_input.text()))
 
@@ -1080,19 +1158,65 @@ class ClipboardWindow(QWidget, FramelessMixin):
             self._item_delegate.set_highlighted_id(item_id)
             self.list_widget.viewport().update()
 
+    def _layout_search(self, progress=None):
+        if progress is not None:
+            self._search_progress = float(progress)
+        width = round(_TOOL_BTN + (self.search_host.width() - _TOOL_BTN) * self._search_progress)
+        self.search_input.setGeometry(0, (self.search_host.height() - _SEARCH_H) // 2, width, _SEARCH_H)
+        self.search_btn.move(0, (self.search_host.height() - _TOOL_BTN) // 2)
+        title_width = max(0, self.search_host.width() - _TOOL_BTN - 12)
+        self.title_label.setGeometry(_TOOL_BTN + 8, 0, title_width, self.search_host.height())
+        title = (self.tr("Search: {query}").format(query=self.search_input.text())
+                 if self.search_input.text() else self.tr("Clipboard History"))
+        self.title_label.setText(self.title_label.fontMetrics().elidedText(title, Qt.TextElideMode.ElideRight, title_width))
+        self.title_label.setVisible(self._search_progress == 0)
+
+    def _finish_search_animation(self):
+        if self._search_progress == 0:
+            self.search_input.hide()
+            self.search_btn.show()
+
+    def _expand_search(self, _checked=False, *, focus=True):
+        self._search_hover_timer.stop()
+        self._search_animation.stop()
+        self.title_label.hide()
+        self.search_btn.hide()
+        self.search_input.show()
+        self._search_animation.setStartValue(self._search_progress)
+        self._search_animation.setEndValue(1.0)
+        self._search_animation.start()
+        self._search_idle_timer.start()
+        if focus:
+            self.search_input.setFocus()
+
+    def _collapse_search(self):
+        # Keep the query/filter intact; reopening restores the same text.
+        if getattr(self, "_search_composing", False):
+            self._search_idle_timer.start()
+            return
+        self._search_hover_timer.stop()
+        self._search_hover_blocked = True
+        self._search_idle_timer.stop()
+        self._search_animation.stop()
+        self.search_input.clearFocus()
+        self._search_animation.setStartValue(self._search_progress)
+        self._search_animation.setEndValue(0.0)
+        self._search_animation.start()
+
     def _update_search_background(self, text: str):
         self._clear_search_action.setVisible(bool(text))
         PreviewPopup.instance().hide_preview()
         self._update_scope_bar()
+        self._layout_search()
 
     def _apply_search_input_style(self, has_text: bool = False):
         p = surface_palette(self.current_theme)
-        fill = self.current_theme.colors.bg_tertiary
+        fill = self.current_theme.colors.bg_secondary
         fill_focus = fill
         self.search_input.setStyleSheet(f"""
             QLineEdit {{ background: {fill}; color: {rgba(p.text)};
-                border: 1px solid transparent; border-radius: 17px; padding: 0 10px;
-                font-size: 14px; selection-background-color: {rgba(p.accent)}; selection-color: {self.current_theme.colors.bg_primary}; }}
+                border: 1px solid {rgba(p.hairline)}; border-radius: {_CONTROL_RADIUS}px; padding: 0 10px;
+                font-size: 15px; selection-background-color: {rgba(p.accent)}; selection-color: {self.current_theme.colors.bg_primary}; }}
             QLineEdit:focus {{ background: {fill_focus}; border-color: {rgba(p.accent)}; }}
         """)
 
@@ -1150,8 +1274,6 @@ class ClipboardWindow(QWidget, FramelessMixin):
         # 半透明磁贴：行内容半透地透出来但又有足够对比托住图标
         tile_bg = "rgba(24, 24, 27, 0.96)" if is_dark else "rgba(255, 255, 255, 0.92)"
         border = generator._hex_to_rgba(c.border_primary, 0.9)
-        accent_soft = generator._accent_soft()
-        accent_soft_pressed = generator._hex_to_rgba(c.accent_primary, 0.24)
         qss = f"""
             QToolButton {{
                 background: {tile_bg};
@@ -1159,10 +1281,10 @@ class ClipboardWindow(QWidget, FramelessMixin):
                 border-radius: 8px;
             }}
             QToolButton:hover {{
-                background: {accent_soft};
+                background: {c.bg_hover};
             }}
             QToolButton:pressed {{
-                background: {accent_soft_pressed};
+                background: {c.bg_selected};
             }}
         """
         self._quick_action_buttons["copy"].setToolTip(self.tr("Copy"))
@@ -1200,6 +1322,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
             return
         if key == "copy":
             copied = self.manager.paste_item(item_id, self.controller.paste_with_html, False)
+            if copied and self.controller.current_group_id is None and self.controller.sort_order == "frequent":
+                self.controller.load_history()
             self.status_label.setText(self.tr("Copied") if copied else self.tr("Copy failed"))
             self._feedback_timer.start(1600)
         elif key == "pin":
@@ -1336,7 +1460,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
             f"background: transparent; color: {c.text_primary}; font-size: 15px; font-weight: 500;"
         )
         self.empty_state_detail.setStyleSheet(
-            f"background: transparent; color: {c.text_secondary}; font-size: 13px;"
+            f"background: transparent; color: {c.text_secondary}; font-size: 15px;"
         )
         keyword = self.search_input.text().strip()
         filtered = bool(keyword or self.type_filter_index or self._date_preset != "any"
@@ -1353,6 +1477,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
         else:
             title = self.tr("Nothing here yet")
             detail = self.tr("Text, images and files you copy will show up here.")
+        if keyword and getattr(self, "_image_indexing", False):
+            title = self.tr("Indexing image text…")
         self.empty_state_label.setText(title)
         self.empty_state_detail.setText(detail)
         viewport = self.list_widget.viewport()
@@ -1485,6 +1611,8 @@ class ClipboardWindow(QWidget, FramelessMixin):
             "paste": lambda: self._paste_item_to_clipboard(item_id),
             "pin_image": lambda: self._create_pin_window(item_id),
             "save_image_as": lambda: self._save_image_as(item_id),
+            "recognize_image": lambda: self._process_image(item_id),
+            "redact_image": lambda: self._process_image(item_id, redact=True),
             "toggle_pin": lambda: self._toggle_pin(item_id),
             "filter_by_source": lambda: self._filter_by_source(item_id),
             "open_file_location": lambda: self._open_file_location(item_id),
@@ -1493,6 +1621,44 @@ class ClipboardWindow(QWidget, FramelessMixin):
             "move_item_down": lambda: self._move_item_order(item_id, 1),
             "delete_item": lambda: self._delete_item(item_id),
         }
+
+    def _start_image_indexing(self):
+        indexer = self.manager.start_image_indexing()
+        if indexer is not self._image_indexer:
+            self._image_indexer = indexer
+            if indexer is not None:
+                indexer.updated.connect(self._on_image_text_indexed)
+                indexer.state_changed.connect(self._on_index_state_changed)
+        self._image_indexing = bool(indexer is not None and indexer.busy)
+
+    def _on_index_state_changed(self, busy):
+        self._image_indexing = busy
+        self._update_scope_bar()
+        self._update_empty_state()
+
+    def _on_image_text_indexed(self, _item_id):
+        # Refresh a visible search without interrupting an unfiltered clipboard list.
+        if self.isVisible() and self.search_input.text().strip():
+            self.controller.load_history()
+
+    def _process_image(self, item_id, redact=False):
+        from PySide6.QtGui import QImage
+        item = self.manager.get_item(item_id)
+        if item is None or not item.image_id:
+            return
+        data = self.manager.get_image_data(item.image_id)
+        image = QImage.fromData(data) if data else QImage()
+        if image.isNull():
+            from ui.dialogs import show_warning_dialog
+            show_warning_dialog(self, self.tr("Error"), self.tr("Unable to load image"))
+            return
+        if redact:
+            from text_recognition.redaction_window import show_redaction
+            show_redaction(image)
+        else:
+            from text_recognition import show_text_recognition
+            show_text_recognition(image, initial_result=self.manager.image_text_store.get_result(item_id),
+                                  query=self.search_input.text().strip())
 
     def _resolve_item_context_menu_handler(self, item_id: int, action_key: str):
         # "移出分组"
@@ -1561,6 +1727,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
     def _toggle_pin(self, item_id: int):
         self.controller.toggle_pin(item_id)
+        self.selection_manager.select_item_id(item_id)
 
     def _new_tag_for_item(self, item_id: int):
         from PySide6.QtWidgets import QInputDialog
@@ -1773,6 +1940,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
         self._fl_reset()
         self.selection_manager.reset()
+        self._start_image_indexing()
         self.controller.on_window_show()
 
         t_show_start = perf_counter()
@@ -1814,6 +1982,11 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
     @safe_event
     def hideEvent(self, event):
+        self._search_hover_timer.stop()
+        self._search_idle_timer.stop()
+        self._search_animation.stop()
+        self._layout_search(0.0)
+        self._finish_search_animation()
         if self._offscreen_warmup_in_progress:
             super().hideEvent(event)
             return
@@ -1835,6 +2008,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
         if not self.config.get_clipboard_preserve_search() and self.search_input.text():
             self.search_input.clear()
+        self._search_idle_timer.stop()
 
         super().hideEvent(event)
         self._save_window_geometry()
@@ -1891,9 +2065,9 @@ class ClipboardWindow(QWidget, FramelessMixin):
                 anim.stop()
             except RuntimeError:
                 pass
-        setattr(self, "_motion_anims", [])
-        setattr(self, "_motion_opening", False)
-        setattr(self, "_motion_closing", False)
+        self._motion_anims = []
+        self._motion_opening = False
+        self._motion_closing = False
 
     def show(self):
         """淡出动画途中再次显示：取消收尾并恢复不透明。
@@ -1970,7 +2144,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
 
     def _is_draggable_area(self, widget, local_pos: QPoint) -> bool:
         _ = local_pos
-        if widget is self.toolbar or widget is self.title_label:
+        if widget is self.toolbar or widget is self.title_label or widget is getattr(self, "search_host", None):
             return True
         bar = getattr(self, "group_bar", None)
         if bar and bar.bar_widget is not None and widget is bar.bar_widget:
@@ -1995,6 +2169,28 @@ class ClipboardWindow(QWidget, FramelessMixin):
     def eventFilter(self, obj, event):
         event_type = event.type()
 
+        if obj is getattr(self, "search_host", None) and event_type == QEvent.Type.Resize:
+            if hasattr(self, "_search_progress"):
+                self._layout_search()
+        if obj is getattr(self, "search_btn", None):
+            if event_type == QEvent.Type.Enter:
+                if not getattr(self, "_search_hover_blocked", False):
+                    self._search_hover_timer.start()
+            elif event_type == QEvent.Type.Leave:
+                self._search_hover_timer.stop()
+                self._search_hover_blocked = False
+
+        if obj is getattr(self, "search_input", None):
+            if event_type == QEvent.Type.InputMethod:
+                self._search_composing = bool(event.preeditString())
+            if event_type in (QEvent.Type.KeyPress, QEvent.Type.MouseMove, QEvent.Type.MouseButtonPress, QEvent.Type.InputMethod):
+                self._search_idle_timer.start()
+            if event_type == QEvent.Type.KeyPress and event.key() == Qt.Key.Key_Escape:
+                self.search_input.clear()
+                self._collapse_search()
+                self.list_widget.setFocus()
+                return True
+
         if event_type == QEvent.Type.Leave and obj is self.list_widget.viewport():
             self.selection_manager.clear_hovered_index()
             self._item_delegate.set_hovered_row(-1)
@@ -2002,7 +2198,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
                 self._hover_anim_timer.start()
                 QTimer.singleShot(_HOVER_ANIM_MS, self._hover_anim_timer.stop)
             QTimer.singleShot(150, self._hide_quick_actions_if_cursor_outside)
-            PreviewPopup.instance().hide_preview()
+            PreviewPopup.instance().schedule_hide()
             selected_items = self.list_widget.selectedItems()
             if selected_items:
                 selected_id = selected_items[0].data(Qt.ItemDataRole.UserRole)

@@ -11,7 +11,7 @@ from PySide6.QtGui import QColor, QCursor, QDrag, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import QListWidget
 
 from core import safe_event
-from ui.fluent_lite.theme import ACCENT
+from ui.fluent_lite.theme import ui_tokens
 
 
 class DraggableListWidget(QListWidget):
@@ -41,15 +41,16 @@ class DraggableListWidget(QListWidget):
         pixmap = self.viewport().grab(rect)
 
         drag_pixmap = QPixmap(pixmap.size())
+        drag_pixmap.setDevicePixelRatio(pixmap.devicePixelRatio())
         drag_pixmap.fill(Qt.GlobalColor.transparent)
 
         painter = QPainter(drag_pixmap)
         painter.setOpacity(0.8)
         painter.drawPixmap(0, 0, pixmap)
 
-        painter.setPen(QColor(ACCENT))
+        painter.setPen(QColor(ui_tokens(self).text))
         painter.setBrush(Qt.BrushStyle.NoBrush)
-        painter.drawRect(0, 0, drag_pixmap.width() - 1, drag_pixmap.height() - 1)
+        painter.drawRect(0, 0, rect.width() - 1, rect.height() - 1)
 
         painter.end()
 
@@ -61,28 +62,6 @@ class DraggableListWidget(QListWidget):
 
         drag.exec(supportedActions)
         self._drag_start_row = -1
-
-    @safe_event
-    def dropEvent(self, event):
-        """重写放置事件，禁止拖到第一个位置"""
-        drop_pos = event.position().toPoint() if hasattr(event, "position") else event.pos()
-        drop_item = self.itemAt(drop_pos)
-
-        if drop_item:
-            drop_row = self.row(drop_item)
-            item_rect = self.visualItemRect(drop_item)
-            if drop_pos.y() < item_rect.center().y():
-                target_row = drop_row
-            else:
-                target_row = drop_row + 1
-        else:
-            target_row = self.count()
-
-        if target_row == 0 and self._drag_start_row > 0:
-            event.ignore()
-            return
-
-        super().dropEvent(event)
 
     @safe_event
     def dragMoveEvent(self, event):
@@ -98,7 +77,7 @@ class DraggableListWidget(QListWidget):
         if self.state() == QListWidget.State.DraggingState:
             painter = QPainter(self.viewport())
 
-            pen = QPen(QColor(ACCENT))
+            pen = QPen(QColor(ui_tokens(self).text))
             pen.setWidth(3)
             painter.setPen(pen)
 
@@ -109,13 +88,11 @@ class DraggableListWidget(QListWidget):
             line_rect = None
 
             if item:
-                item_index = self.row(item)
                 rect = self.visualItemRect(item)
 
                 if pos.y() < rect.center().y():
-                    if item_index > 0:
-                        y = rect.top()
-                        line_rect = rect
+                    y = rect.top()
+                    line_rect = rect
                 else:
                     y = rect.bottom()
                     line_rect = rect
@@ -130,7 +107,7 @@ class DraggableListWidget(QListWidget):
             if y != -1 and line_rect:
                 painter.drawLine(line_rect.left(), y, line_rect.right(), y)
 
-                painter.setBrush(QColor(ACCENT))
+                painter.setBrush(QColor(ui_tokens(self).text))
                 painter.setPen(Qt.PenStyle.NoPen)
                 radius = 4
                 painter.drawEllipse(QPoint(line_rect.left(), y), radius, radius)

@@ -9,14 +9,14 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
-    QApplication, QCheckBox, QDialog, QHBoxLayout, QVBoxLayout,
+    QApplication, QDialog, QHBoxLayout, QVBoxLayout,
 )
 
 from core.i18n import make_tr
 from core.ui_scale import configure_dialog_control, configure_dialog_controls, dialog_scaled, scale_dialog_font
 from settings.color_formats import ColorFormat, default_formats, normalize
 from ui.fluent_lite import (
-    BodyLabel, CaptionLabel, PrimaryPushButton, PushButton, TransparentPushButton, ui_tokens,
+    BodyLabel, CaptionLabel, CheckBox, PrimaryPushButton, PushButton, TransparentPushButton, ui_tokens,
 )
 from ui.reorderable_rows import DraggableRow, ReorderableRowList
 
@@ -33,7 +33,7 @@ class _Row(DraggableRow):
         super().__init__(parent)
         self.format = fmt
 
-        self.check = QCheckBox(self)
+        self.check = CheckBox(self)
         self.check.setChecked(fmt.enabled)
 
         self.name_label = BodyLabel(fmt.name, self)

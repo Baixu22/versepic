@@ -122,6 +122,11 @@ def fade_show(widget: QWidget, duration: int = 200, rise_px: int = 10) -> None:
 
 def fade_hide(widget: QWidget, duration: int = 160) -> None:
     """Fade the window out and hide it when the animation finishes."""
+    from PySide6.QtWidgets import QApplication
+    if QApplication.instance().property("uiReducedMotion"):
+        cancel_motion(widget)
+        QWidget.hide(widget)  # A window's hide() override may route back to fade_hide.
+        return
     if getattr(widget, _CLOSING_ATTR, False):
         return
     setattr(widget, _CLOSING_ATTR, True)

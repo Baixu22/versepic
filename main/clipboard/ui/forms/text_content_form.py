@@ -7,7 +7,7 @@
 """
 
 from ui.fluent_lite import BodyLabel, LineEdit, TextEdit
-from ..layout_scale import scale_y
+from ..layout_scale import field_group_gap, scale_y
 
 
 def build_text_content_form(dialog):
@@ -17,15 +17,20 @@ def build_text_content_form(dialog):
 
     dialog.title_input = LineEdit()
     dialog.title_input.setPlaceholderText(dialog.tr("Enter title (e.g., Restart Command)..."))
+    dialog.title_input.setAccessibleName(dialog.tr("Title"))
+    title_label.setBuddy(dialog.title_input)
     dialog.detail_layout.addWidget(dialog.title_input)
 
+    dialog.detail_layout.addSpacing(field_group_gap())
     content_label = BodyLabel(dialog.tr("Content"))
     dialog.detail_layout.addWidget(content_label)
 
     dialog.content_edit = TextEdit()
     dialog.content_edit.setPlaceholderText(dialog.tr("Enter text content to save..."))
-    dialog.content_edit.setLineWrapMode(TextEdit.LineWrapMode.NoWrap)
+    dialog.content_edit.setLineWrapMode(TextEdit.LineWrapMode.WidgetWidth)
     dialog.content_edit.setMinimumHeight(scale_y(200))
+    dialog.content_edit.setAccessibleName(dialog.tr("Content"))
+    content_label.setBuddy(dialog.content_edit)
     dialog.detail_layout.addWidget(dialog.content_edit, 1)
 
 
@@ -37,13 +42,18 @@ def build_edit_text_content_form(dialog, item):
     dialog.title_input = LineEdit()
     dialog.title_input.setText(item.title or "")
     dialog.title_input.setPlaceholderText(dialog.tr("Enter title..."))
+    dialog.title_input.setAccessibleName(dialog.tr("Title"))
+    title_label.setBuddy(dialog.title_input)
     dialog.detail_layout.addWidget(dialog.title_input)
 
+    dialog.detail_layout.addSpacing(field_group_gap())
     content_label = BodyLabel(dialog.tr("Content"))
     dialog.detail_layout.addWidget(content_label)
 
     dialog.content_edit = TextEdit()
-    dialog.content_edit.setText(item.content)
-    dialog.content_edit.setLineWrapMode(TextEdit.LineWrapMode.NoWrap)
+    dialog.content_edit.setPlainText(item.content)
+    dialog.content_edit.setLineWrapMode(TextEdit.LineWrapMode.WidgetWidth)
     dialog.content_edit.setMinimumHeight(scale_y(200))
+    dialog.content_edit.setAccessibleName(dialog.tr("Content"))
+    content_label.setBuddy(dialog.content_edit)
     dialog.detail_layout.addWidget(dialog.content_edit, 1)

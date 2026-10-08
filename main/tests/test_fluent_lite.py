@@ -26,6 +26,64 @@ def test_all_declared_icons_exist():
     assert missing == []
 
 
+def test_hidden_tooltips_do_not_filter_unrelated_application_events(qapp, qtbot):
+    from PySide6.QtCore import QEvent
+    from PySide6.QtWidgets import QWidget
+    from ui.fluent_lite.popups import ToolTip
+
+    probe = QWidget()
+    qtbot.addWidget(probe)
+    deliveries = []
+
+    class CountingTip(ToolTip):
+        def eventFilter(self, obj, event):
+            if obj is probe and event.type() == QEvent.Type.User:
+                deliveries.append(self)
+            return super().eventFilter(obj, event)
+
+    roots = [QWidget() for _ in range(24)]
+    for root in roots:
+        qtbot.addWidget(root)
+        CountingTip.install(root)
+    qapp.sendEvent(probe, QEvent(QEvent.Type.User))
+    assert deliveries == []
+    roots[0].show()
+    qapp.sendEvent(probe, QEvent(QEvent.Type.User))
+    assert deliveries == [roots[0]._kit_tooltip]
+    deliveries.clear()
+    roots[0].hide()
+    qapp.sendEvent(probe, QEvent(QEvent.Type.User))
+    assert deliveries == []
+
+
+def test_tooltip_reactivates_after_hide_and_is_removed_on_destroy(qapp, qtbot):
+    from PySide6.QtCore import QEvent, QPoint, Qt
+    from PySide6.QtGui import QHelpEvent
+    from PySide6.QtWidgets import QPushButton, QWidget
+    from shiboken6 import isValid
+    from ui.fluent_lite.popups import ToolTip
+
+    root = QWidget()
+    root.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+    button = QPushButton("Button", root)
+    button.setToolTip("Scoped help")
+    tip = ToolTip.install(root)
+    for _ in range(2):
+        root.show()
+        event = QHelpEvent(QEvent.Type.ToolTip, QPoint(1, 1), button.mapToGlobal(QPoint(1, 1)))
+        qapp.sendEvent(button, event)
+        assert tip.label is not None and tip.label.isVisible()
+        assert tip.label.text() == "Scoped help"
+        root.hide()
+        assert not tip.label.isVisible()
+    root.close()
+    qapp.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+    assert not isValid(tip)
+    probe = QWidget()
+    qtbot.addWidget(probe)
+    qapp.sendEvent(probe, QEvent(QEvent.Type.User))
+
+
 def test_setting_cards_keep_the_expected_api(qapp):
     card = SettingCard(FluentIcon.INFO, "Title", "Description")
     assert card.titleLabel.text() == "Title"

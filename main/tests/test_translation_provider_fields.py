@@ -159,7 +159,7 @@ def test_supported_request_options_are_real_option_keys(registry):
 # ============================================================================
 
 def test_settings_page_builds_a_widget_for_every_declared_field(
-    qapp, declared_fields
+    qapp, qtbot, declared_fields
 ):
     """这是替代「accept() 有没有保存每一家」的那条守卫。
 
@@ -169,6 +169,8 @@ def test_settings_page_builds_a_widget_for_every_declared_field(
     from ui.settings_ui.dialog import SettingsDialog
 
     dialog = SettingsDialog()
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True
     built = set(dialog.provider_field_widgets)
     declared = {f.config_key for f in declared_fields}
     assert built == declared, {
@@ -177,10 +179,12 @@ def test_settings_page_builds_a_widget_for_every_declared_field(
     }
 
 
-def test_settings_page_builds_one_section_per_provider(qapp, registry):
+def test_settings_page_builds_one_section_per_provider(qapp, qtbot, registry):
     from ui.settings_ui.dialog import SettingsDialog
 
     dialog = SettingsDialog()
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True
     assert set(dialog.provider_sections) == {
         m.provider_id for m in registry.available_providers()
     }

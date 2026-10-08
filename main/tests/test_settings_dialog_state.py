@@ -625,6 +625,7 @@ def _nav_fake():
     return SimpleNamespace(
         tr=lambda text: text,
         content_title=_TextWidget(),
+        _footer_reset_btn=_TextWidget(),
         content_stack=_Combo(),
         _set_current_nav=_Recorder(),
         _refresh_after_page_change=_Recorder(),
@@ -639,6 +640,9 @@ class TestOnNavChanged:
             SettingsDialog._on_nav_changed(fake, index)
             assert fake.content_title.set_texts == [title], index
             assert fake.content_stack.set_indexes == [index]
+            assert fake._footer_reset_btn.set_texts == [
+                "Reset Capture Settings" if index == 1 else "Reset This Page"
+            ]
             assert fake._refresh_after_page_change.called
 
     def test_route_key_highlights_the_navigation_entry(self):
@@ -682,12 +686,14 @@ class TestNavigationHelpers:
             tr=lambda text: text,
             content_stack=_Combo(),
             content_title=_TextWidget(),
+            _footer_reset_btn=_TextWidget(),
             nav_list=SimpleNamespace(clearCurrentItem=_Recorder()),
             _refresh_after_page_change=_Recorder(),
         )
         SettingsDialog._open_developer_page(fake)
         assert fake.content_stack.set_indexes == [7]
         assert fake.content_title.set_texts == ["Developer Options"]
+        assert fake._footer_reset_btn.set_texts == ["Reset This Page"]
         assert fake.nav_list.clearCurrentItem.called
 
     def test_opening_the_wizard_only_emits_the_request(self):

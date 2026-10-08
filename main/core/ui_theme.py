@@ -17,6 +17,19 @@ from PySide6.QtGui import QColor, QGuiApplication, QPalette
 from PySide6.QtWidgets import QApplication
 
 
+# 圆角刻度，对齐 shadcn/ui 的 --radius（0.625rem = 10px）派生规则：
+#   radius-sm  6  = 徽标、kbd、小色块
+#   radius-md  8  = 按钮、输入框、菜单项
+#   radius-lg 10  = 浮层、卡片内分区
+#   radius-xl 14  = 卡片、窗口
+# 剪贴板窗口、内容管理、截图设置页原先各写一套（7/8/12/14 与 6/10/12 与
+# 6/8/10/12），同一个应用里同一类控件圆角对不上。三处都改读这里。
+RADIUS_SM = 6
+RADIUS_MD = 8
+RADIUS_LG = 10
+RADIUS_XL = 14
+
+
 class UIThemeMode(str, Enum):
     SYSTEM = "system"
     LIGHT = "light"
@@ -79,6 +92,11 @@ class UIThemeTokens:
         return "#A3A3A3" if self.is_dark else "#737373"
 
     @property
+    def destructive_background(self) -> str:
+        # danger is a foreground token; the pale dark-mode red cannot carry white text.
+        return "#B91C1C" if self.is_dark else self.danger
+
+    @property
     def is_dark(self) -> bool:
         return self.mode is UIThemeMode.DARK
 
@@ -93,7 +111,7 @@ LIGHT_TOKENS = UIThemeTokens(
     surface="#FFFFFF", surface_strong="#FFFFFF", surface_subtle="#F1F1F1", surface_hover="#F1F1F1",
     text="#171717", text_muted="#737373", text_disabled="#A3A3A3",
     border="#E7E7E7", border_hover="#A3A3A3", window_border="#D4D4D4",
-    input_background="#F1F1F1", popup_background="#FFFFFF", popup_hover="#F1F1F1",
+    input_background="#FFFFFF", popup_background="#FFFFFF", popup_hover="#F1F1F1",
     separator="#E7E7E7", switch_off="#D4D4D4",
     success="#16803C", danger="#B91C1C", danger_soft="#FEF2F2", status_idle="#A3A3A3",
     selected_text="#FAFAFA",
@@ -108,7 +126,7 @@ DARK_TOKENS = UIThemeTokens(
     surface="#171717", surface_strong="#202020", surface_subtle="#262626", surface_hover="#3D3D3D",
     text="#FAFAFA", text_muted="#A3A3A3", text_disabled="#737373",
     border="#2E2E2E", border_hover="#737373", window_border="#525252",
-    input_background="#262626", popup_background="#202020", popup_hover="#3D3D3D",
+    input_background="#171717", popup_background="#202020", popup_hover="#3D3D3D",
     separator="#2E2E2E", switch_off="#525252",
     success="#4ADE80", danger="#F87171", danger_soft="#3B2020", status_idle="#737373",
     selected_text="#171717",

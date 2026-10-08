@@ -313,33 +313,37 @@ def test_pending_config_uses_unsaved_form_values(settings):
     assert pending.get_translation_provider() == settings.get_translation_provider()
 
 
-def test_settings_page_offers_test_and_model_list(qapp):
+def test_settings_page_offers_test_and_model_list(qapp, qtbot):
     from translation.provider import ModelField
-    from ui.fluent_lite import PushButton
+    from PySide6.QtWidgets import QAbstractButton
     from ui.settings_ui.dialog import SettingsDialog
 
     dialog = SettingsDialog()
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True  # Teardown discards this test's temporary form.
     assert set(dialog.provider_status_labels) == set(dialog.provider_sections)
 
     edit = dialog.provider_field_widgets["custom_llm_model"]
-    buttons = [b.text() for b in edit.parentWidget().findChildren(PushButton)]
+    buttons = [b.text() for b in edit.parentWidget().findChildren(QAbstractButton)]
     assert dialog.tr("Fetch Models") in buttons
     assert any(isinstance(f, ModelField) for f in CustomLLMProvider.all_fields())
 
 
 def test_test_button_reports_the_result_on_the_page(qapp, qtbot, server, settings):
     """走真实的按钮 → 后台线程 → 信号 → 状态行，用的是还没保存的表单值。"""
-    from ui.fluent_lite import PushButton
+    from PySide6.QtWidgets import QAbstractButton
     from ui.settings_ui.dialog import SettingsDialog
 
     # 不传配置时用的是预览用的 MockConfig，它不做设置键到 provider 参数的映射
     dialog = SettingsDialog(config_manager=settings)
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True
     widgets = dialog.provider_field_widgets
     widgets["custom_llm_base_url"].setText("http://localhost:9/v1")
     widgets["custom_llm_model"].setText("typed-model")
 
     status = dialog.provider_status_labels["custom_llm"]
-    button = next(b for b in status.parentWidget().findChildren(PushButton)
+    button = next(b for b in status.parentWidget().findChildren(QAbstractButton)
                   if b.text() == dialog.tr("Test Connection"))
     button.click()
     qtbot.waitUntil(lambda: status.text().startswith(("✓", "✗")), timeout=5000)
@@ -371,10 +375,10 @@ def test_empty_reply_without_reasoning_keeps_the_generic_message(server):
 
 
 def _fetch_button(dialog, key):
-    from ui.fluent_lite import PushButton
+    from PySide6.QtWidgets import QAbstractButton
 
     edit = dialog.provider_field_widgets[key]
-    return edit, next(b for b in edit.parentWidget().findChildren(PushButton)
+    return edit, next(b for b in edit.parentWidget().findChildren(QAbstractButton)
                       if b.text() == dialog.tr("Fetch Models"))
 
 
@@ -400,6 +404,8 @@ def test_fetched_models_are_offered_and_the_pick_is_filled_in(
     monkeypatch.setattr(page_translation, "QMenu", _Menu)
     server["replies"] = [{"data": [{"id": "qwen3.5:2b"}, {"id": "llama3"}]}]
     dialog = SettingsDialog(config_manager=settings)
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True
     dialog.provider_field_widgets["custom_llm_base_url"].setText("http://localhost:9/v1")
     edit, button = _fetch_button(dialog, "custom_llm_model")
 
@@ -421,6 +427,8 @@ def test_fetch_failure_is_shown_next_to_the_button(qapp, qtbot, server, settings
 
     server["replies"] = [_http_error(401, {"error": {"message": "invalid key"}})]
     dialog = SettingsDialog(config_manager=settings)
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True
     dialog.provider_field_widgets["custom_llm_base_url"].setText("http://localhost:9/v1")
     _edit, button = _fetch_button(dialog, "custom_llm_model")
     status = dialog.provider_status_labels["custom_llm"]
@@ -529,7 +537,7 @@ def test_translation_windows_get_the_slot_label(settings):
     assert manager._backend_name() == expected
 
 
-def test_settings_page_offers_every_slot_and_saves_the_one_edited(qapp, settings, monkeypatch):
+def test_settings_page_offers_every_slot_and_saves_the_one_edited(qapp, qtbot, settings, monkeypatch):
     from ui.settings_ui.dialog import SettingsDialog
 
     # An installed instance may own the hotkeys; this test only saves provider fields.
@@ -539,6 +547,8 @@ def test_settings_page_offers_every_slot_and_saves_the_one_edited(qapp, settings
     )
 
     dialog = SettingsDialog(config_manager=settings)
+    qtbot.addWidget(dialog)
+    dialog._skip_unsaved_close_prompt = True
     combo = dialog.translation_provider_combo
     assert [combo.itemData(i) for i in range(combo.count())][-3:] == _SLOT_IDS
     assert [combo.itemText(i) for i in range(combo.count())][-3:] == [

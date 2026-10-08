@@ -4,7 +4,7 @@
 
 from core.ui_scale import get_dialog_scale
 
-MANAGE_DIALOG_BASE_WIDTH = 900
+MANAGE_DIALOG_BASE_WIDTH = 1020
 MANAGE_DIALOG_BASE_HEIGHT = 600
 
 MANAGE_DIALOG_MIN_WIDTH_BASE = 820
@@ -56,3 +56,18 @@ def scale_ui(value: int) -> int:
     """字号、圆角、内边距。不乘设计稿换算比例：那是窗口外框的留白，
     乘上去字会比其他窗口大一圈。"""
     return _scale(value, _dialog_factor())
+
+
+def field_gap() -> int:
+    """字段内间距：label 和它自己的控件之间。详情区布局的统一 spacing。"""
+    return scale_ui(6)
+
+
+def field_group_gap() -> int:
+    """字段组之间额外插入的间距。
+
+    叠加上下两道 spacing 后，组间约为组内的三倍，label 才会明显贴住自己的
+    控件、而不是悬在两组中间。用布局 spacer 而不是 label 的 margin-top：
+    详情区换肤时会整句重写 label 的样式表，margin 会被一起抹掉。
+    """
+    return scale_ui(10)

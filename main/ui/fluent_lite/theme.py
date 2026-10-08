@@ -5,10 +5,12 @@ from __future__ import annotations
 from PySide6.QtCore import QRectF, Qt
 from functools import lru_cache
 
-from PySide6.QtGui import QColor, QIcon, QLinearGradient, QPainter, QPixmap
+from PySide6.QtGui import QColor, QFont, QIcon, QLinearGradient, QPainter
 
 from core.resource_manager import ResourceManager
-from core.ui_theme import get_ui_theme
+from core.ui_theme import (
+    RADIUS_LG, RADIUS_MD, RADIUS_SM, RADIUS_XL, get_ui_theme,
+)
 
 
 FONT_FAMILY = '"Microsoft YaHei UI", "Segoe UI Variable Text", "Segoe UI", sans-serif'
@@ -23,11 +25,96 @@ FOCUS_RING = "#737373"
 # 输入类控件（下拉框、数字框、单行输入）的外框度量。要和它们排在同一列、
 # 看起来该是一家的控件——比如外观页那几个色块按钮——按这里取值，不要各写
 # 一套数字，否则改了一边就会高矮或圆角对不上。
-INPUT_RADIUS = 18
+#
+# 圆角统一读 core.ui_theme 里那一份 shadcn 刻度，不再在这里另立一套：
+# 设置窗口、内容管理、剪贴板窗口三类页面的同类控件因此圆角一致。
+CONTROL_RADIUS = RADIUS_MD
+ITEM_RADIUS = RADIUS_SM
+SURFACE_RADIUS = RADIUS_LG
+WINDOW_RADIUS = RADIUS_XL
+POPUP_RADIUS = RADIUS_MD
+CONTROL_HEIGHT = 36
+WORKSPACE_SIDEBAR_WIDTH = 172
+WORKSPACE_HEADER_HEIGHT = 52
+WORKSPACE_MARGIN = 12
+WORKSPACE_PADDING = 24
+MOTION_FAST = 120
+MOTION_NORMAL = 150
+INPUT_RADIUS = CONTROL_RADIUS
 INPUT_CONTENT_HEIGHT = 26
 INPUT_PADDING_V = 4
 INPUT_PADDING_H = 11
 INPUT_HEIGHT = INPUT_CONTENT_HEIGHT + 2 * INPUT_PADDING_V + 2
+
+
+def ui_font(size=14, weight=QFont.Weight.Normal):
+    font = QFont()
+    font.setFamilies(["Microsoft YaHei UI", "Segoe UI Variable Text", "Segoe UI"])
+    font.setPixelSize(size)
+    font.setWeight(weight)
+    # Prefer outlines over embedded bitmap strikes at small Chinese text sizes.
+    font.setStyleStrategy(QFont.StyleStrategy.PreferAntialias | QFont.StyleStrategy.PreferOutline)
+    # Align glyph strokes to physical pixels, including translucent windows.
+    font.setHintingPreference(QFont.HintingPreference.PreferFullHinting)
+    return font
+
+
+def button_colors(tokens, variant, *, checked=False, enabled=True):
+    """Shared surface recipe for painted buttons and native button QSS."""
+    t = tokens
+    if not enabled:
+        return t.surface_subtle, t.surface_subtle, t.text_disabled, t.border
+    if variant in ("primary", "default"):
+        return t.accent_strong, t.accent_strong_hover, t.primary_foreground, "transparent"
+    if variant == "destructive-ghost":
+        return "transparent", t.danger_soft, t.danger, "transparent"
+    if variant == "destructive":
+        return t.destructive_background, QColor(t.destructive_background).darker(110).name(), "#FFFFFF", "transparent"
+    if checked or variant == "secondary":
+        return t.accent_soft, t.surface_hover, t.text, "transparent"
+    if variant == "link":
+        return "transparent", "transparent", t.accent_text, "transparent"
+    if variant == "ghost":
+        return "transparent", t.surface_hover, t.text, "transparent"
+    return t.surface, t.surface_hover, t.text, t.border
+
+
+def button_qss(widget=None, *, variant="outline", selector="QPushButton", scale=None):
+    """Same palette/geometry for Qt-owned buttons (toolbars, dialog button boxes)."""
+    from core.ui_scale import widget_scaled
+    s = scale or (lambda value: widget_scaled(widget, value))
+    t = ui_tokens(widget)
+    bg, hover, fg, border = button_colors(t, variant)
+    disabled, _, disabled_fg, disabled_border = button_colors(t, variant, enabled=False)
+    pressed = t.accent_strong_pressed if variant in ("primary", "default") else hover
+    return f"""
+        {selector} {{ min-height: {s(INPUT_CONTENT_HEIGHT)}px;
+            padding: {s(INPUT_PADDING_V)}px {s(14)}px;
+            color: {fg}; background: {bg}; border: 1px solid {border};
+            border-radius: {s(CONTROL_RADIUS)}px; font: 600 {s(14)}px {FONT_FAMILY}; }}
+        {selector}:hover {{ background: {hover}; }}
+        {selector}:pressed {{ background: {pressed}; }}
+        {selector}:checked {{ background: {t.accent_soft}; color: {t.text}; }}
+        {selector}:focus {{ border-color: {t.ring}; }}
+        {selector}:disabled {{ background: {disabled}; color: {disabled_fg}; border-color: {disabled_border}; }}
+    """
+
+
+def menu_qss(widget=None, *, tokens=None, scale=None, font_size=14):
+    """One menu recipe, including native editor menus and window theme overrides."""
+    from core.ui_scale import widget_scaled
+    s = scale or (lambda value: widget_scaled(widget, value))
+    t = tokens or ui_tokens(widget)
+    return f"""
+        QMenu {{ color: {t.text}; background-color: {t.popup_background};
+            border: 1px solid {t.border}; border-radius: {s(POPUP_RADIUS)}px;
+            padding: {s(4)}px; font: {s(font_size)}px {FONT_FAMILY}; }}
+        QMenu::item {{ color: {t.text}; background-color: transparent;
+            border-radius: {s(ITEM_RADIUS)}px; padding: {s(6)}px {s(28)}px {s(6)}px {s(24)}px; }}
+        QMenu::item:selected {{ color: {t.text}; background-color: {t.popup_hover}; }}
+        QMenu::item:disabled {{ color: {t.text_disabled}; background-color: transparent; }}
+        QMenu::separator {{ height: 1px; margin: {s(4)}px; background-color: {t.separator}; }}
+    """
 
 def ui_tokens(widget=None):
     """Return semantic colours, honoring an optional top-level theme scope."""
@@ -107,19 +194,20 @@ def tinted_icon(icon, color: str) -> QIcon:
 @lru_cache(maxsize=128)
 def _tinted_icon(path: str, color: str) -> QIcon:
     source = ResourceManager.get_icon(path)
-    pixmap = source.pixmap(64, 64)
-    if pixmap.isNull():
-        return source
-    tinted = QPixmap(pixmap.size())
-    tinted.fill(Qt.GlobalColor.transparent)
-    painter = QPainter(tinted)
-    painter.drawPixmap(0, 0, pixmap)
-    painter.setCompositionMode(
-        QPainter.CompositionMode.CompositionMode_SourceIn
-    )
-    painter.fillRect(tinted.rect(), QColor(color))
-    painter.end()
-    return QIcon(tinted)
+    # Retain the source's raster sizes instead of reducing every control from
+    # a single 64px bitmap. Assets stay in memory for one-file installations.
+    result = QIcon()
+    for size in source.availableSizes():
+        pixmap = source.pixmap(size)
+        if pixmap.isNull():
+            continue
+        painter = QPainter(pixmap)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+        painter.fillRect(pixmap.rect(), QColor(color))
+        painter.end()
+        result.addPixmap(pixmap)
+    return result if not result.isNull() else source
+
 
 
 def paint_solid_background(widget, radius: int = 8) -> None:

@@ -14,6 +14,8 @@
 - **剪贴板历史**：检索文字、图片和文件，使用分组、标签、类型与日期筛选整理内容。
 - **内容管理**：创建分组、编辑常用内容、导入与导出 CSV 文本。
 - **识别与输出**：本地 PP-OCR、可配置翻译服务、GIF 录制、条码识别和 PDF 导出。
+- **截图内容助手**：OCR 结果可合并断行、清理空格、撤销、翻译、网页搜索并保存到分组或文本文件；历史图片在后台建立本地文字索引，可按图中文字检索。
+- **智能脱敏**：截图工具栏「更多」或历史图片右键菜单可识别手机号、邮箱与自定义关键词，逐行确认遮盖，也可拖动补画区域；复制和导出为合成后的实色遮盖图片。
 - **统一界面**：中性深浅色、圆角组件、Lucide 图标和简短交互动效。
 
 ## 应用截图
@@ -37,6 +39,8 @@
 ## 数据与兼容性
 
 剪贴板内容与 OCR 在本机处理。翻译会将选定文字发送至你配置的服务。为兼容已有数据，暂时保留旧版设置／数据目录标识，品牌改名不会清空历史。CSV 导出针对已保存文本，不等同于完整图片或数据库备份。
+
+打开剪贴板历史后会逐张补齐旧图片的文字索引，新复制的图片也会在后台识别；底栏显示索引进度状态，首次使用时搜索结果会逐步补齐。索引与历史记录保存在同一个本地数据库，删除历史会一并删除对应索引。图片右键「文字识别」可打开识别结果并定位搜索词。「网页搜索」仅在点击时把当前选中文字（未选中时为全文）交给浏览器中的 Bing。智能脱敏按整行遮盖匹配项，支持手动补画，输出前可检查预览；原始历史图片不会被覆盖。
 
 ## 开发与打包
 
@@ -225,6 +229,7 @@ clipboard/
 │   ├── enums.py             # GroupType — 分组类型定义
 │   ├── text_transform.py    # 纯文本加工函数 — 供「特殊粘贴」调用，全部无副作用
 │   ├── tag_store.py         # TagStore — 标签定义与条目-标签映射存储
+│   ├── image_text.py        # 本地图片文字索引、历史搜索与串行后台 OCR
 │   └── __init__.py
 ├── services/                # 服务层 — 文件 payload、分组规则、导入导出、保存逻辑
 │   ├── file_payload_service.py   # file 类型 JSON payload 与旧格式兼容
@@ -256,6 +261,7 @@ clipboard/
 │   │   └── theme_styles.py
 │   ├── widgets/
 │   │   ├── draggable_list_widget.py
+│   │   ├── manage_list_delegate.py
 │   │   ├── group_bar.py
 │   │   ├── item_delegate.py
 │   │   ├── item_widget.py
@@ -585,6 +591,7 @@ ui/
 ├── tray_menu.py             # TrayMenu — 系统托盘菜单
 ├── screenshot_window.py     # ScreenshotWindow — 截图主窗口（全屏覆盖、选区绘制）
 ├── dialogs.py               # StandardDialog / 对话框函数集 — 确认、警告、信息、错误对话框
+├── component_gallery.py     # 共用 Qt 组件交互展示页；对齐与复用约定见 docs/qt-components.md
 ├── magnifier.py             # MagnifierOverlay — 放大镜覆盖层（像素级取色）
 ├── color_picker_dialog.py   # ColorPickerDialog — 自定义HSV颜色选择器
 ├── color_picker_button.py   # ColorPickerButton — 颜色选择按钮
@@ -605,6 +612,7 @@ ui/
 │
 ├── glass.py / glyphs.py / outline_icons.py  # Native glass and Lucide SVG rendering
 ├── fluent_lite/             # Fluent 风格轻量组件库
+│   ├── icon_label.py        # 图标与文字的共用对齐规则
 │   ├── button_base.py / popups.py / primitives.py  # Shared animated controls
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # 按钮、卡片、图标、输入框
 │   ├── labels.py / navigation.py / segmented.py      # 标签、导航、分段控件

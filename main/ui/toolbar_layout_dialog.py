@@ -29,6 +29,7 @@ BUTTON_NAMES = {
     "save": "Save",
     "screenshot_translate": "Screenshot translate",
     "text_recognize": "Recognize text",
+    "smart_redact": "Smart redact",
     "scan_code": "Scan code",
     "gif": "GIF recording",
     "pen": "Pen",

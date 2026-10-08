@@ -31,11 +31,11 @@ def theme(monkeypatch):
 
 # components 里成对取值的派生函数，以及它们的 (light, dark) 期望值
 DERIVED_COLORS = {
-    "theme_surface_color": ("#FAFBFC", "#202124"),
-    "theme_border_color": ("rgba(255, 255, 255, 0.76)", "rgba(255, 255, 255, 0.08)"),
-    "theme_input_background": ("rgba(255, 255, 255, 0.78)", "#2B2D31"),
-    "theme_popup_background": ("#FFFFFF", "#2A2C30"),
-    "theme_popup_hover_background": ("#EAF2FA", "#36393F"),
+    "theme_surface_color": "surface",
+    "theme_border_color": "border",
+    "theme_input_background": "input_background",
+    "theme_popup_background": "popup_background",
+    "theme_popup_hover_background": "surface_hover",
 }
 
 
@@ -62,16 +62,12 @@ class TestThemeColor:
 class TestDerivedColors:
 
     def test_each_helper_returns_its_light_or_dark_token(self, theme):
-        for name, (light, dark) in DERIVED_COLORS.items():
-            func = getattr(components, name)
-            theme.is_dark = False
-            assert func() == light, name
-            theme.is_dark = True
-            assert func() == dark, name
+        from core.ui_theme import LIGHT_TOKENS, DARK_TOKENS
+        for tokens in (LIGHT_TOKENS, DARK_TOKENS):
+            theme.tokens = tokens
+            for name, field in DERIVED_COLORS.items():
+                assert getattr(components, name)() == getattr(tokens, field)
 
-    def test_light_and_dark_variants_always_differ(self, theme):
-        for name, (light, dark) in DERIVED_COLORS.items():
-            assert light != dark, name
 
 
 class TestThemeTextStyle:

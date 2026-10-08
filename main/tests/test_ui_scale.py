@@ -41,9 +41,9 @@ def test_percent_is_snapped_to_a_real_option(given, expected):
 @pytest.mark.parametrize(("dpi", "expected"), [
     (72, 100),
     (96, 100),
-    (97, 125),
+    (97, 100),
     (120, 125),
-    (144, 125),  # 正好 150% 仍使用较保守的 125% 档位
+    (144, 150),  # 150% 屏幕使用相同的界面比例。
     (145, 150),
     (168, 150),
     (0, 100),
@@ -72,7 +72,7 @@ def test_first_run_scale_defaults_are_written_once(tmp_settings):
 
     # 首次运行标记还没写入时也可能重进初始化；已存在的用户值必须保留。
     config.set_app_setting("ui_scale_percent", 90)
-    assert apply_first_run_scale_defaults(config, system_dpi=144) == 125
+    assert apply_first_run_scale_defaults(config, system_dpi=144) == 150
     assert config.get_app_setting("ui_scale_percent") == 90
     assert config.get_app_setting("dialog_scale_percent") == 125
 

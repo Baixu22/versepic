@@ -220,6 +220,8 @@ _ITEM_CONTEXT_MENU_SPECS: Tuple[_ItemContextMenuSpec, ...] = (
         children_builder=lambda state: _build_tag_menu_children(state),
     ),
     _ItemContextMenuSpec(key="pin_image", label="Pin as Overlay", predicate=lambda state: state.is_image_item),
+    _ItemContextMenuSpec(key="recognize_image", label="Recognize text", predicate=lambda state: state.is_image_item),
+    _ItemContextMenuSpec(key="redact_image", label="Smart redact", predicate=lambda state: state.is_image_item),
     _ItemContextMenuSpec(key="save_image_as", label="Save as", predicate=lambda state: state.is_image_item),
     _ItemContextMenuSpec(
         key="open_file_location",

@@ -8,7 +8,6 @@ import sys
 
 from PySide6.QtGui import QIcon
 
-from core.resource_manager import ResourceManager
 
 
 def _icon_dir() -> Path:

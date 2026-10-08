@@ -83,7 +83,7 @@ class TestNormalizeLayout:
         stored = [(key, SHOW) for key in DEFAULT_ORDER if key != "scan_code"]
         layout = normalize_layout(stored)
         keys = [key for key, _mode in layout]
-        assert keys[keys.index("text_recognize") + 1] == "scan_code"
+        assert keys[keys.index("smart_redact") + 1] == "scan_code"
         assert dict(layout)["scan_code"] == MORE
 
 
@@ -104,9 +104,9 @@ class TestScreenshotToolbar:
     def test_default_layout_folds_low_frequency_buttons_and_ends_with_more(self, qapp):
         toolbar = Toolbar()
         assert _toolbar_row(toolbar) == [
-            key for key in DEFAULT_ORDER if key not in ("text_recognize", "scan_code", "spotlight")
+            key for key in DEFAULT_ORDER if key not in ("text_recognize", "smart_redact", "scan_code", "spotlight")
         ] + ["more"]
-        assert toolbar._folded_keys == ["text_recognize", "scan_code", "spotlight"]
+        assert toolbar._folded_keys == ["text_recognize", "smart_redact", "scan_code", "spotlight"]
         assert toolbar.copy_btn.isHidden()
         geometries = [toolbar._buttons[key].geometry() for key in _toolbar_row(toolbar)]
         for left, right in zip(geometries, geometries[1:]):
@@ -122,14 +122,14 @@ class TestScreenshotToolbar:
     def test_configured_layout_reorders_folds_and_hides(self, qapp):
         default_width = Toolbar().width()
         save_layout(_layout_with(
-            first="pin", mosaic=MORE, text=HIDE, scan_code=MORE, text_recognize=MORE))
+            first="pin", mosaic=MORE, text=HIDE, scan_code=MORE, text_recognize=MORE, smart_redact=MORE))
 
         toolbar = Toolbar()
         row = _toolbar_row(toolbar)
         assert row[0] == "pin"
         assert row[-1] == "more"
         assert "mosaic" not in row and "text" not in row
-        assert toolbar._folded_keys == ["text_recognize", "scan_code", "mosaic"]
+        assert toolbar._folded_keys == ["text_recognize", "smart_redact", "scan_code", "mosaic"]
         assert toolbar.width() < default_width
 
     def test_hiding_a_tool_only_hides_its_button(self, qapp):

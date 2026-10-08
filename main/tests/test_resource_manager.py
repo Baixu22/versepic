@@ -8,6 +8,14 @@ import os
 from core.resource_manager import ResourceManager
 
 
+def test_tint_preserves_native_small_icon_sizes(qapp):
+    from ui.fluent_lite.theme import _tinted_icon
+    path = ResourceManager.get_icon_path("fluent_icons/Language.svg")
+    icon = _tinted_icon(path, "#fafafa")
+    sizes = {size.width() for size in icon.availableSizes()}
+    assert {16, 18, 20, 24, 32}.issubset(sizes)
+
+
 class TestResourceManager:
     """ResourceManager 静态方法测试"""
 
@@ -53,4 +61,4 @@ class TestResourceManager:
         """emoji_groups.json 应存在"""
         path = ResourceManager.get_resource_path("svg/emoji_groups.json")
         assert os.path.isfile(path), f"文件不存在: {path}"
- 
+

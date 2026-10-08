@@ -1,91 +1,51 @@
-# -*- coding: utf-8 -*-
-
-"""导入导出表单构造器。
-
-负责在管理窗口中构建 CSV 导入导出的界面控件，包含编码选择、
-按钮布局和说明文本，不直接处理文件读写逻辑。
-"""
-
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QSizePolicy, QFrame, QHBoxLayout
-
-from ui.fluent_lite import BodyLabel, CaptionLabel, ComboBox, PrimaryPushButton
-from ui.fluent_lite.theme import ui_tokens
+"""CSV transfer settings, with actions beside the options they affect."""
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QSizePolicy
+from ui.fluent_lite import BodyLabel, CaptionLabel, ComboBox, Button
 from ui.outline_icons import Icon
-from ..layout_scale import scale_ui, scale_x, scale_y
+from ..layout_scale import field_group_gap, scale_ui
 
 
 def build_import_export_form(dialog):
-    """构建导入导出表单。"""
-    export_section = BodyLabel(dialog.tr("Export"))
-    export_section.setStyleSheet(f"font-size: {scale_ui(14)}px; font-weight: 600; margin-top: {scale_y(8)}px;")
-    export_section.setProperty("headingSize", 14)
-    dialog.detail_layout.addWidget(export_section)
+    def heading(title, description):
+        label = BodyLabel(dialog.tr(title))
+        label.setProperty("headingSize", 14)
+        dialog.detail_layout.addWidget(label)
+        caption = CaptionLabel(dialog.tr(description))
+        caption.setWordWrap(True)
+        dialog.detail_layout.addWidget(caption)
 
-    export_desc = CaptionLabel(dialog.tr("Export all saved content to CSV file"))
-    dialog.detail_layout.addWidget(export_desc)
-
-    encoding_layout = QHBoxLayout()
+    heading("Export", "Export all saved content to CSV file")
+    dialog.detail_layout.addSpacing(scale_ui(8))
+    row = QHBoxLayout()
+    row.setSpacing(scale_ui(10))
     encoding_label = CaptionLabel(dialog.tr("Encoding:"))
     encoding_label.setWordWrap(False)
     encoding_label.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-    encoding_layout.addWidget(encoding_label)
-
+    row.addWidget(encoding_label)
     dialog.export_encoding_combo = ComboBox()
-    dialog.export_encoding_combo.addItem("UTF-8 (BOM)", userData="utf-8-sig")
-    dialog.export_encoding_combo.addItem("UTF-8", userData="utf-8")
-    dialog.export_encoding_combo.addItem("Shift_JIS", userData="shift_jis")
-    dialog.export_encoding_combo.addItem("GBK", userData="gbk")
-    encoding_layout.addWidget(dialog.export_encoding_combo)
-    encoding_layout.addStretch()
-    dialog.detail_layout.addLayout(encoding_layout)
-
-    export_btn = PrimaryPushButton(dialog.tr("📤 Export to CSV").removeprefix("📤").strip(), icon=Icon.UPLOAD)
-    export_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-    export_btn.setFixedWidth(scale_x(200))
-    export_btn.clicked.connect(dialog._export_to_csv)
-    # 紧凑按钮右对齐，避免整行的蓝色长条压过表单内容。
-    export_row = QHBoxLayout()
-    export_row.addStretch()
-    export_row.addWidget(export_btn)
-    dialog.detail_layout.addLayout(export_row)
-
-    line = QFrame()
-    dialog.import_export_separator = line
-    line.setFrameShape(QFrame.Shape.HLine)
-    line.setStyleSheet(
-        f"background: {ui_tokens(dialog).separator}; border: none;"
-    )
-    line.setFixedHeight(1)
-    dialog.detail_layout.addWidget(line)
-
-    import_section = BodyLabel(dialog.tr("Import"))
-    import_section.setStyleSheet(f"font-size: {scale_ui(14)}px; font-weight: 600; margin-top: {scale_y(8)}px;")
-    import_section.setProperty("headingSize", 14)
-    dialog.detail_layout.addWidget(import_section)
-
-    import_desc = CaptionLabel(dialog.tr("Import content from CSV file (Group, Content, Title)"))
-    dialog.detail_layout.addWidget(import_desc)
-
-    import_btn = PrimaryPushButton(dialog.tr("📥 Import from CSV").removeprefix("📥").strip(), icon=Icon.DOWNLOAD)
-    import_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-    import_btn.setFixedWidth(scale_x(200))
-    import_btn.clicked.connect(dialog._import_from_csv)
-    import_row = QHBoxLayout()
-    import_row.addStretch()
-    import_row.addWidget(import_btn)
-    dialog.detail_layout.addLayout(import_row)
-
-    format_section = BodyLabel(dialog.tr("CSV Format"))
-    format_section.setStyleSheet(f"font-size: {scale_ui(14)}px; font-weight: 600; margin-top: {scale_y(24)}px;")
-    format_section.setProperty("headingSize", 14)
-    dialog.detail_layout.addWidget(format_section)
-
-    format_desc = CaptionLabel(
-        dialog.tr("Column 1: Group Name") + "\n" +
-        dialog.tr("Column 2: Content") + "\n" +
-        dialog.tr("Column 3: Title (optional)")
-    )
-    dialog.detail_layout.addWidget(format_desc)
-
-    dialog.detail_layout.addStretch()
+    dialog.export_encoding_combo.setAccessibleName(dialog.tr("Encoding:"))
+    for name, encoding in (("UTF-8 (BOM)", "utf-8-sig"), ("UTF-8", "utf-8"), ("Shift_JIS", "shift_jis"), ("GBK", "gbk")):
+        dialog.export_encoding_combo.addItem(name, userData=encoding)
+    row.addWidget(dialog.export_encoding_combo)
+    export = Button(dialog.tr("📤 Export to CSV").removeprefix("📤").strip(), variant="outline", icon=Icon.UPLOAD)
+    export.clicked.connect(dialog._export_to_csv)
+    row.addWidget(export)
+    row.addStretch()
+    dialog.detail_layout.addLayout(row)
+    dialog.detail_layout.addSpacing(field_group_gap())
+    dialog.import_export_separator = QFrame()
+    dialog.import_export_separator.setFixedHeight(1)
+    dialog.detail_layout.addWidget(dialog.import_export_separator)
+    dialog.detail_layout.addSpacing(field_group_gap())
+    heading("Import", "Import content from CSV file (Group, Content, Title)")
+    dialog.detail_layout.addSpacing(scale_ui(8))
+    row = QHBoxLayout()
+    import_button = Button(dialog.tr("📥 Import from CSV").removeprefix("📥").strip(), variant="outline", icon=Icon.DOWNLOAD)
+    import_button.clicked.connect(dialog._import_from_csv)
+    row.addWidget(import_button)
+    row.addStretch()
+    dialog.detail_layout.addLayout(row)
+    dialog.detail_layout.addSpacing(field_group_gap() * 2)
+    heading("CSV Format", "Column 1: Group Name")
+    dialog.detail_layout.addWidget(CaptionLabel(dialog.tr("Column 2: Content")))
+    dialog.detail_layout.addWidget(CaptionLabel(dialog.tr("Column 3: Title (optional)")))

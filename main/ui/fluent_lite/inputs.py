@@ -13,8 +13,8 @@ from core.ui_theme import get_ui_theme
 
 from .text_context_menu import TextContextMenuMixin, install_text_context_menu
 from .theme import (
-    ACCENT, FONT_FAMILY, INPUT_CONTENT_HEIGHT, INPUT_PADDING_H, INPUT_PADDING_V,
-    INPUT_RADIUS, ui_tokens,
+    FONT_FAMILY, INPUT_CONTENT_HEIGHT, INPUT_PADDING_H, INPUT_PADDING_V,
+    INPUT_RADIUS, ITEM_RADIUS, MOTION_FAST, ui_tokens,
 )
 
 
@@ -25,13 +25,13 @@ def _input_qss(widget=None):
     QComboBox, QLineEdit, QSpinBox, QDoubleSpinBox {{
         min-height: {s(INPUT_CONTENT_HEIGHT)}px;
         padding: {s(INPUT_PADDING_V)}px {s(INPUT_PADDING_H)}px; color: {t.text};
-        background: {t.input_background}; border: 1px solid transparent;
+        background: {t.input_background}; border: 1px solid {t.border};
         border-radius: {s(INPUT_RADIUS)}px;
-        font: {s(13)}px {FONT_FAMILY}; selection-background-color: {t.accent};
+        font: {s(14)}px {FONT_FAMILY}; selection-background-color: {t.accent};
         selection-color: {t.selected_text};
     }}
     QComboBox:hover, QLineEdit:hover, QSpinBox:hover, QDoubleSpinBox:hover {{
-        border-color: {t.border}; background: {t.input_background};
+        border-color: {t.border_hover}; background: {t.surface_hover};
     }}
     QComboBox:focus, QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus {{
         border: 1px solid {t.ring}; background: {t.input_background};
@@ -39,6 +39,8 @@ def _input_qss(widget=None):
     QComboBox:disabled, QLineEdit:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled {{
         color: {t.text_disabled}; background: {t.surface_subtle}; border-color: {t.border};
     }}
+    QComboBox[invalid="true"], QLineEdit[invalid="true"],
+    QSpinBox[invalid="true"], QDoubleSpinBox[invalid="true"] {{ border-color: {t.danger}; }}
     QComboBox::drop-down {{ width: {s(24)}px; border: none; }}
     QComboBox::down-arrow {{ image: none; }}
     QComboBox QAbstractItemView {{
@@ -46,7 +48,10 @@ def _input_qss(widget=None):
         border-radius: {s(INPUT_RADIUS)}px; padding: {s(5)}px; outline: none;
         selection-background-color: {t.accent_soft}; selection-color: {t.text};
     }}
-    QComboBox QAbstractItemView::item {{ border-radius: {s(10)}px; min-height: {s(INPUT_CONTENT_HEIGHT)}px; padding: {s(3)}px {s(8)}px; }}
+    QComboBox QAbstractItemView::item {{ border-radius: {s(ITEM_RADIUS)}px; min-height: {s(INPUT_CONTENT_HEIGHT)}px; padding: {s(3)}px {s(8)}px; }}
+    QComboBox QAbstractItemView::item:hover, QComboBox QAbstractItemView::item:selected {{
+        background: {t.surface_hover}; color: {t.text};
+    }}
     QSpinBox::up-button, QDoubleSpinBox::up-button,
     QSpinBox::down-button, QDoubleSpinBox::down-button {{
         width: {s(18)}px; border: none; background: transparent;
@@ -55,6 +60,13 @@ def _input_qss(widget=None):
 
 
 class _ThemedInput:
+    def setInvalid(self, invalid: bool):
+        """Form validation owns the message; every editor shares the error appearance."""
+        self.setProperty("invalid", bool(invalid))
+        self.style().unpolish(self)
+        self.style().polish(self)
+        self.update()
+
     def _init_theme(self):
         self._apply_theme()
         get_ui_theme().theme_changed.connect(self._apply_theme)
@@ -69,6 +81,7 @@ class ComboBox(_ThemedInput, QComboBox):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.view().setMouseTracking(True)
         self._init_theme()
 
     def _apply_theme(self, _tokens=None):
@@ -83,7 +96,7 @@ class ComboBox(_ThemedInput, QComboBox):
         from ui.motion import cancel_motion, fade_show
         popup = self.view().window()
         cancel_motion(popup)
-        fade_show(popup, duration=120, rise_px=0)
+        fade_show(popup, duration=MOTION_FAST, rise_px=0)
 
     def paintEvent(self, event):
         """A left-aligned value and explicit outline chevron, including item icons."""
@@ -116,13 +129,13 @@ class LineEdit(TextContextMenuMixin, _ThemedInput, _QLineEdit):
             self._init_theme()
 
 
-class TextEdit(TextContextMenuMixin, _QTextEdit):
+class TextEdit(TextContextMenuMixin, _ThemedInput, _QTextEdit):
     """Multiline input with the same theme, selection and focus as LineEdit."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, *, use_default_style: bool = True):
         super().__init__(parent)
-        self._apply_theme()
-        get_ui_theme().theme_changed.connect(self._apply_theme)
+        if use_default_style:
+            self._init_theme()
 
     def _apply_theme(self, *_):
         from .theme import scrollbar_qss
@@ -130,11 +143,12 @@ class TextEdit(TextContextMenuMixin, _QTextEdit):
         self.setStyleSheet(f"""
             QTextEdit {{ color: {t.text}; background: {t.input_background};
                 border: 1px solid {t.border}; border-radius: {_px(self, INPUT_RADIUS)}px;
-                padding: {_px(self, 10)}px; font: {_px(self, 13)}px {FONT_FAMILY};
+                padding: {_px(self, 10)}px; font: {_px(self, 14)}px {FONT_FAMILY};
                 selection-background-color: {t.accent}; selection-color: {t.selected_text}; }}
             QTextEdit:hover {{ border-color: {t.border_hover}; }}
             QTextEdit:focus {{ border-color: {t.ring}; }}
             QTextEdit:disabled {{ color: {t.text_disabled}; background: {t.surface_subtle}; }}
+            QTextEdit[invalid="true"] {{ border-color: {t.danger}; }}
         """ + scrollbar_qss(self))
 
 

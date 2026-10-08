@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from core.ui_theme import RADIUS_LG, RADIUS_MD, RADIUS_SM, RADIUS_XL
+
 APPLE_FONT_FAMILY = '"SF Pro Text", "PingFang SC", "Microsoft YaHei UI", "Segoe UI Variable", sans-serif'
 
 
@@ -26,11 +28,13 @@ class AppleTokens:
     danger: str
     danger_soft: str
     success: str
-    window_radius: int = 12
-    card_radius: int = 10
-    chip_radius: int = 10
-    control_radius: int = 6
-    input_radius: int = 10
+    # 圆角统一读 core.ui_theme 的 shadcn 刻度，不再自带一套 6/10/12，
+    # 否则内容管理窗的按钮、卡片会比设置页同位置控件更方正。
+    window_radius: int = RADIUS_XL
+    card_radius: int = RADIUS_LG
+    chip_radius: int = RADIUS_SM
+    control_radius: int = RADIUS_MD
+    input_radius: int = RADIUS_MD
     font_family: str = APPLE_FONT_FAMILY
 
 

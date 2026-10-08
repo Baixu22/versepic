@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtCore import QEvent, QSize, Qt, Signal
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from core.ui_scale import dialog_scaled
@@ -10,7 +10,7 @@ from core.ui_theme import get_ui_theme
 
 from .labels import BodyLabel, CaptionLabel
 from .switch import SwitchButton
-from .theme import FONT_FAMILY, to_qicon, ui_tokens
+from .theme import CONTROL_RADIUS, SURFACE_RADIUS, FONT_FAMILY, to_qicon, ui_tokens
 
 
 def card_right_margin() -> int:
@@ -67,16 +67,16 @@ class SettingCard(QFrame):
         self.hBoxLayout.setSpacing(dialog_scaled(13))
 
         self.iconLabel = QLabel(self)
-        self.iconLabel.setFixedSize(dialog_scaled(24), dialog_scaled(24))
+        self.iconLabel.setFixedSize(dialog_scaled(20), dialog_scaled(20))
         self.iconLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.iconLabel.setPixmap(to_qicon(icon).pixmap(dialog_scaled(20), dialog_scaled(20)))
         self.iconLabel.setStyleSheet("background: transparent; border: none;")
-        self.hBoxLayout.addWidget(self.iconLabel)
+        self.hBoxLayout.addWidget(self.iconLabel, 0, Qt.AlignmentFlag.AlignVCenter)
 
         self._text_layout = QVBoxLayout()
         self._text_layout.setContentsMargins(0, 0, 0, 0)
         self._text_layout.setSpacing(dialog_scaled(3))
         self.titleLabel = BodyLabel(str(title), self)
+        self.titleLabel.setWordWrap(True)
         self._text_layout.addWidget(self.titleLabel)
         self.contentLabel = CaptionLabel("" if content is None else str(content), self)
         self.contentLabel.setWordWrap(True)
@@ -97,20 +97,30 @@ class SettingCard(QFrame):
     def _apply_theme(self, _tokens=None):
         t = ui_tokens(self)
         self.setStyleSheet(f"""
-            QFrame#FluentLiteSettingCard {{ background: transparent; border: none; border-radius: {dialog_scaled(12)}px; }}
+            QFrame#FluentLiteSettingCard {{ background: transparent; border: none; border-radius: {dialog_scaled(CONTROL_RADIUS)}px; }}
             QFrame#FluentLiteSettingCard:hover {{ background: {t.surface_subtle}; border: none; }}
         """)
-        self.iconLabel.setPixmap(
-            to_qicon(self._theme_icon, self).pixmap(dialog_scaled(20), dialog_scaled(20))
-        )
+        self._refresh_icon()
         self.titleLabel.setStyleSheet(
-            f"color: {t.text}; font: 600 {dialog_scaled(13)}px {FONT_FAMILY}; "
+            f"color: {t.text}; font: 500 {dialog_scaled(14)}px {FONT_FAMILY}; "
             "background: transparent; border: none;"
         )
         self.contentLabel.setStyleSheet(
-            f"color: {t.text_muted}; font: {dialog_scaled(12)}px {FONT_FAMILY}; "
+            f"color: {t.text_muted}; font: {dialog_scaled(13)}px {FONT_FAMILY}; "
             "background: transparent; border: none;"
         )
+
+    def _refresh_icon(self):
+        side = dialog_scaled(18)
+        self.iconLabel.setPixmap(
+            to_qicon(self._theme_icon, self).pixmap(QSize(side, side), self.devicePixelRatioF())
+        )
+
+    def event(self, event):
+        result = super().event(event)
+        if event.type() == QEvent.Type.DevicePixelRatioChange and hasattr(self, "iconLabel"):
+            self._refresh_icon()
+        return result
 
     def addControl(self, widget, *, align=None):
         """把控件排进右侧的控件列。
@@ -205,15 +215,17 @@ class SettingCardGroup(QWidget):
 
     def _apply_theme(self, _tokens=None):
         t = ui_tokens(self)
+        # 组标题对齐 shadcn 的「小号、中等字重、次级色」标签写法：12px/600 太粗，
+        # 会和卡片内标题（15px/600）抢层级，看起来像两层标题。
         self.titleLabel.setStyleSheet(
-            f"color: {t.text}; font: 600 {dialog_scaled(12)}px {FONT_FAMILY}; "
+            f"color: {t.text_muted}; font: 500 {dialog_scaled(13)}px {FONT_FAMILY}; "
             f"padding: {dialog_scaled(2)}px {dialog_scaled(8)}px 0 {dialog_scaled(8)}px; background: transparent;"
         )
         self._card_container.setStyleSheet(f"""
             QFrame#FluentLiteGroupBody {{
                 background: {t.surface};
                 border: 1px solid {t.border};
-                border-radius: {dialog_scaled(15)}px;
+                border-radius: {dialog_scaled(SURFACE_RADIUS)}px;
             }}
         """)
         for separator in self._separators:
@@ -279,5 +291,5 @@ class SimpleCardWidget(QFrame):
         t = ui_tokens(self)
         self.setStyleSheet(
             f"QFrame#FluentLiteSimpleCard {{ background: {t.surface}; "
-            f"border: 1px solid {t.border}; border-radius: 14px; }}"
+            f"border: 1px solid {t.border}; border-radius: {dialog_scaled(SURFACE_RADIUS)}px; }}"
         )

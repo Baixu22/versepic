@@ -163,6 +163,7 @@ clipboard/
 │   ├── enums.py             # GroupType 定義
 │   ├── text_transform.py    # プレーンテキスト変換 — 「特殊貼り付け」用の副作用のない純関数群
 │   ├── tag_store.py         # TagStore — タグ定義とアイテム-タグ対応の保存
+│   ├── image_text.py        # ローカル画像文字索引・検索・バックグラウンド OCR
 │   └── __init__.py
 ├── services/                # サービス層 — file payload、グループ規則、入出力、保存ロジック
 │   ├── file_payload_service.py   # file 型 JSON payload と旧形式互換
@@ -194,6 +195,7 @@ clipboard/
 │   │   └── theme_styles.py
 │   ├── widgets/
 │   │   ├── draggable_list_widget.py
+│   │   ├── manage_list_delegate.py
 │   │   ├── group_bar.py
 │   │   ├── item_delegate.py
 │   │   ├── item_widget.py
@@ -463,6 +465,7 @@ ui/
 ├── tray_menu.py             # TrayMenu — システムトレイメニュー
 ├── screenshot_window.py     # ScreenshotWindow — フルスクリーンキャプチャウィンドウ
 ├── dialogs.py               # StandardDialog — 確認、警告、情報、エラーダイアログ
+├── component_gallery.py     # 共通 Qt コンポーネントの操作ギャラリー（docs/qt-components.md）
 ├── magnifier.py             # MagnifierOverlay — ピクセルレベル拡大鏡
 ├── color_picker_dialog.py   # ColorPickerDialog — カスタムHSVカラーピッカー
 ├── color_picker_button.py   # ColorPickerButton — カラー選択ボタン
@@ -483,6 +486,7 @@ ui/
 │
 ├── glass.py / glyphs.py / outline_icons.py  # Native glass and Lucide SVG rendering
 ├── fluent_lite/             # Fluent スタイル軽量コンポーネントライブラリ
+│   ├── icon_label.py        # アイコンとテキストの共通配置
 │   ├── button_base.py / popups.py / primitives.py  # Shared animated controls
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # ボタン、カード、アイコン、入力欄
 │   ├── labels.py / navigation.py / segmented.py      # ラベル、ナビゲーション、セグメントコントロール

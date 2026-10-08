@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QStyleFactory
 from core.i18n import make_tr
 from core.ui_theme import UIThemeManager
 
-from .theme import ui_tokens
+from .theme import menu_qss, ui_tokens
 
 
 _tr = make_tr("TextEditContextMenu")
@@ -42,6 +42,7 @@ def _translate_standard_actions(menu) -> None:
 def create_text_context_menu(editor):
     """Create a standard editor menu using the active app theme and language."""
     menu = editor.createStandardContextMenu()
+    menu.setProperty("dialog_scale_factor", editor.property("dialog_scale_factor"))
     _translate_standard_actions(menu)
     style_popup_menu(menu, ui_tokens(editor))
     return menu
@@ -63,34 +64,7 @@ def style_popup_menu(menu, tokens) -> None:
     menu.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
     menu.setAutoFillBackground(True)
     menu.setPalette(UIThemeManager.build_palette(tokens))
-    menu.setStyleSheet(f"""
-        QMenu {{
-            color: {tokens.text};
-            background-color: {tokens.popup_background};
-            border: 1px solid {tokens.border_hover};
-            border-radius: 6px;
-            padding: 4px;
-        }}
-        QMenu::item {{
-            color: {tokens.text};
-            background-color: transparent;
-            padding: 6px 28px 6px 26px;
-            margin: 1px 0;
-        }}
-        QMenu::item:selected {{
-            color: {tokens.text};
-            background-color: {tokens.popup_hover};
-        }}
-        QMenu::item:disabled {{
-            color: {tokens.text_disabled};
-            background-color: transparent;
-        }}
-        QMenu::separator {{
-            height: 1px;
-            background-color: {tokens.separator};
-            margin: 4px 7px;
-        }}
-    """)
+    menu.setStyleSheet(menu_qss(menu, tokens=tokens))
 
 
 def show_text_context_menu(editor, global_pos) -> None:

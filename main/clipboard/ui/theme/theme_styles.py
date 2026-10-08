@@ -10,6 +10,8 @@ from dataclasses import dataclass
 
 from PySide6.QtGui import QColor
 
+from core.ui_theme import RADIUS_LG, RADIUS_MD, RADIUS_XL
+
 from .themes import Theme
 
 
@@ -59,7 +61,8 @@ def readable_accent(color: QColor, background: QColor, minimum: float = 4.5) -> 
         fg = luminance(result)
         if (max(fg, bg) + 0.05) / (min(fg, bg) + 0.05) >= minimum:
             break
-        result = result.darker(108) if bg > 0.5 else result.lighter(108)
+        # 0.179 is where black and white have equal contrast, in linear luminance.
+        result = result.darker(108) if bg > 0.179 else result.lighter(108)
     return result
 
 
@@ -87,6 +90,14 @@ def surface_palette(theme: Theme) -> SurfacePalette:
         danger=QColor(c.error),
         popup=QColor(c.bg_secondary) if not dark else QColor(c.bg_secondary).lighter(108),
     )
+
+
+def tag_chip_palette(color: str, background: QColor):
+    """Opaque chip fill and readable ink, including pale user-selected tag colours."""
+    tint = QColor(color)
+    fill = QColor(*[round(a * .16 + b * .84) for a, b in zip(
+        tint.getRgb()[:3], background.getRgb()[:3])])
+    return fill, readable_accent(tint, fill)
 
 
 def management_palette(theme: Theme):
@@ -152,15 +163,17 @@ class ThemeStyleGenerator:
         """
         p = self.palette
         opacity_alpha = (255 - int(opacity * 2.55)) / 255
-        radius = 12
+        radius = RADIUS_XL
         if self.glass:
             import sys
             # DWM 只做纯高斯模糊（无噪点），底色层由这里画：主题底色 + 按「透明度」调的 alpha
             tint = _with_alpha(p.tint, glass_tint_alpha(p.dark, opacity, native_glass=True))
             background = rgba(tint)
-            radius = 8 if sys.getwindowsversion().build >= 22000 else 12
+            # Windows 11 让 DWM 自己画窗口圆角，Qt 侧只描边，半径跟着系统走，
+            # 否则自绘的圆角会和系统裁切错开、四角露出底下的桌面。
+            radius = RADIUS_MD if sys.getwindowsversion().build >= 22000 else RADIUS_XL
         else:
-            alpha = max(0.72, opacity_alpha * 0.96)
+            alpha = max(0.0, min(1.0, opacity_alpha))
             background = f"rgba({self._hex_to_rgb(self.colors.bg_primary)}, {alpha:.3f})"
 
         return f"""
@@ -173,7 +186,7 @@ class ThemeStyleGenerator:
                 background: {rgba(p.popup)};
                 color: {self.colors.text_primary};
                 border: 1px solid {rgba(p.hairline)};
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 4px 8px;
                 font-size: 12px;
             }}
@@ -182,8 +195,7 @@ class ThemeStyleGenerator:
     def generate_list_widget_style(self, opacity: int = 0) -> str:
         """生成列表控件样式：行由 delegate 自绘，控件本身透明，滚动条细而淡。"""
         p = self.palette
-        alpha = 255 - int(opacity * 2.55)
-        bg = "transparent" if self.glass else f"rgba({self._hex_to_rgb(self.colors.bg_primary)}, {alpha / 255})"
+        bg = "transparent"  # The parent paints alpha once; stacking fills cancels transparency.
         handle = _with_alpha(p.text, 0.22 if p.dark else 0.18)
         handle_hover = _with_alpha(p.text, 0.36 if p.dark else 0.32)
         return f"""
@@ -216,11 +228,11 @@ class ThemeStyleGenerator:
         """生成顶部工具栏 / 侧栏容器样式；corner_radius 给出窗口圆角处的补充圆角 QSS。"""
         alpha = 255 - int(opacity * 2.55)
         if self.glass:
-            return f"""
-            QWidget {{
+            return """
+            QWidget {
                 background: transparent;
                 border-top: 1px solid transparent;
-            }}
+            }
         """
 
         return f"""
@@ -255,7 +267,7 @@ class ThemeStyleGenerator:
                     background: {self.colors.accent_primary};
                     color: white;
                     border: none;
-                    border-radius: 7px;
+                    border-radius: {RADIUS_MD}px;
                     padding: 7px 18px;
                     font-size: 13px;
                     font-weight: 500;
@@ -273,7 +285,7 @@ class ThemeStyleGenerator:
                     background: transparent;
                     color: {self.colors.error};
                     border: none;
-                    border-radius: 7px;
+                    border-radius: {RADIUS_MD}px;
                     padding: 7px 18px;
                     font-size: 13px;
                 }}
@@ -287,7 +299,7 @@ class ThemeStyleGenerator:
                     background: {self.colors.bg_secondary};
                     color: {self.colors.text_primary};
                     border: 1px solid {self.colors.border_primary};
-                    border-radius: 7px;
+                    border-radius: {RADIUS_MD}px;
                     padding: 6px 16px;
                     font-size: 13px;
                 }}
@@ -301,7 +313,7 @@ class ThemeStyleGenerator:
         return f"""
             QLineEdit {{
                 border: 1px solid {self.colors.border_primary};
-                border-radius: 8px;
+                border-radius: {RADIUS_MD}px;
                 padding: 7px 11px;
                 font-size: 13px;
                 background: {self.colors.bg_secondary};
@@ -312,7 +324,7 @@ class ThemeStyleGenerator:
             }}
             QTextEdit {{
                 border: 1px solid {self.colors.border_primary};
-                border-radius: 8px;
+                border-radius: {RADIUS_MD}px;
                 padding: 8px;
                 font-size: 13px;
                 background: {self.colors.bg_secondary};
@@ -328,7 +340,7 @@ class ThemeStyleGenerator:
         return f"""
             QComboBox {{
                 border: 1px solid {self.colors.border_primary};
-                border-radius: 8px;
+                border-radius: {RADIUS_MD}px;
                 padding: 6px 10px;
                 font-size: 12px;
                 background: {self.colors.bg_secondary};
@@ -402,13 +414,13 @@ class ThemeStyleGenerator:
             PreviewPopup {{
                 background: {rgba(p.popup)};
                 border: 1px solid {rgba(p.hairline)};
-                border-radius: 14px;
+                border-radius: {RADIUS_LG}px;
             }}
             QTextEdit {{
                 background: transparent;
                 border: none;
                 padding: 2px 4px;
-                font-size: 13px;
+                font-size: 15px;
                 color: {self.colors.text_primary};
                 selection-background-color: {rgba(p.selected)};
             }}
@@ -424,53 +436,19 @@ class ThemeStyleGenerator:
             }}
         """
 
-    def generate_menu_style(self) -> str:
-        """统一的浮层菜单：圆角卡片 + 强调色高亮行（macOS 菜单做法）。"""
-        p = self.palette
-        return f"""
-            QMenu {{
-                background: {rgba(p.popup)};
-                border: 1px solid {rgba(p.hairline)};
-                border-radius: 14px;
-                padding: 5px;
-            }}
-            QMenu::item {{
-                padding: 6px 22px 6px 12px;
-                margin: 0px;
-                border-radius: 10px;
-                color: {self.colors.text_primary};
-                background: transparent;
-            }}
-            QMenu::item:selected {{
-                background: {self.colors.accent_primary};
-                color: #FFFFFF;
-            }}
-            QMenu::item:disabled {{
-                color: {self.colors.text_disabled};
-                background: transparent;
-            }}
-            QMenu::item:checked {{
-                color: {self.colors.text_primary};
-            }}
-            QMenu::item:checked:selected {{
-                color: #FFFFFF;
-            }}
-            QMenu::indicator {{
-                width: 14px;
-                height: 14px;
-                padding-left: 4px;
-            }}
-            QMenu::separator {{
-                height: 1px;
-                background: {rgba(p.hairline)};
-                margin: 5px 10px;
-            }}
-            QMenu::right-arrow {{
-                width: 8px;
-                height: 8px;
-                padding-right: 8px;
-            }}
-        """
+    def generate_menu_style(self, font_size: int = 15) -> str:
+        """Use the shared menu geometry with this clipboard window's palette."""
+        from dataclasses import replace
+        from core.ui_theme import DARK_TOKENS, LIGHT_TOKENS
+        from ui.fluent_lite.theme import menu_qss
+        p, c = self.palette, self.colors
+        tokens = replace(
+            DARK_TOKENS if p.dark else LIGHT_TOKENS,
+            text=c.text_primary, text_disabled=c.text_disabled,
+            popup_background=rgba(p.popup), popup_hover=c.bg_hover,
+            border=rgba(p.hairline), separator=rgba(p.hairline),
+        )
+        return menu_qss(tokens=tokens, font_size=font_size)
 
     def generate_toolbar_button_style(self) -> str:
         """工具栏图标按钮：静止无底，悬停浅底，激活为强调色软底。"""
@@ -479,7 +457,7 @@ class ThemeStyleGenerator:
             QToolButton {{
                 background: transparent;
                 border: none;
-                border-radius: 7px;
+                border-radius: {RADIUS_MD}px;
                 padding: 0px;
             }}
             QToolButton:hover {{
@@ -501,9 +479,9 @@ class ThemeStyleGenerator:
             QLineEdit {{
                 background: {rgba(bg)};
                 border: 1px solid transparent;
-                border-radius: 8px;
+                border-radius: {RADIUS_MD}px;
                 color: {self.colors.text_primary};
-                font-size: 14px;
+                font-size: 16px;
                 padding: 0px 6px 0px 4px;
                 selection-background-color: {self.colors.accent_primary};
                 selection-color: white;
@@ -533,9 +511,9 @@ class ThemeStyleGenerator:
                 background: transparent;
                 color: {self.colors.text_secondary};
                 border: none;
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 0px 10px;
-                font-size: 13px;
+                font-size: 15px;
             }}
             QToolButton:hover {{
                 background: {rgba(p.control_hover)};
@@ -556,7 +534,7 @@ class ThemeStyleGenerator:
                 background: {rgba(p.control)};
                 color: {self.colors.text_primary};
                 border: 1px solid transparent;
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 2px 6px;
                 font-size: 13px;
             }}
@@ -607,7 +585,7 @@ class ThemeStyleGenerator:
                 background: transparent;
                 color: {self.colors.text_primary};
                 border: none;
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 4px 6px;
                 font-weight: 600;
             }}
@@ -627,7 +605,7 @@ class ThemeStyleGenerator:
                 background: {rgba(p.control)};
                 color: {self.colors.text_primary};
                 border: none;
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 2px 4px;
             }}
             QCalendarWidget QAbstractItemView {{
@@ -651,7 +629,7 @@ class ThemeStyleGenerator:
                 background: transparent;
                 color: {fg};
                 border: none;
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 0px 8px;
                 font-size: 13px;
             }}
@@ -668,7 +646,7 @@ class ThemeStyleGenerator:
                 background: {self.colors.bg_primary};
                 color: {self.colors.text_primary};
                 border: 1px solid {self.colors.border_primary};
-                border-radius: 10px;
+                border-radius: {RADIUS_MD}px;
                 padding: 3px 12px 3px 8px;
                 font-size: 12px;
             }}

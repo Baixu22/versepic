@@ -17,7 +17,7 @@ from core.logger import log_exception, log_warning, T
 # 此时所有图标会同时变成空白且永不恢复，表现就是"运行一段时间后工具栏按钮突然全没了"。
 #
 # 一次性渲染成位图存进 QIcon 之后，运行期就不再依赖源文件，顺带也省掉了每次绘制的文件 IO。
-_RASTER_BOX_SIZES = (16, 24, 32, 48, 64, 128)
+_RASTER_BOX_SIZES = (16, 18, 20, 24, 28, 32, 36, 40, 48, 64, 128)
 
 
 class ResourceManager:

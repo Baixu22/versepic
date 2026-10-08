@@ -1,16 +1,18 @@
 """Small neutral controls used by both the component gallery and feature pages."""
 from PySide6.QtCore import QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPen
-from PySide6.QtWidgets import QCheckBox as _QCheckBox, QFrame, QLabel, QStyle, QStyleOptionButton
+from PySide6.QtWidgets import QCheckBox as _QCheckBox, QFrame, QLabel, QStyle, QStyleOptionButton, QWidget
 
 from core.ui_scale import widget_scaled as px
 from core.ui_theme import get_ui_theme
 from ui.outline_icons import outline_icon
-from .theme import FONT_FAMILY, css_color, ui_tokens
+from .theme import FONT_FAMILY, ITEM_RADIUS, css_color, ui_tokens
 
 
 class CheckBox(_QCheckBox):
     def __init__(self, text="", parent=None):
+        if isinstance(text, QWidget):
+            parent, text = text, ""
         super().__init__(text, parent)
         self._apply_theme()
         get_ui_theme().theme_changed.connect(self._apply_theme)
@@ -19,7 +21,7 @@ class CheckBox(_QCheckBox):
         t = ui_tokens(self)
         self.setStyleSheet(f"""
             QCheckBox {{ color: {t.text}; spacing: {px(self, 8)}px;
-                font: {px(self, 13)}px {FONT_FAMILY}; }}
+                font: {px(self, 14)}px {FONT_FAMILY}; }}
             QCheckBox::indicator {{ width: {px(self, 16)}px; height: {px(self, 16)}px; }}
             QCheckBox:disabled {{ color: {t.text_disabled}; }}
         """)
@@ -38,7 +40,7 @@ class CheckBox(_QCheckBox):
         selected = self.checkState() != Qt.CheckState.Unchecked
         painter.setBrush(css_color(t.accent if selected else t.input_background))
         painter.setPen(QPen(css_color(t.accent if selected else t.border_hover), 1))
-        painter.drawRoundedRect(box, px(self, 5), px(self, 5))
+        painter.drawRoundedRect(box, px(self, ITEM_RADIUS), px(self, ITEM_RADIUS))
         if self.checkState() == Qt.CheckState.PartiallyChecked:
             painter.setPen(QPen(QColor(t.primary_foreground), 1.75))
             painter.drawLine(box.center().x()-4, box.center().y(), box.center().x()+4, box.center().y())
@@ -78,8 +80,8 @@ class Badge(QLabel):
         elif self.variant == "outline":
             bg, border = "transparent", t.border
         elif self.variant == "destructive":
-            bg, fg = t.danger_soft, t.danger
-        self.setStyleSheet(f"QLabel {{ background: {bg}; color: {fg}; border: 1px solid {border}; border-radius: {px(self,10)}px; padding: {px(self,2)}px {px(self,7)}px; font: 500 {px(self,11)}px {FONT_FAMILY}; }}")
+            bg, fg = t.destructive_background, "#FFFFFF"
+        self.setStyleSheet(f"QLabel {{ background: {bg}; color: {fg}; border: 1px solid {border}; border-radius: {px(self,10)}px; min-height: {px(self,16)}px; padding: {px(self,2)}px {px(self,7)}px; font: 500 {px(self,12)}px {FONT_FAMILY}; }}")
 
 
 class Separator(QFrame):

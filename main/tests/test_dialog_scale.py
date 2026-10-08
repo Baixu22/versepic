@@ -190,7 +190,7 @@ def test_only_explicitly_opted_fluent_controls_receive_dialog_metrics(qapp):
     try:
         configure_dialog_control(button)
         configure_dialog_control(combo)
-        assert "font: 600 20px" in button.styleSheet()
+        assert "font: 600 21px" in button.styleSheet()
         assert "min-height: 39px" in combo.styleSheet()
         assert combo.minimumWidth() == dialog_scaled(96)
     finally:
@@ -306,15 +306,17 @@ def test_manage_dialog_scales_static_and_rebuilt_detail_controls(qapp):
     dialog = ManageDialog(_DummyClipboardManager())
     try:
         assert dialog.save_btn.property("dialog_scale_factor") == 1.5
-        assert "font: 600 20px" in dialog.save_btn.styleSheet()
+        assert "font: 600 21px" in dialog.save_btn.styleSheet()
         assert not hasattr(dialog, "nav_title")
-        assert "font-size: 18px" in dialog.list_widget.styleSheet()
-        assert "padding: 9px" in dialog.list_widget.styleSheet()
+        assert "font-size: 20px" in dialog.list_widget.styleSheet()
+        assert dialog.list_header.height() == 78
+        assert dialog.detail_title.height() == 78
+        assert dialog.icon_picker_button.width() == 54
 
         first_name_input = dialog.group_name_input
         assert first_name_input.property("dialog_scale_factor") == 1.5
         assert "min-height: 39px" in first_name_input.styleSheet()
-        assert "font: 20px" in dialog.radio_normal.styleSheet()
+        assert "font: 21px" in dialog.radio_normal.styleSheet()
         assert "width: 24px" in dialog.radio_normal.styleSheet()
 
         # Switching/reselecting rebuilds the form from scratch; new controls
@@ -358,8 +360,8 @@ def test_settings_dialog_scales_its_own_window_and_shared_cards(qapp):
     get_dialog_scale().set_percent(80)
     small = SettingsDialog()
     try:
-        assert small.width() == dialog_scaled(1050)
-        assert small.height() == dialog_scaled(750)
+        assert small.width() == dialog_scaled(1040)
+        assert small.height() == dialog_scaled(720)
         small_card = SettingCard(FluentIcon.INFO, "t")
         try:
             assert small_card.minimumHeight() == dialog_scaled(62)
@@ -372,7 +374,7 @@ def test_settings_dialog_scales_its_own_window_and_shared_cards(qapp):
     get_dialog_scale().set_percent(150)
     large = SettingsDialog()
     try:
-        assert large.width() == dialog_scaled(1050)
+        assert large.width() == dialog_scaled(1040)
         assert large.width() > small.width()
         large_card = SettingCard(FluentIcon.INFO, "t")
         try:

@@ -49,9 +49,19 @@ def request_trim_working_set(delay_ms: int = 1500):
 
 def set_dpi_awareness():
     """设置进程 DPI 感知（必须在 QApplication 创建之前调用）。
-    优先使用 Per-Monitor DPI Aware（PMv1，SetProcessDpiAwareness(2)），
-    失败时回退到旧版 SetProcessDPIAware（System DPI Aware）。
+    优先使用 Per-Monitor V2，避免 Windows 对窗口进行位图拉伸。
+    已由 EXE manifest 设置时无需重复设置；旧系统回退到 PMv1 / System。
     """
+    if os.name != "nt":
+        return
+    try:
+        user32 = ctypes.windll.user32
+        user32.SetProcessDpiAwarenessContext.argtypes = [ctypes.c_void_p]
+        user32.SetProcessDpiAwarenessContext.restype = ctypes.c_int
+        if user32.SetProcessDpiAwarenessContext(ctypes.c_void_p(-4)):
+            return  # DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+    except AttributeError:
+        pass  # Windows 10 1607 之前没有此 API。
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(2)  # PROCESS_PER_MONITOR_DPI_AWARE
     except Exception as e:

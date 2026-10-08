@@ -5,6 +5,8 @@
 """
 from PySide6.QtWidgets import (
     QApplication,
+    QAbstractButton,
+    QComboBox,
     QWidget,
     QPushButton,
     QHBoxLayout,
@@ -14,16 +16,18 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 from PySide6.QtCore import Qt, Signal, QEvent, QPoint, QRect, QRectF, QSize, QTimer
-from PySide6.QtGui import QColor, QPainter, QPen, QBrush, QPainterPath
+from PySide6.QtGui import QIcon, QColor, QPainter, QPen, QBrush, QPainterPath
 from core import safe_event
 from core.constants import CSS_FONT_FAMILY
 from core.i18n import tr as translate_text
 from core.resource_manager import ResourceManager
 from core.ui_scale import scaled, scaled_f
+from core.ui_theme import get_ui_theme
+from ui.fluent_lite.theme import tinted_icon
 from .color_picker_button import ColorPickerButton
 
 
-PANEL_RADIUS = 6.0
+PANEL_RADIUS = 12.0
 
 
 def paint_rounded_panel(widget):
@@ -39,18 +43,39 @@ def paint_rounded_panel(widget):
     path = QPainterPath()
     path.addRoundedRect(rect, radius, radius)
 
-    # 半透明黑：白色截图上能看出边界，深色截图上几乎不可见，不会像描边框
-    painter.setPen(QPen(QColor(0, 0, 0, 36), pen_width))
-    painter.setBrush(QBrush(QColor("#ffffff")))
+    # 与主界面共用表面及边框色，适配深浅主题。
+    painter.setPen(QPen(QColor(get_ui_theme().tokens.border), pen_width))
+    painter.setBrush(QBrush(QColor(get_ui_theme().tokens.surface)))
     painter.drawPath(path)
     painter.end()
 
 
+def _theme_panel_icons(panel):
+    """Retint control glyphs only; annotation colour swatches have no icons."""
+    def tinted(icon):
+        pixmap = icon.pixmap(64, 64)
+        if pixmap.isNull():
+            return icon
+        painter = QPainter(pixmap)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+        painter.fillRect(pixmap.rect(), QColor(get_ui_theme().tokens.text))
+        painter.end()
+        return QIcon(pixmap)
+
+    for button in panel.findChildren(QAbstractButton):
+        if not button.icon().isNull():
+            button.setIcon(tinted(button.icon()))
+    for combo in panel.findChildren(QComboBox):
+        for row in range(combo.count()):
+            if not combo.itemIcon(row).isNull():
+                combo.setItemIcon(row, tinted(combo.itemIcon(row)))
+
+
 def set_step_button_icon(button: QToolButton, direction: str):
-    """为步进按钮使用固定深色 SVG，避免箭头颜色受系统调色板影响。"""
+    """按当前主题为步进按钮着色。"""
     icon_name = "step_up.svg" if direction == "up" else "step_down.svg"
     button.setArrowType(Qt.ArrowType.NoArrow)
-    button.setIcon(ResourceManager.get_icon(ResourceManager.get_icon_path(icon_name)))
+    button.setIcon(tinted_icon(ResourceManager.get_icon_path(icon_name), get_ui_theme().tokens.text))
     button.setIconSize(QSize(scaled(9), scaled(5)))
 
 
@@ -67,25 +92,26 @@ def build_settings_panel_stylesheet(
     传入的宽度和样式里的字号、内边距、圆角都是 100% 下的基准值，按当前比例换算；
     改比例后要重新调用一次，样式表本身不会跟着比例走。
     """
+    t = get_ui_theme().tokens
     font_px = scaled(12)
-    radius = scaled(3)
+    radius = scaled(8)
     combo_block = ""
     if combo_enabled:
         combo_block = f"""
             QComboBox {{
-                border: 1px solid #ccc;
+                border: 1px solid {t.border};
                 border-radius: {radius}px;
                 padding: 0px;
                 padding-right: 0px;
-                background: white;
+                background: {t.surface};
                 min-width: {scaled(combo_min_width)}px;
                 max-width: {scaled(combo_max_width)}px;
                 font-family: {CSS_FONT_FAMILY};
                 font-size: {font_px}px;
-                color: #333;
+                color: {t.text};
             }}
             QComboBox:hover {{
-                border: 1px solid #999;
+                border: 1px solid {t.border_hover};
             }}
             QComboBox::drop-down {{
                 subcontrol-origin: content;
@@ -94,7 +120,7 @@ def build_settings_panel_stylesheet(
                 border: none;
                 border-top-right-radius: {radius}px;
                 border-bottom-right-radius: {radius}px;
-                background: white;
+                background: {t.surface};
             }}
             QComboBox::down-arrow {{
                 image: none;
@@ -107,28 +133,28 @@ def build_settings_panel_stylesheet(
                 text-align: center;
             }}
             QComboBox QAbstractItemView {{
-                border: 1px solid #999;
-                background: white;
-                selection-background-color: #0078d7;
-                selection-color: white;
+                border: 1px solid {t.border_hover};
+                background: {t.surface};
+                selection-background-color: {t.accent_soft};
+                selection-color: {t.text};
                 font-family: {CSS_FONT_FAMILY};
                 font-size: {font_px}px;
-                color: #333;
+                color: {t.text};
                 outline: none;
             }}
             QComboBox QAbstractItemView::item {{
                 padding: {scaled(3)}px {scaled(6)}px;
                 min-height: {scaled(18)}px;
-                color: #333;
-                background: white;
+                color: {t.text};
+                background: {t.surface};
             }}
             QComboBox QAbstractItemView::item:hover {{
-                background-color: #e5f3ff;
-                color: #000;
+                background-color: {t.surface_hover};
+                color: {t.text};
             }}
             QComboBox QAbstractItemView::item:selected {{
-                background-color: #0078d7;
-                color: white;
+                background-color: {t.accent_soft};
+                color: {t.text};
             }}
         """
 
@@ -138,50 +164,51 @@ def build_settings_panel_stylesheet(
             border: none;
         }}
         QPushButton {{
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: {t.surface};
+            border: 1px solid {t.border};
             border-radius: {radius}px;
             padding: {scaled(4)}px;
             font-family: {CSS_FONT_FAMILY};
             font-size: {font_px}px;
+            color: {t.text};
         }}
         QPushButton:hover {{
-            background-color: #f0f0f0;
-            border: 1px solid #bbb;
+            background-color: {t.surface_hover};
+            border: 1px solid {t.border_hover};
         }}
         QPushButton:checked {{
-            background-color: #e0e0e0;
-            border: 1px solid #999;
+            background-color: {t.accent_soft};
+            border: 1px solid {t.border_hover};
         }}
         QSpinBox {{
-            border: 1px solid #ccc;
+            border: 1px solid {t.border};
             border-radius: {radius}px;
             padding: {scaled(2)}px {scaled(2)}px {scaled(2)}px {scaled(4)}px;
-            background: white;
+            background: {t.surface};
             font-family: {CSS_FONT_FAMILY};
             font-size: {font_px}px;
-            color: #333;
+            color: {t.text};
         }}
         QSpinBox::up-button {{
             subcontrol-origin: border;
             subcontrol-position: top right;
             width: {scaled(18)}px;
-            border-left: 1px solid #ccc;
-            border-bottom: 1px solid #ccc;
+            border-left: 1px solid {t.border};
+            border-bottom: 1px solid {t.border};
             border-top-right-radius: {radius}px;
-            background: white;
+            background: {t.surface};
         }}
         QSpinBox::up-button:hover {{
-            background: #f0f0f0;
+            background: {t.surface_hover};
         }}
         QSpinBox::up-button:pressed {{
-            background: #e0e0e0;
+            background: {t.accent_soft};
         }}
         QSpinBox::up-arrow {{
             image: none;
             border-left: {scaled(4)}px solid transparent;
             border-right: {scaled(4)}px solid transparent;
-            border-bottom: {scaled(6)}px solid #666;
+            border-bottom: {scaled(6)}px solid {t.text_muted};
             width: 0;
             height: 0;
         }}
@@ -189,33 +216,33 @@ def build_settings_panel_stylesheet(
             subcontrol-origin: border;
             subcontrol-position: bottom right;
             width: {scaled(18)}px;
-            border-left: 1px solid #ccc;
+            border-left: 1px solid {t.border};
             border-bottom-right-radius: {radius}px;
-            background: white;
+            background: {t.surface};
         }}
         QSpinBox::down-button:hover {{
-            background: #f0f0f0;
+            background: {t.surface_hover};
         }}
         QSpinBox::down-button:pressed {{
-            background: #e0e0e0;
+            background: {t.accent_soft};
         }}
         QSpinBox::down-arrow {{
             image: none;
             border-left: {scaled(4)}px solid transparent;
             border-right: {scaled(4)}px solid transparent;
-            border-top: {scaled(6)}px solid #666;
+            border-top: {scaled(6)}px solid {t.text_muted};
             width: 0;
             height: 0;
         }}
         QLabel {{
-            color: #333;
+            color: {t.text};
             background-color: transparent;
             border: none;
             font-family: {CSS_FONT_FAMILY};
             font-size: {font_px}px;
         }}
         QFrame#separator {{
-            background-color: #ddd;
+            background-color: {t.border};
             width: 1px;
             margin: {scaled(4)}px {scaled(4)}px;
             border: none;
@@ -278,8 +305,8 @@ class StepperWidget(QWidget):
         """按当前比例重算标签和步进按钮的尺寸"""
         self._label.setFixedHeight(scaled(self.BASE_LABEL_HEIGHT))
         self._label.setStyleSheet(
-            f"QLabel {{ background: transparent; color: #333; border: 1px solid #999;"
-            f" border-radius: {scaled(6)}px; padding: 0 {scaled(6)}px; font-weight: bold; }}"
+            f"QLabel {{ background: {get_ui_theme().tokens.surface_subtle}; color: {get_ui_theme().tokens.text}; border: 1px solid {get_ui_theme().tokens.border};"
+            f" border-radius: {scaled(6)}px; padding: 0 {scaled(6)}px; font-weight: 500; }}"
         )
         for direction, button in (("up", self._up_btn), ("down", self._down_btn)):
             set_step_button_icon(button, direction)
@@ -427,8 +454,8 @@ class HoverPopup(QWidget):
     def apply_scale(self):
         """按当前比例重挂样式。子类补自己的控件尺寸时记得先调 super()。"""
         self.setStyleSheet(
-            f"#HoverPopup {{ background: white; border: 1px solid #ccc;"
-            f" border-radius: {scaled(3)}px; }}" + self._extra_qss
+            f"#HoverPopup {{ background: {get_ui_theme().tokens.surface}; border: 1px solid {get_ui_theme().tokens.border};"
+            f" border-radius: {scaled(10)}px; }}" + self._extra_qss
         )
 
     def show_beside(self, panel: QWidget, anchor: QWidget):
@@ -486,6 +513,7 @@ class BaseSettingsPanel(QWidget):
         self.current_opacity = self.OPACITY_DEFAULT
         
         self._init_ui()
+        get_ui_theme().theme_changed.connect(self.apply_scale)
 
     @safe_event
     def paintEvent(self, event):
@@ -588,6 +616,7 @@ class BaseSettingsPanel(QWidget):
         """按当前比例重算面板尺寸。数值、颜色、工具状态都不动，只改显示大小。"""
         self.setStyleSheet(self._build_stylesheet())
         self._apply_scale_sizes()
+        _theme_panel_icons(self)
         self.adjustSize()
         self.update()
 

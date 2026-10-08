@@ -21,7 +21,7 @@ from core.logger import (
 )
 
 # ── 全局版本号 ────────────────────────────────────────────
-APP_VERSION = "2.1.0"
+APP_VERSION = "2.1.2"
 
 
 def create_fallback_app_icon():
@@ -190,6 +190,8 @@ class MainApp(QObject):
 
     def _on_about_to_quit(self):
         """应用退出前收尾"""
+        if self.clipboard_manager:
+            self.clipboard_manager.stop_image_indexing()
         try:
             from translation import TranslationManager
 
@@ -637,6 +639,8 @@ class MainApp(QObject):
     @Slot(object)
     def _on_clipboard_item_received(self, item):
         """Refresh clipboard UI on the GUI thread without owning probe logic."""
+        if getattr(item, "content_type", None) == "image" and self.clipboard_manager:
+            self.clipboard_manager.start_image_indexing()
         if self.clipboard_window:
             self.clipboard_window.notify_new_content(item)
 

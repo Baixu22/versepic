@@ -34,8 +34,8 @@ def setup_environment():
     from core.crash_handler import install_crash_hooks
     install_crash_hooks()
 
-    # 禁用 Qt 的高 DPI 自动缩放，不然桌面设置缩放比例不是100%就会让画面变得奇怪
-    # 必须在导入 PySide6 之前设置
+    # 截图画布与 mss / Win32 共用物理像素坐标；界面尺寸由 ui_scale 单独放大。
+    # DPI awareness 仍启用，确保 Windows 不把整个窗口当低清位图拉伸。
     os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0"
     os.environ["QT_SCALE_FACTOR"] = "1"
     # 抑制 Qt 的 DPI 警告（因为我们手动控制 DPI）
@@ -436,6 +436,7 @@ class PreloadManager:
             current_hotkey = self.config.get_hotkey()
             self.app.settings_window = SettingsDialog(self.config, current_hotkey)
             self.app.settings_window.accepted.connect(self.app.on_settings_accepted)
+            self.app.settings_window.settings_applied.connect(self.app.on_settings_accepted)
             self.app.settings_window.wizard_requested.connect(self.app._on_wizard_requested)
             log_debug(T("设置窗口预加载完成"), "Preload")
     

@@ -16,11 +16,12 @@ def _manager(tmp_path):
     return ToolSettingsManager(qsettings=settings)
 
 
-def test_welcome_clipboard_history_limit_uses_saved_value(qapp, tmp_path):
+def test_welcome_clipboard_history_limit_uses_saved_value(qapp, qtbot, tmp_path):
     manager = _manager(tmp_path)
     manager.set_clipboard_history_limit(3001)
 
     page = ClipboardHotkeyPage(manager)
+    qtbot.addWidget(page)
 
     assert page._history_limit_spin.value() == 3001
     assert page._history_limit_spin.minimum() == 0
@@ -29,9 +30,10 @@ def test_welcome_clipboard_history_limit_uses_saved_value(qapp, tmp_path):
     page.close()
 
 
-def test_welcome_clipboard_history_limit_updates_config(qapp, tmp_path):
+def test_welcome_clipboard_history_limit_updates_config(qapp, qtbot, tmp_path):
     manager = _manager(tmp_path)
     page = ClipboardHotkeyPage(manager)
+    qtbot.addWidget(page)
 
     page._history_limit_spin.setValue(4321)
 
@@ -40,8 +42,12 @@ def test_welcome_clipboard_history_limit_updates_config(qapp, tmp_path):
     page.close()
 
 
+@pytest.mark.parametrize("language, expected", [
+    ("zh", ["文字", "图片", "文件"]),
+    ("en", ["Text", "Image", "File"]),
+])
 def test_welcome_clipboard_illustration_does_not_change_toolbar_position(
-    qapp, tmp_path
+    qapp, qtbot, tmp_path, language, expected
 ):
     manager = _manager(tmp_path)
 
@@ -51,23 +57,29 @@ def test_welcome_clipboard_illustration_does_not_change_toolbar_position(
     manager.get_clipboard_group_bar_position = unexpected_toolbar_position_access
     manager.set_clipboard_group_bar_position = unexpected_toolbar_position_access
 
-    page = ClipboardHotkeyPage(manager)
-    animation = page.illus_area.animation
-    animation._timer.stop()
+    from core.i18n import I18nManager
+    previous = I18nManager.get_current_language()
+    try:
+        assert I18nManager.load_language(language)
+        page = ClipboardHotkeyPage(manager)
+        qtbot.addWidget(page)
+        animation = page.illus_area.animation
+        animation._timer.stop()
 
-    assert animation._type_labels == ["文字", "图片", "文件"]
-    assert [name for _kind, name, _metadata in animation._quick_rows] == [
-        "Microsoft Edge",
-        "Visual Studio Code",
-        "Notepad",
-    ]
+        assert animation._type_labels == expected
+        assert [name for _kind, name, _metadata in animation._quick_rows] == [
+            "Microsoft Edge",
+            "Visual Studio Code",
+            "Notepad",
+        ]
+    finally:
+        I18nManager.load_language(previous)
 
-    page.close()
 
-
-def test_welcome_clipboard_animation_renders_every_stage(qapp, tmp_path):
+def test_welcome_clipboard_animation_renders_every_stage(qapp, qtbot, tmp_path):
     manager = _manager(tmp_path)
     page = ClipboardHotkeyPage(manager)
+    qtbot.addWidget(page)
     animation = page.illus_area.animation
     animation._timer.stop()
     animation.resize(260, 320)

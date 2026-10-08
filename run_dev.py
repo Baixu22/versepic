@@ -30,8 +30,6 @@ def seed_dev_config() -> None:
         cfg.set_clipboard_show_metadata(True)
     else:
         cfg.set_app_setting("clipboard_show_metadata", True)
-    if hasattr(cfg, "set_clipboard_window_opacity"):
-        cfg.set_clipboard_window_opacity(0)
     if hasattr(cfg, "set_clipboard_theme"):
         cfg.set_clipboard_theme("auto")
     if hasattr(cfg, "set_clipboard_enabled"):

@@ -122,11 +122,10 @@ class TestI18nManager:
     """I18nManager 单例测试"""
 
     @pytest.fixture(autouse=True)
-    def reset_singleton(self, qapp):
-        """重置单例"""
+    def reset_singleton(self, qapp, monkeypatch):
+        """隔离单例；用后恢复已有实例，保留其翻译器和窗口信号连接。"""
         from core.i18n import I18nManager
-        I18nManager._instance = None
-        yield
+        monkeypatch.setattr(I18nManager, "_instance", None)
 
     def test_singleton(self, qapp):
         """应为单例"""

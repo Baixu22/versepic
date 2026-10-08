@@ -503,8 +503,8 @@ Replace it?</source>
         <translation>압축 품질(1-100)입니다. JPG와 WebP에만 영향을 줍니다.</translation>
     </message>
     <message>
-        <source>💡 Hint: Even with auto-save off, it will be copied to clipboard.</source>
-        <translation>💡 팁: 자동 저장이 꺼져 있어도 클립보드에는 복사됩니다.</translation>
+        <source>With auto-save off, the screenshot is still copied to the clipboard.</source>
+        <translation>자동 저장이 꺼져 있어도 스크린샷은 클립보드에 복사됩니다.</translation>
     </message>
     <message>
         <source>Select Screenshot Save Folder</source>
@@ -1798,11 +1798,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation>이 그룹을 삭제하시겠습니까?</translation>
+        <translation>이 그룹을 삭제할까요?</translation>
     </message>
     <message>
         <source>All items in the group will also be deleted.</source>
-        <translation>그룹의 모든 항목도 함께 삭제됩니다.</translation>
+        <translation>그룹 안의 모든 항목도 삭제됩니다. 이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?\nAll items in the group will also be deleted.</source>
@@ -1810,7 +1810,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this item?</source>
-        <translation>이 항목을 삭제하시겠습니까?</translation>
+        <translation>이 항목을 삭제할까요? 이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Delete Group</source>
@@ -1889,8 +1889,10 @@ Replace it?</source>
         <translation>비우기 확인</translation>
     </message>
     <message>
-        <source>Are you sure you want to clear all clipboard history?\nThis action cannot be undone.</source>
-        <translation>모든 클립보드 기록을 비우시겠습니까?\n이 작업은 되돌릴 수 없습니다.</translation>
+        <source>Are you sure you want to clear all clipboard history?
+This action cannot be undone.</source>
+        <translation>클립보드 기록을 지울까요?
+이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Paste</source>
@@ -1964,11 +1966,51 @@ Replace it?</source>
         <source>No clipboard history yet</source>
         <translation>클립보드 기록이 아직 없습니다</translation>
     </message>
+    <message>
+        <source>Pinned</source>
+        <translation>고정됨</translation>
+    </message>
+    <message>
+        <source>Unknown source</source>
+        <translation>출처 미기록</translation>
+    </message>
+    <message>
+        <source>Default order</source>
+        <translation>기본 순서</translation>
+    </message>
+    <message>
+        <source>Newest first</source>
+        <translation>최신순</translation>
+    </message>
+    <message>
+        <source>Oldest first</source>
+        <translation>오래된순</translation>
+    </message>
+    <message>
+        <source>Most used</source>
+        <translation>많이 사용한 순</translation>
+    </message>
+    <message>
+        <source>Manual order</source>
+        <translation>수동 순서</translation>
+    </message>
+    <message>
+        <source>Pinned items always come first</source>
+        <translation>고정한 기록은 항상 맨 위에 표시됩니다</translation>
+    </message>
+    <message>
+        <source>Use Move Up / Move Down in the context menu</source>
+        <translation>우클릭 메뉴에서 위로 / 아래로 이동하여 정렬하세요</translation>
+    </message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
 <context>
     <name>ManageDialog</name>
+    <message><source>Load more</source><translation>더 불러오기</translation></message>
+    <message><source>Unsaved changes</source><translation>저장하지 않은 변경 사항</translation></message>
+    <message><source>Discard changes and continue?</source><translation>변경 사항을 버리고 계속할까요?</translation></message>
+    <message><source>Saved</source><translation>저장됨</translation></message>
     <message>
         <source>Clipboard Management</source>
         <translation>클립보드 관리</translation>
@@ -2087,15 +2129,15 @@ Replace it?</source>
     </message>
     <message>
         <source>General groups allow any content; selecting an item pastes content or files to the target</source>
-        <translation>일반 그룹은 모든 콘텐츠를 허용하며, 선택 시 내용이나 파일을 붙여넣습니다</translation>
+        <translation>텍스트, 이미지, 파일을 저장해 다시 복사하거나 붙여넣을 수 있습니다.</translation>
     </message>
     <message>
         <source>Quick launch groups only allow file or folder paths; selecting an item opens them</source>
-        <translation>빠른 실행 그룹은 파일 또는 폴더 경로만 허용하며, 항목을 선택하면 바로 엽니다</translation>
+        <translation>파일이나 폴더 경로를 저장하고 클릭해 엽니다.</translation>
     </message>
     <message>
         <source>Quick launch groups only accept file items; left-click opens the file directly</source>
-        <translation>빠른 실행 그룹은 파일 항목만 허용하며, 왼쪽 클릭으로 파일을 바로 엽니다</translation>
+        <translation>이 그룹에는 파일이나 폴더 경로만 저장할 수 있습니다. 클릭하면 열립니다.</translation>
     </message>
     <message>
         <source>Enter or paste emoji...</source>
@@ -2251,11 +2293,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation>이 그룹을 삭제하시겠습니까?</translation>
+        <translation>이 그룹을 삭제할까요?</translation>
     </message>
     <message>
         <source>All items in the group will also be deleted.</source>
-        <translation>그룹의 모든 항목도 함께 삭제됩니다.</translation>
+        <translation>그룹 안의 모든 항목도 삭제됩니다. 이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?\nAll items in the group will also be deleted.</source>
@@ -2263,7 +2305,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this item?</source>
-        <translation>이 항목을 삭제하시겠습니까?</translation>
+        <translation>이 항목을 삭제할까요? 이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Failed to delete item</source>
@@ -2284,7 +2326,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Export all saved content to CSV file</source>
-        <translation>저장된 모든 내용을 CSV 파일로 내보냅니다</translation>
+        <translation>그룹에 저장된 텍스트를 CSV로 내보냅니다. 이미지와 파일은 포함되지 않습니다.</translation>
     </message>
     <message>
         <source>Encoding:</source>
@@ -2300,7 +2342,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Import content from CSV file (Group, Content, Title)</source>
-        <translation>CSV 파일에서 내용 가져오기 (그룹, 내용, 제목)</translation>
+        <translation>CSV의 텍스트를 그룹 이름별로 가져옵니다. 이름이 같은 그룹에 추가됩니다.</translation>
     </message>
     <message>
         <source>📥 Import from CSV</source>
@@ -2460,8 +2502,10 @@ Replace it?</source>
         <translation>비우기 확인</translation>
     </message>
     <message>
-        <source>Are you sure you want to clear all clipboard history?\nThis action cannot be undone.</source>
-        <translation>모든 클립보드 기록을 비우시겠습니까?\n이 작업은 되돌릴 수 없습니다.</translation>
+        <source>Are you sure you want to clear all clipboard history?
+This action cannot be undone.</source>
+        <translation>클립보드 기록을 지울까요?
+이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
         <source>Also delete saved content in groups</source>
@@ -3443,11 +3487,11 @@ SOFTWARE.</translation></message>
     <name>StandardDialog</name>
     <message>
         <source>Yes</source>
-        <translation>예</translation>
+        <translation>확인</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>아니요</translation>
+        <translation>취소</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3465,6 +3509,10 @@ SOFTWARE.</translation></message>
     <message>
         <source>富文本预览</source>
         <translation>서식 있는 텍스트 미리보기</translation>
+    </message>
+    <message>
+        <source>Preview shortened; copy the item for its full content.</source>
+        <translation>미리보기가 잘렸습니다. 전체 내용은 기록을 복사하여 확인하세요.</translation>
     </message>
 </context>
 
@@ -3860,6 +3908,98 @@ SOFTWARE.</translation></message>
     <message>
         <source>Only in screenshot and pin windows</source>
         <translation>스크린샷 및 고정 창에서만 작동</translation>
+    </message>
+</context>
+<context>
+    <name>TextRecognitionWindow</name>
+    <message><source>Merge lines</source><translation>줄바꿈 합치기</translation></message>
+    <message><source>Clean spacing</source><translation>공백 정리</translation></message>
+    <message><source>Restore original</source><translation>원문 복원</translation></message>
+    <message><source>Translate</source><translation>번역</translation></message>
+    <message><source>Search web</source><translation>웹 검색</translation></message>
+    <message><source>Save…</source><translation>저장…</translation></message>
+    <message><source>Save text file…</source><translation>텍스트 파일 저장…</translation></message>
+    <message><source>Save to history</source><translation>기록에 저장</translation></message>
+    <message><source>Saved</source><translation>저장됨</translation></message>
+    <message><source>Save failed</source><translation>저장 실패</translation></message>
+</context>
+<context>
+    <name>RedactionWindow</name>
+    <message><source>Save…</source><translation>저장…</translation></message>
+    <message><source>Saved</source><translation>저장됨</translation></message>
+    <message><source>Save failed</source><translation>저장 실패</translation></message>
+    <message><source>Smart redact</source><translation>민감 정보 가리기</translation></message>
+    <message><source>Phone numbers</source><translation>전화번호</translation></message>
+    <message><source>Email addresses</source><translation>이메일 주소</translation></message>
+    <message><source>Keywords, separated by commas</source><translation>키워드 (쉼표로 구분)</translation></message>
+    <message><source>Matched lines are covered in full. Uncheck to keep; drag on the image to cover more.</source><translation>일치한 줄 전체를 가립니다. 선택을 해제하면 유지하고, 이미지를 드래그하면 영역을 추가합니다.</translation></message>
+    <message><source>Copy redacted image</source><translation>가린 이미지 복사</translation></message>
+    <message><source>Manual area</source><translation>수동 영역</translation></message>
+    <message><source>%1 areas covered</source><translation>%1개 영역 가림</translation></message>
+    <message><source>Recognizing...</source><translation>인식 중…</translation></message>
+    <message><source>Copied</source><translation>복사됨</translation></message>
+</context>
+<context>
+    <name>ClipboardWindow</name>
+    <message><source>Smart redact</source><translation>민감 정보 가리기</translation></message>
+    <message><source>Recognize text</source><translation>텍스트 인식</translation></message>
+    <message><source>Unable to load image</source><translation>이미지를 불러올 수 없습니다</translation></message>
+</context>
+<context>
+    <name>Toolbar</name>
+    <message><source>Smart redact</source><translation>민감 정보 가리기</translation></message>
+</context>
+<context>
+    <name>ToolbarLayoutDialog</name>
+    <message><source>Smart redact</source><translation>민감 정보 가리기</translation></message>
+</context>
+<context><name>ClipboardWindow</name><message><source>Indexing image text…</source><translation>이미지 텍스트 색인 중…</translation></message></context>
+
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>General</source>
+        <translation>일반</translation>
+    </message>
+    <message>
+        <source>Saving and Pins</source>
+        <translation>저장 및 고정</translation>
+    </message>
+</context>
+
+<context>
+    <name>ManageDialog</name>
+    <message>
+        <source>Name this group and choose how its contents are used.</source>
+        <translation>그룹 이름과 콘텐츠 사용 방식을 설정하세요.</translation>
+    </message>
+    <message>
+        <source>Save reusable text or file paths in this group.</source>
+        <translation>자주 쓰는 텍스트나 파일 경로를 이 그룹에 저장하세요.</translation>
+    </message>
+    <message>
+        <source>Edit the content, then save your changes.</source>
+        <translation>콘텐츠를 편집한 후 변경 사항을 저장하세요.</translation>
+    </message>
+    <message>
+        <source>Transfer saved text and file paths using CSV.</source>
+        <translation>저장한 텍스트와 파일 경로를 CSV로 가져오거나 내보내세요.</translation>
+    </message>
+</context>
+
+<context>
+    <name>ClipboardWindow</name>
+    <message>
+        <source>Search: {query}</source>
+        <translation>검색: {query}</translation>
+    </message>
+</context>
+
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Reset Capture Settings</source>
+        <translation>캡처 설정 초기화</translation>
     </message>
 </context>
 </TS>

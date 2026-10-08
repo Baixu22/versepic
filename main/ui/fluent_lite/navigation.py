@@ -4,14 +4,15 @@ from enum import Enum
 from typing import Optional
 
 from PySide6.QtCore import QRectF, QSize, Qt
-from PySide6.QtGui import QColor, QIcon, QPainter
-from PySide6.QtWidgets import QButtonGroup, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtGui import QColor, QIcon, QPainter, QPalette
+from PySide6.QtWidgets import QButtonGroup, QPushButton, QStyle, QStyleOptionButton, QVBoxLayout, QWidget
 
-from core.ui_scale import dialog_scaled
+from core.ui_scale import configure_dialog_control, dialog_scaled, widget_scaled
 from core.ui_theme import get_ui_theme
 from ui.motion import HoverAnimator
 
-from .theme import ACCENT, FONT_FAMILY, css_color, tinted_icon, to_qicon, ui_tokens
+from .icon_label import draw_button_label
+from .theme import CONTROL_RADIUS, FONT_FAMILY, MOTION_NORMAL, css_color, tinted_icon, to_qicon, ui_tokens
 
 
 class NavigationItemPosition(Enum):
@@ -31,11 +32,12 @@ class NavigationItemButton(QPushButton):
 
     def __init__(self, text="", parent=None):
         super().__init__(text, parent)
+        self._keyboard_focus = False
         self._hover_fill: Optional[QColor] = None
         self._checked_fill: Optional[QColor] = None
-        self._fill_radius = dialog_scaled(11)
-        self._hover_animator = HoverAnimator(self, duration=150)
-        self._selection_animator = HoverAnimator(self, duration=160)
+        self._fill_radius = dialog_scaled(CONTROL_RADIUS)
+        self._hover_animator = HoverAnimator(self, duration=MOTION_NORMAL)
+        self._selection_animator = HoverAnimator(self, duration=MOTION_NORMAL)
         self.toggled.connect(lambda selected: self._selection_animator.enter() if selected else self._selection_animator.leave())
 
     def set_fill_colors(self, hover: str = None, checked: str = None, radius=None):
@@ -54,17 +56,45 @@ class NavigationItemButton(QPushButton):
         self._hover_animator.leave()
         super().leaveEvent(event)
 
+    def focusInEvent(self, event):
+        self._keyboard_focus = event.reason() in (Qt.FocusReason.TabFocusReason, Qt.FocusReason.BacktabFocusReason, Qt.FocusReason.ShortcutFocusReason)
+        super().focusInEvent(event)
+        self.update()
+
+    def focusOutEvent(self, event):
+        self._keyboard_focus = False
+        super().focusOutEvent(event)
+        self.update()
+
+    def sizeHint(self):
+        size = super().sizeHint()
+        if self.text() and not self.icon().isNull():
+            size.setWidth(size.width() + max(0, widget_scaled(self, 8) - 4))
+        return size
+
     def paintEvent(self, event):
+        painter = QPainter(self)
         fill = self._fill_color()
         if fill is not None:
-            painter = QPainter(self)
             painter.setRenderHint(QPainter.RenderHint.Antialiasing)
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(fill)
             rect = QRectF(self.rect()).adjusted(0.5, 0.5, -0.5, -0.5)
             painter.drawRoundedRect(rect, self._fill_radius, self._fill_radius)
-            painter.end()
-        super().paintEvent(event)
+        option = QStyleOptionButton()
+        self.initStyleOption(option)
+        if not self._keyboard_focus:
+            option.state &= ~QStyle.StateFlag.State_HasFocus
+        self.style().drawControl(QStyle.ControlElement.CE_PushButtonBevel, option, painter, self)
+        tokens = ui_tokens(self)
+        foreground = (tokens.text_disabled if not self.isEnabled() else
+                      tokens.accent_text if self.isChecked() else
+                      tokens.text if self.underMouse() else tokens.text_muted)
+        option.palette.setColor(QPalette.ColorRole.ButtonText, QColor(foreground))
+        source = getattr(self, "_navigation_icon", None)
+        if source is not None and not isinstance(source, QIcon):
+            option.icon = tinted_icon(source, foreground)
+        draw_button_label(self, painter, option, centered=False)
 
     def _fill_color(self):
         selected = self._selection_animator.value()
@@ -88,11 +118,11 @@ class NavigationInterface(QWidget):
         self._group.setExclusive(True)
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(0, 0, 0, 0)
-        self._layout.setSpacing(5)
+        self._layout.setSpacing(dialog_scaled(4))
         self._top = QVBoxLayout()
-        self._top.setSpacing(5)
+        self._top.setSpacing(dialog_scaled(4))
         self._bottom = QVBoxLayout()
-        self._bottom.setSpacing(5)
+        self._bottom.setSpacing(dialog_scaled(4))
         self._layout.addLayout(self._top)
         self._layout.addStretch(1)
         self._layout.addLayout(self._bottom)
@@ -103,7 +133,7 @@ class NavigationInterface(QWidget):
         button = NavigationItemButton(str(text), self)
         button.setObjectName("FluentLiteNavItem")
         button.setCheckable(True)
-        button.setIconSize(QSize(dialog_scaled(18), dialog_scaled(18)))
+        button.setIconSize(QSize(dialog_scaled(16), dialog_scaled(16)))
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         # Labels are already visible in the expanded navigation.  Creating a
         # duplicate tooltip for every item leaves an unwanted popup on hover;
@@ -115,6 +145,8 @@ class NavigationInterface(QWidget):
             button.clicked.connect(onClick)
         self._group.addButton(button)
         self._items[routeKey] = button
+        button._navigation_icon = icon
+        button.setAutoDefault(False)
         self._icons[routeKey] = icon
         button.toggled.connect(lambda _checked, key=routeKey: self._apply_icon(key))
         self._style_button(button)
@@ -127,13 +159,13 @@ class NavigationInterface(QWidget):
         t = ui_tokens(button)
         # The fill itself is painted by NavigationItemButton so hovering can
         # fade; the stylesheet background stays transparent on every state.
-        button.set_fill_colors(t.surface_hover, t.accent_soft, radius=dialog_scaled(6))
+        button.set_fill_colors(t.surface_hover, t.accent_soft, radius=dialog_scaled(CONTROL_RADIUS))
         button.setStyleSheet(f"""
             QPushButton#FluentLiteNavItem {{ min-height: {dialog_scaled(32)}px; padding: {dialog_scaled(2)}px {dialog_scaled(12)}px; text-align: left;
-                color: {t.text_muted}; background: transparent; border: 1px solid transparent; border-radius: {dialog_scaled(6)}px;
-                font: {dialog_scaled(13)}px {FONT_FAMILY}; }}
+                color: {t.text_muted}; background: transparent; border: 1px solid transparent; border-radius: {dialog_scaled(CONTROL_RADIUS)}px;
+                font: 500 {dialog_scaled(14)}px {FONT_FAMILY}; }}
             QPushButton#FluentLiteNavItem:hover {{ color: {t.text}; background: transparent; }}
-            QPushButton#FluentLiteNavItem:checked {{ color: {t.accent_text}; background: transparent; font-weight: 600; }}
+            QPushButton#FluentLiteNavItem:checked {{ color: {t.accent_text}; background: transparent; }}
             QPushButton#FluentLiteNavItem:focus {{ border-color: {t.ring}; }}
             QPushButton#FluentLiteNavItem:disabled {{ color: {t.text_disabled}; }}
         """)

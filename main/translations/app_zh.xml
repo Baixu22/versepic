@@ -14,7 +14,7 @@
     </message>
     <message>
         <source>Capture Settings</source>
-        <translation>截图设定</translation>
+        <translation>截图设置</translation>
     </message>
     <message>
         <source>Clipboard</source>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Capture Settings</source>
-        <translation>截图设定</translation>
+        <translation>截图设置</translation>
     </message>
     <message>
         <source>Clipboard Settings</source>
@@ -89,17 +89,17 @@
     </message>
     <message>
         <source>OCR Settings</source>
-        <translation>OCR设置</translation>
+        <translation>文字识别</translation>
     </message>
 
     <!-- Setup Wizard -->
     <message>
         <source>Setup Wizard</source>
-        <translation>初始向导</translation>
+        <translation>设置向导</translation>
     </message>
     <message>
         <source>Re-run the initial setup guide.</source>
-        <translation>打开初始设置向导界面。</translation>
+        <translation>重新配置常用功能和快捷键。</translation>
     </message>
     <message>
         <source>Open Wizard</source>
@@ -113,7 +113,7 @@
     </message>
     <message>
         <source>Control which modules are preloaded at startup. Disable to speed up launch. Changes take effect after restart.</source>
-        <translation>控制启动时预加载哪些模块。关闭可加快启动速度。修改后重启生效。</translation>
+        <translation>提前加载常用功能，减少首次使用的等待。关闭可加快启动，重启后生效。</translation>
     </message>
     <message>
         <source>Preload Fonts</source>
@@ -121,7 +121,7 @@
     </message>
     <message>
         <source>Pre-scan system font list on startup</source>
-        <translation>启动时预扫描系统字体列表</translation>
+        <translation>启动时读取字体列表，减少首次选字体的等待。</translation>
     </message>
     <message>
         <source>Preload Screenshot Modules</source>
@@ -129,15 +129,15 @@
     </message>
     <message>
         <source>Pre-load mss, canvas, tools in background thread</source>
-        <translation>在后台线程中预加载 mss、画布、工具等模块</translation>
+        <translation>启动时在后台准备截图和标注功能。</translation>
     </message>
     <message>
         <source>Preload Toolbar</source>
-        <translation>预热工具栏</translation>
+        <translation>预加载工具栏</translation>
     </message>
     <message>
         <source>Pre-create toolbar widgets to avoid first-capture lag</source>
-        <translation>预创建工具栏控件，避免首次截图卡顿</translation>
+        <translation>提前准备工具栏，减少首次截图的等待。</translation>
     </message>
     <message>
         <source>Preload OCR Engine</source>
@@ -145,23 +145,23 @@
     </message>
     <message>
         <source>Pre-load OCR model in background thread</source>
-        <translation>在后台线程中预加载 OCR 模型</translation>
+        <translation>启动时在后台加载文字识别模型。</translation>
     </message>
     <message>
         <source>Preload Settings Window</source>
-        <translation>预创建设置窗口</translation>
+        <translation>预加载设置窗口</translation>
     </message>
     <message>
         <source>Pre-create the settings dialog on startup</source>
-        <translation>启动时提前创建设置窗口</translation>
+        <translation>提前准备设置窗口，加快首次打开。</translation>
     </message>
     <message>
         <source>Preload Clipboard Manager</source>
-        <translation>预加载剪贴板管理器</translation>
+        <translation>预加载剪贴板</translation>
     </message>
     <message>
         <source>Initialize clipboard monitoring on startup</source>
-        <translation>启动时初始化剪贴板监听</translation>
+        <translation>启动时准备剪贴板记录功能。</translation>
     </message>
 
     <!-- Selection Info Panel -->
@@ -175,17 +175,17 @@
     </message>
     <message>
         <source>Hide Panel on Drag</source>
-        <translation>拖拽时隐藏面板</translation>
+        <translation>拖动时隐藏面板</translation>
     </message>
     <message>
         <source>Hide the info panel while dragging the selection area</source>
-        <translation>拖拽选区时隐藏信息面板</translation>
+        <translation>拖动选区时暂时隐藏信息面板。</translation>
     </message>
 
     <!-- Buttons -->
     <message>
         <source>Reset This Page</source>
-        <translation>重置此页面</translation>
+        <translation>重置本页</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -201,7 +201,7 @@
     </message>
     <message>
         <source>You have unsaved changes. Do you want to save before closing?</source>
-        <translation>您有未保存的更改，是否在关闭前保存？</translation>
+        <translation>关闭前保存更改？</translation>
     </message>
     <message>
         <source>Save</source>
@@ -305,7 +305,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Delete Selected</source>
-        <translation>删除选中图元</translation>
+        <translation>删除选中标注</translation>
     </message>
     <message>
         <source>Restore Last Region</source>
@@ -313,11 +313,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Copy Pinned Image</source>
-        <translation>复制钉图内容</translation>
+        <translation>复制钉图</translation>
     </message>
     <message>
         <source>Copy All Text</source>
-        <translation>复制全部文本</translation>
+        <translation>复制全部文字</translation>
     </message>
     <message>
         <source>Reset Size</source>
@@ -353,11 +353,11 @@ Replace it?</source>
     </message>
     <message>
         <source>💡 Hint: Click the input box and press the desired key combination.</source>
-        <translation>💡 提示: 点击输入框后按下想要的快捷键组合。</translation>
+        <translation>点击输入框，再按下要设置的快捷键。</translation>
     </message>
     <message>
         <source>💡 Hint: You can use modifier keys like Ctrl, Shift, Alt.</source>
-        <translation>💡 提示: 可以使用 Ctrl, Shift, Alt 等修饰键组合。</translation>
+        <translation>可组合使用 Ctrl、Shift、Alt 等按键。</translation>
     </message>
     
     <!-- Long Screenshot Page -->
@@ -393,15 +393,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Double-click to Copy and Close</source>
-        <translation>双击复制并关闭</translation>
+        <translation>双击完成截图</translation>
     </message>
     <message>
         <source>Double-click the selected screenshot to copy it to the clipboard and close the capture.</source>
-        <translation>双击已选截图时复制到剪贴板并关闭截图。</translation>
+        <translation>双击选区，复制截图并退出。</translation>
     </message>
     <message>
         <source>Enable Ctrl Cross-Tool Selection</source>
-        <translation>启用 Ctrl 跨工具选择</translation>
+        <translation>按住 Ctrl 跨工具编辑</translation>
     </message>
     <message>
         <source>Hold Ctrl and click any editable annotation to adjust it without switching tools.</source>
@@ -409,7 +409,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Keep Text Annotations on Top</source>
-        <translation>文字标注始终置顶</translation>
+        <translation>文字始终置顶</translation>
     </message>
     <message>
         <source>Keep text above other annotations, including ones drawn later.</source>
@@ -427,11 +427,11 @@ Replace it?</source>
     <!-- Smart Selection Page -->
     <message>
         <source>Detection Mode</source>
-        <translation>检测方式</translation>
+        <translation>选区吸附</translation>
     </message>
     <message>
         <source>Snap the selection to the window or control under the cursor. Control detection reads the accessibility tree and takes longer on large windows.</source>
-        <translation>让选区自动贴合光标下的窗口或控件。检测元素需要读取无障碍树，窗口越大耗时越久。</translation>
+        <translation>自动贴合光标下的窗口或控件。选择「控件」时，识别可能稍慢。</translation>
     </message>
     <message>
         <source>Off</source>
@@ -477,15 +477,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Automatically saves as file when capturing.</source>
-        <translation>截图时自动保存为文件。</translation>
+        <translation>完成截图时，自动保存一份图片文件。</translation>
     </message>
     <message>
         <source>Write File Path to Clipboard</source>
-        <translation>写入文件路径到剪贴板</translation>
+        <translation>同时复制文件引用</translation>
     </message>
     <message>
         <source>Lets tools that only recognize a file path (e.g. some terminal apps) paste the screenshot too. Requires Auto-save Screenshots to be enabled.</source>
-        <translation>让只认文件路径的工具（如部分终端程序）也能粘贴截图。需要开启"自动保存截图"。</translation>
+        <translation>自动保存开启时，可将截图作为文件粘贴到支持的应用。</translation>
     </message>
     <message>
         <source>Save Folder</source>
@@ -493,7 +493,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Save Format:</source>
-        <translation>保存格式:</translation>
+        <translation>保存格式</translation>
     </message>
     <message>
         <source>File format for auto-saved screenshots.</source>
@@ -501,15 +501,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Save Quality:</source>
-        <translation>保存质量:</translation>
+        <translation>图片质量</translation>
     </message>
     <message>
         <source>Compression quality (1-100). Only affects JPG and WebP.</source>
-        <translation>压缩质量 (1-100)，仅影响 JPG 和 WebP。</translation>
+        <translation>质量为 1–100，仅适用于 JPG 和 WebP。</translation>
     </message>
     <message>
-        <source>💡 Hint: Even with auto-save off, it will be copied to clipboard.</source>
-        <translation>💡 提示: 即使关闭自动保存，也会复制到剪贴板。</translation>
+        <source>With auto-save off, the screenshot is still copied to the clipboard.</source>
+        <translation>关闭自动保存后，截图仍会复制到剪贴板。</translation>
     </message>
     <message>
         <source>Select Screenshot Save Folder</source>
@@ -539,7 +539,7 @@ Replace it?</source>
     </message>
     <message>
         <source>On very low-end computers, OCR after pinning may cause a brief stutter. Turn off automatic recognition if needed.</source>
-        <translation>超低配电脑上，钉图后的 OCR 可能导致瞬时卡顿，可以关闭自动文字识别。</translation>
+        <translation>钉图后如有短暂卡顿，可关闭自动识别。</translation>
     </message>
     <message>
         <source>Auto language detection: Supports Chinese, Japanese, English mixed recognition</source>
@@ -593,7 +593,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Save Location:</source>
-        <translation>保存位置:</translation>
+        <translation>保存位置</translation>
     </message>
     <message>
         <source>Select Log Save Folder</source>
@@ -601,15 +601,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Current Log:</source>
-        <translation>当前日志:</translation>
+        <translation>当前日志</translation>
     </message>
     <message>
         <source>Current Log: (Not generated)  *Log will be created after app starts</source>
-        <translation>当前日志: (未生成)  *日志将在应用启动后创建</translation>
+        <translation>尚未生成日志，将在应用运行后创建。</translation>
     </message>
     <message>
         <source>Current Log: (Not generated)</source>
-        <translation>当前日志: (未生成)</translation>
+        <translation>尚未生成日志</translation>
     </message>
     <message>
         <source>Log</source>
@@ -625,7 +625,7 @@ Replace it?</source>
     </message>
     <message>
         <source>*Changes will fully take effect after restart.</source>
-        <translation>*更改将在重启后完全生效。</translation>
+        <translation>重启后完全生效。</translation>
     </message>
     
     <!-- Misc Page -->
@@ -635,7 +635,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Register in Windows startup via registry.</source>
-        <translation>通过注册表注册 Windows 开机启动。</translation>
+        <translation>登录 Windows 后自动启动。</translation>
     </message>
     <message>
         <source>Show Main Window on Startup</source>
@@ -663,11 +663,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Select display language. Restart required after change.</source>
-        <translation>选择显示语言。更改后需要重启。</translation>
+        <translation>更改界面语言，重启后生效。</translation>
     </message>
     <message>
         <source>💡 Hint: Even with background startup, you can operate from system tray.</source>
-        <translation>💡 提示: 即使后台启动，也可以通过系统托盘操作。</translation>
+        <translation>后台运行时，可从系统托盘打开常用功能。</translation>
     </message>
     
     <!-- Info Page -->
@@ -783,7 +783,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Azure Endpoint</source>
-        <translation>Azure 终结点</translation>
+        <translation>Azure 服务地址</translation>
     </message>
     <message>
         <source>Optional, use default if empty</source>
@@ -811,7 +811,7 @@ Replace it?</source>
     </message>
     <message>
         <source>DeepSeek API Key</source>
-        <translation>DeepSeek API Key</translation>
+        <translation>DeepSeek API 密钥</translation>
     </message>
     <message>
         <source>Model</source>
@@ -823,7 +823,7 @@ Replace it?</source>
     </message>
     <message>
         <source>LLM translation: better with context and idioms, but slower, billed per token, and may refuse some content</source>
-        <translation>大模型翻译：更懂上下文和习惯用法，但更慢、按 token 计费，且可能拒绝部分内容</translation>
+        <translation>大模型翻译适合处理上下文和习惯用语，但速度较慢、按用量计费，部分内容可能无法翻译。</translation>
     </message>
     <message>
         <source>Translation Options</source>
@@ -835,7 +835,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Auto (System)</source>
-        <translation>自动（跟随系统）</translation>
+        <translation>跟随系统</translation>
     </message>
     <message>
         <source>Ignore Line Breaks</source>
@@ -854,7 +854,7 @@ Replace it?</source>
         <translation>保持原文格式</translation>
     </message>
     <message><source>Color Formats</source><translation>颜色格式</translation></message>
-    <message><source>Which formats the magnifier shows, and which one the copy shortcut uses.</source><translation>放大镜上显示哪些格式，以及按键复制的是哪一个。</translation></message>
+    <message><source>Which formats the magnifier shows, and which one the copy shortcut uses.</source><translation>选择显示的颜色格式，并设置默认复制格式。</translation></message>
     <message><source>Manage Color Formats</source><translation>管理颜色格式</translation></message>
     <message>
         <source>Custom LLM-1</source>
@@ -870,11 +870,11 @@ Replace it?</source>
     </message>
     <message>
         <source>API Key</source>
-        <translation>API Key</translation>
+        <translation>API 密钥</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation>温度</translation>
+        <translation>随机性（Temperature）</translation>
     </message>
     <message>
         <source>Timeout (s)</source>
@@ -890,11 +890,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Shown in the translation window</source>
-        <translation>显示在翻译窗口上</translation>
+        <translation>用于在翻译窗口中区分服务。</translation>
     </message>
     <message>
         <source>Extra Body</source>
-        <translation>附加请求体</translation>
+        <translation>附加参数（JSON）</translation>
     </message>
     <message>
         <source>JSON Mode</source>
@@ -902,7 +902,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Ask for JSON replies. If the service rejects it, the request is retried without; turn it off to skip that retry</source>
-        <translation>要求模型以 JSON 回复。服务不支持时会去掉后自动重试一次；关闭可省掉这次重试</translation>
+        <translation>请求 JSON 格式回复。若服务不支持，将自动改用普通格式重试一次。</translation>
     </message>
     <message>
         <source>Optional for local models</source>
@@ -930,7 +930,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Testing...</source>
-        <translation>测试中…</translation>
+        <translation>正在测试…</translation>
     </message>
     <message>
         <source>Fetching models...</source>
@@ -938,7 +938,7 @@ Replace it?</source>
     </message>
     <message>
         <source>No models returned</source>
-        <translation>服务没有返回任何模型</translation>
+        <translation>服务未返回可用模型。</translation>
     </message>
 </context>
 
@@ -1426,15 +1426,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Hotkey Registration Failed</source>
-        <translation>热键注册失败</translation>
+        <translation>快捷键不可用</translation>
     </message>
     <message>
         <source>The following hotkeys failed to register:</source>
-        <translation>以下热键注册失败：</translation>
+        <translation>以下快捷键暂时无法使用：</translation>
     </message>
     <message>
         <source>The hotkey may be occupied by other programs. Please try a different combination.</source>
-        <translation>该热键可能已被其他程序占用。请尝试其他组合。</translation>
+        <translation>可能已被其他应用占用，请更换按键组合。</translation>
     </message>
 </context>
 
@@ -1699,7 +1699,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Auto (System)</source>
-        <translation>自动（跟随系统）</translation>
+        <translation>跟随系统</translation>
     </message>
     <message>
         <source>Advanced Options</source>
@@ -1761,25 +1761,25 @@ Replace it?</source>
     <message><source>Manage Tags</source><translation>管理标签</translation></message>
     <message><source>More filters</source><translation>更多筛选</translation></message>
     <message><source>New Tag</source><translation>新建标签</translation></message>
-    <message><source>No records yet</source><translation>暂无记录</translation></message>
-    <message><source>No results for “{q}”</source><translation>未找到“{q}”的相关记录</translation></message>
-    <message><source>Nothing here yet</source><translation>这里暂无内容</translation></message>
-    <message><source>Nothing matches these filters</source><translation>没有符合筛选条件的记录</translation></message>
+    <message><source>No records yet</source><translation>还没有历史记录</translation></message>
+    <message><source>No results for “{q}”</source><translation>未找到与「{q}」相关的记录</translation></message>
+    <message><source>Nothing here yet</source><translation>暂无内容</translation></message>
+    <message><source>Nothing matches these filters</source><translation>没有符合条件的记录</translation></message>
     <message><source>PNG Image (*.png);;JPEG Image (*.jpg *.jpeg);;Bitmap Image (*.bmp);;WebP Image (*.webp);;PDF (*.pdf)</source><translation>PNG 图片 (*.png);;JPEG 图片 (*.jpg *.jpeg);;位图图片 (*.bmp);;WebP 图片 (*.webp);;PDF 文档 (*.pdf)</translation></message>
     <message><source>Reset filters</source><translation>重置筛选</translation></message>
-    <message><source>Right-click any item and choose “Move to Group” to add it here.</source><translation>右键点击记录，选择“移动到分组”即可添加到这里。</translation></message>
+    <message><source>Right-click any item and choose “Move to Group” to add it here.</source><translation>右键点击历史记录，选择「移动到分组」即可添加。</translation></message>
     <message><source>Search clipboard</source><translation>搜索剪贴板</translation></message>
     <message><source>Source: {name}</source><translation>来源：{name}</translation></message>
     <message><source>Stays open after pasting</source><translation>粘贴后保持打开</translation></message>
     <message><source>Tag name:</source><translation>标签名称：</translation></message>
-    <message><source>Text, images and files you copy will show up here.</source><translation>复制的文字、图片和文件会显示在这里。</translation></message>
-    <message><source>This group is empty</source><translation>此分组暂无内容</translation></message>
+    <message><source>Text, images and files you copy will show up here.</source><translation>复制文字、图片或文件后，会在这里显示。</translation></message>
+    <message><source>This group is empty</source><translation>这个分组还没有内容</translation></message>
     <message><source>Today</source><translation>今天</translation></message>
-    <message><source>Try a different keyword, or clear the filters.</source><translation>试试其他关键词，或清除筛选条件。</translation></message>
+    <message><source>Try a different keyword, or clear the filters.</source><translation>换个关键词，或清除筛选条件。</translation></message>
     <message><source>to</source><translation>至</translation></message>
     <message><source>{n} found</source><translation>找到 {n} 条</translation></message>
     <message><source>{n} items</source><translation>{n} 条记录</translation></message>
-    <message><source>↑↓ Select · Enter {action} · Space Preview</source><translation>↑↓ 选择 · 回车{action} · 空格预览</translation></message>
+    <message><source>↑↓ Select · Enter {action} · Space Preview</source><translation>↑↓ 选择 · Enter {action} · 空格预览</translation></message>
     <message>
         <source>Clipboard History</source>
         <translation>剪贴板历史</translation>
@@ -1810,7 +1810,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Add Group</source>
-        <translation>添加分组</translation>
+        <translation>新建分组</translation>
     </message>
     <message>
         <source>Filter Type</source>
@@ -1846,7 +1846,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Paste with Format</source>
-        <translation>粘贴带格式</translation>
+        <translation>保留格式粘贴</translation>
     </message>
     <message>
         <source>Auto Paste After Selection</source>
@@ -1858,7 +1858,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Move to Top After Paste</source>
-        <translation>粘贴后移到最前</translation>
+        <translation>粘贴后移至顶部</translation>
     </message>
     <message>
         <source>Show Time and Source</source>
@@ -1866,7 +1866,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Preserve Search on Reopen</source>
-        <translation>保留搜索条件</translation>
+        <translation>重新打开时保留搜索</translation>
     </message>
     <message>
         <source>Window Opacity</source>
@@ -1920,11 +1920,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation>确定要删除这个分组吗？</translation>
+        <translation>删除这个分组？</translation>
     </message>
     <message>
         <source>All items in the group will also be deleted.</source>
-        <translation>分组内的内容也会被删除。</translation>
+        <translation>分组内的所有内容也会删除，且无法撤销。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?\nAll items in the group will also be deleted.</source>
@@ -1932,7 +1932,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this item?</source>
-        <translation>确定要删除他吗？</translation>
+        <translation>删除这条记录？此操作无法撤销。</translation>
     </message>
     <message>
         <source>Delete Group</source>
@@ -2011,8 +2011,10 @@ Replace it?</source>
         <translation>确认清空</translation>
     </message>
     <message>
-        <source>Are you sure you want to clear all clipboard history?\nThis action cannot be undone.</source>
-        <translation>确定要清空所有剪贴板历史吗？\n此操作不可恢复。</translation>
+        <source>Are you sure you want to clear all clipboard history?
+This action cannot be undone.</source>
+        <translation>清空剪贴板历史？
+此操作无法撤销。</translation>
     </message>
     <message>
         <source>Paste</source>
@@ -2056,7 +2058,7 @@ Replace it?</source>
     </message>
     <message>
         <source>SQL IN Clause</source>
-        <translation>SQL IN 句</translation>
+        <translation>SQL IN 子句</translation>
     </message>
     <message>
         <source>Remove Line Breaks</source>
@@ -2086,11 +2088,51 @@ Replace it?</source>
         <source>No clipboard history yet</source>
         <translation>暂无剪贴板历史</translation>
     </message>
+    <message>
+        <source>Pinned</source>
+        <translation>已置顶</translation>
+    </message>
+    <message>
+        <source>Unknown source</source>
+        <translation>来源未记录</translation>
+    </message>
+    <message>
+        <source>Default order</source>
+        <translation>默认顺序</translation>
+    </message>
+    <message>
+        <source>Newest first</source>
+        <translation>最新复制</translation>
+    </message>
+    <message>
+        <source>Oldest first</source>
+        <translation>最早复制</translation>
+    </message>
+    <message>
+        <source>Most used</source>
+        <translation>使用最多</translation>
+    </message>
+    <message>
+        <source>Manual order</source>
+        <translation>手动顺序</translation>
+    </message>
+    <message>
+        <source>Pinned items always come first</source>
+        <translation>置顶记录始终排在最前</translation>
+    </message>
+    <message>
+        <source>Use Move Up / Move Down in the context menu</source>
+        <translation>右键记录，选择上移或下移调整顺序</translation>
+    </message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
 <context>
     <name>ManageDialog</name>
+    <message><source>Load more</source><translation>加载更多</translation></message>
+    <message><source>Unsaved changes</source><translation>有未保存的更改</translation></message>
+    <message><source>Discard changes and continue?</source><translation>放弃当前更改并继续？</translation></message>
+    <message><source>Saved</source><translation>已保存</translation></message>
     <message><source>Created</source><translation>创建时间</translation></message>
     <message>
         <source>Clipboard Management</source>
@@ -2118,7 +2160,7 @@ Replace it?</source>
     </message>
     <message>
         <source>(Please create a group first)</source>
-        <translation>（请先创建分组）</translation>
+        <translation>先创建一个分组</translation>
     </message>
     <message>
         <source>New Group</source>
@@ -2126,7 +2168,7 @@ Replace it?</source>
     </message>
     <message>
         <source>(Please select a group first)</source>
-        <translation>（请先选择分组）</translation>
+        <translation>先选择一个分组</translation>
     </message>
     <message>
         <source>Add Content</source>
@@ -2158,7 +2200,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Enter group name...</source>
-        <translation>输入分组名称...</translation>
+        <translation>例如：常用回复</translation>
     </message>
     <message>
         <source>Select Icon</source>
@@ -2170,7 +2212,7 @@ Replace it?</source>
     </message>
     <message>
         <source>General Group</source>
-        <translation>通用分组</translation>
+        <translation>普通分组</translation>
     </message>
     <message>
         <source>Group Type</source>
@@ -2178,7 +2220,7 @@ Replace it?</source>
     </message>
     <message>
         <source>New General Group</source>
-        <translation>新建通用分组</translation>
+        <translation>新建普通分组</translation>
     </message>
     <message>
         <source>New Quick Launch Group</source>
@@ -2186,7 +2228,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Edit General Group</source>
-        <translation>编辑通用分组</translation>
+        <translation>编辑普通分组</translation>
     </message>
     <message>
         <source>Edit Quick Launch Group</source>
@@ -2206,27 +2248,27 @@ Replace it?</source>
     </message>
     <message>
         <source>Hidden groups are not displayed on the clipboard panel; changing to normal group restores visibility</source>
-        <translation>不在剪贴板面板显示，设为普通分组即恢复</translation>
+        <translation>不显示在剪贴板面板中；改为普通分组即可显示。</translation>
     </message>
     <message>
         <source>General groups allow any content; selecting an item pastes content or files to the target</source>
-        <translation>通用分组允许任意内容；选中条目后会向目标粘贴内容或文件</translation>
+        <translation>保存文字、图片和文件，方便再次复制或粘贴。</translation>
     </message>
     <message>
         <source>Quick launch groups only allow file or folder paths; selecting an item opens them</source>
-        <translation>快速启动分组只允许文件或文件夹路径；选中条目后会直接打开</translation>
+        <translation>保存文件或文件夹路径，点击即可打开。</translation>
     </message>
     <message>
         <source>Quick launch groups only accept file items; left-click opens the file directly</source>
-        <translation>快速启动分组只接受文件类型条目，左键点击直接打开文件</translation>
+        <translation>此分组仅支持文件或文件夹路径，点击即可打开。</translation>
     </message>
     <message>
         <source>Enter or paste emoji...</source>
-        <translation>输入或粘贴表情...</translation>
+        <translation>输入或粘贴表情</translation>
     </message>
     <message>
         <source>Preview:</source>
-        <translation>预览:</translation>
+        <translation>预览</translation>
     </message>
     <message>
         <source>Edit Group</source>
@@ -2238,7 +2280,7 @@ Replace it?</source>
     </message>
     <message>
         <source>(No content in group)</source>
-        <translation>（分组内暂无内容）</translation>
+        <translation>分组内暂无内容</translation>
     </message>
     <message>
         <source>Add Content</source>
@@ -2250,7 +2292,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Please select a group above, or create a group first</source>
-        <translation>请先在上方选择一个分组，或先创建分组</translation>
+        <translation>选择一个分组，或新建分组后添加内容。</translation>
     </message>
     <message>
         <source>Title (Optional)</source>
@@ -2262,7 +2304,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Select a file...</source>
-        <translation>请选择文件...</translation>
+        <translation>选择文件或文件夹</translation>
     </message>
     <message>
         <source>Browse</source>
@@ -2270,15 +2312,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Browse File</source>
-        <translation>浏览文件</translation>
+        <translation>选择文件…</translation>
     </message>
     <message>
         <source>Browse Folder</source>
-        <translation>浏览文件夹</translation>
+        <translation>选择文件夹…</translation>
     </message>
     <message>
         <source>Drag a file or folder here</source>
-        <translation>将文件或文件夹拖拽到这里</translation>
+        <translation>将文件或文件夹拖到这里</translation>
     </message>
     <message>
         <source>Select Folder</source>
@@ -2302,7 +2344,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Enter title (e.g., Restart Command)...</source>
-        <translation>输入标题（如：重启命令）...</translation>
+        <translation>例如：重启命令</translation>
     </message>
     <message>
         <source>Content</source>
@@ -2310,7 +2352,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Enter text content to save...</source>
-        <translation>输入要保存的文本内容...</translation>
+        <translation>输入要保存的文字</translation>
     </message>
     <message>
         <source>Edit Content</source>
@@ -2318,11 +2360,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Enter title...</source>
-        <translation>输入标题...</translation>
+        <translation>输入标题</translation>
     </message>
     <message>
         <source>Created: %s</source>
-        <translation>创建时间: %s</translation>
+        <translation>创建时间：%s</translation>
     </message>
     <message>
         <source>Hint</source>
@@ -2334,11 +2376,11 @@ Replace it?</source>
     </message>
     <message>
         <source>A group with this name already exists</source>
-        <translation>已存在同名分组</translation>
+        <translation>已有同名分组，请换一个名称。</translation>
     </message>
     <message>
         <source>Failed</source>
-        <translation>失败</translation>
+        <translation>操作未完成</translation>
     </message>
     <message>
         <source>Failed to create group</source>
@@ -2378,11 +2420,11 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this group?</source>
-        <translation>确定要删除这个分组吗？</translation>
+        <translation>删除这个分组？</translation>
     </message>
     <message>
         <source>All items in the group will also be deleted.</source>
-        <translation>分组内的内容也会被删除。</translation>
+        <translation>分组内的所有内容也会删除，且无法撤销。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this group?\nAll items in the group will also be deleted.</source>
@@ -2390,7 +2432,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Are you sure you want to delete this item?</source>
-        <translation>确定要删除这条内容吗？</translation>
+        <translation>删除这条记录？此操作无法撤销。</translation>
     </message>
     <message>
         <source>Failed to delete item</source>
@@ -2411,7 +2453,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Export all saved content to CSV file</source>
-        <translation>将所有保存的内容导出到 CSV 文件</translation>
+        <translation>将分组中的文本导出为 CSV，不包含图片和文件。</translation>
     </message>
     <message>
         <source>Encoding:</source>
@@ -2427,7 +2469,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Import content from CSV file (Group, Content, Title)</source>
-        <translation>从 CSV 文件导入内容（组名、内容、标题）</translation>
+        <translation>从 CSV 导入文本，按分组名称归类；同名分组会合并。</translation>
     </message>
     <message>
         <source>📥 Import from CSV</source>
@@ -2439,15 +2481,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Column 1: Group Name</source>
-        <translation>第1列：组名</translation>
+        <translation>第 1 列：分组名称</translation>
     </message>
     <message>
         <source>Column 2: Content</source>
-        <translation>第2列：内容</translation>
+        <translation>第 2 列：文本内容</translation>
     </message>
     <message>
         <source>Column 3: Title (optional)</source>
-        <translation>第3列：标题（可选）</translation>
+        <translation>第 3 列：标题（可选）</translation>
     </message>
     <message>
         <source>Export to CSV</source>
@@ -2455,15 +2497,15 @@ Replace it?</source>
     </message>
     <message>
         <source>Group</source>
-        <translation>组名</translation>
+        <translation>分组名称</translation>
     </message>
     <message>
         <source>Export Successful</source>
-        <translation>导出成功</translation>
+        <translation>导出完成</translation>
     </message>
     <message>
         <source>Exported {count} items to CSV file.</source>
-        <translation>已导出 {count} 条内容到 CSV 文件。</translation>
+        <translation>已导出 {count} 条文本到 CSV 文件。</translation>
     </message>
     <message>
         <source>Export Failed</source>
@@ -2479,7 +2521,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Import Successful</source>
-        <translation>导入成功</translation>
+        <translation>导入完成</translation>
     </message>
     <message>
         <source>Imported {count} items.</source>
@@ -2491,7 +2533,7 @@ Replace it?</source>
     </message>
     <message>
         <source>No valid data found in CSV file.</source>
-        <translation>CSV 文件中没有找到有效数据。</translation>
+        <translation>未找到可导入的内容。请检查分组名称和文本内容是否为空。</translation>
     </message>
     <message>
         <source>Failed to import: {error}</source>
@@ -2504,11 +2546,11 @@ Replace it?</source>
     <name>SettingsDialog</name>
     <message>
         <source>Enable Clipboard Manager</source>
-        <translation>启用剪贴板管理器</translation>
+        <translation>记录剪贴板历史</translation>
     </message>
     <message>
         <source>Monitor and manage clipboard history</source>
-        <translation>监控并管理剪贴板历史记录</translation>
+        <translation>保留复制过的文字、图片和文件，方便再次使用。</translation>
     </message>
     <message>
         <source>Auto Paste After Selection</source>
@@ -2516,35 +2558,35 @@ Replace it?</source>
     </message>
     <message>
         <source>Automatically send Ctrl+V after selecting an item</source>
-        <translation>选择项目后自动发送 Ctrl+V</translation>
+        <translation>选择记录后，自动粘贴到目标窗口。</translation>
     </message>
     <message>
         <source>History Limit</source>
-        <translation>历史记录限制</translation>
+        <translation>历史记录上限</translation>
     </message>
     <message>
         <source>Maximum number of items to keep (0 = unlimited)</source>
-        <translation>保留的最大项目数（0 = 无限制）</translation>
+        <translation>最多保留的记录数，0 表示不限制。</translation>
     </message>
     <message>
         <source>Window Scan Interval</source>
-        <translation>窗口扫描频率</translation>
+        <translation>粘贴目标检测间隔</translation>
     </message>
     <message>
         <source>How often the foreground window is sampled to find the paste target (only while this panel is open)</source>
-        <translation>面板打开时按此频率识别前台窗口以确定粘贴目标（仅面板可见时生效）</translation>
+        <translation>检测粘贴目标的间隔，仅在剪贴板面板打开时生效。</translation>
     </message>
     <message>
         <source>Auto Cleanup Old Items</source>
-        <translation>自动清理旧项目</translation>
+        <translation>自动清理旧记录</translation>
     </message>
     <message>
         <source>Automatically remove items exceeding the limit</source>
-        <translation>自动删除超出限制的项目</translation>
+        <translation>超出上限时自动删除旧记录。</translation>
     </message>
     <message>
         <source>Data Storage Location</source>
-        <translation>数据存储位置</translation>
+        <translation>数据保存位置</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -2564,7 +2606,7 @@ Replace it?</source>
     </message>
     <message>
         <source>← Get storage size</source>
-        <translation>← 获取数据占用大小</translation>
+        <translation>查看占用空间</translation>
     </message>
     <message>
         <source>Clear History</source>
@@ -2572,23 +2614,25 @@ Replace it?</source>
     </message>
     <message>
         <source>Image Data Optimization</source>
-        <translation>图片数据优化</translation>
+        <translation>节省图片存储空间</translation>
     </message>
     <message>
         <source>If PNG is available, skip storing DIB to save space</source>
-        <translation>若剪贴板含PNG格式，跳过DIB存储以节省空间</translation>
+        <translation>已有 PNG 时不再保存 DIB 副本，减少重复存储。</translation>
     </message>
     <message>
         <source>💡 Hint: Set clipboard hotkey in Shortcuts settings.</source>
-        <translation>💡 提示：在快捷键设置中设置剪贴板热键。</translation>
+        <translation>可在「快捷键」中设置打开剪贴板的按键。</translation>
     </message>
     <message>
         <source>Confirm Clear</source>
         <translation>确认清空</translation>
     </message>
     <message>
-        <source>Are you sure you want to clear all clipboard history?\nThis action cannot be undone.</source>
-        <translation>确定要清空所有剪贴板历史吗？\n此操作不可恢复。</translation>
+        <source>Are you sure you want to clear all clipboard history?
+This action cannot be undone.</source>
+        <translation>清空剪贴板历史？
+此操作无法撤销。</translation>
     </message>
     <message>
         <source>Also delete saved content in groups</source>
@@ -2596,7 +2640,7 @@ Replace it?</source>
     </message>
     <message>
         <source>Clipboard history cleared successfully</source>
-        <translation>剪贴板历史已清空</translation>
+        <translation>已清空剪贴板历史。</translation>
     </message>
     <message>
         <source>Failed to clear clipboard history</source>
@@ -3393,9 +3437,9 @@ Replace it?</source>
     <message><source>Appearance Settings</source><translation>外观设置</translation></message>
     <message><source>Screenshot</source><translation>截图</translation></message>
     <message><source>Clipboard</source><translation>剪贴板</translation></message>
-    <message><source>Theme Color</source><translation>主题颜色</translation></message>
+    <message><source>Theme Color</source><translation>截图强调色</translation></message>
     <message><source>Affects selection border, toolbar border, magnifier crosshair, etc. Restart recommended after change.</source><translation>影响选区边框、工具栏描边、放大镜十字线等。修改后建议重启应用。</translation></message>
-    <message><source>Select Theme Color</source><translation>选择主题颜色</translation></message>
+    <message><source>Select Theme Color</source><translation>选择截图强调色</translation></message>
     <message><source>Used for selection border, toolbar accent, magnifier crosshair.</source><translation>用于选区边框、工具栏强调色、放大镜十字线。</translation></message>
     <message><source>Screenshot Overlay</source><translation>截图遮罩</translation></message>
     <message><source>The semi-transparent overlay color outside the selection area during screenshot.</source><translation>截图时选区外部的半透明遮罩颜色。</translation></message>
@@ -3403,7 +3447,7 @@ Replace it?</source>
     <message><source>Mask Color</source><translation>遮罩颜色</translation></message>
     <message><source>The overlay color for unselected area. Supports transparency.</source><translation>未选中区域的覆盖颜色，支持透明度。</translation></message>
     <message><source>Reset to Defaults</source><translation>恢复默认</translation></message>
-    <message><source>💡 Hint: Color changes take effect on the next screenshot.</source><translation>💡 提示：颜色修改在下次截图时生效。</translation></message>
+    <message><source>💡 Hint: Color changes take effect on the next screenshot.</source><translation>颜色更改将在下次截图时生效。</translation></message>
     <!-- Clipboard Appearance -->
     <!-- Clipboard Appearance -->
     <message><source>Theme</source><translation>主题</translation></message>
@@ -3426,15 +3470,15 @@ Replace it?</source>
     <!-- 杂项页分组标题 -->
     <message><source>Startup</source><translation>启动</translation></message>
     <message><source>Show Magnifier</source><translation>显示放大镜</translation></message>
-    <message><source>Follows the cursor while selecting, and picks the color under it.</source><translation>选区时跟随光标显示，并可取光标下的颜色。</translation></message>
+    <message><source>Follows the cursor while selecting, and picks the color under it.</source><translation>截图时跟随光标放大细节，并支持取色。</translation></message>
     <message><source>Pixel Grid</source><translation>像素网格线</translation></message>
-    <message><source>Outline each pixel in the magnified view. Hidden at low zoom, where the lines would cover the pixels.</source><translation>在放大图上勾出每个像素的边界。倍率低时自动不画，否则网格线会盖住像素本身。</translation></message>
+    <message><source>Outline each pixel in the magnified view. Hidden at low zoom, where the lines would cover the pixels.</source><translation>显示像素边界；低倍率时自动隐藏，避免遮挡。</translation></message>
     <message><source>Shortcut Hint</source><translation>快捷键提示</translation></message>
-    <message><source>Show the color-copy shortcut under the readings. Off makes the magnifier shorter.</source><translation>在数值下方显示复制颜色的快捷键。关掉后放大镜会变矮一些。</translation></message>
+    <message><source>Show the color-copy shortcut under the readings. Off makes the magnifier shorter.</source><translation>在颜色数值下方显示复制快捷键。</translation></message>
     <message><source>Color Swatch</source><translation>取色色块</translation></message>
-    <message><source>Show the picked color in the top-right corner of the magnified view.</source><translation>在放大图右上角显示当前取到的颜色。</translation></message>
+    <message><source>Show the picked color in the top-right corner of the magnified view.</source><translation>在放大镜右上角预览当前颜色。</translation></message>
     <message><source>Magnifier</source><translation>放大镜</translation></message>
-    <message><source>Pin Settings</source><translation>钉图设定</translation></message>
+    <message><source>Pin Settings</source><translation>钉图设置</translation></message>
     <message><source>Operation</source><translation>操作</translation></message>
     <!-- 关于页 -->
     <message><source>Features</source><translation>功能特色</translation></message>
@@ -3467,7 +3511,7 @@ SOFTWARE.</translation></message>
     <message><source>Open GitHub</source><translation>打开GitHub</translation></message>
     <message><source>Version</source><translation>版本</translation></message>
     <message><source>Check for Updates</source><translation>检查更新</translation></message>
-    <message><source>Checking...</source><translation>正在检查...</translation></message>
+    <message><source>Checking...</source><translation>正在检查…</translation></message>
     <message><source>Update Check</source><translation>更新检查</translation></message>
     <message><source>You're using the latest version (%1).</source><translation>您正在使用最新版本（%1）。</translation></message>
     <message><source>Update Available</source><translation>有可用更新</translation></message>
@@ -3491,7 +3535,7 @@ SOFTWARE.</translation></message>
     <message><source>Merge multi-line text for better translation</source><translation>合并多行文本以获得更好的翻译</translation></message>
     <!-- 变更的字符串（新版）-->
     <message><source>Save Format</source><translation>保存格式</translation></message>
-    <message><source>OCR</source><translation>OCR</translation></message>
+    <message><source>OCR</source><translation>文字识别</translation></message>
     <message><source>Keep original text formatting</source><translation>保留原文格式</translation></message>
 </context>
 
@@ -3566,11 +3610,11 @@ SOFTWARE.</translation></message>
     <name>StandardDialog</name>
     <message>
         <source>Yes</source>
-        <translation>是</translation>
+        <translation>确认</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>否</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3589,6 +3633,10 @@ SOFTWARE.</translation></message>
         <source>富文本预览</source>
         <translation>富文本预览</translation>
     </message>
+    <message>
+        <source>Preview shortened; copy the item for its full content.</source>
+        <translation>预览已截短，复制记录可获取完整内容。</translation>
+    </message>
 </context>
 
 <context>
@@ -3596,20 +3644,20 @@ SOFTWARE.</translation></message>
     <message><source>Current clipboard database path is unavailable.</source><translation>无法获取当前剪贴板数据库路径。</translation></message>
     <message><source>Choose Clipboard Data Folder</source><translation>选择剪贴板数据文件夹</translation></message>
     <message><source>Info</source><translation>提示</translation></message>
-    <message><source>The selected folder is already the current location.</source><translation>所选文件夹已经是当前位置。</translation></message>
+    <message><source>The selected folder is already the current location.</source><translation>当前已使用此文件夹。</translation></message>
     <message><source>Please choose a folder outside the current clipboard images folder.</source><translation>请选择当前剪贴板图片文件夹之外的位置。</translation></message>
     <message><source>Replace Existing Data</source><translation>替换现有数据</translation></message>
     <message><source>The selected folder already contains clipboard data. Replace it with the current data?</source><translation>所选文件夹已包含剪贴板数据。要用当前数据替换吗？</translation></message>
     <message><source>Failed to close the current clipboard database.</source><translation>关闭当前剪贴板数据库失败。</translation></message>
-    <message><source>Preparing migration...</source><translation>正在准备迁移...</translation></message>
+    <message><source>Preparing migration...</source><translation>正在准备移动…</translation></message>
     <message><source>Moving Clipboard Data</source><translation>正在移动剪贴板数据</translation></message>
-    <message><source>Finalizing migration...</source><translation>正在完成迁移...</translation></message>
-    <message><source>Migration complete.</source><translation>迁移完成。</translation></message>
+    <message><source>Finalizing migration...</source><translation>正在完成移动…</translation></message>
+    <message><source>Migration complete.</source><translation>移动完成。</translation></message>
     <message><source>Clipboard data location changed successfully.</source><translation>剪贴板数据位置已更改。</translation></message>
     <message><source>Clipboard data location changed successfully, but the old files are still in use and could not be deleted. You can remove them after restarting the app.\n{error}</source><translation>剪贴板数据位置已更改，但旧文件仍被占用，暂时无法删除。重启应用后可以手动删除。\n{error}</translation></message>
     <message><source>Clipboard data moved, but reopening the database failed. Please restart the app.</source><translation>剪贴板数据已移动，但重新打开数据库失败。请重启应用。</translation></message>
     <message><source>No clipboard data files were found to move.</source><translation>没有找到可移动的剪贴板数据文件。</translation></message>
-    <message><source>Moving clipboard data... {done} / {total}</source><translation>正在移动剪贴板数据... {done} / {total}</translation></message>
+    <message><source>Moving clipboard data... {done} / {total}</source><translation>正在移动数据… {done} / {total}</translation></message>
 </context>
 
 <!-- ========== Application UI Theme ========== -->
@@ -3617,7 +3665,7 @@ SOFTWARE.</translation></message>
     <name>SettingsDialog</name>
     <message>
         <source>Application</source>
-        <translation>应用程序</translation>
+        <translation>应用</translation>
     </message>
     <message>
         <source>Interface Theme</source>
@@ -3625,7 +3673,7 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>Choose a display mode.</source>
-        <translation>选择显示模式。</translation>
+        <translation>选择浅色、深色或跟随系统。</translation>
     </message>
     <message>
         <source>Toolbar &amp; Panel Scale</source>
@@ -3633,7 +3681,7 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>Size of toolbars, tool panels and popups.</source>
-        <translation>工具栏的显示大小。</translation>
+        <translation>调整截图工具栏、面板和弹出控件的大小。</translation>
     </message>
     <message>
         <source>Window Scale</source>
@@ -3641,7 +3689,7 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>Font and size of application windows.</source>
-        <translation>应用窗口的字体与尺寸。</translation>
+        <translation>调整设置等应用窗口的文字和控件大小。</translation>
     </message>
     <message>
         <source>Selection Border Width</source>
@@ -3653,23 +3701,23 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>Selection Handles</source>
-        <translation>选区手柄</translation>
+        <translation>选区控制点</translation>
     </message>
     <message>
         <source>Hidden handles can still be dragged to resize.</source>
-        <translation>隐藏后依然可以拖动边角调整选区。</translation>
+        <translation>隐藏控制点后，仍可拖动边角调整选区。</translation>
     </message>
     <message>
         <source>Selection Handle Size</source>
-        <translation>选区手柄大小</translation>
+        <translation>控制点大小</translation>
     </message>
     <message>
         <source>Size of the selection handles.</source>
-        <translation>选区手柄的大小。</translation>
+        <translation>调整选区边角控制点的大小。</translation>
     </message>
     <message>
         <source>8 handles</source>
-        <translation>8 个手柄</translation>
+        <translation>8 个控制点</translation>
     </message>
     <message>
         <source>4 corners</source>
@@ -3693,7 +3741,7 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>System</source>
-        <translation>系统</translation>
+        <translation>跟随系统</translation>
     </message>
     <message>
         <source>Light</source>
@@ -3748,7 +3796,7 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>In more menu</source>
-        <translation>隐藏在更多菜单中</translation>
+        <translation>收进「更多」</translation>
     </message>
     <message>
         <source>Always hide</source>
@@ -3756,11 +3804,11 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>This button can't be hidden</source>
-        <translation>此按钮不能隐藏</translation>
+        <translation>此按钮必须保留</translation>
     </message>
     <message>
         <source>Drag the handle to reorder. Use the drop-down to change visibility.</source>
-        <translation>拖动左侧手柄调整顺序，使用下拉菜单更改显示方式。</translation>
+        <translation>拖动左侧手柄排序，在下拉菜单中选择显示位置。</translation>
     </message>
     <message>
         <source>Restore defaults</source>
@@ -3898,15 +3946,15 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>Recognizing...</source>
-        <translation>识别中...</translation>
+        <translation>正在识别…</translation>
     </message>
     <message>
         <source>Recognized %1 characters</source>
-        <translation>识别到 %1 个字符</translation>
+        <translation>已识别 %1 个字符</translation>
     </message>
     <message>
         <source>No text found in the selection.</source>
-        <translation>选区内没有识别到文字。</translation>
+        <translation>未识别到文字，请尝试重新框选清晰的文字区域。</translation>
     </message>
     <message>
         <source>This build does not include the text recognition engine.</source>
@@ -3914,7 +3962,7 @@ SOFTWARE.</translation></message>
     </message>
     <message>
         <source>Text recognition failed.</source>
-        <translation>文字识别失败。</translation>
+        <translation>识别失败，请重新截图后再试。</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -3935,7 +3983,7 @@ SOFTWARE.</translation></message>
 <context>
     <name>ColorFormatDialog</name>
     <message><source>Manage Color Formats</source><translation>管理颜色格式</translation></message>
-    <message><source>Checked formats show on the magnifier. The first one is what the copy shortcut puts on the clipboard — drag it to the top to change that.</source><translation>勾选的格式会显示在放大镜上。排在第一位的那个才是按键复制到剪贴板的内容——想换就把它拖到最前面。</translation></message>
+    <message><source>Checked formats show on the magnifier. The first one is what the copy shortcut puts on the clipboard — drag it to the top to change that.</source><translation>勾选要显示的颜色格式。快捷键会复制排在首位的格式，拖动即可调整顺序。</translation></message>
     <message><source>Restore defaults</source><translation>恢复默认</translation></message>
     <message><source>OK</source><translation>确定</translation></message>
     <message><source>Cancel</source><translation>取消</translation></message>
@@ -3978,11 +4026,11 @@ SOFTWARE.</translation></message>
     <name>SettingsDialog</name>
     <message>
         <source>Works anytime</source>
-        <translation>在任何时候都能触发</translation>
+        <translation>在其他应用中也可使用</translation>
     </message>
     <message>
         <source>Only in screenshot and pin windows</source>
-        <translation>只在截图和钉图窗口里生效</translation>
+        <translation>仅在截图和钉图窗口中生效</translation>
     </message>
 </context>
 <context>
@@ -3990,5 +4038,97 @@ SOFTWARE.</translation></message>
     <message><source>All items in the group will also be deleted.</source><translation>分组中的所有内容也将被删除。</translation></message>
     <message><source>Are you sure you want to delete this group?</source><translation>确定要删除这个分组吗？</translation></message>
     <message><source>Confirm Delete</source><translation>确认删除</translation></message>
+</context>
+<context>
+    <name>TextRecognitionWindow</name>
+    <message><source>Merge lines</source><translation>合并换行</translation></message>
+    <message><source>Clean spacing</source><translation>整理空格</translation></message>
+    <message><source>Restore original</source><translation>恢复原文</translation></message>
+    <message><source>Translate</source><translation>翻译</translation></message>
+    <message><source>Search web</source><translation>网页搜索</translation></message>
+    <message><source>Save…</source><translation>保存…</translation></message>
+    <message><source>Save text file…</source><translation>另存为文本…</translation></message>
+    <message><source>Save to history</source><translation>保存到剪贴板历史</translation></message>
+    <message><source>Saved</source><translation>已保存</translation></message>
+    <message><source>Save failed</source><translation>保存失败</translation></message>
+</context>
+<context>
+    <name>RedactionWindow</name>
+    <message><source>Save…</source><translation>保存…</translation></message>
+    <message><source>Saved</source><translation>已保存</translation></message>
+    <message><source>Save failed</source><translation>保存失败</translation></message>
+    <message><source>Smart redact</source><translation>智能脱敏</translation></message>
+    <message><source>Phone numbers</source><translation>手机号</translation></message>
+    <message><source>Email addresses</source><translation>邮箱</translation></message>
+    <message><source>Keywords, separated by commas</source><translation>输入要遮盖的关键词，用逗号分隔</translation></message>
+    <message><source>Matched lines are covered in full. Uncheck to keep; drag on the image to cover more.</source><translation>匹配内容按整行遮盖。取消勾选可保留；也可在图片上拖动，手动添加遮盖。</translation></message>
+    <message><source>Copy redacted image</source><translation>复制脱敏结果</translation></message>
+    <message><source>Manual area</source><translation>手动遮盖</translation></message>
+    <message><source>%1 areas covered</source><translation>已遮盖 %1 个区域</translation></message>
+    <message><source>Recognizing...</source><translation>正在识别…</translation></message>
+    <message><source>Copied</source><translation>已复制</translation></message>
+</context>
+<context>
+    <name>ClipboardWindow</name>
+    <message><source>Smart redact</source><translation>智能脱敏</translation></message>
+    <message><source>Recognize text</source><translation>文字识别</translation></message>
+    <message><source>Unable to load image</source><translation>无法加载图片</translation></message>
+</context>
+<context>
+    <name>Toolbar</name>
+    <message><source>Smart redact</source><translation>智能脱敏</translation></message>
+</context>
+<context>
+    <name>ToolbarLayoutDialog</name>
+    <message><source>Smart redact</source><translation>智能脱敏</translation></message>
+</context>
+<context><name>ClipboardWindow</name><message><source>Indexing image text…</source><translation>正在准备图片文字搜索…</translation></message></context>
+
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>General</source>
+        <translation>常规</translation>
+    </message>
+    <message>
+        <source>Saving and Pins</source>
+        <translation>保存与钉图</translation>
+    </message>
+</context>
+
+<context>
+    <name>ManageDialog</name>
+    <message>
+        <source>Name this group and choose how its contents are used.</source>
+        <translation>设置分组名称，以及内容的使用方式。</translation>
+    </message>
+    <message>
+        <source>Save reusable text or file paths in this group.</source>
+        <translation>将常用文本或文件路径保存到当前分组。</translation>
+    </message>
+    <message>
+        <source>Edit the content, then save your changes.</source>
+        <translation>编辑内容后，点击保存或按 Ctrl+S。</translation>
+    </message>
+    <message>
+        <source>Transfer saved text and file paths using CSV.</source>
+        <translation>通过 CSV 导入或导出保存的文本与文件路径。</translation>
+    </message>
+</context>
+
+<context>
+    <name>ClipboardWindow</name>
+    <message>
+        <source>Search: {query}</source>
+        <translation>搜索：{query}</translation>
+    </message>
+</context>
+
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <source>Reset Capture Settings</source>
+        <translation>重置截图设置</translation>
+    </message>
 </context>
 </TS>

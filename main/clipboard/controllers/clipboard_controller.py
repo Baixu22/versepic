@@ -96,6 +96,7 @@ class ClipboardController(QObject):
         self._time_range: Optional[Tuple[datetime, datetime]] = None
         self._source_filter: Optional[str] = None  # 来源短名；None 表示不过滤
         self._tag_filter_id: Optional[int] = None  # 标签 ID；None 表示不过滤
+        self.sort_order = "default"
         
         # 设置
         self.auto_paste_enabled = True
@@ -119,6 +120,9 @@ class ClipboardController(QObject):
             config = get_tool_settings_manager()
             self.auto_paste_enabled = config.get_clipboard_auto_paste()
             self.paste_with_html = config.get_app_setting("clipboard_paste_with_html", True)
+            order = config.get_app_setting("clipboard_sort_order", "default")
+            if order in ("default", "newest", "oldest", "frequent"):
+                self.sort_order = order
             self._foreground_tracker.set_interval(config.get_clipboard_foreground_scan_interval_ms())
         except Exception as e:
             log_exception(e, T("加载剪贴板设置"))
@@ -262,7 +266,9 @@ class ClipboardController(QObject):
                 content_type=self._content_type,
                 start_time=start_ts,
                 end_time=end_ts,
+                **({"sort_order": self.sort_order} if self.sort_order != "default" else {}),
             )
+            raw_count = len(items)
             if self._source_filter:
                 key = self._source_filter.lower()
                 items = [
@@ -271,7 +277,7 @@ class ClipboardController(QObject):
                     or key in (item.source_app or "").lower()
                 ]
             items = self._filter_by_tag(items)
-            return items, len(items)
+            return items, raw_count
 
         items = self.manager.get_by_group(
             group_id=self.current_group_id,
@@ -286,6 +292,7 @@ class ClipboardController(QObject):
                 item for item in items
                 if search_lower in item.content.lower()
                 or (item.title and search_lower in item.title.lower())
+                or search_lower in item.ocr_text.lower()
             ]
 
         if self._source_filter:
@@ -356,6 +363,16 @@ class ClipboardController(QObject):
             self._load_more_items()
     
     # ==================== 搜索与筛选 ====================
+
+    def set_sort_order(self, order: str):
+        if order not in ("default", "newest", "oldest", "frequent"):
+            raise ValueError(order)
+        if order == self.sort_order:
+            return
+        self.sort_order = order
+        from settings import get_tool_settings_manager
+        get_tool_settings_manager().set_app_setting("clipboard_sort_order", order)
+        self.load_history()
     
     def set_search_text(self, text: str):
         """设置搜索文本"""
@@ -577,7 +594,9 @@ class ClipboardController(QObject):
         if self.manager.paste_item(item_id, self.paste_with_html, move_to_top):
             log_info(T("已粘贴项 {item_id} (带格式: {with_html}, 移到最前: {move_to_top})", item_id=item_id, with_html=self.paste_with_html, move_to_top=move_to_top), "Clipboard")
             
-            if move_to_top:
+            if self.current_group_id is None and self.sort_order == "frequent":
+                self.load_history()
+            elif move_to_top and self.sort_order == "default":
                 self.move_item_to_top(item_id)
 
             # 调用关闭回调
@@ -945,6 +964,9 @@ class ClipboardController(QObject):
             and not self._search_text
             and not self._content_type
             and self._time_range is None
+            and not self._source_filter
+            and not self._tag_filter_id
+            and self.sort_order == "default"
         )
 
     def _first_unpinned_row(self) -> int:

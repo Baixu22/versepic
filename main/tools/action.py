@@ -221,6 +221,22 @@ class ActionTools:
         self._cleanup_and_close()
         show_text_recognition(image)
 
+    def handle_smart_redact(self):
+        from text_recognition.redaction_window import show_redaction
+        from ui.dialogs import show_modeless_warning_dialog
+        if not self.scene.selection_model.is_confirmed:
+            show_modeless_warning_dialog(
+                self.parent_window, _tr("Warning"), _tr("Please select a valid capture area first."))
+            return
+        rect = self.scene.selection_model.rect()
+        # Keep existing annotations/redactions in the image sent to the review window.
+        image = self.export_service.export(rect)
+        if image is None or image.isNull():
+            return
+        self._remember_last_region(rect)
+        self._cleanup_and_close()
+        show_redaction(image)
+
     def handle_scan_code(self):
         """扫码：识别选区里的二维码 / 条形码，关掉截图界面后在结果窗口里列出"""
         from barcode import show_barcode_result

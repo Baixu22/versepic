@@ -11,6 +11,7 @@ from PySide6.QtGui import QColor, QIcon, QPainter, QPen, QPixmap
 from canvas.items import ArrowItem
 from core.i18n import make_tr
 from core.ui_scale import scaled, scaled_f
+from core.ui_theme import get_ui_theme
 from tools.base import Tool
 from .base_settings_panel import StepperWidget, build_settings_panel_stylesheet, paint_rounded_panel
 from .color_picker_button import ColorPickerButton
@@ -41,7 +42,7 @@ BASE_PREVIEW_ROW_SIZE = QSize(96, 26)
 BASE_PREVIEW_STROKE_WIDTH = 3
 # 图标固定用中性墨色：这是样式选择器不是颜色选择器，跟着当前颜色走的话，
 # 选浅色标注时白底上的图标自己就看不见了（和序号样式条同一个理由）。
-# 下拉选中行是蓝底，深墨色会糊在上面，所以另备一张白的挂到 Selected 模式。
+# 渲染函数接受显式墨色；控件图标则使用当前界面的前景色。
 PREVIEW_INK = QColor("#444444")
 PREVIEW_INK_SELECTED = QColor("#FFFFFF")
 
@@ -92,18 +93,19 @@ def render_arrow_style_preview(style: str, ink: QColor, size: QSize, ratio: floa
 def arrow_style_icon(style: str, ratio: float = 2.0) -> QIcon:
     """样式下拉用的图标（进程内缓存，一种样式、一个尺寸只画一次）"""
     size = preview_size()
-    key = (style, ratio, size.width(), size.height())
+    ink = QColor(get_ui_theme().tokens.text)
+    key = (style, ratio, size.width(), size.height(), ink.name())
     cached = _icon_cache.get(key)
     if cached is not None:
         return cached
 
     icon = QIcon()
     icon.addPixmap(
-        render_arrow_style_preview(style, PREVIEW_INK, size, ratio),
+        render_arrow_style_preview(style, ink, size, ratio),
         QIcon.Mode.Normal
     )
     icon.addPixmap(
-        render_arrow_style_preview(style, PREVIEW_INK_SELECTED, size, ratio),
+        render_arrow_style_preview(style, ink, size, ratio),
         QIcon.Mode.Selected
     )
     _icon_cache[key] = icon

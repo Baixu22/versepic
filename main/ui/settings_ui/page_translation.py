@@ -17,15 +17,16 @@ from PySide6.QtWidgets import (
 from shiboken6 import isValid
 from core.ui_scale import dialog_scaled
 from ui.fluent_lite.text_context_menu import style_popup_menu
-from ui.fluent_lite.theme import ACCENT, ui_tokens
+from ui.fluent_lite.theme import ui_tokens
+from ui.fluent_lite.button_base import Button
 from ui.fluent_lite import (
     SwitchSettingCard, SettingCard as FSettingCard,
     FluentIcon, ComboBox, LineEdit,
-    PushButton, card_right_margin,
+    card_right_margin,
 )
 from core.ui_theme import get_ui_theme
 from .components import (
-    SettingCardGroup, WhiteCard, adjust_button_width, apply_theme_text_style,
+    SettingCardGroup, adjust_button_width, apply_theme_text_style,
 )
 from . import provider_fields
 
@@ -217,9 +218,7 @@ def create_translation_page(dialog) -> QWidget:
     info_label = QLabel(page)
     info_label.setOpenExternalLinks(True)
     info_label.setWordWrap(True)
-    info_label.setStyleSheet(
-        f"padding: {dialog_scaled(5)}px; font-size: {dialog_scaled(13)}px; color: #999;"
-    )
+    apply_theme_text_style(info_label, 13, caption=True, extra=f"padding: {dialog_scaled(5)}px;")
     layout.addWidget(info_label)
     dialog.translation_notice_label = info_label
 
@@ -248,7 +247,7 @@ def _build_field(dialog, section, field, provider_id):
         section.addSettingCard(card)
         return card
 
-    card = WhiteCard(section)
+    card = QWidget(section)
     row = QHBoxLayout(card)
     row.setContentsMargins(
         dialog_scaled(_ROW_LEFT_MARGIN), dialog_scaled(12), card_right_margin(), dialog_scaled(12)
@@ -256,15 +255,14 @@ def _build_field(dialog, section, field, provider_id):
     row.setSpacing(dialog_scaled(10))
 
     title = QLabel(dialog.tr(field.label), card)
-    apply_theme_text_style(title, 13, bold=True)
+    apply_theme_text_style(title, 13)
     title.setFixedWidth(dialog_scaled(_LABEL_WIDTH))
     row.addWidget(title)
 
-    edit = LineEdit(card, use_default_style=False)
+    edit = LineEdit(card)
     edit.setText(provider_fields.read_config(dialog.config_manager, field))
     if field.placeholder:
         edit.setPlaceholderText(dialog.tr(field.placeholder))
-    edit.setStyleSheet(dialog._get_input_style())
     if field.secret:
         edit.setEchoMode(QLineEdit.EchoMode.Password)
     row.addWidget(edit, 1)
@@ -272,8 +270,8 @@ def _build_field(dialog, section, field, provider_id):
     # 每个 secret 字段都配一个显示/隐藏。以前这按钮只长在 DeepL 那一行上，
     # 六个 secret 字段只有一个能查看——填错了另外五个，肉眼没法核对。
     if field.secret:
-        button = PushButton(dialog.tr("Show"), card)
-        button.setFixedHeight(dialog_scaled(32))
+        button = Button(dialog.tr("Show"), card, variant="outline")
+        button.setFixedHeight(dialog_scaled(36))
         adjust_button_width(button, min_width=60)
         button.clicked.connect(
             lambda _checked=False, e=edit, b=button: _toggle_secret(dialog, e, b)
@@ -281,8 +279,8 @@ def _build_field(dialog, section, field, provider_id):
         row.addWidget(button)
 
     if isinstance(field, ModelField):
-        button = PushButton(dialog.tr("Fetch Models"), card)
-        button.setFixedHeight(dialog_scaled(32))
+        button = Button(dialog.tr("Fetch Models"), card, variant="outline")
+        button.setFixedHeight(dialog_scaled(36))
         adjust_button_width(button, min_width=60)
         button.clicked.connect(
             lambda _checked=False, e=edit, b=button:
@@ -290,14 +288,14 @@ def _build_field(dialog, section, field, provider_id):
         )
         row.addWidget(button)
 
-    card.setFixedHeight(dialog_scaled(58))
+    card.setMinimumHeight(dialog_scaled(64))
     section.addSettingCard(card)
     return edit
 
 
 def _build_test_row(dialog, section, provider_id):
     """每家最后一行：用表单里的当前值（含未保存的）发一句测试翻译。"""
-    card = WhiteCard(section)
+    card = QWidget(section)
     row = QHBoxLayout(card)
     row.setContentsMargins(
         dialog_scaled(_ROW_LEFT_MARGIN), dialog_scaled(12), card_right_margin(), dialog_scaled(12)
@@ -311,8 +309,8 @@ def _build_test_row(dialog, section, provider_id):
     row.addWidget(status, 1)
     dialog.provider_status_labels[provider_id] = status
 
-    button = PushButton(dialog.tr("Test Connection"), card)
-    button.setFixedHeight(dialog_scaled(32))
+    button = Button(dialog.tr("Test Connection"), card, variant="outline")
+    button.setFixedHeight(dialog_scaled(36))
     adjust_button_width(button, min_width=60)
     button.clicked.connect(
         lambda _checked=False, b=button: _test_connection(dialog, provider_id, b)
@@ -499,7 +497,7 @@ def _notice_html(dialog, metadata) -> str:
     if metadata.help_url:
         label = dialog.tr(metadata.help_label) if metadata.help_label else ""
         parts.append(
-            f'<a href="{metadata.help_url}" style="color:{ACCENT};">'
+            f'<a href="{metadata.help_url}" style="color:{get_ui_theme().tokens.text}; text-decoration:underline;">'
             f'{label or metadata.help_url}</a>'
         )
     return ("💡 " + " ".join(parts)) if parts else ""

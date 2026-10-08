@@ -224,13 +224,26 @@ def test_changing_the_style_of_a_selected_number_is_undoable(qapp):
     assert item.style == NumberItem.STYLE_HOLLOW_ALL
 
 
-def test_the_popup_uses_the_panel_palette_not_its_own_dark_theme(qapp):
+@pytest.mark.parametrize("mode", ["light", "dark"])
+def test_the_popup_uses_the_panel_palette_not_its_own_dark_theme(qapp, mode):
     """自造一套深色会和应用主体脱节。"""
     from ui.number_settings_panel import NumberStylePopup
+    from core.ui_theme import get_ui_theme
+    import re
 
-    sheet = NumberStylePopup().styleSheet()
-    assert "background: white" in sheet
-    assert "#2b2b2b" not in sheet and "#3a3a3a" not in sheet
+    theme = get_ui_theme()
+    previous = theme.mode
+    popup = None
+    try:
+        theme.set_mode(mode, persist=False)
+        popup = NumberStylePopup()
+        background = re.search(r"#HoverPopup\s*\{\s*background:\s*([^;]+)", popup.styleSheet())
+        assert background is not None
+        assert QColor(background.group(1)) == QColor(theme.tokens.surface)
+    finally:
+        if popup is not None:
+            popup.deleteLater()
+        theme.set_mode(previous, persist=False)
 
 
 def test_the_popup_icons_stay_small(qapp):

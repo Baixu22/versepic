@@ -109,7 +109,7 @@ def create_about_page(dialog) -> QScrollArea:
     dev_card = SettingCard(
         FluentIcon.PEOPLE,
         dialog.tr("Developer"),
-        "JYAARU",
+        "baixu",
         parent=group,
     )
     group.addSettingCard(dev_card)

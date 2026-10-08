@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QAbstractButton, QApplication
 
 from core.ui_scale import widget_scaled as px
 from core.ui_theme import get_ui_theme
-from .theme import ui_tokens
+from .theme import MOTION_NORMAL, ui_tokens
 
 
 class SwitchButton(QAbstractButton):
@@ -18,7 +18,7 @@ class SwitchButton(QAbstractButton):
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self._animation = QPropertyAnimation(self, b"progress", self)
-        self._animation.setDuration(145)
+        self._animation.setDuration(MOTION_NORMAL)
         self._animation.setEasingCurve(QEasingCurve.Type.OutCubic)
         self.toggled.connect(self._on_toggled)
         get_ui_theme().theme_changed.connect(self._apply_theme)
@@ -77,11 +77,13 @@ class SwitchButton(QAbstractButton):
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(color)
         painter.drawRoundedRect(track, track.height()/2, track.height()/2)
-        diameter = track.height()-4
-        x = track.left()+2 + (track.width()-diameter-4)*self._progress
+        gap = px(self, 2)
+        diameter = track.height()-2*gap
+        progress = 1-self._progress if self.layoutDirection() == Qt.LayoutDirection.RightToLeft else self._progress
+        x = track.left()+gap + (track.width()-diameter-2*gap)*progress
         knob = QColor(t.primary_foreground if self.isChecked() else "#FFFFFF")
         painter.setBrush(knob)
-        painter.drawEllipse(QRectF(x, track.top()+2, diameter, diameter))
+        painter.drawEllipse(QRectF(x, track.top()+gap, diameter, diameter))
         if self.hasFocus():
             painter.setPen(QPen(QColor(t.ring), 1))
             painter.setBrush(Qt.BrushStyle.NoBrush)

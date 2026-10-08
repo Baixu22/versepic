@@ -6,14 +6,35 @@
 
 from html import escape
 
-from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QDialogButtonBox, QCheckBox
+from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QDialogButtonBox
 from PySide6.QtWidgets import QScrollArea, QWidget
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtGui import QDesktopServices
 from core.i18n import make_tr
+from core.ui_scale import configure_dialog_control, dialog_scaled
+from core.ui_theme import get_ui_theme
+from ui.fluent_lite import Button, CheckBox
+from ui.fluent_lite.theme import FONT_FAMILY, ui_tokens
 
 
 _translate_dialog_text = make_tr("StandardDialog")
+
+class DialogButtonBox(QDialogButtonBox):
+    """Keep Qt button roles/defaults while using the shared Button implementation."""
+    def addButton(self, *args):
+        if len(args) == 2 and isinstance(args[0], str):
+            text, role = args
+            variant = "outline"
+            if role in (self.ButtonRole.AcceptRole, self.ButtonRole.YesRole):
+                variant = "primary"
+            elif role == self.ButtonRole.DestructiveRole:
+                variant = "destructive"
+            button = Button(text, self, variant=variant)
+            configure_dialog_control(button)
+            super().addButton(button, role)
+            return button
+        return super().addButton(*args)
+
 
 class StandardDialog(QDialog):
     """
@@ -32,50 +53,29 @@ class StandardDialog(QDialog):
             | Qt.WindowType.WindowCloseButtonHint
         )
         self.setWindowModality(Qt.WindowModality.WindowModal)
-        self.setStyleSheet("""
-            QDialog#standardDialog {
-                background: #FFFFFF;
-                color: #202124;
-            }
-            QLabel {
-                background: transparent;
-                color: #202124;
-                font-size: 13px;
-            }
-            QCheckBox {
-                background: transparent;
-                color: #202124;
-                font-size: 13px;
-            }
-            QPushButton {
-                min-width: 84px;
-                min-height: 30px;
-                padding: 4px 14px;
-                background: #FFFFFF;
-                color: #202124;
-                border: 1px solid #D0D7DE;
-                border-radius: 6px;
-            }
-            QPushButton:hover {
-                background: #F5F7FA;
-            }
-            QPushButton:pressed {
-                background: #EBEEF2;
-            }
-        """)
-        
+        self._apply_theme()
+        get_ui_theme().theme_changed.connect(self._apply_theme)
+
         layout = QVBoxLayout(self)
-        layout.setSpacing(12)
-        layout.setContentsMargins(20, 16, 20, 16)
+        layout.setSpacing(dialog_scaled(12))
+        layout.setContentsMargins(*(dialog_scaled(v) for v in (20, 16, 20, 16)))
         
         self.label = QLabel(message, self)
         self.label.setWordWrap(True)
         layout.addWidget(self.label)
         
-        self.button_box = QDialogButtonBox(self)
+        self.button_box = DialogButtonBox(self)
         layout.addWidget(self.button_box)
         
         self.result_action = None
+
+    def _apply_theme(self, *_):
+        t = ui_tokens(self)
+        self.setStyleSheet(f"""
+            QDialog#standardDialog {{ background: {t.window}; color: {t.text}; }}
+            QLabel {{ background: transparent; color: {t.text};
+                font: {dialog_scaled(14)}px {FONT_FAMILY}; }}
+        """)
 
 
 def track_modeless_dialog(dialog):
@@ -159,7 +159,7 @@ def show_confirm_checkbox_dialog(parent, title, message, checkbox_text, checkbox
     no_text = _translate_dialog_text("No")
 
     dialog = StandardDialog(parent, title, message)
-    checkbox = QCheckBox(checkbox_text, dialog)
+    checkbox = CheckBox(checkbox_text, dialog)
     checkbox.setChecked(checkbox_checked)
     dialog.layout().insertWidget(dialog.layout().count() - 1, checkbox)
 

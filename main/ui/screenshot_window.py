@@ -673,6 +673,7 @@ class ScreenshotWindow(QWidget):
         self.toolbar.long_screenshot_clicked.connect(self.start_long_screenshot_mode)
         self.toolbar.screenshot_translate_clicked.connect(self._handle_screenshot_translate)
         self.toolbar.text_recognize_clicked.connect(self._handle_text_recognize)
+        self.toolbar.smart_redact_clicked.connect(self._handle_smart_redact)
         self.toolbar.scan_code_clicked.connect(self._handle_scan_code)
         self.toolbar.gif_record_clicked.connect(self.start_gif_record_mode)
 
@@ -720,6 +721,10 @@ class ScreenshotWindow(QWidget):
     def _handle_scan_code(self):
         if self.action_handler:
             self.action_handler.handle_scan_code()
+
+    def _handle_smart_redact(self):
+        if self.action_handler:
+            self.action_handler.handle_smart_redact()
 
     def _safe_activate_and_focus(self):
         """避免已销毁窗口执行激活/聚焦导致崩溃"""

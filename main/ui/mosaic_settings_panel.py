@@ -13,6 +13,8 @@ from PySide6.QtGui import QColor, QIcon, QImage, QPainter, QPixmap, QPolygonF
 from core.resource_manager import ResourceManager
 from core.i18n import make_tr
 from core.ui_scale import scaled
+from core.ui_theme import get_ui_theme
+from ui.fluent_lite.theme import tinted_icon
 from tools.mosaic import MosaicTool
 from .base_settings_panel import (
     StepperWidget, build_settings_panel_stylesheet, paint_rounded_panel,
@@ -186,11 +188,14 @@ class MosaicSettingsPanel(QWidget):
         for btn in (self.freehand_btn, self.rect_btn):
             btn.setFixedSize(btn_sz, btn_sz)
             btn.setIconSize(QSize(icon_sz, icon_sz))
+        self.freehand_btn.setIcon(tinted_icon(ResourceManager.get_icon_path("画笔.svg"), get_ui_theme().tokens.text))
+        self.rect_btn.setIcon(tinted_icon(ResourceManager.get_icon_path("方框.svg"), get_ui_theme().tokens.text))
         self.mode_widget.layout().setSpacing(scaled(2))
         self.size_spin.setFixedWidth(scaled(self.BASE_SIZE_SPIN_WIDTH))
         for button in self.block_size_buttons.values():
             button.setFixedSize(btn_sz, btn_sz)
             button.setIconSize(QSize(icon_sz, icon_sz))
+            button.setStyleSheet(f"QPushButton {{ padding: 0px; }} QPushButton:checked {{ border: 2px solid {get_ui_theme().tokens.text}; }}")
         self._block_size_layout.setSpacing(scaled(2))
         # 档位图样是按 _swatch_side 的像素画的，改比例后要重画
         self._swatch_side = icon_sz
@@ -266,7 +271,7 @@ class MosaicSettingsPanel(QWidget):
         level_button_qss = (
             "QPushButton { padding: 0px; border: 1px solid #ddd; }"
             "QPushButton:hover { border-color: #bbb; }"
-            "QPushButton:checked { border: 2px solid #0078d7; }"
+            f"QPushButton:checked {{ border: 2px solid {get_ui_theme().tokens.text}; }}"
         )
         self._swatch_side = scaled(self.BASE_ICON)
         for index, level in enumerate(MosaicTool.BLOCK_SIZE_LEVELS):

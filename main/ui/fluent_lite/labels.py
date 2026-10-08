@@ -1,11 +1,12 @@
 """Typography-compatible label classes."""
 
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QLabel, QSizePolicy, QWidget
 
 from core.ui_scale import widget_scaled as _px
 from core.ui_theme import get_ui_theme
 
-from .theme import FONT_FAMILY, ui_tokens
+from .theme import FONT_FAMILY, WORKSPACE_HEADER_HEIGHT, ui_tokens
 
 
 def _parse_args(args, kwargs):
@@ -25,13 +26,35 @@ class BodyLabel(QLabel):
     def __init__(self, *args, **kwargs):
         text, parent = _parse_args(args, kwargs)
         super().__init__(text, parent)
+        self._type_size = 14
+        self._type_weight = 400
+        self.setTextFormat(Qt.TextFormat.PlainText)
         self._apply_theme()
         get_ui_theme().theme_changed.connect(self._apply_theme)
+
+    def setTypography(self, size=14, weight=400):
+        self._type_size = size
+        self._type_weight = weight
+        self._apply_theme()
 
     def _apply_theme(self, _tokens=None):
         self.setStyleSheet(
             f"background: transparent; color: {ui_tokens(self).text}; "
-            f"font: {_px(self, 13)}px {FONT_FAMILY};"
+            f"font: {self._type_weight} {_px(self, self._type_size)}px {FONT_FAMILY};"
+        )
+
+
+class PageHeader(BodyLabel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setTextFormat(Qt.TextFormat.PlainText)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+
+    def _apply_theme(self, _tokens=None):
+        self.setFixedHeight(_px(self, WORKSPACE_HEADER_HEIGHT))
+        self.setStyleSheet(
+            f"background: transparent; color: {ui_tokens(self).text}; "
+            f"font: 500 {_px(self, 16)}px {FONT_FAMILY};"
         )
 
 
@@ -47,5 +70,5 @@ class CaptionLabel(QLabel):
     def _apply_theme(self, _tokens=None):
         self.setStyleSheet(
             f"background: transparent; color: {ui_tokens(self).text_muted}; "
-            f"font: {_px(self, 12)}px {FONT_FAMILY};"
+            f"font: {_px(self, 13)}px {FONT_FAMILY};"
         )

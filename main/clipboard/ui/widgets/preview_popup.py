@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 剪贴板悬停预览弹窗
 
@@ -43,16 +43,17 @@ class PreviewPopup(QWidget):
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating, True)
-        
-        self.setStyleSheet("""
-            PreviewPopup {
-                background: #FAFAFA;
-                border: 1px solid #D0D0D0;
-                border-radius: 8px;
-            }
-        """)
-        
+
+        # 颜色不再写死浅色：预览弹窗是独立顶层窗口，拿不到父窗口的样式，
+        # 之前固定 #FAFAFA/#333，深色主题下会弹出一块刺眼的白底黑字。
+        # 这里按当前剪贴板主题取色，并订阅主题变化。
         self._setup_ui()
+        from ..theme.themes import get_theme_manager
+
+        self._theme_manager = get_theme_manager()
+        self._theme_manager.theme_changed.connect(self._apply_theme)
+        self._apply_theme()
+
         self._manager = None
         self._current_item_id = None
         # 预览是无父窗口的独立顶层窗口。剪贴板窗口隐藏后，队列中仍可能有
@@ -63,6 +64,10 @@ class PreviewPopup(QWidget):
         self._show_timer = QTimer()
         self._show_timer.setSingleShot(True)
         self._show_timer.timeout.connect(self._do_show)
+        self._hide_timer = QTimer(self)
+        self._hide_timer.setSingleShot(True)
+        self._hide_timer.setInterval(350)
+        self._hide_timer.timeout.connect(self.hide_preview)
         self._pending_item = None
         self._pending_pos = None
         self._pending_prefer_side = "auto"
@@ -70,46 +75,77 @@ class PreviewPopup(QWidget):
     
     def _setup_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(2, 2, 2, 2)
-        layout.setSpacing(0)
+        layout.setContentsMargins(12, 12, 12, 12)
+        layout.setSpacing(8)
         
-        # 标题行（仅用于文本预览，图片预览时隐藏）
+        # 来源、时间及标签，所有类型共用。
         self.title_label = QLabel()
+        self.title_label.setTextFormat(Qt.TextFormat.PlainText)
+        self.title_label.setWordWrap(True)
         self.title_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
-        self.title_label.setStyleSheet("font-size: 12px; color: #666; font-weight: bold; padding-left: 4px;")
         self.title_label.hide()  # 默认隐藏
         layout.addWidget(self.title_label)
         
         # 内容区域 - 使用 QTextEdit 支持富文本
-        self.content_widget = TextEdit()
+        self.content_widget = TextEdit(use_default_style=False)
         self.content_widget.setReadOnly(True)
         # 启用自动换行
         self.content_widget.setLineWrapMode(TextEdit.LineWrapMode.WidgetWidth)
-        # 禁用滚动条
-        self.content_widget.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        # 长内容可滚动阅读，避免被高度上限静默裁掉。
+        self.content_widget.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.content_widget.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.content_widget.setStyleSheet("""
-            QTextEdit {
-                background: #FAFAFA;
-                border: 1px solid #E0E0E0;
-                border-radius: 4px;
-                padding: 4px 8px;
-                font-size: 13px;
-                color: #333;
-            }
-        """)
+        # 外观（底色/描边/文字色）统一由 _apply_theme 里的预览样式给，
+        # 这里不再挂一份写死颜色的样式表，否则深浅切换时它会盖住主题。
         # 设置文档边距为0，减少额外空间
         self.content_widget.document().setDocumentMargin(2)
         # 只设置最大尺寸，让内容自适应
-        self.content_widget.setMaximumSize(500, 400)
+        self.content_widget.setMaximumSize(680, 540)
         layout.addWidget(self.content_widget)
         
         # 图片预览（默认隐藏）
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.image_label.setStyleSheet("background: #F0F0F0; border: 1px solid #E0E0E0; border-radius: 4px;")
         self.image_label.hide()
         layout.addWidget(self.image_label)
+
+    def _apply_theme(self, _theme=None):
+        """Re-tint the popup from the active clipboard theme.
+
+        The popup is a top-level tool window, so it cannot inherit the
+        clipboard window's stylesheet and must resolve its own colours.
+        """
+        from ..theme.theme_styles import ThemeStyleGenerator, rgba, surface_palette
+        from dataclasses import replace
+        from core.ui_theme import DARK_TOKENS, LIGHT_TOKENS
+        from ui.fluent_lite.theme import scrollbar_qss
+
+        theme = self._theme_manager.get_current_theme()
+        palette = surface_palette(theme)
+        colors = theme.colors
+        self._ui_theme_tokens_override = replace(
+            DARK_TOKENS if palette.dark else LIGHT_TOKENS,
+            accent=palette.accent_text.name(), border_hover=palette.text_secondary.name())
+        generator = ThemeStyleGenerator(theme)
+        # objectName 要先设好，下面的选择器才能命中图片预览框。
+        self.image_label.setObjectName("previewImage")
+        # 外框 + 文本区沿用生成器里那一份，避免和剪贴板窗口内的预览样式漂移。
+        self.setStyleSheet(
+            generator.generate_preview_popup_style()
+            + scrollbar_qss(self) + f"""
+            QLabel {{
+                background: transparent;
+                color: {colors.text_secondary};
+                font-size: 13px;
+                font-weight: 400;
+                padding-left: 4px;
+            }}
+            QLabel#previewImage {{
+                background: {rgba(palette.control)};
+                border: 1px solid {rgba(palette.hairline)};
+                border-radius: 4px;
+            }}
+        """
+        )
     
     def set_manager(self, manager: 'ClipboardManager'):
         """设置剪贴板管理器（用于加载图片）"""
@@ -134,6 +170,8 @@ class PreviewPopup(QWidget):
         """
         if not self._display_enabled:
             return
+
+        self._hide_timer.stop()
 
         if not item:
             self.hide_preview()
@@ -180,6 +218,19 @@ class PreviewPopup(QWidget):
         else:
             # 其他类型不显示预览
             return
+
+        from .item_delegate import source_app_display_name, _tr as row_tr
+        name = source_app_display_name(getattr(item, "source_app", None))
+        source = row_tr("Source: {name}").format(name=name) if name else row_tr("Unknown source")
+        when = item.created_at.strftime("%Y-%m-%d %H:%M") if item.created_at else ""
+        tags = "  ".join("#" + tag.name for tag in (getattr(item, "tags", None) or []))
+        metadata = source + ("  ·  " + when if when else "") + ("\n" + tags if tags else "")
+        self.title_label.setText(metadata)
+        self.title_label.setToolTip(metadata)
+        self.title_label.setFixedWidth(max(240, self.image_label.width() if item.content_type == "image"
+                                           else self.content_widget.width()))
+        self.title_label.setMaximumHeight(100)
+        self.title_label.show()
         
         # 调整位置（在触发位置右侧显示）
         self.adjustSize()
@@ -239,6 +290,7 @@ class PreviewPopup(QWidget):
 
         self.move(x, y)
         self.show()
+        self.content_widget.verticalScrollBar().setValue(0)
     
     def _show_text_preview(self, item: 'ClipboardItem'):
         """显示纯文本预览 - 上面显示时间，下面显示完整内容"""
@@ -251,11 +303,13 @@ class PreviewPopup(QWidget):
         self.title_label.show()
         
         # 显示完整内容（限制长度避免卡顿）
-        content = item.content[:2000] if len(item.content) > 2000 else item.content
+        content = item.content[:100000]
+        if len(item.content) > 100000:
+            content += "\n\n" + _tr("Preview shortened; copy the item for its full content.")
         
         # 先重置尺寸约束
         self.content_widget.setMinimumSize(0, 0)
-        self.content_widget.setMaximumSize(500, 400)
+        self.content_widget.setMaximumSize(680, 540)
         
         self.content_widget.setPlainText(content)
         
@@ -333,7 +387,7 @@ class PreviewPopup(QWidget):
             
             # 先重置尺寸约束
             self.content_widget.setMinimumSize(0, 0)
-            self.content_widget.setMaximumSize(500, 400)
+            self.content_widget.setMaximumSize(680, 540)
             
             self.content_widget.setPlainText(text)
             
@@ -344,13 +398,14 @@ class PreviewPopup(QWidget):
         except Exception as e:
             log_exception(e, T("加载文本预览"))
             self.content_widget.setMinimumSize(0, 0)
-            self.content_widget.setMaximumSize(500, 400)
+            self.content_widget.setMaximumSize(680, 540)
             self.content_widget.setPlainText(item.content)
             self._adjust_content_size()
             self.content_widget.show()
     
     def _adjust_content_size(self):
         """根据内容调整 content_widget 大小 - 智能自适应宽度和高度"""
+        self.content_widget.ensurePolished()
         doc = self.content_widget.document()
         
         # 获取字体度量
@@ -375,14 +430,14 @@ class PreviewPopup(QWidget):
         ideal_width = max_line_width + h_padding
         
         # 限制最大宽度
-        max_width = 500
-        min_width = 80
+        max_width, max_height = self._preview_limits()
+        min_width = min(420, max_width)
         
         if ideal_width <= max_width:
             # 内容不需要换行，使用理想宽度
             actual_width = max(ideal_width, min_width)
             # 不设置文档宽度限制，保持自然布局
-            doc.setTextWidth(-1)
+            doc.setTextWidth(actual_width - h_padding)
             # 高度基于实际行数
             actual_height = line_count * line_height + v_padding
         else:
@@ -394,7 +449,6 @@ class PreviewPopup(QWidget):
             actual_height = int(doc.size().height()) + v_padding
         
         # 限制高度范围
-        max_height = 550
         min_height = line_height + v_padding  # 至少能显示一行
         
         actual_height = min(actual_height, max_height)
@@ -402,6 +456,12 @@ class PreviewPopup(QWidget):
         
         # 设置固定尺寸
         self.content_widget.setFixedSize(int(actual_width), int(actual_height))
+
+    def _preview_limits(self):
+        screen = QApplication.screenAt(self._pending_pos) if self._pending_pos is not None else None
+        screen = screen or QApplication.primaryScreen()
+        geometry = screen.availableGeometry()
+        return min(680, max(200, geometry.width() - 48)), min(540, max(120, geometry.height() - 160))
     
     def _show_html_preview(self, item: 'ClipboardItem'):
         """显示 HTML 富文本预览"""
@@ -431,7 +491,7 @@ class PreviewPopup(QWidget):
                 pixmap.loadFromData(image_data)
                 # 缩放到合适大小
                 scaled = pixmap.scaled(
-                    400, 300,
+                    *self._preview_limits(),
                     Qt.AspectRatioMode.KeepAspectRatio,
                     Qt.TransformationMode.SmoothTransformation
                 )
@@ -450,7 +510,7 @@ class PreviewPopup(QWidget):
                     pixmap = QPixmap()
                     pixmap.loadFromData(image_data)
                     scaled = pixmap.scaled(
-                        400, 300,
+                        *self._preview_limits(),
                         Qt.AspectRatioMode.KeepAspectRatio,
                         Qt.TransformationMode.SmoothTransformation
                     )
@@ -462,6 +522,7 @@ class PreviewPopup(QWidget):
     
     def hide_preview(self):
         """隐藏预览"""
+        self._hide_timer.stop()
         self._show_timer.stop()
         self._pending_item = None
         self._pending_pos = None
@@ -469,9 +530,23 @@ class PreviewPopup(QWidget):
         self._pending_avoid_rect = None
         self._current_item_id = None
         self.hide()
+
+    def schedule_hide(self):
+        """Allow the pointer to cross the gap from the list into the scrollable preview."""
+        self._show_timer.stop()
+        self._hide_timer.start()
+
+    def enterEvent(self, event):
+        self._hide_timer.stop()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event):
+        self.schedule_hide()
+        super().leaveEvent(event)
     
     def force_cleanup(self):
         """强制清理 - 用于窗口关闭时确保预览完全停止"""
+        self._hide_timer.stop()
         self._show_timer.stop()
         self._pending_item = None
         self._pending_pos = None

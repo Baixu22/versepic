@@ -21,6 +21,7 @@ from core.constants import (
     normalize_text_font_family,
 )
 from core import safe_event
+from core.ui_theme import get_ui_theme
 from core.ui_scale import scaled
 from core.logger import log_exception, T
 
@@ -61,7 +62,7 @@ def render_text_effect_icon(side: int, ratio: float = 1.0, *, outline_width: flo
 
     font = QFont("Arial", 48)
     font.setBold(True)
-    ink = QColor("white") if outline_width is not None else EFFECT_ICON_INK
+    ink = QColor("white") if outline_width is not None else QColor(get_ui_theme().tokens.text)
     item = TextItem("A", QPointF(0, 0), font, ink)
     item.setTextInteractionFlags(Qt.TextInteractionFlag.NoTextInteraction)
     item.document().setDocumentMargin(0)
@@ -186,18 +187,19 @@ class TextSettingsPanel(QWidget):
         描边粗细虽只有四档，但用带刻度的离散滑条呈现：比四个零散的小方块更紧凑，
         也不会伪装成可取任意数值的连续滑条。尺寸按当前比例算，改比例后要重新挂。
         """
+        t = get_ui_theme().tokens
         return f"""
         QPushButton {{
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: {scaled(3)}px;
+            background-color: {t.surface};
+            border: 1px solid {t.border};
+            border-radius: {scaled(8)}px;
             padding: 0px;
         }}
         QPushButton:hover {{
-            border-color: #bbb;
+            border-color: {t.border_hover};
         }}
         QPushButton:checked {{
-            border: 2px solid #0078d7;
+            border: 2px solid {t.text};
         }}
         QSlider {{
             background-color: transparent;
@@ -205,41 +207,41 @@ class TextSettingsPanel(QWidget):
         QSlider#outlineWidthSlider {{
             min-height: {scaled(24)}px;
         }}
-        QSlider#outlineWidthSlider::groove:horizontal {{
+        QSlider::groove:horizontal {{
             height: {scaled(4)}px;
             margin: 0 {scaled(6)}px;
-            background: #d7d7d7;
+            background: {t.border};
             border-radius: {scaled(2)}px;
         }}
-        QSlider#outlineWidthSlider::sub-page:horizontal {{
+        QSlider::sub-page:horizontal {{
             margin: 0 {scaled(6)}px;
-            background: #0078d7;
+            background: {t.text};
             border-radius: {scaled(2)}px;
         }}
-        QSlider#outlineWidthSlider::add-page:horizontal {{
+        QSlider::add-page:horizontal {{
             margin: 0 {scaled(6)}px;
-            background: #d7d7d7;
+            background: {t.border};
             border-radius: {scaled(2)}px;
         }}
-        QSlider#outlineWidthSlider::handle:horizontal {{
+        QSlider::handle:horizontal {{
             width: {scaled(12)}px;
             height: {scaled(12)}px;
             margin: {-scaled(5)}px {-scaled(6)}px;
-            background: #0078d7;
-            border: 2px solid white;
+            background: {t.text};
+            border: 2px solid {t.surface};
             border-radius: {scaled(7)}px;
         }}
-        QSlider#outlineWidthSlider::handle:horizontal:hover {{
-            background: #0067b8;
+        QSlider::handle:horizontal:hover {{
+            background: {t.text_muted};
         }}
         QFrame#popupDivider {{
-            background: #e8e8e8;
+            background: {t.border};
             border: none;
             min-height: 1px;
             max-height: 1px;
         }}
         QLabel {{
-            color: #333;
+            color: {t.text};
             font-family: {CSS_FONT_FAMILY};
             font-size: {scaled(11)}px;
         }}
@@ -284,7 +286,7 @@ class TextSettingsPanel(QWidget):
                 border: none;
                 font-family: {CSS_FONT_FAMILY};
                 font-size: {scaled(12)}px;
-                color: #333;
+                color: {get_ui_theme().tokens.text};
             }}
         """
 
@@ -665,17 +667,7 @@ class TextSettingsPanel(QWidget):
                 }}
             """)
         else:
-            self.background_btn.setStyleSheet("""
-                QPushButton {
-                    background-color: white;
-                    border: 1px solid #ddd;
-                    font-size: 12px;
-                }
-                QPushButton:hover {
-                    background-color: #f0f0f0;
-                    border: 1px solid #bbb;
-                }
-            """)
+            self.background_btn.setStyleSheet("")
 
     def _on_background_toggled(self, checked: bool):
         self.background_enabled = checked

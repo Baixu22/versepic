@@ -112,12 +112,17 @@ class ThemeManager:
     @property
     def theme_color(self) -> QColor:
         """主题色（用于选区框、工具栏描边、放大镜十字线等）"""
+        # Resolve the legacy turquoise default through the current UI palette.
+        # Explicit annotation/accent customizations remain intact.
+        if self._theme_color.name().lower() == "#40e0d0":
+            from core.ui_theme import get_ui_theme
+            return QColor(get_ui_theme().tokens.accent)
         return QColor(self._theme_color)
 
     @property
     def theme_color_hex(self) -> str:
-        """主题色 hex 字符串（不含 alpha），如 '#40E0D0'"""
-        return self._theme_color.name().upper()
+        """主题色 hex 字符串（不含 alpha），随当前界面主题解析默认颜色"""
+        return self.theme_color.name().upper()
 
     @property
     def mask_color(self) -> QColor:

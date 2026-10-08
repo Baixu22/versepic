@@ -243,7 +243,7 @@ def test_every_row_in_the_panel_has_its_own_picture(qapp):
 
 
 def test_the_selected_row_gets_its_own_legible_icon(qapp):
-    """下拉选中行是蓝底：深墨色图标糊在上面，那一行等于没有图。"""
+    """中性选中底色使用与普通行相同的主题前景色。"""
     for style in ArrowItem.STYLES:
         assert _preview_bytes(style) != _preview_bytes(style, PREVIEW_INK_SELECTED)
 
@@ -253,7 +253,7 @@ def test_the_selected_row_gets_its_own_legible_icon(qapp):
         normal = icon.pixmap(preview_size(), QIcon.Mode.Normal).toImage()
         selected = icon.pixmap(preview_size(), QIcon.Mode.Selected).toImage()
         assert not normal.isNull() and not selected.isNull()
-        assert _image_bytes(normal) != _image_bytes(selected)
+        assert _image_bytes(normal) == _image_bytes(selected)
     finally:
         panel.deleteLater()
 

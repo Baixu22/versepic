@@ -25,7 +25,6 @@ from clipboard.core import ClipboardItem, Group, GroupType
 from clipboard.ui.dialogs.manage_dialog import ManageDialog
 from core.i18n import I18nManager
 from core.ui_theme import DARK_TOKENS, LIGHT_TOKENS, get_ui_theme
-from ui.apple_style import DARK_APPLE, LIGHT_APPLE
 from ui.fluent_lite import LineEdit, TextEdit
 
 
@@ -221,7 +220,7 @@ class TestManageDialog:
                 palette = management_palette(current)
                 assert "background: transparent" in dlg.nav_column.styleSheet()
                 assert palette.border in dlg.list_column.styleSheet()
-                assert palette.card_bg in dlg.detail_column.styleSheet()
+                assert palette.card_bg in dlg.content_card.styleSheet()
                 assert ui_tokens(dlg).window == current.colors.bg_primary
                 assert ui_tokens(dlg).is_dark == surface_palette(current).dark
                 # Primary actions must remain readable in the independently scoped theme.
@@ -237,7 +236,10 @@ class TestManageDialog:
                     assert (b + 0.05) / (a + 0.05) >= 4.5
                 dlg._show_new_group_form()
                 assert ui_tokens(dlg.group_name_input).text == current.colors.text_primary
-                assert palette.danger in dlg.delete_btn.styleSheet()
+                assert dlg.delete_btn._colors()[0] == "transparent"
+                assert dlg.delete_btn._colors()[2] == ui_tokens(dlg).danger
+                assert dlg.delete_btn._colors()[1] == ui_tokens(dlg).danger_soft
+                assert dlg.delete_btn.sizeHint().height() == dlg.save_btn.sizeHint().height()
 
             clipboard_theme.set_theme("auto")
             for mode in ("light", "dark"):
@@ -258,10 +260,10 @@ class TestManageDialog:
 
         dlg._show_new_group_form()
 
-        assert dlg.detail_title.text() == dlg.tr("New General Group")
+        assert dlg.detail_title.text() == dlg.tr("New Group")
         assert dlg.detail_subtitle.wordWrap() is True
         assert dlg.detail_subtitle.text() == dlg.tr(
-            "General groups allow any content; selecting an item pastes content or files to the target"
+            "Name this group and choose how its contents are used."
         )
         assert dlg.radio_normal.isChecked() is True
         assert dlg.radio_file.isChecked() is False
@@ -274,9 +276,9 @@ class TestManageDialog:
 
         dlg._show_edit_group_form(quick_group.id)
 
-        assert dlg.detail_title.text() == dlg.tr("Edit Quick Launch Group")
+        assert dlg.detail_title.text() == dlg.tr("Edit Group")
         assert dlg.detail_subtitle.text() == dlg.tr(
-            "Quick launch groups only allow file or folder paths; selecting an item opens them"
+            "Name this group and choose how its contents are used."
         )
         assert dlg.group_name_input.text() == "快速启动"
         assert dlg.radio_file.isChecked() is True
@@ -288,16 +290,16 @@ class TestManageDialog:
 
         dlg._show_new_group_form()
         dlg.radio_file.setChecked(True)
-        assert dlg.detail_title.text() == dlg.tr("New Quick Launch Group")
+        assert dlg.detail_title.text() == dlg.tr("New Group")
         assert dlg.detail_subtitle.text() == dlg.tr(
-            "Quick launch groups only allow file or folder paths; selecting an item opens them"
+            "Name this group and choose how its contents are used."
         )
         assert dlg.icon_input.text() == "⚡"
 
         dlg.radio_normal.setChecked(True)
-        assert dlg.detail_title.text() == dlg.tr("New General Group")
+        assert dlg.detail_title.text() == dlg.tr("New Group")
         assert dlg.detail_subtitle.text() == dlg.tr(
-            "General groups allow any content; selecting an item pastes content or files to the target"
+            "Name this group and choose how its contents are used."
         )
         assert dlg.icon_input.text() == "📁"
 

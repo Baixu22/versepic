@@ -215,6 +215,7 @@ clipboard/
 │   ├── enums.py             # GroupType definitions
 │   ├── text_transform.py    # Plain-text transforms — pure functions behind "paste special"
 │   ├── tag_store.py         # TagStore — tag definitions and item-tag mappings
+│   ├── image_text.py        # Local image text index, search, and serial background OCR
 │   └── __init__.py
 ├── services/                # Service layer — file payloads, group rules, import/export, save logic
 │   ├── file_payload_service.py   # file payload JSON + legacy format compatibility
@@ -246,6 +247,7 @@ clipboard/
 │   │   └── theme_styles.py
 │   ├── widgets/
 │   │   ├── draggable_list_widget.py
+│   │   ├── manage_list_delegate.py
 │   │   ├── group_bar.py
 │   │   ├── item_delegate.py
 │   │   ├── item_widget.py
@@ -515,6 +517,7 @@ ui/
 ├── tray_menu.py             # TrayMenu — system tray menu
 ├── screenshot_window.py     # ScreenshotWindow — full-screen capture window (region drawing)
 ├── dialogs.py               # StandardDialog — confirm, warning, info, error dialogs
+├── component_gallery.py     # Interactive gallery of shared Qt components; see docs/qt-components.md
 ├── magnifier.py             # MagnifierOverlay — pixel-level magnifier
 ├── color_picker_dialog.py   # ColorPickerDialog — custom HSV color picker
 ├── color_picker_button.py   # ColorPickerButton — color selection button
@@ -535,6 +538,7 @@ ui/
 │
 ├── glass.py / glyphs.py / outline_icons.py  # Native glass and Lucide SVG rendering
 ├── fluent_lite/             # Fluent-style lightweight component library
+│   ├── icon_label.py        # Shared icon and text alignment
 │   ├── button_base.py / popups.py / primitives.py  # Shared animated controls
 │   ├── buttons.py / cards.py / icons.py / inputs.py  # buttons, cards, icons, inputs
 │   ├── labels.py / navigation.py / segmented.py      # labels, navigation, segmented controls

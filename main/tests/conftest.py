@@ -69,10 +69,17 @@ def isolated_tool_settings(tmp_path_factory):
     settings_file = str(tmp_path_factory.mktemp("settings") / "tool_settings.ini")
     previous = tool_settings._tool_settings_manager
     tool_settings._tool_settings_manager = None
-    tool_settings.get_tool_settings_manager(
+    config = tool_settings.get_tool_settings_manager(
         QSettings(settings_file, QSettings.Format.IniFormat)
     )
+    # UI construction may start local image indexing; never use personal history in tests.
+    config.set_clipboard_db_path(str(tmp_path_factory.mktemp("clipboard") / "clipboard.db"))
     yield
+    from clipboard.core.manager import ClipboardManager
+    from text_recognition import shutdown_recognition
+    if ClipboardManager._instance is not None:
+        ClipboardManager._instance.stop_image_indexing()
+    shutdown_recognition()
     tool_settings._tool_settings_manager = previous
 
 

@@ -2,12 +2,13 @@
 """
 ClipboardItemDelegate — 剪贴板列表项绘制代理
 
-一行的结构（两行文字 + 左侧图形 + 右侧按键提示）：
+一行的结构（内容、出处/时间、独立标签 + 左侧图形 + 右侧按键提示）：
 
-    [图标]  内容标题（单行，超出省略）                     1
-            Code · 3 分钟前 · ● 代码 ● 工作                📌
+    [图标]  [已置顶] 内容标题（单行，超出省略）              1
+            来源：Code · 3 分钟前
+            (代码) (工作) (+2)
 
-- 行本身透明，直接压在毛玻璃上；没有斑马纹和分隔线；
+- 置顶行用浅底、侧边指示条和常驻文字标记；标签有独立的高对比度底色；
 - 高亮（鼠标或键盘选中）是一块内缩的圆角底，在行之间平滑淡入淡出；
 - 左侧图形：文本用来源应用图标，图片用裁成方形的缩略图，文件用系统文件图标；
 - 右侧是直选按键（1–9、A–Z），悬停时让位给行尾快捷按钮。
@@ -32,7 +33,7 @@ from core.logger import T, log_error
 from ui.glyphs import svg_pixmap
 
 from ...core import ClipboardItem, Tag, source_app_short_name
-from ..theme.theme_styles import SurfacePalette, surface_palette
+from ..theme.theme_styles import SurfacePalette, surface_palette, readable_accent, tag_chip_palette
 from ..theme.themes import Theme
 
 
@@ -48,7 +49,7 @@ UI_FAMILIES = ["Microsoft YaHei UI", "Segoe UI Variable Text", "Segoe UI"]
 # 几何（以内容字号 17px 为基准，按字号等比缩放）
 _BASE_FONT = 17
 _ROW_INSET_X = 6        # 高亮底距视口左右边
-_ROW_INSET_Y = 1
+_ROW_INSET_Y = 3
 _ROW_RADIUS = 8
 _PAD_X = 10             # 高亮底内的左右留白
 _LEAD_W = 36            # 左侧图形列宽
@@ -285,21 +286,27 @@ class ClipboardItemDelegate(QStyledItemDelegate):
             font.setFamilies(UI_FAMILIES)
             font.setPixelSize(px)
             font.setWeight(weight)
-            font.setHintingPreference(QFont.HintingPreference.PreferNoHinting)
+            font.setHintingPreference(QFont.HintingPreference.PreferFullHinting)
             return font
 
         meta_px = max(12, round(size * 0.76))
         self._fonts = {
             "title": make(size),
             "meta": make(meta_px),
+            "chip": make(meta_px, QFont.Weight.Medium),
             "hint": make(max(11, round(size * 0.7)), QFont.Weight.Medium),
         }
         self._metrics = {key: QFontMetrics(font) for key, font in self._fonts.items()}
         self._title_h = round(size * 1.45)
         self._meta_h = round(meta_px * 1.5)
+        self._chip_h = max(22, self._meta_h + 4)
 
     def _pad_y(self) -> int:
-        return self._s(7) if self._show_metadata else self._s(8)
+        return self._s(max(10, self._line_height_padding))
+
+    def _block_height(self, item):
+        return (self._title_h + (self._meta_h + 4 if self._show_metadata else 0)
+                + (self._chip_h + 6 if item.tags else 0))
 
     # ========== 核心绘制 ==========
 
@@ -315,6 +322,17 @@ class ClipboardItemDelegate(QStyledItemDelegate):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
         painter.setRenderHint(QPainter.RenderHint.TextAntialiasing, True)
         painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, True)
+        painter.setClipRect(rect)
+
+        box = QRectF(rect).adjusted(_ROW_INSET_X, _ROW_INSET_Y, -_ROW_INSET_X, -_ROW_INSET_Y)
+        path = QPainterPath()
+        path.addRoundedRect(box, _ROW_RADIUS, _ROW_RADIUS)
+        background = pal.accent_soft if item.is_pinned else pal.tint
+        if item.is_pinned:
+            painter.fillPath(path, background)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(pal.accent_text)
+            painter.drawRoundedRect(QRectF(box.left() + 2, box.top() + 9, 3, box.height() - 18), 1.5, 1.5)
 
         # ---- 高亮底（选中 / 悬停，同一块圆角底，靠进度淡入淡出） ----
         highlighted = self._highlighted_id is not None and index.data(ROLE_ITEM_ID) == self._highlighted_id
@@ -324,10 +342,11 @@ class ClipboardItemDelegate(QStyledItemDelegate):
         if strength > 0.0:
             fill = QColor(pal.selected)
             fill.setAlphaF(pal.selected.alphaF() * strength)
-            box = QRectF(rect).adjusted(_ROW_INSET_X, _ROW_INSET_Y, -_ROW_INSET_X, -_ROW_INSET_Y)
-            path = QPainterPath()
-            path.addRoundedRect(box, _ROW_RADIUS, _ROW_RADIUS)
             painter.fillPath(path, fill)
+        if highlighted:
+            painter.setPen(QPen(pal.accent_text, 1))
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.drawRoundedRect(box.adjusted(.5, .5, -.5, -.5), _ROW_RADIUS, _ROW_RADIUS)
 
         # ---- 水平分区 ----
         left = rect.left() + _ROW_INSET_X + _PAD_X
@@ -339,15 +358,26 @@ class ClipboardItemDelegate(QStyledItemDelegate):
         text_right = right - max(hint_w + (self._s(8) if hint_w else 0), reserve)
 
         # ---- 垂直分区 ----
-        pad_y = self._pad_y()
-        block_h = self._title_h + (self._meta_h if self._show_metadata else 0)
+        block_h = self._block_height(item)
         top = rect.top() + (rect.height() - block_h) // 2
         title_rect = QRect(text_left, top, max(0, text_right - text_left), self._title_h)
-        meta_top = top + self._title_h
-        _ = pad_y
+        meta_top = top + self._title_h + 4
 
         # ---- 左侧图形 ----
         self._paint_leading(painter, item, QRect(left, rect.top(), lead_w, rect.height()))
+
+        # Pin stays in the title slot even while the trailing action buttons are visible.
+        if item.is_pinned:
+            pin_size = self._s(14)
+            label = _tr("Pinned")
+            pin_width = pin_size + 5 + self._metrics["chip"].horizontalAdvance(label)
+            painter.setPen(readable_accent(pal.accent, background))
+            painter.setFont(self._fonts["chip"])
+            painter.drawPixmap(text_left, top + (self._title_h - pin_size) // 2,
+                               svg_pixmap("fluent_icons/Pin.svg", pin_size, painter.pen().color().name()))
+            painter.drawText(QRect(text_left + pin_size + 5, top, pin_width - pin_size - 5, self._title_h),
+                             Qt.AlignmentFlag.AlignVCenter, label)
+            title_rect.setLeft(text_left + pin_width + self._s(10))
 
         # ---- 标题 ----
         painter.setFont(self._fonts["title"])
@@ -358,6 +388,9 @@ class ClipboardItemDelegate(QStyledItemDelegate):
         # ---- 元数据行：来源 · 时间 · 标签 ----
         if self._show_metadata:
             self._paint_meta(painter, item, text_left, text_right, meta_top)
+        if item.tags:
+            tag_top = meta_top + self._meta_h + 6 if self._show_metadata else top + self._title_h + 6
+            self._paint_tags(painter, item.tags, text_left, text_right, tag_top, background)
 
         # ---- 右侧：直选按键 / 置顶标记（悬停时让位给快捷按钮） ----
         if not reserve:
@@ -366,18 +399,12 @@ class ClipboardItemDelegate(QStyledItemDelegate):
                 painter.setPen(pal.text_tertiary)
                 hint_rect = QRect(right - hint_w, top, hint_w, self._title_h)
                 painter.drawText(hint_rect, Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight, SHORTCUT_KEYS[row])
-            if item.is_pinned:
-                size = self._s(13)
-                y = (meta_top + (self._meta_h - size) // 2) if self._show_metadata else (top + (self._title_h - size) // 2)
-                x = right - size if (self._show_metadata or not self._show_shortcuts) else right - hint_w - size - self._s(6)
-                pin = svg_pixmap("fluent_icons/Pin.svg", size, pal.accent.name())
-                painter.drawPixmap(x, y, pin)
 
         painter.restore()
 
     def sizeHint(self, option: QStyleOptionViewItem, index: QModelIndex) -> QSize:
-        height = self._title_h + (self._meta_h if self._show_metadata else 0) + self._pad_y() * 2
         item: ClipboardItem = index.data(ROLE_ITEM_DATA)
+        height = (self._block_height(item) if item else self._title_h) + self._pad_y() * 2
         if item and item.content_type == "image" and item.thumbnail:
             height = max(height, self._s(_THUMB) + self._s(10))
         width = option.rect.width() if option.rect.width() > 0 else 300
@@ -410,8 +437,9 @@ class ClipboardItemDelegate(QStyledItemDelegate):
             if pixmap is None:
                 glyph = "fluent_icons/Camera.svg" if item.content_type == "image" else "fluent_icons/Document.svg"
                 pixmap = svg_pixmap(glyph, self._s(20), pal.text_tertiary.name())
-        x = column.left() + (column.width() - pixmap.width()) // 2
-        y = column.top() + (column.height() - pixmap.height()) // 2
+        logical_size = pixmap.deviceIndependentSize().toSize()
+        x = column.left() + (column.width() - logical_size.width()) // 2
+        y = column.top() + (column.height() - logical_size.height()) // 2
         painter.drawPixmap(x, y, pixmap)
 
     @classmethod
@@ -431,10 +459,11 @@ class ClipboardItemDelegate(QStyledItemDelegate):
                     source = icon.pixmap(QSize(size * 2, size * 2))
                     if not source.isNull():
                         pixmap = source.scaled(
-                            size, size,
+                            size * 2, size * 2,
                             Qt.AspectRatioMode.KeepAspectRatio,
                             Qt.TransformationMode.SmoothTransformation,
                         )
+                        pixmap.setDevicePixelRatio(2.0)
         except Exception:
             pixmap = None
         if len(cls._icon_cache) >= cls._ICON_CACHE_MAX:
@@ -522,46 +551,53 @@ class ClipboardItemDelegate(QStyledItemDelegate):
             x += fm.horizontalAdvance(shown)
             return shown == text
 
-        source = source_app_display_name(item.source_app)
-        if item.content_type == "file":
-            paths = file_paths_of(item)
-            if len(paths) > 1:
-                source = _tr("{n} files").format(n=len(paths))
-            elif paths:
-                folder = os.path.basename(os.path.dirname(os.path.normpath(paths[0])))
-                source = folder or source
+        name = source_app_display_name(item.source_app)
+        source = _tr("Source: {name}").format(name=name) if name else _tr("Unknown source")
         when = format_relative_time(item.created_at)
-        dot = "  ·  "
+        suffix = f"  ·  {when}" if when else ""
+        room = max(0, right - left - fm.horizontalAdvance(suffix))
+        background = pal.accent_soft if item.is_pinned else pal.tint
+        ink = readable_accent(pal.text_secondary, background)
+        draw(fm.elidedText(source, Qt.TextElideMode.ElideRight, room), ink)
+        draw(suffix, ink)
 
-        if source and not draw(source, pal.text_secondary):
-            return
-        if when:
-            if source and not draw(dot, pal.text_tertiary):
-                return
-            if not draw(when, pal.text_tertiary):
-                return
+    def _tag_layout(self, tags, width):
+        """Reserve the overflow count before laying out labels, including at narrow widths."""
+        fm = self._metrics["chip"]
+        gap, padding = 6, 16
+        result = []
+        remaining = width
+        for i, tag in enumerate(tags[:_TAG_MAX]):
+            count = len(tags) - i - 1
+            reserve = fm.horizontalAdvance(f"+{count}") + padding + gap if count else 0
+            available = min(self._s(145), remaining - reserve)
+            if available < fm.horizontalAdvance("…") + padding:
+                break
+            label = fm.elidedText(tag.name, Qt.TextElideMode.ElideRight, available - padding)
+            size = fm.horizontalAdvance(label) + padding
+            result.append((label, size, tag.chip_color))
+            remaining -= size + gap
+        hidden = len(tags) - len(result)
+        if hidden:
+            label = f"+{hidden}"
+            size = fm.horizontalAdvance(label) + padding
+            if size <= remaining:
+                result.append((label, size, None))
+        return result
 
-        tags: List[Tag] = getattr(item, "tags", None) or []
-        if not tags:
-            return
-        dot_d = max(6, round(fm.height() * 0.36))
-        gap = self._s(10)
-        for index, tag in enumerate(tags[:_TAG_MAX]):
-            label = tag.name
-            need = gap + dot_d + self._s(4) + fm.horizontalAdvance(label)
-            if x + need > right:
-                return
-            x += gap
-            cy = top + self._meta_h / 2
-            painter.setPen(Qt.PenStyle.NoPen)
-            painter.setBrush(QColor(tag.chip_color))
-            painter.drawEllipse(QRectF(x, cy - dot_d / 2, dot_d, dot_d))
-            x += dot_d + self._s(4)
-            painter.setPen(pal.text_secondary)
-            painter.drawText(x, baseline, label)
-            x += fm.horizontalAdvance(label)
-            if index == _TAG_MAX - 1 and len(tags) > _TAG_MAX:
-                draw(f"  +{len(tags) - _TAG_MAX}", pal.text_tertiary)
+    def _paint_tags(self, painter, tags, left, right, top, background):
+        painter.setFont(self._fonts["chip"])
+        for label, width, color in self._tag_layout(tags, right - left):
+            fill, ink = tag_chip_palette(color or self._palette.text_secondary.name(), background)
+            box = QRectF(left, top, width, self._chip_h)
+            edge = QColor(ink)
+            edge.setAlphaF(.45)
+            painter.setPen(QPen(edge, 1))
+            painter.setBrush(fill)
+            painter.drawRoundedRect(box, 8, 8)
+            painter.setPen(ink)
+            painter.drawText(box, Qt.AlignmentFlag.AlignCenter, label)
+            left += width + 6
 
 
 __all__ = [

@@ -144,6 +144,8 @@ def test_build_context_menu_for_image_item_includes_save_as(monkeypatch):
         "toggle_pin",
         "tags_menu",
         "pin_image",
+        "recognize_image",
+        "redact_image",
         "save_image_as",
         "delete_item",
     ]
