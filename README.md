@@ -164,6 +164,9 @@ canvas/
     ├── background_item.py   # BackgroundItem — selection area background
     ├── mosaic_item.py       # MosaicItem — pixel mosaic item
     ├── spotlight_item.py    # SpotlightItem / SpotlightCurtain — spotlight holes and their shared curtain
+    ├── magnify_item.py      # MagnifyCalloutItem — exportable magnified region of original pixels
+    ├── callout_link.py      # callout_link — link and geometry sync for arrow + text-bubble callouts
+    ├── image_stamp_item.py  # ImageStampItem — inserted bitmap (proportional resize, undoable, stored in the project)
     ├── selection_item.py    # SelectionItem — selection boundary display
     ├── arrow_item.py        # ArrowItem — arrow item, geometry for nine shaft and head styles
     └── text_item.py         # TextItem — text item, outline/shadow/background and tri-state interaction frame
@@ -183,6 +186,10 @@ Screen capture and smart window detection.
 ```text
 capture/
 ├── capture_service.py       # CaptureService — core screenshot logic
+├── quick_capture.py         # Validated quick-capture requests for screen, window and last region
+├── region_presets.py        # Named screen regions with layout and DPI validation
+├── cursor_capture.py        # Native Windows pointer snapshots and hotspot-aware compositing
+├── multi_region.py          # Ordered crops of one frozen frame with undo/redo
 ├── uia_element_finder.py    # Background UI Automation element snapshots for smart selection
 └── window_finder.py         # WindowFinder — smart window selection, cursor-based detection
 ```
@@ -288,8 +295,21 @@ core/
 ├── shortcut_manager.py      # HotkeySystem / ShortcutManager — global & in-app hotkeys
 ├── last_capture_region.py   # In-memory "last capture region" for the restore-region hotkey
 ├── save.py                  # SaveService — file save service (auto naming, high-quality PDF output)
+├── searchable_pdf.py       # Fresh-pixel OCR searchable PDF with per-page fallback report
+├── image_output.py          # Immutable image export options and safe filename templates
+├── image_layout.py          # Bounded image composition and one-image-per-page PDF rendering
+├── image_compare.py         # Bounded alpha-aware pixel comparison
+├── image_document.py        # Non-destructive file image geometry and source-path protection
+├── editable_project.py      # Bounded editable-image project archive and annotation codecs
 ├── export.py                # ExportService — image export
+├── number_legend.py         # Layout and export of numbered caption step lists (below/right)
+├── watermark.py             # Export watermark (TF-0038): text or image, position/margin/opacity, off by default
+├── annotation_presets.py    # Named annotation style presets (TF-0039): save per-tool styles and apply them to new-tool defaults
+├── capture_metadata.py      # Capture metadata (TF-0040): source/time/note, all off by default
+├── markdown_report.py       # Markdown issue report (TF-0041): relative attachments, escaping, order
+├── packaged_self_check.py   # Packaged self-check (TF-0045): core pipelines inside the built app
 ├── clipboard_utils.py       # copy_image_to_clipboard() — copy images to system clipboard
+├── capture_privacy.py       # Per-owner in-memory capture privacy guards
 ├── platform_utils.py        # DPI awareness, AppUserModelID, Windows API utilities
 ├── qt_utils.py              # safe_disconnect() — Qt signal safe disconnect
 ├── log_translations/        # per-module log text translation helpers
@@ -320,6 +340,9 @@ gif/
 ├── playback_controller.py   # PlaybackController — playback UI and export management
 ├── playback_toolbar.py      # PlaybackToolbar / RangeSlider — progress bar, speed control
 ├── composer.py              # _ComposeWorker / ComposerProgressDialog — GIF/video composition
+├── export_dialog.py         # GifExportDialog — GIF export size and frame-rate controls
+├── mp4_export.py            # Silent H.264/MP4 frame export
+├── mp4_diagnostics.py       # Opt-in synthetic export check for packaged applications
 ├── cursor_overlay.py        # CursorOverlay — cursor rendering and click animation
 └── _widgets.py              # ClickMenuButton / svg_icon() — custom widgets
 ```
@@ -363,6 +386,8 @@ pin/
 ├── pin_canvas_view.py       # PinCanvasView — pin canvas view (sole content renderer)
 ├── pin_canvas.py            # Pin canvas object
 ├── pin_manager.py           # PinManager — manages all pin windows (singleton)
+├── workspace.py            # Bounded editable pin workspace archive and safe restoration
+├── workspace_dialog.py     # Explicit pin selection, save, restore and Recycle Bin actions
 ├── pin_toolbar.py           # PinToolbar — pin toolbar
 ├── pin_controls.py          # PinControlButtons — close, edit, copy buttons
 ├── pin_context_menu.py      # PinContextMenu — right-click menu
@@ -403,6 +428,10 @@ settings/
 stitch/
 ├── jietuba_long_stitch_unified.py   # Stitching interface (calls the Rust longstitch)
 ├── scroll_window.py                 # ScrollCaptureWindow — scroll capture window
+├── session.py              # Bounded scroll checkpoints and reversible seam correction
+├── adjustment_dialog.py    # Visual seam and matching-exclusion review dialogs
+├── auto_scroll.py          # Bounded foreground-targeted scrolling with cancellation
+├── auto_scroll_dialog.py   # Explicit automatic-scroll limits and startup dialog
 └── scroll_toolbar.py                # Scroll capture toolbar
 ```
 
@@ -424,11 +453,13 @@ tools/
 ├── rect.py                  # RectTool — rectangle (filled/outlined)
 ├── ellipse.py               # EllipseTool — ellipse
 ├── arrow.py                 # ArrowTool — arrow
+├── callout.py               # CalloutTool — arrow + text-bubble callout
 ├── text.py                  # TextTool — text
 ├── number.py                # NumberTool — auto-incrementing numbers
 ├── highlighter.py           # HighlighterTool — highlighter
 ├── mosaic.py                # MosaicTool — pixel mosaic
 ├── spotlight.py             # SpotlightTool — spotlight (dims outside the box)
+├── magnify.py               # MagnifyTool — place a magnified callout of original pixels
 ├── cursor.py                # CursorTool — cursor/selection
 ├── eraser.py                # EraserTool — eraser
 └── cursor_manager.py        # CursorManager — cursor style manager
@@ -516,6 +547,11 @@ ui/
 ├── reorderable_rows.py      # DragGrip / DraggableRow / ReorderableRowList — drag-to-reorder rows
 ├── tray_menu.py             # TrayMenu — system tray menu
 ├── screenshot_window.py     # ScreenshotWindow — full-screen capture window (region drawing)
+├── capture_countdown.py     # CaptureCountdown — cancellable, non-activating delayed capture
+├── image_layout_dialog.py   # Image collection, ordering, previews and asynchronous export
+├── image_compare.py         # Read-only side-by-side, wipe and difference views
+├── image_editor.py          # File editor reusing PinCanvas and annotation toolbar
+├── multi_region_dialog.py   # Full-desktop multi-region selection and atomic collection
 ├── dialogs.py               # StandardDialog — confirm, warning, info, error dialogs
 ├── component_gallery.py     # Interactive gallery of shared Qt components; see docs/qt-components.md
 ├── magnifier.py             # MagnifierOverlay — pixel-level magnifier
@@ -551,6 +587,10 @@ ui/
 │   ├── components.py        # SettingCardGroup / ToggleSwitch — setting components
 │   ├── page_appearance.py   # Appearance settings (theme, language)
 │   ├── page_capture.py      # Capture settings
+├── watermark_controls.py  # Export watermark settings group (TF-0038)
+├── metadata_controls.py   # Capture metadata settings group (TF-0040)
+├── markdown_report_dialog.py # Markdown report dialog (TF-0041)
+├── preset_dialog.py       # Annotation style presets dialog (TF-0039)
 │   ├── color_format_dialog.py # ColorFormatDialog — magnifier color format editor
 │   ├── page_clipboard.py    # Clipboard settings
 │   ├── page_hotkey.py       # Hotkey settings
@@ -575,6 +615,7 @@ ui/
 └── selection_info/          # Selection info UI
     ├── controller.py        # Selection info controller
     ├── panel.py             # Selection info panel (dimensions, coordinates)
+    ├── geometry_dialog.py   # Numeric position, size and aspect-ratio editor
     ├── hook_manager.py      # Hook manager
     ├── border_shadow.py     # Selection border shadow effect
     ├── lock_ratio.py        # Aspect ratio lock
@@ -615,3 +656,43 @@ tests/
 ```
 
 </details>
+
+The local screenshot-expansion work includes GIF export size/rate controls. It requires rebuilding/installing the vendored `rust_libs/gifrecorder` from this checkout; the published j-gif 0.3.1 binary does not expose the new interface. See the native module README. This is local development work, not a verified installer release.
+
+Recording playback → Save → MP4 exports silent H.264 video with the selected trim, speed and cursor effects. Odd dimensions are padded on the right/bottom, not stretched. This development build supports no audio capture. For an explicit synthetic package check, run `versepic.exe --verify-mp4-export <empty-output-directory>`; it bypasses normal bootstrap and writes test media/results only to that directory. PyAV notices are bundled, but FFmpeg/x264 redistribution/license review and full installer acceptance remain release gates.
+
+Smart redact adds optional Chinese ID date/checksum and bank-card Luhn checks, plus a limited OCR O/I/l correction switch. Named presets save rule switches only, not keywords, OCR text or images. All matches remain candidates for manual review; checksums do not establish identity or account validity, and OCR errors or split lines can be missed. PNG/JPEG/PDF exports flatten black covers at the reviewed original resolution into new files only; existing files are never overwritten.
+
+Single sensitive capture is wired to the tray in the local checkout. The policy stays with pins and redaction, disables persistent/recording/text/translation exports, and permits only explicit marked image Copy. It depends on the local private clipboard protocol. Real Windows monitor no-retention acceptance is still incomplete because isolated window-station creation was denied; native UI checks mocked the OS clipboard. Do not treat this development feature as a verified privacy guarantee. It cannot erase content read by other apps, OS paging or crash dumps.
+
+History image context menu → Image text index exposes waiting/recognizing/failed/excluded/indexed/no-text states, retry, re-recognize, exclusion and restore. Exclusion removes current OCR search metadata and stays excluded across restarts until explicitly restored; original images and paste formats remain unchanged. Failed jobs no longer automatically retry on every restart. Per-job tokens reject stale results after exclusion, deletion, replacement or database migration. This is not secure erasure of SQLite pages, backups or previously copied text.
+
+Text recognition → Review table reconstructs simple, separated OCR cells into an editable grid alongside the original image. It uses original OCR boxes (not edits in the plain-text pane), supports cell/row/column correction, quoted TSV copy and escaped Markdown export. Up to 200 rows, 32 columns, 4000 cells and 500,000 characters; image preview up to 32 MP. Merged cells, wrapped rows or OCR lines combining multiple cells need manual correction. Formula-like TSV text is apostrophe-prefixed by default; spreadsheet import settings can still change dates, leading zeros or embedded control characters. No cloud upload or automatic history save is added.
+
+PDF collections now offer image-only (default) or searchable output with fresh local OCR, plus 0/90/180/270° image rotation. The searchable path recognizes exact rotated pixels after flattening transparency to white; it never accepts cached history or pre-redaction OCR. Text is positioned below the opaque source image, so appearance stays image-based while reader search/text extraction is possible. Failed/blank pages and unsupported font glyphs fall back to image-only and appear in a per-page report. OCR errors and complex reading order still require review. The OCR result window also opens PDF output for its current image; edited plain text is not used as a hidden PDF layer.
+
+The tray already exposes a one-shot Sensitive screenshot: the policy follows pins and redaction windows, blocks save/history/recording/text/translation exits, and only explicit Copy writes a marked image. It requires this checkout's private clipboard protocol. Isolated window-station creation was denied (WinError 5), so real Windows-listener zero-residue acceptance is not done; native UI checks use a copy stand-in. This in-development path is not a verified privacy guarantee and cannot erase what other apps already read, paging files or crash dumps.
+
+Screenshot, pin and file-editor canvases can place an exportable magnified callout of a source rectangle. The callout shows original background pixels only (nearest-neighbour), not other annotations, the callout itself or edit handles; moving the box does not change the sampled region. It is separate from the colour-picker magnifier. On the screenshot toolbar the button starts in the more menu; pin and file-editor toolbars show it in the drawing row. Older project files without this item type still load; a newer file that contains one reports an unsupported annotation type instead of turning it into a rectangle.
+
+Screenshot, pin and file-editor canvases can create an arrow-and-text-bubble callout in one drag: drag from where the bubble should sit to what it points at, then type the note; leaving it empty and clicking away discards the whole callout. Moving the bubble or growing the text re-hangs the arrow tail on the bubble edge while the tip stays on the original target, and delete, batch delete and undo treat both halves as one unit without changing standalone arrows or text. On the screenshot toolbar the button starts in the more menu; pin and file-editor toolbars show it in the drawing row. A reopened project still draws both halves where they were saved, but the link between them is not restored.
+
+Number annotations can now carry a per-number caption (select a number and type it into the caption field on the number panel). Export can place those captions as a step list below the image or to its right: the list follows number order, captions stay bound to their own number through delete, undo and renumbering, and long captions wrap by pixel width so mixed CJK/Latin text and explicit line breaks are never truncated. The default is no caption list, so existing exports are unchanged; captions are stored in the editable project and survive pin cloning.
+
+The screenshot toolbar's more menu gains Insert image…: pick a local bitmap (PNG/JPG/BMP/WebP) and it lands in the middle of the selection, ready to move, resize proportionally from the corner handles, delete and undo, sitting above normal annotations and below text. Transparency composites as-is, the pixels are read once at insert time so moving or deleting the source file does not affect the result, and oversized, missing or unsupported files are rejected with a warning. Inserted images are stored in the editable project and survive pin inheritance.
+
+## Screenshot features added in this development batch
+
+These were verified with targeted/full regressions and real Windows native drivers (per-batch evidence in docs/screenshot-expansion-progress.md, batches 20-29):
+
+- **Text callout (TF-0035)**: drag out "arrow + text bubble" in one gesture; the tail re-hangs when the bubble moves while the tip stays put, and delete/undo treat both halves as one unit.
+- **Numbered caption list (TF-0036)**: add a caption per number and export it as a step list below or beside the image; off by default.
+- **Inserted image (TF-0037)**: insert PNG/JPG/BMP/WebP from a file, resize proportionally, undo; oversized or broken files are rejected.
+- **Export watermark (TF-0038)**: text or image, four corners or centre, opacity and scale, off by default, with a live preview in settings.
+- **Annotation presets (TF-0039)**: save/apply/rename/delete named per-tool styles; applies to new-tool defaults or the selected item (undoable).
+- **Capture metadata (TF-0040)**: source/time/note, all off by default; only what you keep is exported and window titles are never written to file names.
+- **Markdown issue report (TF-0041)**: export a multi-image collection as report.md plus a relative images/ folder, preserving order and notes.
+- **Mixed-DPI acceptance (TF-0042)**: on a single 150% display, Win32 / mss / Qt physical rectangles match; 100%/125%/200% and negative-coordinate monitors are unverified.
+- **Capture compatibility (TF-0043)**: real results for normal, occluded and minimised windows plus DWM composition; HDR, hardware-accelerated windows and protected content are unverified and protection is never bypassed.
+
+**Not verified / not delivered**: real listener zero-retention (TF-0030, needs an isolated Windows environment or an explicitly authorised verification method); HDR and protected content; full installer main path (planned after TF-0045).

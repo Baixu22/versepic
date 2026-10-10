@@ -112,6 +112,9 @@ canvas/
     ├── background_item.py   # BackgroundItem — 選択領域の背景
     ├── mosaic_item.py       # MosaicItem — モザイクアイテム
     ├── spotlight_item.py    # SpotlightItem / SpotlightCurtain — スポットライトの穴と共有の幕
+    ├── magnify_item.py      # MagnifyCalloutItem — 元画像ピクセルの書き出し可能な拡大枠
+    ├── callout_link.py      # callout_link — 矢印と吹き出しの注釈の関連付けと同期
+    ├── image_stamp_item.py  # ImageStampItem — 挿入したビットマップ（等比拡縮・取り消し可・プロジェクトに保存）
     ├── selection_item.py    # SelectionItem — 選択境界表示
     ├── arrow_item.py        # ArrowItem — 矢印アイテム、9 種類の軸・先端・輪郭のジオメトリ
     └── text_item.py         # TextItem — テキストアイテム、縁取り/影/背景と三状態の操作枠
@@ -131,6 +134,10 @@ canvas/
 ```text
 capture/
 ├── capture_service.py       # CaptureService — スクリーンショットコアロジック
+├── quick_capture.py         # 画面・ウィンドウ・前回範囲のクイック撮影検証
+├── region_presets.py        # 保存範囲と画面配置・DPI の検証
+├── cursor_capture.py        # Windowsポインターの取得とホットスポット合成
+├── multi_region.py          # 静止画の複数範囲と取り消し/やり直し
 ├── uia_element_finder.py    # UI Automation によるバックグラウンド要素検出・キャッシュ
 └── window_finder.py         # WindowFinder — スマートウィンドウ選択、カーソル位置検出
 ```
@@ -236,8 +243,21 @@ core/
 ├── shortcut_manager.py      # HotkeySystem / ShortcutManager — グローバル＆アプリ内ホットキー
 ├── last_capture_region.py   # 「前回の選択範囲を復元」用のプロセス内メモリ
 ├── save.py                  # SaveService — ファイル保存サービス（高品質 PDF 出力対応）
+├── searchable_pdf.py       # 出力ピクセルからOCRする検索PDFとページ別結果
+├── image_output.py          # 不変の画像出力設定と安全な命名テンプレート
+├── image_layout.py          # メモリ上限付き画像結合と画像ごとのPDFページ描画
+├── image_compare.py         # 容量制限付き透明度対応ピクセル比較
+├── image_document.py        # 非破壊の画像変換と元ファイル保護
+├── editable_project.py      # 容量制限付き編集画像プロジェクトと注釈の保存・復元
 ├── export.py                # ExportService — 画像エクスポート
+├── number_legend.py         # 番号説明の手順リストを下/右にレイアウトして書き出す
+├── watermark.py             # 出力ウォーターマーク（TF-0038）：文字/画像、位置/余白/不透明度、既定はオフ
+├── annotation_presets.py    # 注釈スタイルのプリセット（TF-0039）：ツールごとに保存し新規既定へ適用
+├── capture_metadata.py      # キャプチャのメタ情報（TF-0040）：来源/時刻/メモ、既定は全オフ
+├── markdown_report.py       # Markdown 問題レポート（TF-0041）：相対パス添付・エスケープ・順序
+├── packaged_self_check.py   # パッケージ自检（TF-0045）：ビルド内で主要経路を実行
 ├── clipboard_utils.py       # copy_image_to_clipboard() — 画像をクリップボードにコピー
+├── capture_privacy.py       # キャプチャと派生ウィンドウのメモリ内機密ポリシー
 ├── platform_utils.py        # DPI設定、AppUserModelID、Windows APIユーティリティ
 ├── qt_utils.py              # safe_disconnect() — Qtシグナル安全切断
 ├── log_translations/        # 各モジュールのログ翻訳ヘルパー
@@ -268,6 +288,9 @@ gif/
 ├── playback_controller.py   # PlaybackController — 再生UI＆エクスポート管理
 ├── playback_toolbar.py      # PlaybackToolbar / RangeSlider — プログレスバー、速度調整
 ├── composer.py              # _ComposeWorker / ComposerProgressDialog — GIF/動画合成
+├── export_dialog.py         # GifExportDialog — GIF出力サイズとフレームレート設定
+├── mp4_export.py            # 無音H.264/MP4フレーム出力
+├── mp4_diagnostics.py       # パッケージの明示的な合成素材出力チェック
 ├── cursor_overlay.py        # CursorOverlay — カーソルレンダリング＆クリックアニメーション
 └── _widgets.py              # ClickMenuButton / svg_icon() — カスタムウィジェット
 ```
@@ -311,6 +334,8 @@ pin/
 ├── pin_canvas_view.py       # PinCanvasView — ピンキャンバスビュー
 ├── pin_canvas.py            # ピンキャンバスオブジェクト
 ├── pin_manager.py           # PinManager — 全ピンウィンドウ管理（シングルトン）
+├── workspace.py            # 容量制限付き編集画像ワークスペースと復元
+├── workspace_dialog.py     # 画像の選択、保存、復元とごみ箱への移動
 ├── pin_toolbar.py           # PinToolbar — ピンツールバー
 ├── pin_controls.py          # PinControlButtons — 閉じる、編集、コピーボタン
 ├── pin_context_menu.py      # PinContextMenu — 右クリックメニュー
@@ -351,6 +376,10 @@ settings/
 stitch/
 ├── jietuba_long_stitch_unified.py   # 結合インターフェース（Rust の longstitch を呼び出す）
 ├── scroll_window.py                 # ScrollCaptureWindow — スクロールキャプチャウィンドウ
+├── session.py              # 容量制限付きスクロール撮影履歴と継ぎ目修正
+├── adjustment_dialog.py    # 継ぎ目と照合除外領域の確認画面
+├── auto_scroll.py          # 停止可能で上限付きの前面対象スクロール
+├── auto_scroll_dialog.py   # 自動スクロールの上限と開始確認画面
 └── scroll_toolbar.py                # スクロールキャプチャツールバー
 ```
 
@@ -372,11 +401,13 @@ tools/
 ├── rect.py                  # RectTool — 矩形（塗りつぶし/アウトライン）
 ├── ellipse.py               # EllipseTool — 楕円
 ├── arrow.py                 # ArrowTool — 矢印
+├── callout.py               # CalloutTool — 矢印 + 吹き出しの組み合わせ注釈
 ├── text.py                  # TextTool — テキスト
 ├── number.py                # NumberTool — 自動インクリメント番号
 ├── highlighter.py           # HighlighterTool — 蛍光ペン
 ├── mosaic.py                # MosaicTool — モザイク
 ├── spotlight.py             # SpotlightTool — スポットライト（枠の外を暗くする）
+├── magnify.py               # MagnifyTool — 元画像の一部を拡大枠として書き出す
 ├── cursor.py                # CursorTool — カーソル/選択
 ├── eraser.py                # EraserTool — 消しゴム
 └── cursor_manager.py        # CursorManager — カーソルスタイル管理
@@ -464,6 +495,11 @@ ui/
 ├── reorderable_rows.py      # DragGrip / DraggableRow / ReorderableRowList — ドラッグで並べ替えられる行リスト
 ├── tray_menu.py             # TrayMenu — システムトレイメニュー
 ├── screenshot_window.py     # ScreenshotWindow — フルスクリーンキャプチャウィンドウ
+├── capture_countdown.py     # CaptureCountdown — フォーカスを奪わないキャンセル可能な遅延撮影
+├── image_layout_dialog.py   # 画像収集、並べ替え、プレビューと非同期出力
+├── image_compare.py         # 読み取り専用の並列・スライダー・差分表示
+├── image_editor.py          # 貼り付け画像キャンバスと注釈ツールを再利用する画像エディター
+├── multi_region_dialog.py   # 全画面の複数範囲選択と一括収集
 ├── dialogs.py               # StandardDialog — 確認、警告、情報、エラーダイアログ
 ├── component_gallery.py     # 共通 Qt コンポーネントの操作ギャラリー（docs/qt-components.md）
 ├── magnifier.py             # MagnifierOverlay — ピクセルレベル拡大鏡
@@ -499,6 +535,10 @@ ui/
 │   ├── components.py        # SettingCardGroup / ToggleSwitch — 設定コンポーネント
 │   ├── page_appearance.py   # 外観設定（テーマ、言語）
 │   ├── page_capture.py      # キャプチャ設定
+├── watermark_controls.py  # Export watermark settings group (TF-0038)
+├── metadata_controls.py   # Capture metadata settings group (TF-0040)
+├── markdown_report_dialog.py # Markdown レポートダイアログ（TF-0041）
+├── preset_dialog.py       # Annotation style presets dialog (TF-0039)
 │   ├── color_format_dialog.py # ColorFormatDialog — 拡大鏡のカラー形式を管理するダイアログ
 │   ├── page_clipboard.py    # クリップボード設定
 │   ├── page_hotkey.py       # ホットキー設定
@@ -523,6 +563,7 @@ ui/
 └── selection_info/          # 選択情報UI
     ├── controller.py        # 選択情報コントローラー
     ├── panel.py             # 選択情報パネル（サイズ、座標）
+    ├── geometry_dialog.py   # 座標・サイズ・縦横比の編集
     ├── hook_manager.py      # フックマネージャー
     ├── border_shadow.py     # 選択ボーダーシャドウエフェクト
     ├── lock_ratio.py        # アスペクト比ロック
@@ -546,6 +587,8 @@ tests/
 ├── test_drawing_tools.py    # 描画ツールテスト（ペン/矩形/矢印/テキスト/番号/蛍光ペン）
 ├── test_mosaic_tool.py      # モザイクツールテスト
 ├── test_spotlight.py        # スポットライトテスト
+├── test_magnify_callout.py  # 拡大枠テスト
+├── test_text_callout.py     # 組み合わせ注釈（矢印 + 吹き出し）テスト
 ├── test_functional_handles.py # コントロールポイント編集テスト
 ├── test_capture_service.py  # キャプチャサービステスト
 ├── test_clipboard_api.py    # クリップボード公開 API テスト
@@ -563,3 +606,43 @@ tests/
 ```
 
 </details>
+
+ローカルのスクリーンショット拡張には GIF のサイズ・フレームレート設定が含まれます。このチェックアウトの `rust_libs/gifrecorder` をビルドしてインストールしてください。公開版 j-gif 0.3.1 のバイナリには新しいインターフェースがありません。手順はネイティブモジュールの README を参照してください。インストーラーの検証・リリースは未完了です。
+
+録画の再生 → 保存 → MP4 から、トリム・速度・カーソル効果を保った無音 H.264 動画を出力できます。奇数サイズは右端・下端に余白を追加し、伸縮しません。音声収録はありません。`versepic.exe --verify-mp4-export <空の出力先>` は通常起動を回避し、合成素材と結果を指定先だけに書き出す明示的なチェックです。PyAV のライセンスを同梱しますが、FFmpeg/x264 の再配布条件と完全なインストーラー検証はリリース前の確認事項です。
+
+スマート墨消しに、中国身分証の日付・検査符号、カードの Luhn 検査、限定的な OCR O/I/l 補正を追加しました。名前付きプリセットはルール設定のみ保存し、キーワード、OCR テキスト、画像は保存しません。候補は人が確認してください。検査符号は身元や口座の実在を証明せず、OCR 誤読や分割行を見逃す場合があります。PNG/JPEG/PDF は元の解像度で黒塗りを画像に統合して新規保存し、既存ファイルは上書きしません。
+
+ローカル版のトレイに「機密キャプチャ（今回のみ）」を接続しました。ピンと墨消しもポリシーを維持し、保存・録画・テキスト・翻訳の出力を禁止、明示的なマーク付き画像コピーのみ許可します。ローカルの機密クリップボードプロトコルが必要です。分離ウィンドウステーションの作成が拒否され、実際の履歴非保存検証は未完了です。ネイティブUI検証ではOSコピーを代替しています。他アプリの読み取り、OSページング、クラッシュダンプの消去を保証しません。
+
+履歴画像の右クリック → 画像の文字索引で、待機・認識中・失敗・対象外・索引済み・文字なしの状態を確認し、再試行・再認識・除外・再開を操作できます。除外は現在の OCR 検索情報を削除し、明示的に再開するまで再起動後も保持します。元画像と貼り付け形式は変更しません。失敗は再起動のたびに再試行せず、ジョブトークンで削除・除外・画像変更・DB移行後の古い結果を拒否します。SQLiteページ、バックアップ、以前コピーした文字の安全な消去ではありません。
+
+文字認識 → 表を確認では、元の OCR 枠（プレーンテキスト編集後の内容ではありません）から単純で分離したセルの表を再構築し、原画像と比較して編集できます。セル・複数行・行列の修正、引用符付きTSVコピー、エスケープ済みMarkdown出力に対応します。最大200行、32列、4000セル、50万文字、画像3200万画素です。結合セルや折返し、連結OCR行は手動修正が必要です。数式風文字は既定でアポストロフィを付加しますが、貼り付け先の設定により日付・先頭ゼロ・制御文字が変わることがあります。自動クラウド送信や履歴保存は追加しません。
+
+PDF収集で画像のみ（既定）と新しいローカルOCRによる検索PDFを選べ、画像を0/90/180/270度回転できます。検索出力は白背景に合成した回転後の実際のピクセルだけを認識し、履歴や墨消し前のOCRを再利用しません。文字を不透明画像の下に配置するため、画像の外観を維持して検索・抽出できます。空白、OCR失敗、字形不足は画像のみで保存しページ別レポートで報告します。誤認識や複雑な読み順は確認が必要です。文字認識画面からも現在の画像のPDF出力を開けます。
+
+トレイの「1回限りの機密スクリーンショット」は実装済みです。方針はピンと墨消し窓に引き継ぎ、保存・履歴・録画・文字/翻訳の出口を止め、明示的なコピーだけが印付き画像を書き込みます。この作業コピーの私的クリップボードプロトコルが必要です。隔離ウィンドウステーション作成は WinError5 で拒否され、本物の監視ゼロ残留は未完了です。開発中の経路を検証済みのプライバシー保証と見なせません。
+
+スクリーンショット・ピン・ファイル編集キャンバスでは、選んだ元領域を書き出し可能な拡大枠にできます。表示されるのは元画像ピクセル（最近傍）だけで、他の注釈・枠自身・編集ハンドルは入りません。枠を動かしてもサンプリング位置は変わりません。スポイト用ルーペとは別機能です。スクリーンショットツールバーでは「…」に入り、ピンとファイル編集では描画列に出ます。この図元を含まない古い工程はそのまま開けます。含む新しい工程を古い版で開くと、普通の矩形にはならず未対応注釈として報告します。
+
+スクリーンショット・ピン・ファイル編集キャンバスでは、「矢印 + 吹き出し」の注釈を一度のドラッグで作れます。吹き出しを置く位置から指したい場所へドラッグし、そのまま説明を入力します。空のまま別の場所をクリックすると注釈ごと破棄されます。吹き出しを動かしたり文字を増やしたりすると、矢印の根元が吹き出しの縁に付き直し、先端は元の対象を指したままです。削除・一括削除・取り消しは両方をひとまとまりとして扱い、単体の矢印とテキストの動作は変わりません。スクリーンショットのツールバーでは「…」に入り、ピンとファイル編集では描画列に出ます。保存した工程を開き直すと両方は同じ座標に描かれますが、連動は復元されません。
+
+番号注釈に番号ごとの説明を付けられるようになりました（番号を選び、番号パネルの入力欄に記入）。書き出し時は説明を手順リストとして画像の下または右に配置できます。リストは番号順で、削除・取り消し・番号の振り直しでも説明は自分の番号に付いたままです。長い説明はピクセル幅で折り返し、CJK とラテンの混在や明示的な改行も切り捨てません。既定は「説明リストなし」なので既存の書き出しは変わりません。説明は編集プロジェクトに保存され、ピンのクローンにも引き継がれます。
+
+スクリーンショットのツールバー「…」に「画像を挿入…」を追加しました。ローカルのビットマップ（PNG/JPG/BMP/WebP）を選択領域の中央に挿入し、移動・角ハンドルでの等比拡縮・削除・取り消しができます。重なり順は通常の注釈より上、テキストより下です。透明部分はそのまま合成され、ピクセルは挿入時に一度だけ読み込むため元ファイルを移動・削除しても成図は変わりません。サイズ・画素・ファイル上限を超える場合や、ファイルが無い・画像でない場合は警告を出して拒否します。挿入画像は編集プロジェクトに保存され、ピンの継承でも保持されます。
+
+## 今回追加したスクリーンショット機能（開発バッチ）
+
+以下は定向/全量回帰と実機のネイティブドライバで検証済みです（批次ごとの証跡は docs/screenshot-expansion-progress.md の第20〜29批）：
+
+- **吹き出し注釈（TF-0035）**：一度のドラッグで「矢印 + 吹き出し」を作成。吹き出しを動かすと矢印の根元が付き直し、先端は動きません。削除・取り消しは両方をひとまとまりとして扱います。
+- **番号の説明リスト（TF-0036）**：番号ごとに説明を入力し、画像の下または右に手順リストとして書き出せます（既定はオフ）。
+- **画像の挿入（TF-0037）**：PNG/JPG/BMP/WebP をファイルから挿入し、等比拡縮・取り消しが可能。サイズ超過や壊れたファイルは拒否します。
+- **出力ウォーターマーク（TF-0038）**：文字/画像、四隅/中央、不透明度とサイズ。既定はオフで、設定ページにライブプレビューがあります。
+- **注釈スタイルのプリセット（TF-0039）**：ツールごとに名前付きスタイルを保存/適用/名前変更/削除。新規既定値か選択中の図元（取り消し可）に適用します。
+- **キャプチャのメタ情報（TF-0040）**：来源/時刻/メモ。既定は全オフで、残した内容だけが出力され、ウィンドウタイトルをファイル名に書きません。
+- **Markdown 問題レポート（TF-0041）**：複数画像を report.md と相対パスの images/ に出力。順序とメモを保ちます。
+- **混合 DPI 検証（TF-0042）**：150% 単一画面で Win32 / mss / Qt の物理矩形が一致。100%/125%/200% と負座標モニタは未検証です。
+- **キャプチャ互換性（TF-0043）**：通常・遮蔽・最小化ウィンドウと DWM 合成の実測結果あり。HDR、ハードウェアアクセラレーション、保護コンテンツは未検証で、保護の回避は行いません。
+
+**未検証/未提供**：実リスナーの零残留（TF-0030、隔離された Windows 環境か明示的な許可が必要）、HDR と保護コンテンツ、完全なインストーラ経路（TF-0045 以降）。
