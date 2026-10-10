@@ -10,3 +10,4 @@ venv*/
 /dist/
 /*.spec
 /release-artifacts/
+/rust_libs/target/
