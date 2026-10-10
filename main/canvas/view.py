@@ -771,7 +771,7 @@ class CanvasView(QGraphicsView):
         owner_tool_id = controller.get_item_tool_id(item) if controller else None
         line_style_panel = {
             "pen": "paint_panel", "highlighter": "paint_panel",
-            "rect": "shape_panel", "ellipse": "shape_panel",
+            "rect": "shape_panel", "ellipse": "shape_panel", "magnify": "shape_panel",
         }.get(owner_tool_id)
         if line_style_panel and hasattr(toolbar, line_style_panel):
             try:
@@ -829,10 +829,11 @@ class CanvasView(QGraphicsView):
                 toolbar.paint_panel.set_state_from_item(item)
                 if isinstance(item, RectItem):
                     toolbar.paint_panel.set_highlighter_mode("rect")
-            elif tool_id in ("rect", "ellipse"):
+            elif tool_id in ("rect", "ellipse", "magnify"):
                 toolbar.shape_panel.set_state_from_item(item)
             elif tool_id == "number":
                 toolbar.number_panel.set_style(item.style)
+                toolbar.number_panel.set_caption(getattr(item, "caption", ""))
             # 马赛克图元（框选或自由涂抹都在这，跨工具/钉图选中时也要弹出对应面板）
             elif tool_id == "mosaic":
                 toolbar.mosaic_panel.set_draw_mode("rect" if item.fill_mode() else "freehand")
@@ -1969,7 +1970,7 @@ class CanvasView(QGraphicsView):
         selection_rect = self.canvas_scene.selection_model.rect()
         log_debug(T("准备导出选区: {selection_rect}", selection_rect=selection_rect), module="CanvasView")
         
-        result = exporter.export(selection_rect)
+        result = exporter.export_with_legend(selection_rect)
         
         if result:
             log_info(T("导出成功，图像大小: {width}x{height}", width=result.width(), height=result.height()), module="CanvasView")

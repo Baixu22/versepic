@@ -1,4 +1,4 @@
-﻿"""
+"""
 工具栏 - 截图工具栏UI
 """
 
@@ -152,12 +152,16 @@ class _MorePopup(QWidget):
         self.adjust_btn.setObjectName("more_adjust")
         self.adjust_btn.setIcon(FluentIcon.SETTING.icon())
         self.adjust_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.presets_btn = QPushButton(self)
+        self.presets_btn.setObjectName("more_presets")
+        self.presets_btn.setIcon(FluentIcon.EDIT.icon())
+        self.presets_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.apply_scale()
 
     def apply_scale(self):
         """按当前比例刷新自身尺寸；网格布局在下次 set_buttons 时用新的 cell 重算"""
         self.setStyleSheet(_button_qss() + f"""
-            QPushButton#more_adjust {{
+            QPushButton#more_adjust, QPushButton#more_presets {{
                 color: {get_ui_theme().tokens.text_muted};
                 font-size: {scaled(self.BASE_ADJUST_FONT)}px;
                 padding: 0px {scaled(8)}px;
@@ -165,8 +169,10 @@ class _MorePopup(QWidget):
         """)
         from ui.fluent_lite import FluentIcon
         self.adjust_btn.setIcon(FluentIcon.SETTING.render_icon(get_ui_theme().tokens.text))
+        self.presets_btn.setIcon(FluentIcon.EDIT.render_icon(get_ui_theme().tokens.text))
         icon = scaled(self.BASE_ADJUST_ICON)
         self.adjust_btn.setIconSize(QSize(icon, icon))
+        self.presets_btn.setIconSize(QSize(icon, icon))
 
     def set_buttons(self, buttons, cell):
         """把 buttons 按每行 COLUMNS 个排成网格，每格 cell 大小；「调整」放在网格下方靠右"""
@@ -182,9 +188,12 @@ class _MorePopup(QWidget):
         rows = -(-len(buttons) // self.COLUMNS)   # 向上取整
         grid_width = min(len(buttons), self.COLUMNS) * cell.width()
         adjust_width = self.adjust_btn.sizeHint().width()
+        presets_width = self.presets_btn.sizeHint().width()
         adjust_height = round(cell.height() * 0.7)
-        width = max(grid_width, adjust_width) + 2 * pad
+        bottom_width = adjust_width + presets_width + pad
+        width = max(grid_width, bottom_width) + 2 * pad
         top = pad + rows * cell.height()
+        self.presets_btn.setGeometry(width - pad - adjust_width - presets_width, top, presets_width, adjust_height)
         self.adjust_btn.setGeometry(width - pad - adjust_width, top, adjust_width, adjust_height)
         self.resize(width, top + adjust_height + pad)
 
@@ -229,11 +238,17 @@ class Toolbar(QWidget):
     long_screenshot_clicked = Signal()  # 长截图按钮
     screenshot_translate_clicked = Signal()  # 截图翻译按钮
     text_recognize_clicked = Signal()  # 文字识别按钮
+    editable_project_clicked = Signal()
+    multi_region_clicked = Signal()
+    collect_next_clicked = Signal()
+    collect_review_clicked = Signal()
     smart_redact_clicked = Signal()
     scan_code_clicked = Signal()  # 扫码按钮
     gif_record_clicked = Signal()  # GIF录制按钮
+    insert_image_clicked = Signal()  # 插入图片（TF-0037）
     color_changed = Signal(QColor)  # 颜色改变
     number_style_changed = Signal(str)  # 序号样式改变
+    number_caption_changed = Signal(str)  # 选中序号的说明文字改变（可撤销）
     stroke_width_changed = Signal(int)  # 线宽改变
     opacity_changed = Signal(int)  # 透明度改变(0-255)
     number_next_changed = Signal(int)  # 序号工具下一数字改变
@@ -318,8 +333,18 @@ class Toolbar(QWidget):
             "scan_code", "svg/扫码.svg", "Scan QR code / barcode", wide, self.scan_code_clicked.emit)
         self.smart_redact_btn = self._add_button(
             "smart_redact", "svg/马赛克.svg", "Smart redact", wide, self.smart_redact_clicked.emit)
+        self.editable_project_btn = self._add_button(
+            "editable_project", "svg/lucide/folder.svg", "Edit or save project…", wide, self.editable_project_clicked.emit)
+        self.multi_region_btn = self._add_button(
+            "multi_region", "svg/lucide/list-filter.svg", "Multiple regions from frozen frame", wide, self.multi_region_clicked.emit)
+        self.collect_next_btn = self._add_button(
+            "collect_next", "svg/lucide/plus.svg", "Collect and capture next", wide, self.collect_next_clicked.emit)
+        self.collect_review_btn = self._add_button(
+            "collect_review", "svg/lucide/image.svg", "Collect and review images", wide, self.collect_review_clicked.emit)
         self.gif_btn = self._add_button(
             "gif", "svg/gif.svg", "GIF recording", wide, self.gif_record_clicked.emit)
+        self.insert_image_btn = self._add_button(
+            "insert_image", "svg/insert_image.svg", "Insert image…", wide, self.insert_image_clicked.emit)
         # 复制按钮只在钉图里摆出来，截图的排布里没有它
         self.copy_btn = self._add_button(
             "copy", "svg/copy.svg", "Copy image", wide, self.copy_clicked.emit)
@@ -332,7 +357,11 @@ class Toolbar(QWidget):
             "mosaic", "svg/马赛克.svg", "Mosaic (mouse wheel to resize)", tool)
         self.spotlight_btn = self._add_tool_button(
             "spotlight", "svg/聚光灯.svg", "Spotlight (dim outside the box)", tool)
+        self.magnify_btn = self._add_tool_button(
+            "magnify", "svg/放大框.svg", "Magnify region", tool)
         self.arrow_btn = self._add_tool_button("arrow", "svg/箭头.svg", "Draw arrow", tool)
+        self.callout_btn = self._add_tool_button(
+            "callout", "svg/气泡标注.svg", "Text callout (drag from bubble to target)", tool)
         self.number_btn = self._add_tool_button(
             "number", "svg/序号.svg", "Number (Shift+scroll to change number)", tool)
         self.rect_btn = self._add_tool_button("rect", "svg/方框.svg", "Draw rectangle", tool)
@@ -370,7 +399,9 @@ class Toolbar(QWidget):
             "highlighter": self.highlighter_btn,
             "mosaic": self.mosaic_btn,
             "spotlight": self.spotlight_btn,
+            "magnify": self.magnify_btn,
             "arrow": self.arrow_btn,
+            "callout": self.callout_btn,
             "number": self.number_btn,
             "rect": self.rect_btn,
             "ellipse": self.ellipse_btn,
@@ -524,6 +555,8 @@ class Toolbar(QWidget):
             self._make_floating(self._more_popup)
             self._more_popup.adjust_btn.setText(self.tr("Adjust"))
             self._more_popup.adjust_btn.clicked.connect(self._open_layout_dialog)
+            self._more_popup.presets_btn.setText(self.tr("Presets"))
+            self._more_popup.presets_btn.clicked.connect(self._open_preset_dialog)
             self._more_popup.hover_changed.connect(self._on_more_hover)
             self._more_close_timer = QTimer(self)
             self._more_close_timer.setSingleShot(True)
@@ -552,6 +585,18 @@ class Toolbar(QWidget):
         if self._more_popup is not None:
             self._more_close_timer.stop()
             self._more_popup.hide()
+
+    def _open_preset_dialog(self):
+        """「预设」：保存/应用常用标注样式；不参与工具栏排布配置。"""
+        from .preset_dialog import AnnotationPresetDialog
+
+        self._hide_more_popup()
+        host = self._host_window()
+        view = getattr(host, "view", None) or getattr(host, "canvas", None)
+        dialog = AnnotationPresetDialog(self, view, host)
+        screen = QApplication.screenAt(self.mapToGlobal(QPoint(0, 0))) or QApplication.primaryScreen()
+        dialog.move(screen.availableGeometry().center() - dialog.rect().center())
+        dialog.exec()
 
     def _open_layout_dialog(self):
         """「调整」：编辑排布，确认后保存并立即重排"""
@@ -644,6 +689,10 @@ class Toolbar(QWidget):
             self.number_panel.next_number_changed.connect(self._on_number_next_changed)
         if hasattr(self.number_panel, "style_changed"):
             self.number_panel.style_changed.connect(self._on_number_style_changed)
+        if hasattr(self.number_panel, "caption_changed"):
+            self.number_panel.caption_changed.connect(self._on_number_caption_changed)
+        if hasattr(self.number_panel, "legend_placement_changed"):
+            self.number_panel.legend_placement_changed.connect(self._on_number_legend_placement_changed)
         self.number_panel.hide()
         
         # === 5. 文字设置面板 (text) ===
@@ -717,10 +766,13 @@ class Toolbar(QWidget):
                     self.paint_panel.set_highlighter_mode(settings.get("draw_mode"))
             elif tool_id in ("rect", "ellipse"):
                 self.shape_panel.line_style = settings.get("line_style")
-            elif tool_id == "arrow":
+            elif tool_id in ("arrow", "callout"):
                 self.arrow_panel.arrow_style = settings.get("arrow_style")
             elif tool_id == "number":
                 self.number_panel.set_style(settings.get("style"))
+                # 说明属于选中的图元，不是工具默认值：回填成空，选中图元后再盖上去
+                self.number_panel.set_caption("")
+                self.number_panel.refresh_legend_placement()
             elif tool_id == "mosaic":
                 self.mosaic_panel.set_draw_mode(settings.get("draw_mode"))
                 self.mosaic_panel.set_style(settings.get("style"))
@@ -873,9 +925,11 @@ class Toolbar(QWidget):
             "pen": self.paint_panel,
             "highlighter": self.paint_panel,
             "spotlight": self.paint_panel,
+            "magnify": self.shape_panel,
             "rect": self.shape_panel,
             "ellipse": self.shape_panel,
             "arrow": self.arrow_panel,
+            "callout": self.arrow_panel,
             "number": self.number_panel,
             "text": self.text_panel,
             "mosaic": self.mosaic_panel,
@@ -1108,6 +1162,16 @@ class Toolbar(QWidget):
     def _on_number_style_changed(self, style: str):
         """转发给窗口统一处理：落到选中的序号 + 存设置 + 刷新光标。"""
         self.number_style_changed.emit(style)
+
+    def _on_number_caption_changed(self, caption: str):
+        """说明只落在当前选中的序号上，由窗口统一处理（可撤销）。"""
+        self.number_caption_changed.emit(caption)
+
+    def _on_number_legend_placement_changed(self, placement: str):
+        """导出位置是应用级设置，直接记住；不用等窗口处理。"""
+        from tools.number import NumberTool
+
+        NumberTool.apply_legend_placement(placement)
 
     def set_number_next_value(self, value: int):
         """设置序号工具下一数字（更新UI显示）"""

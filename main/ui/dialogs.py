@@ -99,7 +99,7 @@ def track_modeless_dialog(dialog):
     dialog.destroyed.connect(_cleanup)
     return dialog
 
-def show_custom_confirm_dialog(parent, title, message, buttons_config) -> object:
+def show_custom_confirm_dialog(parent, title, message, buttons_config, *, plain_text=False) -> object:
     """
     显示自定义多按钮确认对话框，返回被点击按钮的 action_id
     buttons_config 格式:
@@ -110,6 +110,8 @@ def show_custom_confirm_dialog(parent, title, message, buttons_config) -> object
       ]
     """
     dialog = StandardDialog(parent, title, message)
+    if plain_text:
+        dialog.label.setTextFormat(Qt.TextFormat.PlainText)
     reject_roles = (
         QDialogButtonBox.ButtonRole.RejectRole,
         QDialogButtonBox.ButtonRole.NoRole,
@@ -142,7 +144,7 @@ def show_custom_confirm_dialog(parent, title, message, buttons_config) -> object
     dialog.exec()
     return dialog.result_action
 
-def show_confirm_dialog(parent, title, message) -> bool:
+def show_confirm_dialog(parent, title, message, *, plain_text=False) -> bool:
     """显示确认对话框 (Yes / No)，返回 bool"""
     yes_text = _translate_dialog_text("Yes")
     no_text = _translate_dialog_text("No")
@@ -151,6 +153,8 @@ def show_confirm_dialog(parent, title, message) -> bool:
         {"id": True, "text": yes_text, "role": QDialogButtonBox.ButtonRole.YesRole},
         {"id": False, "text": no_text, "role": QDialogButtonBox.ButtonRole.NoRole, "default": True}
     ]
+    if plain_text:
+        return show_custom_confirm_dialog(parent, title, message, config, plain_text=True) is True
     return show_custom_confirm_dialog(parent, title, message, config) is True
 
 def show_confirm_checkbox_dialog(parent, title, message, checkbox_text, checkbox_checked=False):

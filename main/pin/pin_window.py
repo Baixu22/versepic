@@ -49,7 +49,7 @@ class PinWindow(QWidget):
     closed = Signal()  # 窗口关闭信号
 
     def __init__(self, image: QImage, position: QPoint, config_manager,
-                 drawing_items=None, selection_offset=None, number_next=None):
+                 drawing_items=None, selection_offset=None, number_next=None, *, sensitive=False):
         """
         Args:
             image: 选区底图（只包含选区的纯净背景，不含绘制）
@@ -62,6 +62,7 @@ class PinWindow(QWidget):
         super().__init__()
 
         self.config_manager = config_manager
+        self.sensitive_capture = sensitive is True
         self.drawing_items = drawing_items or []
         self.selection_offset = selection_offset or QPoint(0, 0)
 
@@ -142,6 +143,7 @@ class PinWindow(QWidget):
         # ====== 画布 ======
         from .pin_canvas import PinCanvas
         self.canvas = PinCanvas(self, self._orig_size, image)
+        self.canvas.scene.sensitive_capture = self.sensitive_capture
         if self.drawing_items:
             self.canvas.initialize_from_items(self.drawing_items, self.selection_offset, number_next)
 
@@ -179,6 +181,16 @@ class PinWindow(QWidget):
             self.border_overlay.setGeometry(0, 0, self.width(), self.height())
             self.border_overlay.raise_()
 
+        if self.sensitive_capture:
+            from core.capture_privacy import notice, install_text_guard
+            install_text_guard(self)
+            self._privacy_badge = QLabel("🔒", self)
+            self._privacy_badge.setToolTip(notice())
+            self._privacy_badge.setAccessibleName(notice())
+            self._privacy_badge.setStyleSheet("background: #291d07; color: #fff2c6; padding: 4px;")
+            self._privacy_badge.adjustSize()
+            self._privacy_badge.move(4, 4)
+            self._privacy_badge.raise_()
         # ====== 显示 ======
         self.show()
         self.update_button_positions()
@@ -615,6 +627,9 @@ class PinWindow(QWidget):
     # ==================================================================
 
     def _on_translate_clicked(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
         if not hasattr(self, '_translation_helper'):
             return
         if self._ocr_has_result:
@@ -639,6 +654,9 @@ class PinWindow(QWidget):
             )
 
     def _on_ocr_translation_finished(self, success: bool, result: str):
+        from core.capture_privacy import is_sensitive
+        if is_sensitive(self):
+            return
         """接收钉图文字层 OCR 结果，交给统一翻译界面。"""
         if hasattr(self, '_translation_helper'):
             self._translation_helper.complete_ocr_translation(success, result)
@@ -675,6 +693,9 @@ class PinWindow(QWidget):
         self.update()
 
     def toggle_text_selection(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
         if hasattr(self, '_ocr_mgr'):
             self._ocr_mgr.toggle_text_selection()
 
@@ -734,7 +755,10 @@ class PinWindow(QWidget):
     # 图像导出
     # ==================================================================
 
-    def get_current_image(self) -> QImage:
+    def get_current_image(self, *, allow_sensitive=False) -> QImage:
+        from core.capture_privacy import is_sensitive
+        if is_sensitive(self) and not allow_sensitive:
+            raise ValueError("Sensitive pin cannot be transferred or saved")
         dpr = self.devicePixelRatioF()
         if self.canvas:
             img = self.canvas.get_current_image(dpr)
@@ -769,7 +793,34 @@ class PinWindow(QWidget):
             if was_editing and active_tool_id:
                 self.canvas.activate_tool(active_tool_id)
 
+    def compare_image(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
+        from ui.image_compare import show_image_compare
+        show_image_compare().load_pin(self)
+
+    def open_editable_project(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
+        from core.image_document import ImageGeometry
+        from ui.image_editor import open_scene_as_project
+        from ui.dialogs import show_warning_dialog
+        def open_project():
+            t=self._image_transform
+            size=self.canvas.base_size
+            geometry=ImageGeometry((0,0,size.width(),size.height()),t.rotation,t.flip_h,t.flip_v)
+            try:
+                open_scene_as_project(self.canvas.scene,geometry=geometry)
+            except Exception:
+                show_warning_dialog(self,self.tr("Project unavailable"),self.tr("Could not transfer the editable image. Original content was kept."))
+        self._with_edit_paused(open_project)
+
     def save_image(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
         from datetime import datetime
         from PySide6.QtWidgets import QFileDialog
         from core.save import SaveService
@@ -807,12 +858,19 @@ class PinWindow(QWidget):
         self._with_edit_paused(_do_save)
 
     def copy_to_clipboard(self):
+        from core.capture_privacy import is_sensitive, copy_private
+        if is_sensitive(self):
+            self._with_edit_paused(lambda: copy_private(self.get_current_image(allow_sensitive=True), self))
+            return
         def _do_copy():
             image = self.get_current_image()
             deliver_image_async(image)
         self._with_edit_paused(_do_copy)
 
     def copy_all_text(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
         """复制钉图中识别到的全部文字；尚未识别过则先识别再复制。"""
         layer = self.ocr_text_layer
         if self._ocr_has_result and layer is not None and layer.has_text():
@@ -823,6 +881,9 @@ class PinWindow(QWidget):
 
     def _copy_ocr_text(self, success: bool, result: str):
         """recognize_then 的回调：成功时 result 是全部文字，失败原因已由它记日志。"""
+        from core.capture_privacy import is_sensitive
+        if is_sensitive(self):
+            return
         if not success or not result.strip():
             self._show_hint_label(self.tr("No text was recognized"))
             return
@@ -839,6 +900,8 @@ class PinWindow(QWidget):
             return
         log_debug(T("开始关闭"), "PinWindow")
         self._is_closed = True
+        from core.capture_privacy import remove_text_guard
+        remove_text_guard(self)
         self.cleanup()
         self.closed.emit()
         self.close()

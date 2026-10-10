@@ -39,6 +39,13 @@ def silence_logging(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def isolate_image_writer(monkeypatch):
+    # This unit suite supplies image-shaped save stubs; real encoding is covered separately.
+    monkeypatch.setattr("core.save.SaveService.save_qimage_to_path",
+                        lambda self, image, path, **kwargs: image.save(path))
+
+
+@pytest.fixture(autouse=True)
 def reset_singleton():
     PinManager._instance = None
     yield

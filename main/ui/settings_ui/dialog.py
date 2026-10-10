@@ -6,6 +6,7 @@
 各个页面分别位于 page_*.py 模块中。
 """
 import os
+from settings.tool_settings import QUICK_CAPTURE_HOTKEY_FIELDS
 import subprocess
 import sys
 
@@ -515,6 +516,9 @@ class SettingsDialog(FrostedFramelessDialog):
             self.translation_hotkey_edit.setText(defaults["translation_hotkey"])
         if hasattr(self, 'translation_hotkey_edit_2'):
             self.translation_hotkey_edit_2.setText(defaults["translation_hotkey_2"])
+        for attr, key in QUICK_CAPTURE_HOTKEY_FIELDS:
+            if hasattr(self, attr):
+                getattr(self, attr).setText(defaults.get(key, ""))
         # 应用内快捷键
         if hasattr(self, '_inapp_edits'):
             for cfg_key, edit in self._inapp_edits.items():
@@ -590,6 +594,17 @@ class SettingsDialog(FrostedFramelessDialog):
                 self._selection_handle_size_combo.setCurrentIndex(index)
 
     def _reset_screenshot_settings_page(self):
+        if hasattr(self, "include_cursor_toggle"):
+            self.include_cursor_toggle.setChecked(False)
+        if hasattr(self, "output_size_combo"):
+            self.output_size_combo.setCurrentIndex(0)
+            self.output_width_spin.setValue(1600)
+            self.output_quality_spin.setValue(85)
+            self.output_template_edit.clear()
+            self.output_project_edit.clear()
+            self.output_date_toggle.setChecked(False)
+        if hasattr(self, "quick_capture_result_combo"):
+            self.quick_capture_result_combo.setCurrentIndex(0)
         defaults = self.config_manager.APP_DEFAULT_SETTINGS
         if hasattr(self, 'double_click_copy_close_toggle'):
             self.double_click_copy_close_toggle.setChecked(
@@ -738,11 +753,23 @@ class SettingsDialog(FrostedFramelessDialog):
             )
             return
 
+        if hasattr(self, "output_template_edit"):
+            from core.image_output import validate_filename_template
+            try:
+                validate_filename_template(self.output_template_edit.text())
+            except ValueError:
+                show_warning_dialog(self, self.tr("Invalid File Name Template"),
+                                    self.tr("Use only the listed filename fields, without formatting."))
+                return
+
         # 防止保存过程中（比如语言切换触发的窗口重建）触发未保存确认弹窗
         self._skip_unsaved_close_prompt = True
 
         # 0. 快捷键
         self.config_manager.set_hotkey(self.hotkey_input.text().strip())
+        for attr, key in QUICK_CAPTURE_HOTKEY_FIELDS:
+            if hasattr(self, attr):
+                self.config_manager.set_app_setting(key, getattr(self, attr).text().strip())
         if hasattr(self, 'hotkey_input_2'):
             self.config_manager.set_hotkey_2(self.hotkey_input_2.text().strip())
         if hasattr(self, 'translation_hotkey_edit'):
@@ -817,6 +844,35 @@ class SettingsDialog(FrostedFramelessDialog):
                         self.tr("Log save location changed.") + "\n" + self.tr("*Changes will fully take effect after restart.")
                     )
                 self._refresh_latest_log_label()
+
+        if hasattr(self, "quick_capture_result_combo"):
+            self.config_manager.set_app_setting("quick_capture_result", self.quick_capture_result_combo.currentData())
+
+        if hasattr(self, "output_size_combo"):
+            self.config_manager.set_app_setting("screenshot_size_mode", self.output_size_combo.currentData())
+            self.config_manager.set_app_setting("screenshot_output_width", self.output_width_spin.value())
+            self.config_manager.set_screenshot_quality(self.output_quality_spin.value())
+            self.config_manager.set_app_setting("screenshot_name_template", self.output_template_edit.text())
+            self.config_manager.set_app_setting("screenshot_project_name", self.output_project_edit.text())
+            self.config_manager.set_app_setting("screenshot_date_folders", self.output_date_toggle.isChecked())
+
+        if hasattr(self, "include_cursor_toggle"):
+            self.config_manager.set_app_setting("screenshot_include_cursor", self.include_cursor_toggle.isChecked())
+        if hasattr(self, "watermark_toggle"):
+            self.config_manager.set_app_setting("watermark_enabled", self.watermark_toggle.isChecked())
+            self.config_manager.set_app_setting("watermark_kind", self.watermark_kind_combo.currentData())
+            self.config_manager.set_app_setting("watermark_text", self.watermark_text_edit.text())
+            self.config_manager.set_app_setting("watermark_image_path", self.watermark_image_edit.text())
+            self.config_manager.set_app_setting("watermark_position", self.watermark_position_combo.currentData())
+            self.config_manager.set_app_setting("watermark_opacity", self.watermark_opacity_spin.value() / 100.0)
+            self.config_manager.set_app_setting("watermark_scale", self.watermark_scale_spin.value() / 100.0)
+        if hasattr(self, "meta_source_toggle"):
+            self.config_manager.set_app_setting("capture_meta_source_enabled", self.meta_source_toggle.isChecked())
+            self.config_manager.set_app_setting("capture_meta_time_enabled", self.meta_time_toggle.isChecked())
+            self.config_manager.set_app_setting("capture_meta_note_enabled", self.meta_note_toggle.isChecked())
+            self.config_manager.set_app_setting("capture_meta_source", self.meta_source_edit.text())
+            self.config_manager.set_app_setting("capture_meta_note", self.meta_note_edit.text())
+            self.config_manager.set_app_setting("capture_meta_time", "")
 
         # 3. 截图保存
         if hasattr(self, 'save_toggle'):
@@ -1085,8 +1141,11 @@ class SettingsDialog(FrostedFramelessDialog):
     def _snapshot_settings(self):
         """捕获所有可编辑控件的当前值，返回 dict"""
         snap = {}
+        for attr, _key in QUICK_CAPTURE_HOTKEY_FIELDS:
+            if hasattr(self, attr):
+                snap[attr] = getattr(self, attr).text()
         # 文本类
-        for attr in ('hotkey_input', 'hotkey_input_2', 'clipboard_hotkey_edit',
+        for attr in ('output_template_edit', 'output_project_edit', 'hotkey_input', 'hotkey_input_2', 'clipboard_hotkey_edit',
                       'translation_hotkey_edit', 'translation_hotkey_edit_2',
                       'clipboard_hotkey_edit_2', 'pin_clipboard_hotkey_edit',
                       'pin_clipboard_hotkey_edit_2', 'save_path_lbl', 'path_lbl',
@@ -1102,7 +1161,7 @@ class SettingsDialog(FrostedFramelessDialog):
                 if w is not None:
                     snap[f.config_key] = provider_fields.widget_value(f, w)
         # 开关类
-        for attr in ('double_click_copy_close_toggle',
+        for attr in ('include_cursor_toggle', 'output_date_toggle', 'double_click_copy_close_toggle',
                       'cross_tool_selection_toggle',
                       'text_always_on_top_toggle',
                       'smart_animation_toggle',
@@ -1123,7 +1182,7 @@ class SettingsDialog(FrostedFramelessDialog):
             if w is not None:
                 snap[attr] = w.isChecked()
         # 下拉框类
-        for attr in ('screenshot_format_combo', 'ocr_engine_combo',
+        for attr in ('output_size_combo', 'quick_capture_result_combo', 'screenshot_format_combo', 'ocr_engine_combo',
                       'translation_provider_combo', 'translation_target_combo',
                       'log_level_combo',
                       'language_combo', 'engine_combo', 'cursor_move_combo',
@@ -1136,7 +1195,7 @@ class SettingsDialog(FrostedFramelessDialog):
             if w is not None:
                 snap[attr] = w.currentIndex()
         # 数值类
-        for attr in ('clipboard_history_limit_spin',
+        for attr in ('output_width_spin', 'output_quality_spin', 'clipboard_history_limit_spin',
                       'cooldown_spinbox', 'ignore_top_pixels_spinbox',
                       'ocr_scale_spinbox'):
             w = getattr(self, attr, None)
@@ -1231,6 +1290,23 @@ class SettingsDialog(FrostedFramelessDialog):
 
     def refresh_settings(self):
         """从配置管理器重新读取所有设置并更新界面"""
+        if hasattr(self, "include_cursor_toggle"):
+            self.include_cursor_toggle.setChecked(self.config_manager.get_app_setting("screenshot_include_cursor", False))
+        if hasattr(self, "output_size_combo"):
+            from core.image_output import ImageOutputOptions
+            options = ImageOutputOptions.from_config(self.config_manager)
+            self.output_size_combo.setCurrentIndex(self.output_size_combo.findData(options.size_mode))
+            self.output_width_spin.setValue(options.width)
+            self.output_quality_spin.setValue(options.quality)
+            self.output_template_edit.setText(self.config_manager.get_app_setting("screenshot_name_template", ""))
+            self.output_project_edit.setText(options.project)
+            self.output_date_toggle.setChecked(options.date_folders)
+        if hasattr(self, "quick_capture_result_combo"):
+            index = self.quick_capture_result_combo.findData(self.config_manager.get_app_setting("quick_capture_result", "edit"))
+            self.quick_capture_result_combo.setCurrentIndex(max(0, index))
+        for attr, key in QUICK_CAPTURE_HOTKEY_FIELDS:
+            if hasattr(self, attr):
+                getattr(self, attr).setText(self.config_manager.get_app_setting(key, ""))
         if hasattr(self, 'hotkey_input'):
             self.hotkey_input.setText(self.config_manager.get_hotkey())
         if hasattr(self, 'hotkey_input_2'):

@@ -1455,6 +1455,15 @@ class LayerEditor:
         if isinstance(r, QRectF):
             state["rect"] = QRectF(r)
 
+        source = getattr(layer, "source_rect", None)
+        if callable(source):
+            try:
+                value = source()
+                if isinstance(value, QRectF):
+                    state["source_rect"] = QRectF(value)
+            except Exception as e:
+                log_exception(e, T("捕获layer source_rect"))
+
         # pos / transform（QGraphicsItem）
         if hasattr(layer, "pos") and callable(layer.pos):
             try:

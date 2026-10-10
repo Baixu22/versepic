@@ -78,6 +78,7 @@ class PinCanvas(QObject):
         offset_y = -selection_offset.y()
         
         inherited_count = 0
+        clone_map = {}  # 源图元 -> 克隆，组合标注两半都克隆完后再重连
         for item in drawing_items:
             try:
                 # 获取原始项目信息
@@ -101,6 +102,7 @@ class PinCanvas(QObject):
                         edit_command = EditItemCommand(cloned_item, base_state, final_state)
                         self.undo_stack.push_command(edit_command)
 
+                    clone_map[item] = cloned_item
                     inherited_count += 1
                 else:
                     log_warning(T("克隆失败: {item_type} - 返回None", item_type=item_type), "PinCanvas")
@@ -112,6 +114,34 @@ class PinCanvas(QObject):
 
         log_info(T("成功继承 {inherited_count}/{total_count} 个绘制项目", inherited_count=inherited_count, total_count=len(drawing_items)), "PinCanvas")
         
+        # 组合标注：两半都克隆出来后按原目标点重连。关联只影响钉图里的后续
+        # 拖动/删除，上面的入栈命令已经按单图元记好，这里不能再动撤销栈。
+        try:
+            from canvas.items.callout_link import (
+                ROLE_ARROW, callout_target, is_callout_part, link_callout, partner_of, role_of,
+            )
+
+            paired = set()
+            for source_item, cloned_item in clone_map.items():
+                if id(source_item) in paired or not is_callout_part(source_item):
+                    continue
+                source_partner = partner_of(source_item)
+                cloned_partner = clone_map.get(source_partner)
+                if cloned_partner is None:
+                    continue
+                if role_of(source_item) == ROLE_ARROW:
+                    arrow_clone, bubble_clone = cloned_item, cloned_partner
+                else:
+                    arrow_clone, bubble_clone = cloned_partner, cloned_item
+                target = callout_target(source_item)
+                if target is not None:
+                    target = QPointF(target.x() + offset_x, target.y() + offset_y)
+                link_callout(arrow_clone, bubble_clone, target)
+                paired.add(id(source_item))
+                paired.add(id(source_partner))
+        except Exception as exc:
+            log_warning(T("恢复组合标注关联失败: {exc}", exc=exc), "PinCanvas")
+
         # 同步序号计数器：直接使用源场景的下一个序号值
         if number_next is not None:
             self._sync_number_next(number_next)
@@ -148,7 +178,7 @@ class PinCanvas(QObject):
                 StrokeItem, RectItem, EllipseItem, ArrowItem, 
                 TextItem, NumberItem
             )
-            from canvas.items import MosaicItem, SpotlightItem
+            from canvas.items import MosaicItem, SpotlightItem, MagnifyCalloutItem, ImageStampItem
 
             # 根据类型进行克隆
             if isinstance(item, StrokeItem):
@@ -158,6 +188,10 @@ class PinCanvas(QObject):
             elif isinstance(item, SpotlightItem):
                 # 必须排在 RectItem 前面：孔也是矩形，落进下面会被克隆成一个普通矩形
                 return self._clone_spotlight_item(item)
+            elif isinstance(item, MagnifyCalloutItem):
+                return self._clone_magnify_item(item)
+            elif isinstance(item, ImageStampItem):
+                return self._clone_image_stamp_item(item)
             elif isinstance(item, RectItem):
                 return self._clone_rect_item(item)
             elif isinstance(item, EllipseItem):
@@ -240,6 +274,11 @@ class PinCanvas(QObject):
                 state["rect"] = rect
             except Exception as e:
                 log_exception(e, T("捕获item rect"))
+        if hasattr(item, "source_rect") and callable(item.source_rect):
+            try:
+                state["source_rect"] = QRectF(item.source_rect())
+            except Exception as e:
+                log_exception(e, T("捕获item source_rect"))
         if hasattr(item, "start_pos"):
             try:
                 state["start"] = QPointF(item.start_pos)
@@ -250,6 +289,11 @@ class PinCanvas(QObject):
                 state["end"] = QPointF(item.end_pos)
             except Exception as e:
                 log_exception(e, T("捕获item end_pos"))
+        if hasattr(item, "caption"):
+            try:
+                state["caption"] = str(item.caption)
+            except Exception as e:
+                log_exception(e, T("捕获item caption"))
         return state
 
     def _build_final_state(self, source_item, base_state):
@@ -322,6 +366,17 @@ class PinCanvas(QObject):
 
         SpotlightCurtain.of(self.scene).setOpacity(item.get_visual_opacity())
         return SpotlightItem(QRectF(item.rect()), item.get_corner_radius())
+
+    def _clone_magnify_item(self, item):
+        from canvas.items import MagnifyCalloutItem
+        from PySide6.QtGui import QPen
+        return MagnifyCalloutItem(QRectF(item.source_rect()), QRectF(item.rect()), QPen(item.pen()))
+
+    def _clone_image_stamp_item(self, item):
+        """克隆插图：图元自带像素副本，不引用外部文件。"""
+        from canvas.items import ImageStampItem
+
+        return ImageStampItem(item.image(), QRectF(item.rect()))
 
     def _clone_rect_item(self, item):
         """克隆矩形项目"""
@@ -423,6 +478,7 @@ class PinCanvas(QObject):
             getattr(item, "style", None),
         )
         cloned.number_order = getattr(item, "number_order", None)
+        cloned.set_caption(getattr(item, "caption", ""))
         return cloned
     
     # ==================== 内部方法 ====================
@@ -592,6 +648,10 @@ class PinCanvas(QObject):
             toolbar.number_style_changed.connect(
                 lambda st: self._on_number_style_changed(st, view)
             )
+        if hasattr(toolbar, "number_caption_changed"):
+            toolbar.number_caption_changed.connect(
+                lambda text: self._on_number_caption_changed(text, view)
+            )
 
         # 文字工具高级样式 → SmartEditController
         controller = getattr(view, "smart_edit_controller", None)
@@ -718,6 +778,12 @@ class PinCanvas(QObject):
         from tools.number import NumberTool
 
         NumberTool.apply_style_change(style, view, self.undo_stack)
+
+    def _on_number_caption_changed(self, caption: str, view):
+        """钉图里给选中的序号填说明，与截图窗口共用同一套策略。"""
+        from tools.number import NumberTool
+
+        NumberTool.apply_caption_change(caption, view, self.undo_stack)
 
     def _on_number_next_changed(self, next_value: int, toolbar, view):
         """序号工具下一数字变化"""

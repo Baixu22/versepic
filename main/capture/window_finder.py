@@ -53,12 +53,14 @@ def get_window_rect_no_shadow(hwnd):
     try:
         rect = ctypes.wintypes.RECT()
         # DWMWA_EXTENDED_FRAME_BOUNDS = 9
-        ctypes.windll.dwmapi.DwmGetWindowAttribute(
+        result = ctypes.windll.dwmapi.DwmGetWindowAttribute(
             ctypes.wintypes.HWND(hwnd), 
             ctypes.c_int(9), 
             ctypes.byref(rect), 
             ctypes.sizeof(rect)
         )
+        if result != 0:
+            return win32gui.GetWindowRect(hwnd)
         return [rect.left, rect.top, rect.right, rect.bottom]
     except Exception:
         # 降级回退

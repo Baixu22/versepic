@@ -136,6 +136,18 @@ class ClipboardManager:
             return None
         return self._image_indexer
 
+    def change_image_index(self, item_id, action):
+        """Persist single-item controls; exclusion never creates a worker."""
+        if not self.is_available:
+            return False
+        if self._image_indexer is not None:
+            changed = self._image_indexer.change(item_id, action)
+        else:
+            changed = self.image_text_store.change(item_id, action)
+            if changed and action != "exclude":
+                self.start_image_indexing()
+        return changed
+
     def stop_image_indexing(self):
         if self._image_indexer is not None:
             self._image_indexer.stop()

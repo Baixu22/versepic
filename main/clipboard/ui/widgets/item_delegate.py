@@ -32,7 +32,7 @@ from PySide6.QtWidgets import QFileIconProvider, QListWidget, QStyledItemDelegat
 from core.logger import T, log_error
 from ui.glyphs import svg_pixmap
 
-from ...core import ClipboardItem, Tag, source_app_short_name
+from ...core import ClipboardItem, source_app_short_name
 from ..theme.theme_styles import SurfacePalette, surface_palette, readable_accent, tag_chip_palette
 from ..theme.themes import Theme
 
@@ -553,6 +553,9 @@ class ClipboardItemDelegate(QStyledItemDelegate):
 
         name = source_app_display_name(item.source_app)
         source = _tr("Source: {name}").format(name=name) if name else _tr("Unknown source")
+        if item.content_type == "image":
+            from ...core.image_text import INDEX_LABELS
+            source = _tr(INDEX_LABELS.get(item.ocr_status, INDEX_LABELS["pending"])) + "  ·  " + source
         when = format_relative_time(item.created_at)
         suffix = f"  ·  {when}" if when else ""
         room = max(0, right - left - fm.horizontalAdvance(suffix))

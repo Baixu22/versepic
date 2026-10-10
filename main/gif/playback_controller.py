@@ -13,7 +13,9 @@ from PySide6.QtGui import QPixmap, QImage
 
 from .playback_engine import PlaybackEngine
 from .playback_toolbar import PlaybackToolbar
-from .composer import ComposerProgressDialog
+from .composer import ComposerProgressDialog, output_size
+from .export_dialog import GifExportDialog
+from ui.dialogs import show_info_dialog, show_warning_dialog
 from .cursor_overlay import CursorOverlay
 
 try:
@@ -367,21 +369,24 @@ class PlaybackController(QObject):
         return 0, len(self._recorder.frames) - 1
 
     def _on_save(self):
-        path, _ = QFileDialog.getSaveFileName(
-            None, "保存 GIF", "", "GIF 动图 (*.gif)"
+        path, selected_filter = QFileDialog.getSaveFileName(
+            None, self.tr("Save recording"), "", "GIF (*.gif);;MP4 (*.mp4)"
         )
         if not path:
             log_debug(T("保存取消"), "GIF")
             return
         log_info(T("保存 GIF: {path}", path=path), "GIF")
-        self._compose_and_export(path, copy_to_clipboard=False)
+        output_format = "mp4" if path.lower().endswith(".mp4") or "*.mp4" in selected_filter else "gif"
+        if not path.lower().endswith("." + output_format):
+            path += "." + output_format
+        self._compose_and_export(path, copy_to_clipboard=False, output_format=output_format)
 
     def _on_copy(self):
         out = self._make_save_path()
         log_info(T("复制 GIF → {out}", out=out), "GIF")
         self._compose_and_export(out, copy_to_clipboard=True)
 
-    def _compose_and_export(self, output_path: str, copy_to_clipboard: bool):
+    def _compose_and_export(self, output_path: str, copy_to_clipboard: bool, output_format="gif"):
         """弹出进度框导出 GIF，完成后写文件或复制到剪贴板"""
         frames = self._recorder.frames
         store = self._recorder.store
@@ -398,7 +403,7 @@ class PlaybackController(QObject):
                 "GIF",
             )
 
-        if not frames:
+        if not frames or store is None:
             log_warning(T("帧列表为空，中止导出"), "GIF")
             return
 
@@ -409,16 +414,34 @@ class PlaybackController(QObject):
         log_info(T("导出裁剪范围: [{trim_start}, {trim_end}]，共 {frame_count} 帧",
                     trim_start=trim_start, trim_end=trim_end, frame_count=trim_end - trim_start + 1), "GIF")
 
+        if self._engine:
+            self._engine.pause()
+        if self._playback_toolbar:
+            self._playback_toolbar.set_playing(False)
+        dialog_kwargs = {"output_format": output_format} if output_format != "gif" else {}
+        dialog = GifExportDialog(store, trim_start, trim_end, self._export_speed, self._cursor_export_enabled, **dialog_kwargs)
+        try:
+            if dialog.exec() != dialog.DialogCode.Accepted:
+                return
+            options = dialog.options()
+        finally:
+            dialog.deleteLater()
+        if output_format == "mp4":
+            from .mp4_export import output_geometry
+            gif_width, gif_height, encoded_width, encoded_height = output_geometry(store, options["gif_width"])
+            options["output_format"] = "mp4"
+        else:
+            gif_width, gif_height = output_size(store, options["gif_width"])
+            encoded_width, encoded_height = gif_width, gif_height
+
         # ── 准备鼠标光标导出参数 ──
         cursor_sprites = None
         cursor_infos = None
         if self._cursor_export_enabled and store is not None:
             from .cursor_overlay import rasterize_cursor_sprites, compute_burst_states
-            from .composer import DEFAULT_GIF_WIDTH
 
-            src_w = store.width
-            gif_width = DEFAULT_GIF_WIDTH
-            scale = gif_width / src_w if src_w > 0 and gif_width > 0 else 1.0
+            scale = gif_width / store.width
+            scale_y = gif_height / store.height
 
             cursor_sprites = rasterize_cursor_sprites(scale)
 
@@ -432,7 +455,7 @@ class PlaybackController(QObject):
                     bf, bs = burst_states[i]
                     cursor_infos.append((
                         int(cur.x * scale),
-                        int(cur.y * scale),
+                        int(cur.y * scale_y),
                         cur.press, cur.scroll, bf, bs,
                     ))
 
@@ -449,6 +472,7 @@ class PlaybackController(QObject):
             cursor_sprites=cursor_sprites,
             cursor_infos=cursor_infos,
             speed_multiplier=self._export_speed,
+            **options,
         )
 
         cursor_sprites = None
@@ -460,9 +484,18 @@ class PlaybackController(QObject):
 
         log_info(T("GIF 导出完成: {result}", result=result), "GIF")
 
-        if copy_to_clipboard:
-            self._copy_file_to_clipboard(output_path, mime_type="image/gif")
-
+        copied = not copy_to_clipboard or self._copy_file_to_clipboard(output_path, mime_type="image/gif")
+        if not copied:
+            show_warning_dialog(None, self.tr("Clipboard copy failed"),
+                                self.tr("The GIF was saved, but could not be copied to the clipboard."))
+        try:
+            size = os.path.getsize(output_path)
+        except OSError:
+            size = None
+        template = self.tr("Silent MP4 saved: %1 × %2 pixels") if output_format == "mp4" else self.tr("GIF saved: %1 × %2 pixels")
+        message = template.replace("%1", str(encoded_width)).replace("%2", str(encoded_height))
+        message += "\n" + (self.tr("Actual file size: %1 bytes").replace("%1", f"{size:,}") if size is not None else self.tr("File size could not be read."))
+        show_info_dialog(None, self.tr("MP4 exported") if output_format == "mp4" else self.tr("GIF exported"), message)
         self.close_requested.emit()
 
     @staticmethod
@@ -479,21 +512,24 @@ class PlaybackController(QObject):
             clipboard.setMimeData(mime)
             log_info(T("已复制到剪贴板 [{mime_type}], 大小={size} bytes",
                         mime_type=mime_type, size=len(data_bytes)), "GIF")
+            return True
         except Exception as e:
             log_error(T("复制到剪贴板失败: {e}", e=e), "GIF")
+            return False
 
     @staticmethod
     def _make_save_path() -> str:
         """生成截图保存目录下的 GIF 路径（确保目录存在）"""
         from datetime import datetime
         try:
-            from settings.tool_settings import ToolSettingsManager
-            save_dir = ToolSettingsManager().get_screenshot_save_path()
+            from settings import get_tool_settings_manager
+            save_dir = get_tool_settings_manager().get_screenshot_save_path()
         except Exception as e:
             log_exception(e, T("获取截图保存路径"))
             save_dir = os.path.join(os.path.expanduser("~"), "Desktop")
 
         os.makedirs(save_dir, exist_ok=True)
+        from uuid import uuid4
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return os.path.join(save_dir, f"jietuba_gif_{ts}.gif")
+        return os.path.join(save_dir, f"jietuba_gif_{ts}_{uuid4().hex}.gif")
  

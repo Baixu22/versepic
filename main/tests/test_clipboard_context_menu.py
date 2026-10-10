@@ -146,7 +146,10 @@ def test_build_context_menu_for_image_item_includes_save_as(monkeypatch):
         "pin_image",
         "recognize_image",
         "redact_image",
+        "image_index_menu",
         "save_image_as",
+        "image_layout",
+        "compare_image",
         "delete_item",
     ]
     _assert_separators_are_normalized(ctx.actions)

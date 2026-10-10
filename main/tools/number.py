@@ -126,6 +126,45 @@ class NumberTool(Tool):
         return persisted
 
     @classmethod
+    def apply_caption_change(cls, caption, view, undo_stack) -> bool:
+        """把说明写进当前选中的序号图元（可撤销）；没有选中序号时什么都不做。"""
+        item = cls._selected_number_item(view)
+        if item is None or undo_stack is None:
+            return False
+        text = "" if caption is None else str(caption)
+        current = str(getattr(item, "caption", "") or "")
+        if text == current:
+            return False
+        from canvas.undo import NumberCaptionCommand
+
+        undo_stack.push(NumberCaptionCommand(item, current, text))
+        return True
+
+    @classmethod
+    def apply_legend_placement(cls, placement) -> bool:
+        """记住导出时说明放哪；这是应用级设置，不写回工具默认值。"""
+        from core.number_legend import normalize_placement
+
+        value = normalize_placement(placement)
+        try:
+            from settings import get_tool_settings_manager
+
+            manager = get_tool_settings_manager()
+            if manager is None:
+                return False
+            manager.set_app_setting("number_legend_placement", value)
+            return True
+        except Exception as exc:
+            log_warning(T("保存编号说明位置失败：{exc}", exc=exc), "NumberTool")
+            return False
+
+    @staticmethod
+    def _selected_number_item(view):
+        controller = getattr(view, "smart_edit_controller", None)
+        item = getattr(controller, "selected_item", None) if controller else None
+        return item if isinstance(item, NumberItem) else None
+
+    @classmethod
     def get_radius_for_width(cls, stroke_width: float) -> float:
         """把宽度换算成圈半径。
 

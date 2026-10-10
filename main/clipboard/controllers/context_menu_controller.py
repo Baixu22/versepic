@@ -134,6 +134,23 @@ def _build_move_group_menu_children(state: _ItemContextMenuState) -> List[MenuAc
     return _normalize_menu_actions(children)
 
 
+def _build_image_index_children(state: _ItemContextMenuState) -> List[MenuAction]:
+    from ..core.image_text import INDEX_LABELS, INDEX_ERRORS
+    status = state.clipboard_item.ocr_status
+    error = state.clipboard_item.ocr_error
+    actions = [MenuAction(INDEX_LABELS.get(status, INDEX_LABELS["pending"]), "image_index_status", enabled=False)]
+    if error in INDEX_ERRORS:
+        actions.append(MenuAction(INDEX_ERRORS[error], "image_index_error", enabled=False))
+    actions.append(MenuAction("", "index_separator", is_separator=True))
+    if status == "excluded":
+        actions.append(MenuAction("Restore image text indexing", "image_index_restore"))
+    else:
+        actions.append(MenuAction("Retry failed OCR", "image_index_retry", enabled=status == "failed"))
+        actions.append(MenuAction("Recognize image text again", "image_index_reindex", enabled=status in ("done", "no_text", "failed")))
+        actions.append(MenuAction("Exclude image from text index", "image_index_exclude"))
+    return actions
+
+
 def _build_special_paste_menu_children(state: _ItemContextMenuState) -> List[MenuAction]:
     """构建"特殊粘贴"子菜单项列表。"""
     if _is_text_item(state):
@@ -222,7 +239,11 @@ _ITEM_CONTEXT_MENU_SPECS: Tuple[_ItemContextMenuSpec, ...] = (
     _ItemContextMenuSpec(key="pin_image", label="Pin as Overlay", predicate=lambda state: state.is_image_item),
     _ItemContextMenuSpec(key="recognize_image", label="Recognize text", predicate=lambda state: state.is_image_item),
     _ItemContextMenuSpec(key="redact_image", label="Smart redact", predicate=lambda state: state.is_image_item),
+    _ItemContextMenuSpec(key="image_index_menu", label="Image text index", predicate=lambda state: state.is_image_item,
+                         children_builder=_build_image_index_children),
     _ItemContextMenuSpec(key="save_image_as", label="Save as", predicate=lambda state: state.is_image_item),
+    _ItemContextMenuSpec(key="image_layout", label="Add to image layout / PDF", predicate=lambda state: state.is_image_item),
+    _ItemContextMenuSpec(key="compare_image", label="Compare image…", predicate=lambda state: state.is_image_item),
     _ItemContextMenuSpec(
         key="open_file_location",
         label="Open File Location",

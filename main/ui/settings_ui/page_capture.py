@@ -8,11 +8,13 @@ from core.ui_scale import dialog_scaled
 from ui.fluent_lite import (
     SwitchSettingCard, SettingCard as FSettingCard,
     FluentIcon, ComboBox, CaptionLabel,
-    PushButton, SegmentedWidget,
+    PushButton, SegmentedWidget, SpinBox, LineEdit,
 )
 from settings import color_formats
 from settings.tool_settings import SMART_SELECTION_MODES
 from .components import SettingCardGroup
+from .metadata_controls import add_metadata_controls
+from .watermark_controls import add_watermark_controls
 
 
 def create_capture_page(dialog) -> QWidget:
@@ -43,6 +45,15 @@ def create_capture_page(dialog) -> QWidget:
     )
     dialog.double_click_copy_close_toggle = double_click_card
     grp_behavior.addSettingCard(double_click_card)
+
+    cursor_card = SwitchSettingCard(
+        FluentIcon.CAMERA, dialog.tr("Include Mouse Pointer"),
+        dialog.tr("Capture the real pointer at its current position. Applies to static captures, not GIF or scrolling capture."),
+        parent=grp_behavior,
+    )
+    cursor_card.setChecked(dialog.config_manager.get_app_setting("screenshot_include_cursor", False))
+    dialog.include_cursor_toggle = cursor_card
+    grp_behavior.addSettingCard(cursor_card)
 
     cross_tool_card = SwitchSettingCard(
         FluentIcon.EDIT,
@@ -218,7 +229,8 @@ def create_capture_page(dialog) -> QWidget:
     fmt_card = FSettingCard(
         FluentIcon.DOCUMENT,
         dialog.tr("Save Format"),
-        dialog.tr("File format for auto-saved screenshots."),
+        dialog.tr("File format for auto-saved screenshots.") + "\n"
+        + dialog.tr("Transparent areas use white in JPG, BMP and PDF."),
         parent=grp_save,
     )
     dialog.screenshot_format_combo = ComboBox(fmt_card)
@@ -233,6 +245,23 @@ def create_capture_page(dialog) -> QWidget:
     dialog.screenshot_format_combo.setCurrentIndex(_fmt_idx)
     fmt_card.addControl(dialog.screenshot_format_combo)
     grp_save.addSettingCard(fmt_card)
+    _add_output_controls(dialog, grp_save)
+    add_watermark_controls(dialog, grp_save)
+    add_metadata_controls(dialog, grp_save)
+
+    quick_card = FSettingCard(
+        FluentIcon.CAMERA, dialog.tr("Quick Capture Result"),
+        dialog.tr("Copy also follows the auto-save setting. Ordinary screenshots are unchanged."),
+        parent=grp_save,
+    )
+    dialog.quick_capture_result_combo = ComboBox(quick_card)
+    dialog.quick_capture_result_combo.addItem(dialog.tr("Open in editor"), "edit")
+    dialog.quick_capture_result_combo.addItem(dialog.tr("Copy directly"), "copy")
+    index = dialog.quick_capture_result_combo.findData(
+        dialog.config_manager.get_app_setting("quick_capture_result", "edit"))
+    dialog.quick_capture_result_combo.setCurrentIndex(max(0, index))
+    quick_card.addControl(dialog.quick_capture_result_combo)
+    grp_save.addSettingCard(quick_card)
 
     # ── 钉图 ──────────────────────────────────────────
     # 自动开工具栏和自动 OCR 都是「钉完图之后自动做什么」，归在一处。
@@ -328,3 +357,88 @@ def _manage_color_formats(dialog):
     editor = ColorFormatDialog(dialog.magnifier_color_formats, dialog)
     if editor.exec():
         dialog.magnifier_color_formats = editor.entries()
+
+
+def _add_output_controls(dialog, group):
+    from dataclasses import replace
+    from datetime import datetime
+    from core.image_output import ImageOutputOptions, validate_filename_template
+    options = ImageOutputOptions.from_config(dialog.config_manager)
+
+    def card(title, description=""):
+        result = FSettingCard(FluentIcon.DOCUMENT, dialog.tr(title), dialog.tr(description) if description else "", parent=group)
+        group.addSettingCard(result)
+        return result
+
+    size = card("Saved Image Size", "These settings affect saved files; clipboard images keep their original size.")
+    dialog.output_size_combo = ComboBox(size)
+    for value, label in (("original", "Original size"), ("half", "50% size"), ("width", "Specified width")):
+        dialog.output_size_combo.addItem(dialog.tr(label), value)
+    dialog.output_size_combo.setCurrentIndex(max(0, dialog.output_size_combo.findData(options.size_mode)))
+    dialog.output_width_spin = SpinBox(size)
+    dialog.output_width_spin.setRange(1, 16384)
+    dialog.output_width_spin.setSuffix(" px")
+    dialog.output_width_spin.setValue(options.width)
+    size_controls = QWidget(size)
+    size_controls_layout = QVBoxLayout(size_controls)
+    size_controls_layout.setContentsMargins(0, 0, 0, 0)
+    size_controls_layout.setSpacing(dialog_scaled(6))
+    size_controls_layout.addWidget(dialog.output_size_combo)
+    size_controls_layout.addWidget(dialog.output_width_spin)
+    size.addControl(size_controls)
+    dialog.output_width_spin.setEnabled(options.size_mode == "width")
+    dialog.output_size_combo.currentIndexChanged.connect(
+        lambda: dialog.output_width_spin.setEnabled(dialog.output_size_combo.currentData() == "width"))
+
+    quality = card("Image Quality", "Applies to JPG and WebP only. PNG and BMP remain lossless.")
+    dialog.output_quality_spin = SpinBox(quality)
+    dialog.output_quality_spin.setRange(1, 100)
+    dialog.output_quality_spin.setValue(options.quality)
+    quality.addControl(dialog.output_quality_spin)
+
+    presets = card("Output Presets")
+    for label, fmt, mode, width, quality_value in (("Original PNG", "PNG", "original", 1600, 85),
+                                                 ("Share WebP", "WEBP", "half", 1280, 80)):
+        button = PushButton(dialog.tr(label), presets)
+        def apply_preset(checked=False, f=fmt, m=mode, w=width, q=quality_value):
+            dialog.screenshot_format_combo.setCurrentIndex(dialog.screenshot_format_combo.findData(f))
+            dialog.output_size_combo.setCurrentIndex(dialog.output_size_combo.findData(m))
+            dialog.output_width_spin.setValue(w)
+            dialog.output_quality_spin.setValue(q)
+        button.clicked.connect(apply_preset)
+        presets.addControl(button)
+
+    naming = card("Automatic File Names", "Leave empty for the original naming. Fields: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.")
+    dialog.output_template_edit = LineEdit(naming)
+    dialog.output_template_edit.setMaxLength(128)
+    dialog.output_template_edit.setText(dialog.config_manager.get_app_setting("screenshot_name_template", ""))
+    naming.addControl(dialog.output_template_edit)
+    project = card("Project Name", "Optional text for the {project} field. Window titles are never added automatically.")
+    dialog.output_project_edit = LineEdit(project)
+    dialog.output_project_edit.setMaxLength(64)
+    dialog.output_project_edit.setText(options.project)
+    project.addControl(dialog.output_project_edit)
+    folders = SwitchSettingCard(FluentIcon.FOLDER, dialog.tr("Date Subfolders"),
+                                dialog.tr("Place automatically named images in a YYYY-MM-DD folder."), parent=group)
+    folders.setChecked(options.date_folders)
+    dialog.output_date_toggle = folders
+    group.addSettingCard(folders)
+    preview = card("File Name Preview", "Example for a normal screenshot; capture time and collisions determine the final name.")
+    dialog.output_name_preview = CaptionLabel(preview)
+    preview.addControl(dialog.output_name_preview)
+
+    def update_preview():
+        try:
+            template = validate_filename_template(dialog.output_template_edit.text())
+            sample = replace(options, template=template, project=dialog.output_project_edit.text(), moment=datetime.now())
+            text = sample.filename("", "", dialog.screenshot_format_combo.currentData())
+            if dialog.output_date_toggle.isChecked():
+                text = sample.moment.strftime("%Y-%m-%d/") + text
+            dialog.output_name_preview.setText(text)
+        except ValueError:
+            dialog.output_name_preview.setText(dialog.tr("Invalid template: use only the listed fields, without formatting."))
+    dialog.output_template_edit.textChanged.connect(update_preview)
+    dialog.output_project_edit.textChanged.connect(update_preview)
+    dialog.output_date_toggle.checkedChanged.connect(update_preview)
+    dialog.screenshot_format_combo.currentIndexChanged.connect(update_preview)
+    update_preview()

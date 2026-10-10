@@ -10,10 +10,12 @@ from .drawing_items import StrokeItem, RectItem, EllipseItem, NumberItem
 from .arrow_item import ArrowItem
 from .text_item import TextItem
 from .spotlight_item import SpotlightCurtain, SpotlightItem
+from .magnify_item import MagnifyCalloutItem
+from .image_stamp_item import ImageStampItem
 
 __all__ = [
     'BackgroundItem', 'SelectionItem',
     'StrokeItem', 'RectItem', 'EllipseItem', 'ArrowItem',
     'TextItem', 'NumberItem', 'MosaicItem',
-    'SpotlightCurtain', 'SpotlightItem'
+    'SpotlightCurtain', 'SpotlightItem', 'MagnifyCalloutItem', 'ImageStampItem'
 ]

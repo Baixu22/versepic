@@ -28,6 +28,14 @@ class ActionTools:
         self.export_service = ExportService(scene)
         self.save_service = SaveService(config_manager=self.config_manager)
 
+    def _private(self):
+        from core.capture_privacy import is_sensitive
+        return is_sensitive(getattr(self, "parent_window", None))
+
+    def _blocked(self):
+        from core.capture_privacy import blocked
+        return blocked(getattr(self, "parent_window", None))
+
     def _copy_save_and_close(self):
         """核心操作：导出选区 → 复制到剪贴板 → 自动保存 → 关闭窗口"""
         from core.clipboard_utils import deliver_image_async
@@ -38,6 +46,12 @@ class ActionTools:
 
         # 导出选区图像（包含背景和绘制内容）
         image = self.export_service.export(selection_rect)
+
+        if self._private():
+            from core.capture_privacy import copy_private
+            if copy_private(image, self.parent_window):
+                self._cleanup_and_close()
+            return
 
         # 导出完成后立即隐藏窗口（数据已拿到，后续操作不需要窗口可见）
         if self.parent_window:
@@ -80,6 +94,8 @@ class ActionTools:
         self._copy_save_and_close()
     
     def handle_save(self):
+        if self._blocked():
+            return
         """保存：弹出对话框让用户选择保存位置"""
         self._temporarily_exit_editing()
 
@@ -104,10 +120,46 @@ class ActionTools:
             image = self.export_service.export(selection_rect)
             if self.save_service.save_qimage_to_path(image, file_path, image_format=image_format):
                 log_info(T("已保存到: {file_path}", file_path=file_path), "Action")
+            else:
+                from ui.dialogs import show_warning_dialog
+                show_warning_dialog(self.parent_window, _tr("Save Failed"), _tr("Failed to save image."))
+                return
             
             if self.parent_window:
                 self._cleanup_and_close()
     
+    def handle_collect(self, continue_capture=False):
+        if self._blocked():
+            return
+        from ui.image_layout_dialog import get_image_layout_window, show_image_layout
+        from ui.dialogs import show_warning_dialog
+        from core.image_layout import check_size, ImageLayoutError, MAX_IMAGES
+
+        collection = get_image_layout_window()
+        rect = self.scene.selection_model.rect()
+        try:
+            if collection._worker is not None or len(collection.entries) >= MAX_IMAGES:
+                raise ImageLayoutError("Collection is full or exporting")
+            check_size(round(rect.width()), round(rect.height()), collection.remaining_pixels())
+            self._temporarily_exit_editing()
+            image = self.export_service.export(rect)
+            collection.add_image(_tr("Screenshot %1").replace("%1", str(len(collection.entries) + 1)), image)
+        except (ImageLayoutError, ValueError):
+            show_warning_dialog(self.parent_window, _tr("Collection unavailable"),
+                                _tr("Finish exporting or remove images from the collection before adding more."))
+            return False
+        capture_window = self.parent_window
+        self._remember_last_region(rect)
+        collection._hidden_for_capture = True
+        collection.hide()
+        self._cleanup_and_close()
+        if continue_capture:
+            capture_window.collection_continue_requested.emit()
+        else:
+            collection._hidden_for_capture = False
+            show_image_layout()
+        return True
+
     def handle_pin(self):
         """
         钉图：创建钉图窗口，显示选区内容
@@ -143,9 +195,14 @@ class ActionTools:
             drawing_items=drawing_items,
             selection_offset=QPoint(int(selection_rect.x()), int(selection_rect.y())),
             number_next=NumberTool.get_next_number(self.scene),
+            **({"sensitive": True} if self._private() else {}),
         )
         
         pin_window.show()
+        if self._private():
+            # Pinning is not an explicit Copy action. Keep pixels in memory.
+            self._cleanup_and_close()
+            return
         log_debug(T("已创建钉图窗口"), "PinAction")
         log_debug(T("位置: ({pos_x}, {pos_y})", pos_x=position.x(), pos_y=position.y()), "PinAction")
         log_debug(T("底图: {width}x{height}", width=base_image.width(), height=base_image.height()), "PinAction")
@@ -166,6 +223,8 @@ class ActionTools:
             self._cleanup_and_close()
 
     def handle_screenshot_translate(self):
+        if self._blocked():
+            return
         """
         截图翻译 - 选区OCR识别后打开翻译窗口
         
@@ -209,6 +268,8 @@ class ActionTools:
         )
     
     def handle_text_recognize(self):
+        if self._blocked():
+            return
         """文字识别：识别选区里的文字，关掉截图界面后在结果窗口里显示
 
         识别比扫码慢得多（本地引擎几百毫秒起），所以窗口先出来等，识别在它的后台线程里跑。
@@ -233,11 +294,17 @@ class ActionTools:
         image = self.export_service.export(rect)
         if image is None or image.isNull():
             return
+        private = self._private()
         self._remember_last_region(rect)
         self._cleanup_and_close()
-        show_redaction(image)
+        if private:
+            show_redaction(image, sensitive=True)
+        else:
+            show_redaction(image)
 
     def handle_scan_code(self):
+        if self._blocked():
+            return
         """扫码：识别选区里的二维码 / 条形码，关掉截图界面后在结果窗口里列出"""
         from barcode import show_barcode_result
 
@@ -272,7 +339,7 @@ class ActionTools:
 
         场景坐标就是虚拟桌面绝对坐标，直接存，不再叠一层窗口偏移。
         """
-        if rect.isEmpty():
+        if self._private() or rect.isEmpty():
             return
         from core.last_capture_region import set_last_region
         from PySide6.QtCore import QRect

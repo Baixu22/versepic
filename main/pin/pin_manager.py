@@ -79,6 +79,7 @@ class PinManager(QObject):
         drawing_items: Optional[List] = None,
         selection_offset: Optional[QPoint] = None,
         number_next: Optional[int] = None,
+        *, sensitive=False,
     ):
         """
         创建新钉图窗口
@@ -104,6 +105,7 @@ class PinManager(QObject):
             drawing_items=drawing_items,
             selection_offset=selection_offset,
             number_next=number_next,
+            **({"sensitive": True} if sensitive else {}),
         )
         
         # 连接关闭信号
@@ -252,12 +254,23 @@ class PinManager(QObject):
         output_dir = Path(directory)
         output_dir.mkdir(parents=True, exist_ok=True)
 
+        from dataclasses import replace
+        from core.save import SaveService
+        service = SaveService()
+        options = service.output_options()
+        options = replace(options, template=options.template or "{prefix}_{index}")
         saved = 0
         failed = 0
-        for index, pin_window in enumerate(self.get_all_pins(), start=1):
-            file_path = output_dir / f"{prefix}_{index:03d}.png"
+        for pin_window in self.get_all_pins():
+            from core.capture_privacy import is_sensitive
+            if is_sensitive(pin_window):
+                failed += 1
+                continue
+            file_path = None
             try:
                 ok = False
+                file_path = service.reserve_save_path(directory=str(output_dir), prefix=prefix,
+                                                      image_format="PNG", output_options=options)
 
                 # ruff B023：闭包引用了循环变量，但 _do_save 总是在本轮迭代内被
                 # 同步调用（_with_edit_paused 内部直接 func()），因此不存在延迟
@@ -265,7 +278,8 @@ class PinManager(QObject):
                 # 必须改成默认参数绑定 pin_window 和 file_path。
                 def _do_save():
                     nonlocal ok
-                    ok = pin_window.get_current_image().save(str(file_path))  # noqa: B023
+                    ok = service.save_qimage_to_path(pin_window.get_current_image(), str(file_path),  # noqa: B023
+                                                     image_format="PNG", output_options=options)
 
                 if hasattr(pin_window, "_with_edit_paused"):
                     pin_window._with_edit_paused(_do_save)

@@ -7,6 +7,7 @@ from PySide6.QtCore import QRectF
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from core import log_debug, log_warning, T
+from core.number_legend import LegendOptions, collect_entries, normalize_placement, render as render_legend
 
 
 class ExportService:
@@ -70,6 +71,39 @@ class ExportService:
         log_debug(T("导出完成: {out_width}x{out_height}", out_width=out.width(), out_height=out.height()), "Export")
         return out
     
+    def legend_placement(self) -> str:
+        """读取"导出时附带编号说明"的位置设置；默认不附带，老行为不变。"""
+        try:
+            from settings import get_tool_settings_manager
+
+            manager = get_tool_settings_manager()
+            raw = manager.get_app_setting("number_legend_placement", "off") if manager else "off"
+        except Exception as exc:
+            log_warning(T("读取编号说明设置失败: {exc}", exc=exc), "Export")
+            raw = "off"
+        return normalize_placement(raw)
+
+    def export_with_legend(self, selection_rect: QRectF, options: LegendOptions = None) -> QImage:
+        """最终导出链：成图 → 水印（可选，默认关）→ 编号说明（可选，默认关）。"""
+        image = self.export(selection_rect)
+        if image.isNull():
+            return image
+        from core.watermark import load_options, render as render_watermark
+
+        image = render_watermark(image, load_options())
+        from dataclasses import replace
+
+        from core.capture_metadata import load_metadata, now_stamp, render_strip
+
+        metadata = load_metadata()
+        if metadata.time_enabled and not metadata.captured_at:
+            metadata = replace(metadata, captured_at=now_stamp())
+        image = render_strip(image, metadata.build_lines())
+        if options is None:
+            options = LegendOptions(placement=self.legend_placement())
+        entries = collect_entries(self.scene.items())
+        return render_legend(image, entries, options)
+
     def export_base_image_only(self, selection_rect: QRectF) -> QImage:
         """
         导出选区的纯净底图（不包含任何绘制内容）

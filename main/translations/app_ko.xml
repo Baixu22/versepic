@@ -8,6 +8,134 @@
 <context>
     <name>SettingsDialog</name>
     <message>
+        <source>Include Source Info</source>
+        <translation>출처 정보 포함</translation>
+    </message>
+    <message>
+        <source>Only the text you keep below is exported. Window titles are never read automatically.</source>
+        <translation>아래에 남긴 텍스트만 내보냅니다. 창 제목은 자동으로 읽지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>출처</translation>
+    </message>
+    <message>
+        <source>Detect window</source>
+        <translation>현재 창 감지</translation>
+    </message>
+    <message>
+        <source>Include Time</source>
+        <translation>시간 포함</translation>
+    </message>
+    <message>
+        <source>Writes the export time next to the image. Off by default.</source>
+        <translation>내보낸 시간을 이미지 옆에 씁니다. 기본은 꺼짐입니다.</translation>
+    </message>
+    <message>
+        <source>Include Note</source>
+        <translation>메모 포함</translation>
+    </message>
+    <message>
+        <source>Your own note; empty notes are not exported.</source>
+        <translation>직접 쓴 메모. 빈 메모는 내보내지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>메모</translation>
+    </message>
+    <message>
+        <source>Metadata Preview</source>
+        <translation>메타 정보 미리보기</translation>
+    </message>
+    <message>
+        <source>Shows exactly what will be appended to the exported image.</source>
+        <translation>내보낸 이미지에 추가될 내용을 그대로 보여 줍니다.</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>이미지 (*.png *.jpg *.jpeg *.bmp *.webp);;모든 파일 (*)</translation>
+    </message>
+    <message>
+        <source>The preview uses the same renderer as export.</source>
+        <translation>미리보기와 내보내기는 같은 렌더러를 사용합니다.</translation>
+    </message>
+    <message>
+        <source>Watermark Preview</source>
+        <translation>워터마크 미리보기</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>크기</translation>
+    </message>
+    <message>
+        <source>Opacity</source>
+        <translation>불투명도</translation>
+    </message>
+    <message>
+        <source>Watermark Opacity and Size</source>
+        <translation>워터마크 불투명도와 크기</translation>
+    </message>
+    <message>
+        <source>Center</source>
+        <translation>가운데</translation>
+    </message>
+    <message>
+        <source>Top left</source>
+        <translation>왼쪽 위</translation>
+    </message>
+    <message>
+        <source>Top right</source>
+        <translation>오른쪽 위</translation>
+    </message>
+    <message>
+        <source>Bottom left</source>
+        <translation>왼쪽 아래</translation>
+    </message>
+    <message>
+        <source>Bottom right</source>
+        <translation>오른쪽 아래</translation>
+    </message>
+    <message>
+        <source>Watermark Position</source>
+        <translation>워터마크 위치</translation>
+    </message>
+    <message>
+        <source>Choose…</source>
+        <translation>선택…</translation>
+    </message>
+    <message>
+        <source>PNG/JPG/BMP/WebP. Missing or oversized files are ignored.</source>
+        <translation>PNG/JPG/BMP/WebP 지원. 파일이 없거나 너무 크면 워터마크 없음으로 처리합니다.</translation>
+    </message>
+    <message>
+        <source>Watermark Image</source>
+        <translation>워터마크 이미지</translation>
+    </message>
+    <message>
+        <source>Only the text you type here is written; window titles and identities are never read.</source>
+        <translation>여기에 입력한 텍스트만 기록하며 창 제목이나 신원 정보는 읽지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Watermark Text</source>
+        <translation>워터마크 텍스트</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>이미지</translation>
+    </message>
+    <message>
+        <source>Watermark Type</source>
+        <translation>워터마크 종류</translation>
+    </message>
+    <message>
+        <source>Adds a text or image mark to exported images. Off by default; the original image and project are never changed.</source>
+        <translation>내보낸 이미지에 텍스트나 이미지 표시를 겹칩니다. 기본은 꺼짐이며 원본 이미지와 프로젝트는 변경되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Export Watermark</source>
+        <translation>내보내기 워터마크</translation>
+    </message>
+    <message>
         <source>Shortcuts</source>
         <translation>단축키</translation>
     </message>
@@ -931,6 +1059,130 @@ Replace it?</source>
         <source>No models returned</source>
         <translation>반환된 모델이 없습니다</translation>
     </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>마우스가 있는 화면 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>활성 창 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>이전 영역 다시 캡처</translation>
+    </message>
+    <message>
+        <source>Quick Capture Result</source>
+        <translation>빠른 캡처 후 동작</translation>
+    </message>
+    <message>
+        <source>Copy also follows the auto-save setting. Ordinary screenshots are unchanged.</source>
+        <translation>바로 복사도 자동 저장 설정을 따릅니다. 일반 캡처에는 영향을 주지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Open in editor</source>
+        <translation>편집기 열기</translation>
+    </message>
+    <message>
+        <source>Copy directly</source>
+        <translation>바로 복사</translation>
+    </message>
+    <message>
+        <source>Saved Image Size</source>
+        <translation>저장 이미지 크기</translation>
+    </message>
+    <message>
+        <source>These settings affect saved files; clipboard images keep their original size.</source>
+        <translation>파일 출력에만 적용됩니다. 클립보드 비트맵은 원본 크기를 유지합니다.</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>원본 크기</translation>
+    </message>
+    <message>
+        <source>50% size</source>
+        <translation>50% 크기</translation>
+    </message>
+    <message>
+        <source>Specified width</source>
+        <translation>너비 지정</translation>
+    </message>
+    <message>
+        <source>Image Quality</source>
+        <translation>이미지 품질</translation>
+    </message>
+    <message>
+        <source>Applies to JPG and WebP only. PNG and BMP remain lossless.</source>
+        <translation>JPG와 WebP에만 적용됩니다. PNG와 BMP는 무손실 인코딩을 유지합니다.</translation>
+    </message>
+    <message>
+        <source>Output Presets</source>
+        <translation>출력 프리셋</translation>
+    </message>
+    <message>
+        <source>Original PNG</source>
+        <translation>원본 PNG</translation>
+    </message>
+    <message>
+        <source>Share WebP</source>
+        <translation>공유용 WebP</translation>
+    </message>
+    <message>
+        <source>Automatic File Names</source>
+        <translation>자동 파일 이름</translation>
+    </message>
+    <message>
+        <source>Leave empty for the original naming. Fields: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.</source>
+        <translation>비우면 기존 이름을 사용합니다. 필드: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.</translation>
+    </message>
+    <message>
+        <source>Project Name</source>
+        <translation>프로젝트 이름</translation>
+    </message>
+    <message>
+        <source>Optional text for the {project} field. Window titles are never added automatically.</source>
+        <translation>{project}에 사용할 선택적 텍스트입니다. 창 제목은 자동 추가되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Date Subfolders</source>
+        <translation>날짜별 하위 폴더</translation>
+    </message>
+    <message>
+        <source>Place automatically named images in a YYYY-MM-DD folder.</source>
+        <translation>자동 이름의 이미지를 YYYY-MM-DD 폴더에 저장합니다.</translation>
+    </message>
+    <message>
+        <source>File Name Preview</source>
+        <translation>파일 이름 미리 보기</translation>
+    </message>
+    <message>
+        <source>Example for a normal screenshot; capture time and collisions determine the final name.</source>
+        <translation>일반 캡처의 예입니다. 실제 이름은 캡처 시각과 기존 파일에 따라 결정됩니다.</translation>
+    </message>
+    <message>
+        <source>Invalid template: use only the listed fields, without formatting.</source>
+        <translation>잘못된 템플릿: 나열된 필드만 사용하고 서식은 지정하지 마세요.</translation>
+    </message>
+    <message>
+        <source>Invalid File Name Template</source>
+        <translation>잘못된 파일 이름 템플릿</translation>
+    </message>
+    <message>
+        <source>Use only the listed filename fields, without formatting.</source>
+        <translation>나열된 파일 이름 필드만 사용하고 서식은 지정하지 마세요.</translation>
+    </message>
+    <message>
+        <source>Transparent areas use white in JPG, BMP and PDF.</source>
+        <translation>JPG, BMP, PDF의 투명 영역은 흰색으로 합성됩니다.</translation>
+    </message>
+    <message>
+        <source>Include Mouse Pointer</source>
+        <translation>마우스 포인터 포함</translation>
+    </message>
+    <message>
+        <source>Capture the real pointer at its current position. Applies to static captures, not GIF or scrolling capture.</source>
+        <translation>현재 위치의 실제 포인터를 캡처합니다. 정지 화면에 적용되며 GIF나 스크롤 캡처에는 영향을 주지 않습니다.</translation>
+    </message>
 </context>
 
 <context>
@@ -963,6 +1215,26 @@ Replace it?</source>
         <source>Please configure DeepL API key in Settings.</source>
         <translation>설정에서 DeepL API 키를 구성해 주세요.</translation>
     </message>
+    <message>
+        <source>Save Failed</source>
+        <translation>저장 실패</translation>
+    </message>
+    <message>
+        <source>Failed to save image.</source>
+        <translation>이미지를 저장하지 못했습니다.</translation>
+    </message>
+    <message>
+        <source>Screenshot %1</source>
+        <translation>스크린샷 %1</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>모음 사용 불가</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images from the collection before adding more.</source>
+        <translation>내보내기를 마치거나 일부 이미지를 제거한 후 추가하세요.</translation>
+    </message>
 </context>
 
 <context>
@@ -980,6 +1252,14 @@ Replace it?</source>
 <!-- ========== Toolbar ========== -->
 <context>
     <name>Toolbar</name>
+    <message>
+        <source>Presets</source>
+        <translation>프리셋</translation>
+    </message>
+    <message>
+        <source>Insert image…</source>
+        <translation>이미지 삽입…</translation>
+    </message>
     <message>
         <source>More</source>
         <translation>더보기</translation>
@@ -999,6 +1279,14 @@ Replace it?</source>
     <message>
         <source>Spotlight (dim outside the box)</source>
         <translation>스포트라이트(상자 바깥 어둡게)</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>영역 확대</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>텍스트 콜아웃(풍선에서 대상으로 드래그)</translation>
     </message>
     <message>
         <source>Long screenshot (scroll)</source>
@@ -1140,6 +1428,22 @@ Replace it?</source>
         <source>Record</source>
         <translation>녹화</translation>
     </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>모음에 추가 후 계속 캡처</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>모음에 추가 후 이미지 확인</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>고정 화면에서 여러 영역 캡처</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>프로젝트 편집/저장…</translation>
+    </message>
 </context>
 
 <!-- ========== Pin Window ========== -->
@@ -1253,6 +1557,22 @@ Replace it?</source>
         <source>Save Pin Image</source>
         <translation>고정 이미지 저장</translation>
     </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>프로젝트 편집/저장…</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>프로젝트 사용 불가</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>편집 가능한 이미지를 옮기지 못했습니다. 원래 내용은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>이 이미지 비교…</translation>
+    </message>
 </context>
 
 <!-- ========== Scroll Screenshot (Long Screenshot) ========== -->
@@ -1318,6 +1638,22 @@ Replace it?</source>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
+    <message>
+        <source>Undo last stitch</source>
+        <translation>마지막 연결 실행 취소</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>최근 이음새 조정</translation>
+    </message>
+    <message>
+        <source>Ignore fixed header / scrollbar</source>
+        <translation>고정 머리글/스크롤 막대 제외</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>자동 스크롤</translation>
+    </message>
 </context>
 
 <!-- ========== System Tray ========== -->
@@ -1361,6 +1697,51 @@ Replace it?</source>
     <message><source>Choose folder to save pinned images</source><translation>고정 이미지를 저장할 폴더 선택</translation></message>
     <message><source>Save Failed</source><translation>저장 실패</translation></message>
     <message><source>Saved {saved} pinned images, failed {failed}.</source><translation>고정 이미지 {saved}개 저장, {failed}개 실패.</translation></message>
+    <message>
+        <source>Delayed screenshot</source>
+        <translation>지연 캡처</translation>
+    </message>
+    <message>
+        <source>After %1 seconds</source>
+        <translation>%1초 후 캡처</translation>
+    </message>
+    <message>
+        <source>Quick capture</source>
+        <translation>빠른 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>마우스가 있는 화면 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>활성 창 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>이전 영역 다시 캡처</translation>
+    </message>
+    <message>
+        <source>Image layout / PDF</source>
+        <translation>이미지 배치 / PDF</translation>
+    </message>
+    <message>
+        <source>Arrange pinned images…</source>
+        <translation>고정 이미지 정리 및 내보내기…</translation>
+    </message>
+    <message>
+        <source>Open image editor…</source>
+        <translation>이미지 편집기 열기…</translation>
+    </message>
+    <message>
+        <source>Pin workspaces…</source>
+        <translation>고정 이미지 작업 공간…</translation>
+    </message>
+    <message>
+        <source>Compare images…</source>
+        <translation>이미지 비교…</translation>
+    </message>
+<message><source>Sensitive screenshot (once)</source><translation>일회성 민감 캡처</translation></message>
 </context>
 
 <!-- ========== Main App (Tray Menu) ========== -->
@@ -1421,6 +1802,38 @@ Replace it?</source>
     <message>
         <source>The hotkey may be occupied by other programs. Please try a different combination.</source>
         <translation>다른 프로그램에서 해당 단축키를 사용 중일 수 있습니다. 다른 조합을 사용해 보세요.</translation>
+    </message>
+    <message>
+        <source>Screenshot failed</source>
+        <translation>캡처 실패</translation>
+    </message>
+    <message>
+        <source>Could not capture the screen. Please try again.</source>
+        <translation>화면을 캡처하지 못했습니다. 다시 시도하세요.</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>마우스가 있는 화면 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>활성 창 캡처</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>이전 영역 다시 캡처</translation>
+    </message>
+    <message>
+        <source>Capture target is unavailable or moved. Use region capture or choose another target.</source>
+        <translation>대상을 사용할 수 없거나 이동했습니다. 영역을 지정하거나 대상을 다시 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Save failed</source>
+        <translation>저장 실패</translation>
+    </message>
+    <message>
+        <source>Could not save the image. Check the output size, folder permissions and free space.</source>
+        <translation>이미지를 저장하지 못했습니다. 출력 크기, 폴더 권한과 여유 공간을 확인하세요.</translation>
     </message>
 </context>
 
@@ -2002,6 +2415,31 @@ This action cannot be undone.</source>
         <source>Use Move Up / Move Down in the context menu</source>
         <translation>우클릭 메뉴에서 위로 / 아래로 이동하여 정렬하세요</translation>
     </message>
+    <message>
+        <source>Add to image layout / PDF</source>
+        <translation>배치 / PDF에 추가</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>이 이미지 비교…</translation>
+    </message>
+<message><source>OCR: waiting</source><translation>OCR: 대기 중</translation></message>
+<message><source>OCR: recognizing</source><translation>OCR: 인식 중</translation></message>
+<message><source>OCR: failed</source><translation>OCR: 실패</translation></message>
+<message><source>OCR: excluded</source><translation>OCR: 제외됨</translation></message>
+<message><source>OCR: indexed</source><translation>OCR: 색인됨</translation></message>
+<message><source>OCR: no text</source><translation>OCR: 텍스트 없음</translation></message>
+<message><source>OCR engine unavailable</source><translation>OCR 엔진 사용 불가</translation></message>
+<message><source>Image could not be read</source><translation>이미지를 읽을 수 없음</translation></message>
+<message><source>OCR recognition failed</source><translation>OCR 인식 실패</translation></message>
+<message><source>OCR interrupted; waiting to retry</source><translation>OCR 중단; 재시도 대기</translation></message>
+<message><source>Restore image text indexing</source><translation>이미지 텍스트 색인 복원</translation></message>
+<message><source>Retry failed OCR</source><translation>실패한 OCR 재시도</translation></message>
+<message><source>Recognize image text again</source><translation>이미지 텍스트 다시 인식</translation></message>
+<message><source>Exclude image from text index</source><translation>텍스트 색인에서 이미지 제외</translation></message>
+<message><source>Image text index</source><translation>이미지 텍스트 색인</translation></message>
+<message><source>Remove stored OCR text for this image and stop automatic indexing until restored? Original image and paste formats stay unchanged. Database backups and previously copied text are not erased.</source><translation>이 이미지의 저장된 OCR 텍스트를 삭제하고 복원할 때까지 자동 색인을 중지할까요? 원본 이미지와 붙여넣기 형식은 유지됩니다. 데이터베이스 백업 및 이전에 복사한 텍스트는 지워지지 않습니다.</translation></message>
+<message><source>The image index could not be updated. Check that the item and database are still available.</source><translation>이미지 색인을 업데이트하지 못했습니다. 항목과 데이터베이스가 사용 가능한지 확인하세요.</translation></message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
@@ -2523,6 +2961,30 @@ This action cannot be undone.</source>
 
 <context>
     <name>ArrowSettingsPanel</name>
+    <message>
+        <source>Step note</source>
+        <translation>단계 설명</translation>
+    </message>
+    <message>
+        <source>Caption shown in the exported step list</source>
+        <translation>내보낸 단계 목록에 표시할 설명</translation>
+    </message>
+    <message>
+        <source>No caption list</source>
+        <translation>설명 목록 없음</translation>
+    </message>
+    <message>
+        <source>Caption list below</source>
+        <translation>아래에 설명 목록</translation>
+    </message>
+    <message>
+        <source>Caption list at right</source>
+        <translation>오른쪽에 설명 목록</translation>
+    </message>
+    <message>
+        <source>Export numbered captions as a step list</source>
+        <translation>번호 설명을 단계 목록으로 내보내기</translation>
+    </message>
     <message>
         <source>Solid Arrow</source>
         <translation>채움 화살표</translation>
@@ -3310,6 +3772,10 @@ This action cannot be undone.</source>
     <message><source>Rounded Corners</source><translation>둥근 모서리</translation></message>
     <message><source>Lock Aspect Ratio</source><translation>종횡비 고정</translation></message>
     <message><source>Refresh Background</source><translation>배경 새로고침</translation></message>
+    <message>
+        <source>Exact Region</source>
+        <translation>정확한 영역</translation>
+    </message>
 </context>
 
 <!-- ========== Border Shadow Popup ========== -->
@@ -3664,6 +4130,10 @@ SOFTWARE.</translation></message>
 <context>
     <name>ToolbarLayoutDialog</name>
     <message>
+        <source>Insert image…</source>
+        <translation>이미지 삽입…</translation>
+    </message>
+    <message>
         <source>Customize Toolbar</source>
         <translation>도구 모음 사용자 지정</translation>
     </message>
@@ -3740,8 +4210,20 @@ SOFTWARE.</translation></message>
         <translation>스포트라이트</translation>
     </message>
     <message>
+        <source>Magnify region</source>
+        <translation>영역 확대</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>텍스트 콜아웃(풍선에서 대상으로 드래그)</translation>
+    </message>
+    <message>
         <source>Arrow</source>
         <translation>화살표</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>텍스트 콜아웃</translation>
     </message>
     <message>
         <source>Number</source>
@@ -3782,6 +4264,22 @@ SOFTWARE.</translation></message>
     <message>
         <source>Confirm</source>
         <translation>확인</translation>
+    </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>모음에 추가 후 계속 캡처</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>모음에 추가 후 이미지 확인</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>고정 화면에서 여러 영역 캡처</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>프로젝트 편집/저장…</translation>
     </message>
 </context>
 <context>
@@ -3849,6 +4347,10 @@ SOFTWARE.</translation></message>
         <source>Copied</source>
         <translation>복사됨</translation>
     </message>
+<message><source>Review table…</source><translation>표 검토…</translation></message>
+<message><source>Table preview unavailable. Use an image up to 32 megapixels with positioned text.</source><translation>표 미리보기를 사용할 수 없습니다. 텍스트 좌표가 있는 3200만 픽셀 이하 이미지를 사용하세요.</translation></message>
+<message><source>PDF output…</source><translation>PDF 출력…</translation></message>
+<message><source>Current image</source><translation>현재 이미지</translation></message>
 </context>
 <context>
     <name>InAppShortcut</name>
@@ -3938,6 +4440,106 @@ SOFTWARE.</translation></message>
     <message><source>%1 areas covered</source><translation>%1개 영역 가림</translation></message>
     <message><source>Recognizing...</source><translation>인식 중…</translation></message>
     <message><source>Copied</source><translation>복사됨</translation></message>
+    <message>
+        <source>Chinese IDs (date + checksum)</source>
+        <translation>중국 신분증 (날짜 및 검사값)</translation>
+    </message>
+    <message>
+        <source>Bank cards (Luhn checksum)</source>
+        <translation>카드 번호 (Luhn 검사)</translation>
+    </message>
+    <message>
+        <source>Try OCR O/I/l substitutions</source>
+        <translation>OCR O/I/l 문자 보정 시도</translation>
+    </message>
+    <message>
+        <source>Rule presets</source>
+        <translation>규칙 프리셋</translation>
+    </message>
+    <message>
+        <source>Save rules…</source>
+        <translation>규칙 저장…</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>프리셋 삭제</translation>
+    </message>
+    <message>
+        <source>Presets save rule switches only, never keywords, OCR text or images.</source>
+        <translation>프리셋에는 규칙 스위치만 저장되며 키워드, OCR 텍스트, 이미지는 저장되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Candidates are not proof of identity or complete privacy detection. OCR errors, split lines and unchecked rules can miss data. Review every line; uncheck false positives and drag to cover missed areas. Exports flatten black covers into new files at this resolution.</source>
+        <translation>후보는 신원 확인이나 모든 개인정보 탐지를 보장하지 않습니다. OCR 오류, 줄 분리, 비활성 규칙으로 누락될 수 있습니다. 각 줄을 검토하고 오탐을 해제하거나 드래그로 추가 가림하세요. 현재 원본 해상도의 새 파일에 검은 가림을 병합합니다.</translation>
+    </message>
+    <message>
+        <source>Current rules</source>
+        <translation>현재 규칙</translation>
+    </message>
+    <message>
+        <source>Contact details</source>
+        <translation>연락처</translation>
+    </message>
+    <message>
+        <source>Identity and bank cards</source>
+        <translation>신분증 및 카드</translation>
+    </message>
+    <message>
+        <source>All checks (strict)</source>
+        <translation>모든 검사 (엄격)</translation>
+    </message>
+    <message>
+        <source>Saved rule presets could not be read. Existing settings were not changed.</source>
+        <translation>규칙 프리셋을 읽을 수 없습니다. 기존 설정은 변경되지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Save rule preset</source>
+        <translation>규칙 프리셋 저장</translation>
+    </message>
+    <message>
+        <source>Preset name (rule switches only)</source>
+        <translation>이름 (규칙 스위치만)</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>프리셋 이름</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>저장</translation>
+    </message>
+    <message>
+        <source>Rule switches saved. Keywords and image data were not saved.</source>
+        <translation>규칙 스위치를 저장했습니다. 키워드와 이미지 데이터는 저장하지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Use a unique name (1–40 characters), up to 20 presets, and writable settings.</source>
+        <translation>저장할 수 없습니다. 고유한 1~40자 이름, 최대 20개 프리셋, 쓰기 가능한 설정이 필요합니다.</translation>
+    </message>
+    <message>
+        <source>Delete only this saved rule combination? Images and history will not be changed.</source>
+        <translation>이 저장된 규칙 조합만 삭제할까요? 이미지와 기록은 변경되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Preset deleted. Current switches and images were kept.</source>
+        <translation>프리셋을 삭제했습니다. 현재 스위치와 이미지는 유지되었습니다.</translation>
+    </message>
+    <message>
+        <source>Could not delete preset. Existing data was kept.</source>
+        <translation>프리셋을 삭제할 수 없습니다. 기존 데이터는 유지되었습니다.</translation>
+    </message>
+    <message>
+        <source>Choose a new filename. Redaction never overwrites an existing file.</source>
+        <translation>새 파일 이름을 선택하세요. 가림 내보내기는 기존 파일을 덮어쓰지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Save failed. Choose a new PNG, JPEG or PDF file.</source>
+        <translation>저장 실패. 새 PNG, JPEG 또는 PDF 파일을 선택하세요.</translation>
+    </message>
 </context>
 <context>
     <name>ClipboardWindow</name>
@@ -4002,4 +4604,1657 @@ SOFTWARE.</translation></message>
         <translation>캡처 설정 초기화</translation>
     </message>
 </context>
+<context>
+    <name>CaptureCountdown</name>
+    <message>
+        <source>Open a menu or tooltip. Esc cancels.</source>
+        <translation>메뉴나 도움말을 여세요. Esc로 취소합니다.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Screenshot in %1 s</source>
+        <translation>%1초 후 캡처</translation>
+    </message>
+</context>
+<context>
+    <name>RegionGeometryDialog</name>
+    <message>
+        <source>Exact Region</source>
+        <translation>정확한 영역</translation>
+    </message>
+    <message>
+        <source>Physical pixels. Negative coordinates are valid on other screens.</source>
+        <translation>물리 픽셀 단위입니다. 다른 화면에서는 음수 좌표도 유효합니다.</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X 좌표</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y 좌표</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>너비</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>높이</translation>
+    </message>
+    <message>
+        <source>Aspect Ratio</source>
+        <translation>가로세로 비율</translation>
+    </message>
+    <message>
+        <source>Free</source>
+        <translation>자유</translation>
+    </message>
+    <message>
+        <source>Current ratio</source>
+        <translation>현재 비율 유지</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>적용</translation>
+    </message>
+    <message>
+        <source>Ratio presets use whole-pixel multiples.</source>
+        <translation>비율 프리셋은 정수 픽셀 배수로 조정됩니다.</translation>
+    </message>
+    <message>
+        <source>The region or ratio does not fit the captured desktop.</source>
+        <translation>영역 또는 비율이 캡처한 바탕 화면을 벗어납니다.</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>출력 크기: %1 × %2 px</translation>
+    </message>
+    <message>
+        <source> (including border/shadow)</source>
+        <translation> (테두리/그림자 포함)</translation>
+    </message>
+    <message>
+        <source>Saved Regions</source>
+        <translation>저장된 영역</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>프리셋 이름</translation>
+    </message>
+    <message>
+        <source>Save preset</source>
+        <translation>프리셋 저장</translation>
+    </message>
+    <message>
+        <source>Update preset</source>
+        <translation>프리셋 갱신</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>이름 변경</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>프리셋 삭제</translation>
+    </message>
+    <message>
+        <source>Preset changes are saved immediately; Apply changes the selection.</source>
+        <translation>프리셋 변경은 즉시 저장됩니다. 적용은 현재 선택 영역만 변경합니다.</translation>
+    </message>
+    <message>
+        <source>Saved region data is invalid. Existing data was left unchanged.</source>
+        <translation>저장된 영역 데이터가 잘못되었습니다. 기존 데이터는 변경하지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>No preset</source>
+        <translation>프리셋 없음</translation>
+    </message>
+    <message>
+        <source>Saved region loaded.</source>
+        <translation>저장된 영역을 불러왔습니다.</translation>
+    </message>
+    <message>
+        <source>Screen layout or scale changed. Review the current region and update the preset, or choose No preset.</source>
+        <translation>화면 배치 또는 배율이 변경되었습니다. 현재 영역을 검토하여 갱신하거나 프리셋 없음을 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Preset saved.</source>
+        <translation>프리셋을 저장했습니다.</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Check the name and settings location.</source>
+        <translation>저장하지 못했습니다. 이름과 설정 폴더를 확인하세요.</translation>
+    </message>
+    <message>
+        <source>Preset renamed.</source>
+        <translation>프리셋 이름을 변경했습니다.</translation>
+    </message>
+    <message>
+        <source>Could not rename preset. Names must be unique.</source>
+        <translation>이름을 변경하지 못했습니다. 이름은 중복될 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Preset deleted.</source>
+        <translation>프리셋을 삭제했습니다.</translation>
+    </message>
+    <message>
+        <source>Could not delete preset.</source>
+        <translation>프리셋을 삭제하지 못했습니다.</translation>
+    </message>
+    <message>
+        <source>Saved file: %1 × %2 px</source>
+        <translation>저장 파일: %1 × %2 px</translation>
+    </message>
+    <message>
+        <source>Saved file would be too large. Reduce the output width.</source>
+        <translation>저장 파일이 너무 큽니다. 출력 너비를 줄이세요.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageSourcePicker</name>
+    <message>
+        <source>Choose Images</source>
+        <translation>이미지 선택</translation>
+    </message>
+    <message>
+        <source>Search image history</source>
+        <translation>이미지 기록 검색</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>검색</translation>
+    </message>
+    <message>
+        <source>Load more</source>
+        <translation>더 불러오기</translation>
+    </message>
+    <message>
+        <source>Add selected</source>
+        <translation>선택 항목 추가</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Ctrl / Shift selects multiple images. Nothing is copied or deleted.</source>
+        <translation>Ctrl / Shift로 여러 항목을 선택합니다. 기록은 복사하거나 삭제하지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Pinned image %1</source>
+        <translation>고정 이미지 %1</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>이미지</translation>
+    </message>
+    <message>
+        <source>Showing up to 1000 records. Search to narrow the list.</source>
+        <translation>최대 1000개 기록을 표시합니다. 검색으로 범위를 좁히세요.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageLayoutDialog</name>
+    <message>
+        <source>Markdown report…</source>
+        <translation>Markdown 보고서…</translation>
+    </message>
+    <message>
+        <source>Image Layout and PDF</source>
+        <translation>이미지 배치 및 PDF</translation>
+    </message>
+    <message>
+        <source>Add history images</source>
+        <translation>기록에서 추가</translation>
+    </message>
+    <message>
+        <source>Add pinned images</source>
+        <translation>고정 이미지 추가</translation>
+    </message>
+    <message>
+        <source>Add image files</source>
+        <translation>이미지 파일 추가</translation>
+    </message>
+    <message>
+        <source>Combined image</source>
+        <translation>한 장으로 합치기</translation>
+    </message>
+    <message>
+        <source>One image per PDF page</source>
+        <translation>이미지당 PDF 한 페이지</translation>
+    </message>
+    <message>
+        <source>Vertical</source>
+        <translation>세로 배치</translation>
+    </message>
+    <message>
+        <source>Horizontal</source>
+        <translation>가로 배치</translation>
+    </message>
+    <message>
+        <source>Original widths</source>
+        <translation>원래 너비</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation>흰색</translation>
+    </message>
+    <message>
+        <source>Transparent</source>
+        <translation>투명</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>어두운 색</translation>
+    </message>
+    <message>
+        <source>Original size (96 pixels/inch)</source>
+        <translation>원본 크기(96픽셀/인치)</translation>
+    </message>
+    <message>
+        <source>A4</source>
+        <translation>A4</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation>Letter</translation>
+    </message>
+    <message>
+        <source>Portrait</source>
+        <translation>세로</translation>
+    </message>
+    <message>
+        <source>Landscape</source>
+        <translation>가로</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation>출력</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>배치 방향</translation>
+    </message>
+    <message>
+        <source>Common width (px)</source>
+        <translation>공통 너비(px)</translation>
+    </message>
+    <message>
+        <source>Gap (px)</source>
+        <translation>이미지 간격(px)</translation>
+    </message>
+    <message>
+        <source>Padding (px)</source>
+        <translation>바깥 여백(px)</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation>배경</translation>
+    </message>
+    <message>
+        <source>PDF paper</source>
+        <translation>PDF 용지</translation>
+    </message>
+    <message>
+        <source>Orientation</source>
+        <translation>용지 방향</translation>
+    </message>
+    <message>
+        <source>Page margins</source>
+        <translation>페이지 여백</translation>
+    </message>
+    <message>
+        <source>Drag images to reorder. Layout size is used exactly; file quality follows settings. PDF pages have a white background and no OCR text layer.</source>
+        <translation>이미지를 끌어 순서를 바꾸세요. 표시된 크기로 출력하며 품질은 설정을 따릅니다. PDF는 흰색 배경이며 OCR 텍스트 레이어가 없습니다.</translation>
+    </message>
+    <message>
+        <source>Image order</source>
+        <translation>이미지 순서</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>위로</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>아래로</translation>
+    </message>
+    <message>
+        <source>Remove image</source>
+        <translation>이미지 제거</translation>
+    </message>
+    <message>
+        <source>Clear collection</source>
+        <translation>모음 비우기</translation>
+    </message>
+    <message>
+        <source>Add images to begin. Up to 50 images and 64 megapixels in total.</source>
+        <translation>이미지를 추가하세요. 최대 50장, 합계 6400만 픽셀까지 지원합니다.</translation>
+    </message>
+    <message>
+        <source>Cancel export</source>
+        <translation>내보내기 취소</translation>
+    </message>
+    <message>
+        <source>Export…</source>
+        <translation>내보내기…</translation>
+    </message>
+    <message>
+        <source>Image %1</source>
+        <translation>이미지 %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>고정 이미지</translation>
+    </message>
+    <message>
+        <source>%1 image(s) could not be added: missing, invalid, or over the collection limit.</source>
+        <translation>%1개 이미지를 추가하지 못했습니다. 없거나 잘못되었거나 모음 한도를 초과했습니다.</translation>
+    </message>
+    <message>
+        <source>%1 pages · Previewing page %2</source>
+        <translation>총 %1페이지 · %2페이지 미리 보기</translation>
+    </message>
+    <message>
+        <source>%1 images · %2 × %3 px</source>
+        <translation>%1장 · %2 × %3 px</translation>
+    </message>
+    <message>
+        <source>This layout exceeds the image or page size limit. Reduce the width or choose A4 / Letter.</source>
+        <translation>이미지 또는 페이지 크기 한도를 초과했습니다. 너비를 줄이거나 A4 / Letter를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Export collection</source>
+        <translation>이미지 모음 내보내기</translation>
+    </message>
+    <message>
+        <source>Choose a file extension matching the selected output.</source>
+        <translation>선택한 출력 형식에 맞는 확장자를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Exporting…</source>
+        <translation>내보내는 중…</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>취소 중…</translation>
+    </message>
+    <message>
+        <source>Export saved.</source>
+        <translation>내보내기를 저장했습니다.</translation>
+    </message>
+    <message>
+        <source>Export cancelled.</source>
+        <translation>내보내기를 취소했습니다.</translation>
+    </message>
+    <message>
+        <source>Export failed. Check image limits, folder permissions and free space.</source>
+        <translation>내보내지 못했습니다. 이미지 한도, 폴더 권한 및 여유 공간을 확인하세요.</translation>
+    </message>
+    <message>
+        <source>Choose Images</source>
+        <translation>이미지 선택</translation>
+    </message>
+<message><source>%1° clockwise</source><translation>시계 방향 %1°</translation></message>
+<message><source>Searchable PDF (fresh local OCR)</source><translation>검색 가능한 PDF (새 로컬 OCR)</translation></message>
+<message><source>Rotate PDF images</source><translation>PDF 이미지 회전</translation></message>
+<message><source>PDF text report</source><translation>PDF 텍스트 보고서</translation></message>
+<message><source>Searchable PDF re-runs OCR on the exact rotated output pixels. Never reuses cached text. Blank/failed pages or missing glyphs fall back to image-only and are reported. OCR can be wrong; review the result. Redacted exports never reuse pre-redaction text.</source><translation>검색 PDF는 회전된 실제 출력 픽셀에 OCR을 다시 실행하고 캐시 텍스트를 사용하지 않습니다. 빈 페이지, 실패, 글꼴 누락은 이미지로 저장하고 보고합니다. OCR 오류를 검토하세요. 가리기 전 텍스트는 재사용하지 않습니다.</translation></message>
+<message><source>Recognizing PDF pages and exporting… Cancellation waits for the current local OCR call.</source><translation>PDF 인식 및 내보내는 중… 취소 시 현재 OCR 호출이 끝날 때까지 기다립니다.</translation></message>
+<message><source>PDF saved: %1 of %2 pages have searchable text. Review the PDF text report.</source><translation>PDF 저장됨: %2페이지 중 %1페이지에 검색 텍스트가 있습니다. 보고서를 확인하세요.</translation></message>
+<message><source>OCR failed or unavailable</source><translation>OCR 실패 또는 사용 불가</translation></message>
+<message><source>Invalid OCR result</source><translation>잘못된 OCR 결과</translation></message>
+<message><source>Text limit exceeded</source><translation>텍스트 제한 초과</translation></message>
+<message><source>Unsupported or invalid text box</source><translation>지원하지 않거나 잘못된 텍스트 상자</translation></message>
+<message><source>Low confidence text</source><translation>신뢰도 낮은 텍스트</translation></message>
+<message><source>Missing font glyphs</source><translation>글꼴 문자 누락</translation></message>
+<message><source>Page %1: %2 text lines</source><translation>%1페이지: 텍스트 %2줄</translation></message>
+<message><source>Image-only page</source><translation>이미지 전용 페이지</translation></message>
+<message><source>No text recognized</source><translation>인식된 텍스트 없음</translation></message>
+</context>
+<context>
+    <name>MultiRegionDialog</name>
+    <message>
+        <source>Multiple Regions</source>
+        <translation>여러 영역 캡처</translation>
+    </message>
+    <message>
+        <source>Drag to add regions from this frozen frame. Overlaps are exported separately. Existing annotations are not included.</source>
+        <translation>고정된 화면에서 드래그하여 영역을 추가하세요. 겹치는 영역은 따로 출력되며 기존 주석은 포함되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Region order</source>
+        <translation>영역 순서</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>위로</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>아래로</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>제거</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>실행 취소</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation>다시 실행</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>비우기</translation>
+    </message>
+    <message>
+        <source>Move controls</source>
+        <translation>조작 패널 이동</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Collect regions</source>
+        <translation>영역 모으기</translation>
+    </message>
+    <message>
+        <source>Region is too small or exceeds the remaining collection capacity.</source>
+        <translation>영역이 너무 작거나 모음의 남은 용량을 초과합니다.</translation>
+    </message>
+    <message>
+        <source>%1 regions · Tab hides controls · Enter collects · Esc cancels</source>
+        <translation>%1개 영역 · Tab으로 패널 숨기기 · Enter로 수집 · Esc로 취소</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenshotWindow</name>
+    <message>
+        <source>Insert image</source>
+        <translation>이미지 삽입</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>이미지 (*.png *.jpg *.jpeg *.bmp *.webp);;모든 파일 (*)</translation>
+    </message>
+    <message>
+        <source>Insert image failed</source>
+        <translation>이미지 삽입 실패</translation>
+    </message>
+    <message>
+        <source>The image is missing, too large, or not a supported bitmap.</source>
+        <translation>이미지가 없거나 너무 크거나 지원되지 않는 비트맵입니다.</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>모음 사용 불가</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images before selecting more regions.</source>
+        <translation>내보내기를 마치거나 일부 이미지를 제거한 후 영역을 추가하세요.</translation>
+    </message>
+    <message>
+        <source>Region %1</source>
+        <translation>영역 %1</translation>
+    </message>
+    <message>
+        <source>Regions could not be collected. Existing images were kept.</source>
+        <translation>영역을 모으지 못했습니다. 기존 이미지는 유지되었습니다.</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>프로젝트 사용 불가</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>편집 가능한 이미지를 옮기지 못했습니다. 원래 내용은 유지됩니다.</translation>
+    </message>
+</context>
+<context>
+    <name>StitchAdjustmentDialog</name>
+    <message>
+        <source>Matching exclusions</source>
+        <translation>일치 검사 제외 영역</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>최근 이음새 조정</translation>
+    </message>
+    <message>
+        <source>Highlighted pixels are excluded from matching only, not removed from the output. Coordinates follow the original screen, even for horizontal or reverse capture.</source>
+        <translation>강조 영역은 일치 검사에서만 제외되며 출력 픽셀은 잘리지 않습니다. 가로 및 역방향에서도 좌표는 원래 화면을 기준으로 합니다.</translation>
+    </message>
+    <message>
+        <source>Review the two latest frames. Overlap counts pixels already present; adjust it to remove duplicate rows or restore missing content. Capturing is paused while this window is open.</source>
+        <translation>최근 두 프레임을 확인하세요. 겹침은 이미 포함된 픽셀 길이입니다. 중복이나 누락을 조정할 수 있습니다. 이 창이 열려 있는 동안 캡처가 일시 중지됩니다.</translation>
+    </message>
+    <message>
+        <source>Click to set header height</source>
+        <translation>클릭하여 머리글 높이 설정</translation>
+    </message>
+    <message>
+        <source>Click to set scrollbar width</source>
+        <translation>클릭하여 오른쪽 제외 너비 설정</translation>
+    </message>
+    <message>
+        <source>Top exclusion (px)</source>
+        <translation>상단 제외(px)</translation>
+    </message>
+    <message>
+        <source>Right exclusion (px)</source>
+        <translation>오른쪽 제외(px)</translation>
+    </message>
+    <message>
+        <source>Preview action</source>
+        <translation>미리 보기 동작</translation>
+    </message>
+    <message>
+        <source>Append below / right</source>
+        <translation>아래/오른쪽에 추가</translation>
+    </message>
+    <message>
+        <source>Prepend above / left</source>
+        <translation>위/왼쪽에 추가</translation>
+    </message>
+    <message>
+        <source>Overlap (px)</source>
+        <translation>겹침(px)</translation>
+    </message>
+    <message>
+        <source>New frame direction</source>
+        <translation>새 프레임 방향</translation>
+    </message>
+    <message>
+        <source>No exclusions</source>
+        <translation>제외 영역 없음</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>적용</translation>
+    </message>
+    <message>
+        <source>These settings affect future matching; the existing stitched image stays unchanged.</source>
+        <translation>이 설정은 이후 일치 검사에 적용됩니다. 기존 연결 이미지는 변경되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>New content: %1 px. Red line marks the join; only this preview includes it.</source>
+        <translation>새 내용: %1px. 빨간 선은 이음새이며 미리 보기에만 표시됩니다.</translation>
+    </message>
+</context>
+<context>
+    <name>ScrollCaptureWindow</name>
+    <message>
+        <source>Undo last stitch (%1 retained; up to 3 checkpoints / 96 MiB)</source>
+        <translation>마지막 연결 실행 취소(%1개 보관, 최대 3개/96 MiB)</translation>
+    </message>
+    <message>
+        <source>No reliable overlap. Scroll less and retry, or adjust the latest seam.</source>
+        <translation>확실한 겹침을 찾지 못했습니다. 스크롤을 줄여 재시도하거나 이음새를 조정하세요.</translation>
+    </message>
+    <message>
+        <source>The frame is unchanged. Scroll to new content before capturing again.</source>
+        <translation>화면이 변경되지 않았습니다. 새 내용으로 스크롤한 후 다시 캡처하세요.</translation>
+    </message>
+    <message>
+        <source>Could not stitch this frame. Existing content was kept; reduce the region or repair the seam.</source>
+        <translation>이 프레임을 연결하지 못했습니다. 기존 내용은 유지됩니다. 영역을 줄이거나 이음새를 조정하세요.</translation>
+    </message>
+    <message>
+        <source>Last stitch undone. Return the page to this preview before continuing.</source>
+        <translation>마지막 연결을 취소했습니다. 계속하기 전에 페이지를 이 미리 보기 위치로 되돌리세요.</translation>
+    </message>
+    <message>
+        <source>Undo all seams or start a new capture before switching direction.</source>
+        <translation>방향을 바꾸려면 모든 이음새를 취소하거나 새로 캡처하세요.</translation>
+    </message>
+    <message>
+        <source>Matching exclusions updated. Existing output pixels were not cropped.</source>
+        <translation>일치 검사 제외 영역을 갱신했습니다. 기존 출력 픽셀은 잘리지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Seam updated. Check the preview before continuing.</source>
+        <translation>이음새를 갱신했습니다. 계속하기 전에 미리 보기를 확인하세요.</translation>
+    </message>
+    <message>
+        <source>Adjustment failed. Existing content was kept.</source>
+        <translation>조정하지 못했습니다. 기존 내용은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: the cancel key is unavailable.</source>
+        <translation>취소 키를 사용할 수 없어 자동 스크롤을 시작하지 못했습니다.</translation>
+    </message>
+    <message>
+        <source>Activate the target and put the pointer inside the capture region within 3 seconds. Esc stops.</source>
+        <translation>3초 안에 대상 창을 활성화하고 포인터를 영역 안에 놓으세요. Esc로 중지합니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped because the cancel key became unavailable.</source>
+        <translation>취소 키를 사용할 수 없어 자동 스크롤을 중지했습니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the starting frame did not match the preview.</source>
+        <translation>시작 화면이 미리 보기와 일치하지 않아 중지했습니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the time limit.</source>
+        <translation>자동 스크롤 시간 한도에 도달했습니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the frame did not change (end of page or unsupported target).</source>
+        <translation>화면이 바뀌지 않아 중지했습니다(페이지 끝 또는 지원되지 않는 대상).</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: overlap failed. Review or repair the last seam.</source>
+        <translation>겹침 일치 검사에 실패했습니다. 최근 이음새를 확인하거나 수정하세요.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling is running. Esc or Stop ends it without discarding images.</source>
+        <translation>자동 스크롤 중입니다. Esc 또는 중지로 끝내며 기존 이미지는 유지합니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: target focus, position, or input access changed.</source>
+        <translation>대상의 포커스, 위치 또는 입력 권한이 바뀌어 중지했습니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped. Existing content was kept.</source>
+        <translation>자동 스크롤을 중지했습니다. 기존 내용은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>중지</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>자동 스크롤</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: check the current direction and starting frame.</source>
+        <translation>현재 방향과 시작 화면을 확인하세요. 자동 스크롤을 시작하지 못했습니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the frame limit.</source>
+        <translation>자동 스크롤 횟수 한도에 도달했습니다.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the image length limit.</source>
+        <translation>자동 스크롤 이미지 길이 한도에 도달했습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>AutoScrollDialog</name>
+    <message>
+        <source>Automatic scrolling</source>
+        <translation>자동 스크롤</translation>
+    </message>
+    <message>
+        <source>After Start, activate the intended app and put the pointer inside the selected capture area within 3 seconds. Scrolling is addressed only to that window. Keep it visible and focused. Esc stops; some applications may not support this input.</source>
+        <translation>시작 후 3초 안에 대상 앱을 활성화하고 포인터를 캡처 영역에 놓으세요. 해당 창에만 스크롤을 보냅니다. 창을 보이는 상태와 전면으로 유지하세요. Esc로 중지합니다. 일부 앱은 이 입력을 지원하지 않을 수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Down / right</source>
+        <translation>아래/오른쪽</translation>
+    </message>
+    <message>
+        <source>Up / left</source>
+        <translation>위/왼쪽</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>방향</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Start in 3 seconds</source>
+        <translation>3초 후 시작</translation>
+    </message>
+    <message>
+        <source>Wheel notches per step</source>
+        <translation>단계별 휠 눈금 수</translation>
+    </message>
+    <message>
+        <source>Wait after each scroll (ms)</source>
+        <translation>스크롤 후 대기(ms)</translation>
+    </message>
+    <message>
+        <source>Maximum scroll steps</source>
+        <translation>최대 스크롤 횟수</translation>
+    </message>
+    <message>
+        <source>Maximum duration (seconds)</source>
+        <translation>최대 시간(초)</translation>
+    </message>
+    <message>
+        <source>Maximum image length (px)</source>
+        <translation>최대 이미지 길이(px)</translation>
+    </message>
+</context>
+<context>
+    <name>GeometryEditor</name>
+    <message>
+        <source>Crop and Resize</source>
+        <translation>자르기 및 크기 조정</translation>
+    </message>
+    <message>
+        <source>Crop coordinates refer to the original image. Rotation and flipping preserve editable annotations. Output width 0 keeps the cropped image size.</source>
+        <translation>자르기 좌표는 원본 기준입니다. 회전과 뒤집기 후에도 주석을 편집할 수 있습니다. 출력 너비 0은 잘린 크기를 유지합니다.</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X 좌표</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y 좌표</translation>
+    </message>
+    <message>
+        <source>Crop width</source>
+        <translation>자르기 너비</translation>
+    </message>
+    <message>
+        <source>Crop height</source>
+        <translation>자르기 높이</translation>
+    </message>
+    <message>
+        <source>Output width (0 = original)</source>
+        <translation>출력 너비(0=원래 크기)</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>적용</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>출력: %1 × %2 px</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>자르기 또는 출력 크기가 이미지 한도를 벗어납니다.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageEditor</name>
+    <message>
+        <source>Crop</source>
+        <translation>자르기</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>자르기 또는 출력 크기가 이미지 한도를 벗어납니다.</translation>
+    </message>
+    <message>
+        <source>Image Editor</source>
+        <translation>이미지 편집기</translation>
+    </message>
+    <message>
+        <source>Crop by dragging</source>
+        <translation>드래그하여 자르기</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>창에 맞추기</translation>
+    </message>
+    <message>
+        <source>Open or drop one PNG, JPEG, BMP or WebP image. The source file is never overwritten.</source>
+        <translation>PNG, JPEG, BMP 또는 WebP 이미지 하나를 열거나 놓으세요. 원본 파일은 덮어쓰지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>저장 취소</translation>
+    </message>
+    <message>
+        <source>Unsaved image</source>
+        <translation>저장하지 않은 이미지</translation>
+    </message>
+    <message>
+        <source>Discard the unsaved edits? The source image will stay unchanged.</source>
+        <translation>저장하지 않은 편집을 버릴까요? 원본 이미지는 변경되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Open image</source>
+        <translation>이미지 열기</translation>
+    </message>
+    <message>
+        <source>Open image…</source>
+        <translation>이미지 열기…</translation>
+    </message>
+    <message>
+        <source>Save as…</source>
+        <translation>다른 이름으로 저장…</translation>
+    </message>
+    <message>
+        <source>Recognize text</source>
+        <translation>문자 인식</translation>
+    </message>
+    <message>
+        <source>Crop / resize…</source>
+        <translation>자르기/크기…</translation>
+    </message>
+    <message>
+        <source>Rotate left</source>
+        <translation>왼쪽 회전</translation>
+    </message>
+    <message>
+        <source>Rotate right</source>
+        <translation>오른쪽 회전</translation>
+    </message>
+    <message>
+        <source>Flip horizontal</source>
+        <translation>좌우 뒤집기</translation>
+    </message>
+    <message>
+        <source>Flip vertical</source>
+        <translation>상하 뒤집기</translation>
+    </message>
+    <message>
+        <source>Could not open image. Use one supported local image within 32 megapixels and 64 MiB.</source>
+        <translation>이미지를 열지 못했습니다. 지원되는 로컬 이미지(최대 3200만 픽셀, 64 MiB)를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Could not allocate the editor canvas. Existing edits were kept.</source>
+        <translation>편집 캔버스를 만들지 못했습니다. 기존 편집은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Cropping preserves hidden source pixels only in this session.</source>
+        <translation>출력: %1 × %2 px · 잘라낸 바깥 원본 픽셀은 현재 세션에만 보존됩니다.</translation>
+    </message>
+    <message>
+        <source>Transform image</source>
+        <translation>이미지 변환</translation>
+    </message>
+    <message>
+        <source>Crop and resize</source>
+        <translation>자르기 및 크기 조정</translation>
+    </message>
+    <message>
+        <source>Save edited image</source>
+        <translation>편집한 이미지 저장</translation>
+    </message>
+    <message>
+        <source>Choose a different file. The source image cannot be overwritten.</source>
+        <translation>다른 파일을 선택하세요. 원본 이미지는 덮어쓸 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Choose PNG, JPEG, WebP, BMP or PDF for the output.</source>
+        <translation>출력 형식은 PNG, JPEG, WebP, BMP 또는 PDF를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Could not render this image. Reduce the output dimensions.</source>
+        <translation>이미지를 렌더링하지 못했습니다. 출력 크기를 줄이세요.</translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation>저장 중…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>저장 취소 중…</translation>
+    </message>
+    <message>
+        <source>Edited image saved. Source file unchanged.</source>
+        <translation>편집 이미지를 저장했습니다. 원본 파일은 변경되지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Save cancelled. Edits are still available.</source>
+        <translation>저장을 취소했습니다. 편집 내용은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Save failed. Edits and the existing file were kept.</source>
+        <translation>저장하지 못했습니다. 편집 내용과 기존 파일은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Edited image copied.</source>
+        <translation>편집 이미지를 복사했습니다.</translation>
+    </message>
+    <message>
+        <source>Save project…</source>
+        <translation>프로젝트 저장…</translation>
+    </message>
+    <message>
+        <source>Untitled project</source>
+        <translation>제목 없는 프로젝트</translation>
+    </message>
+    <message>
+        <source>Could not open image or project. Check the format, version and resource limits.</source>
+        <translation>이미지나 프로젝트를 열지 못했습니다. 형식, 버전 및 리소스 제한을 확인하세요.</translation>
+    </message>
+    <message>
+        <source>Editable project contains original pixels</source>
+        <translation>편집 프로젝트에 원본 픽셀이 포함됩니다</translation>
+    </message>
+    <message>
+        <source>Projects retain the original image, cropped-out pixels and removable annotations. Do not share them as redacted images. Continue?</source>
+        <translation>프로젝트는 원본 이미지, 잘라낸 바깥 픽셀 및 제거 가능한 주석을 보존합니다. 가림 처리된 이미지로 공유하지 마세요. 계속할까요?</translation>
+    </message>
+    <message>
+        <source>Save editable project</source>
+        <translation>편집 가능한 프로젝트 저장</translation>
+    </message>
+    <message>
+        <source>Could not save this project: unsupported annotation or resource limit. Edits were kept.</source>
+        <translation>지원되지 않는 주석 또는 리소스 제한으로 저장하지 못했습니다. 편집 내용은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Saving editable project…</source>
+        <translation>편집 프로젝트 저장 중…</translation>
+    </message>
+    <message>
+        <source>Editable project saved. It contains original pixels; use image export for sharing.</source>
+        <translation>프로젝트를 저장했습니다. 원본 픽셀이 포함됩니다. 공유 시 이미지를 내보내세요.</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Images are flattened; projects retain original pixels and annotations.</source>
+        <translation>출력: %1 × %2 px · 이미지는 합쳐서 출력하고 프로젝트는 원본 픽셀과 주석을 보존합니다.</translation>
+    </message>
+</context>
+<context>
+    <name>PinWorkspaceDialog</name>
+    <message>
+        <source>Pin Workspaces</source>
+        <translation>고정 이미지 작업 공간</translation>
+    </message>
+    <message>
+        <source>Select the pins to keep. Saving is manual; workspaces contain original images and editable annotations. Restoring adds pins without closing existing ones.</source>
+        <translation>저장할 이미지를 선택하세요. 수동 저장만 하며 원본과 편집 가능한 주석을 포함합니다. 복원 시 기존 창을 닫지 않고 추가합니다.</translation>
+    </message>
+    <message>
+        <source>Workspace name</source>
+        <translation>작업 공간 이름</translation>
+    </message>
+    <message>
+        <source>Reference board</source>
+        <translation>참고 이미지 보드</translation>
+    </message>
+    <message>
+        <source>Pins to save</source>
+        <translation>저장할 이미지</translation>
+    </message>
+    <message>
+        <source>Refresh pins</source>
+        <translation>목록 새로 고침</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>모두 선택</translation>
+    </message>
+    <message>
+        <source>Select none</source>
+        <translation>선택 해제</translation>
+    </message>
+    <message>
+        <source>Up to 20 pins, 64 megapixels in total. Closing this dialog does not save anything automatically.</source>
+        <translation>최대 20장, 합계 6400만 픽셀입니다. 이 창을 닫아도 자동 저장하지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Save selected…</source>
+        <translation>선택 이미지 저장…</translation>
+    </message>
+    <message>
+        <source>Open workspace…</source>
+        <translation>작업 공간 열기…</translation>
+    </message>
+    <message>
+        <source>Delete workspace…</source>
+        <translation>작업 공간 삭제…</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>저장 취소</translation>
+    </message>
+    <message>
+        <source>Thumbnail</source>
+        <translation>썸네일</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>고정 이미지</translation>
+    </message>
+    <message>
+        <source>Enter a name and select between 1 and 20 pins.</source>
+        <translation>이름을 입력하고 1~20개 이미지를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Workspace contains original images</source>
+        <translation>작업 공간에 원본 이미지가 포함됩니다</translation>
+    </message>
+    <message>
+        <source>This file keeps original pixels and removable annotations. It is not a redacted sharing format. Save the selected pins?</source>
+        <translation>원본 픽셀과 제거 가능한 주석을 보존하므로 가림 처리된 이미지 공유 형식이 아닙니다. 선택한 이미지를 저장할까요?</translation>
+    </message>
+    <message>
+        <source>Save pin workspace</source>
+        <translation>이미지 작업 공간 저장</translation>
+    </message>
+    <message>
+        <source>Use the .vpins extension for pin workspaces.</source>
+        <translation>.vpins 확장자를 사용하세요.</translation>
+    </message>
+    <message>
+        <source>Could not prepare workspace. Check selected pins, name and resource limits. Nothing was saved.</source>
+        <translation>작업 공간을 준비하지 못했습니다. 선택한 이미지, 이름 및 리소스 제한을 확인하세요. 저장하지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Saving workspace…</source>
+        <translation>작업 공간 저장 중…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>저장 취소 중…</translation>
+    </message>
+    <message>
+        <source>Workspace saved. Source images and existing pins were not changed.</source>
+        <translation>작업 공간을 저장했습니다. 원본과 기존 고정 이미지는 변경되지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>Workspace save cancelled. Existing files were kept.</source>
+        <translation>저장을 취소했습니다. 기존 파일은 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Could not save workspace. Existing files and pins were kept.</source>
+        <translation>저장하지 못했습니다. 기존 파일과 이미지는 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Open pin workspace</source>
+        <translation>이미지 작업 공간 열기</translation>
+    </message>
+    <message>
+        <source>Workspace format or resource limits are invalid. Existing pins were not changed.</source>
+        <translation>작업 공간 형식 또는 리소스 제한이 잘못되었습니다. 기존 이미지는 변경되지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>No valid pins could be restored. The workspace may be missing or contain damaged projects.</source>
+        <translation>복원할 유효한 이미지가 없습니다. 프로젝트가 없거나 손상되었을 수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Restore %1 pins from '%2'? Existing pins stay open. The saved original images will be visible on screen.</source>
+        <translation>'%2'에서 %1개 이미지를 복원할까요? 기존 이미지는 열려 있으며 저장된 원본 이미지가 화면에 표시됩니다.</translation>
+    </message>
+    <message>
+        <source>Restore pin workspace</source>
+        <translation>이미지 작업 공간 복원</translation>
+    </message>
+    <message>
+        <source>Restored %1 pins; %2 failed; %3 moved onto an available screen.</source>
+        <translation>%1개 복원, %2개 실패, %3개를 사용 가능한 화면으로 이동했습니다.</translation>
+    </message>
+    <message>
+        <source>Failed entries: %1. Missing, invalid or over the resource limit.</source>
+        <translation>실패한 항목: %1. 없거나 잘못되었거나 리소스 제한을 초과합니다.</translation>
+    </message>
+    <message>
+        <source>Delete pin workspace</source>
+        <translation>이미지 작업 공간 삭제</translation>
+    </message>
+    <message>
+        <source>Move this workspace file to the Recycle Bin? Open pins and source image files will not be deleted.
+%1</source>
+        <translation>이 작업 공간 파일을 휴지통으로 이동할까요? 열린 고정 이미지와 원본 파일은 삭제하지 않습니다.
+%1</translation>
+    </message>
+    <message>
+        <source>Workspace moved to the Recycle Bin. Open pins were kept.</source>
+        <translation>작업 공간을 휴지통으로 이동했습니다. 열린 이미지는 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Could not move the workspace to the Recycle Bin. Nothing was permanently deleted.</source>
+        <translation>휴지통으로 이동하지 못했습니다. 영구 삭제하지 않았습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCompareWindow</name>
+    <message>
+        <source>Image A</source>
+        <translation>이미지 A</translation>
+    </message>
+    <message>
+        <source>Image B</source>
+        <translation>이미지 B</translation>
+    </message>
+    <message>
+        <source>Image Comparison</source>
+        <translation>이미지 비교</translation>
+    </message>
+    <message>
+        <source>Replace image A</source>
+        <translation>이미지 A 교체</translation>
+    </message>
+    <message>
+        <source>Replace image B</source>
+        <translation>이미지 B 교체</translation>
+    </message>
+    <message>
+        <source>Original pixels, align top-left</source>
+        <translation>원본 픽셀, 왼쪽 위 맞춤</translation>
+    </message>
+    <message>
+        <source>Resize B to A (may distort)</source>
+        <translation>B를 A 크기로 조정(왜곡 가능)</translation>
+    </message>
+    <message>
+        <source>Pixel difference threshold</source>
+        <translation>픽셀 차이 임계값</translation>
+    </message>
+    <message>
+        <source>Threshold</source>
+        <translation>임계값</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>맞춤</translation>
+    </message>
+    <message>
+        <source>Read-only comparison. Original pixels align at the top-left; missing areas are differences. Wheel zooms both views; drag pans. Resizing B may introduce interpolation differences. Pixel differences are not a correctness verdict.</source>
+        <translation>읽기 전용 비교입니다. 원본은 왼쪽 위에 맞추며 없는 영역도 차이로 표시합니다. 휠로 동기 확대, 드래그로 이동합니다. B 크기 조정은 보간 차이를 만들 수 있습니다. 픽셀 차이는 정확성 판단이 아닙니다.</translation>
+    </message>
+    <message>
+        <source>A / B split position</source>
+        <translation>A / B 분할 위치</translation>
+    </message>
+    <message>
+        <source>Choose two images to compare. No source files are changed.</source>
+        <translation>비교할 이미지 두 개를 선택하세요. 원본 파일은 변경하지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Could not load image: missing data, unsupported format or comparison limit (32 megapixels total). Existing images were kept.</source>
+        <translation>이미지를 읽지 못했습니다. 없거나 지원하지 않거나 합계 3200만 픽셀 한도를 초과했습니다. 기존 이미지는 유지됩니다.</translation>
+    </message>
+    <message>
+        <source>Choose comparison image</source>
+        <translation>비교 이미지 선택</translation>
+    </message>
+    <message>
+        <source>History image %1</source>
+        <translation>기록 이미지 %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>고정 이미지</translation>
+    </message>
+    <message>
+        <source>Comparison canvas exceeds 32 megapixels. Use another image pair or resize B to A.</source>
+        <translation>비교 영역이 3200만 픽셀을 초과했습니다. 다른 조합을 선택하거나 B를 A 크기로 조정하세요.</translation>
+    </message>
+    <message>
+        <source>Comparing pixels…</source>
+        <translation>픽셀 비교 중…</translation>
+    </message>
+    <message>
+        <source>%1 of %2 pixels differ (%3%). Alpha is compared; invisible RGB is ignored.</source>
+        <translation>%2픽셀 중 %1개가 다릅니다(%3%). 투명도도 비교하며 보이지 않는 RGB는 무시합니다.</translation>
+    </message>
+    <message>
+        <source>Read-only · %1 × %2 comparison pixels · A on the left, B on the right.</source>
+        <translation>읽기 전용 · %1 × %2 픽셀 · 왼쪽 A, 오른쪽 B.</translation>
+    </message>
+    <message>
+        <source>Comparison failed. Reduce image sizes or choose another pair.</source>
+        <translation>비교하지 못했습니다. 이미지 크기를 줄이거나 다른 이미지를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Choose file…</source>
+        <translation>파일 선택…</translation>
+    </message>
+    <message>
+        <source>Choose history image…</source>
+        <translation>기록 이미지 선택…</translation>
+    </message>
+    <message>
+        <source>Choose pinned image…</source>
+        <translation>고정 이미지 선택…</translation>
+    </message>
+    <message>
+        <source>Swap A / B</source>
+        <translation>A / B 교환</translation>
+    </message>
+    <message>
+        <source>Clear images</source>
+        <translation>이미지 비우기</translation>
+    </message>
+    <message>
+        <source>Side by side</source>
+        <translation>나란히 비교</translation>
+    </message>
+    <message>
+        <source>Slider comparison</source>
+        <translation>슬라이더 비교</translation>
+    </message>
+    <message>
+        <source>Difference overlay</source>
+        <translation>차이 강조</translation>
+    </message>
+</context>
+<context>
+    <name>GifExportDialog</name>
+    <message>
+        <source>Export GIF</source>
+        <translation>GIF 내보내기</translation>
+    </message>
+    <message>
+        <source>GIF output</source>
+        <translation>GIF 출력</translation>
+    </message>
+    <message>
+        <source>Frames %1–%2 · speed %3× · cursor %4</source>
+        <translation>프레임 %1–%2 · 속도 %3× · 커서 %4</translation>
+    </message>
+    <message>
+        <source>on</source>
+        <translation>켜짐</translation>
+    </message>
+    <message>
+        <source>off</source>
+        <translation>꺼짐</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>원본 크기</translation>
+    </message>
+    <message>
+        <source>Custom width</source>
+        <translation>너비 지정</translation>
+    </message>
+    <message>
+        <source>Keep timing (up to 50 fps)</source>
+        <translation>시간 유지 (최대 50 fps)</translation>
+    </message>
+    <message>
+        <source>Limit to %1 fps</source>
+        <translation>최대 %1 fps</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>크기</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>너비</translation>
+    </message>
+    <message>
+        <source>Frame rate</source>
+        <translation>프레임 속도</translation>
+    </message>
+    <message>
+        <source>Frame-rate limits drop frames, never add frames. GIF uses 10 ms timing steps and at least 20 ms per frame. Total time is rounded once; very short clips last at least 20 ms. File size is shown after export, not estimated.</source>
+        <translation>프레임을 줄이기만 하며 추가하지 않습니다. GIF 시간 단위는 10ms이며 프레임당 최소 20ms입니다. 전체 시간을 한 번 반올림하며 짧은 클립도 최소 20ms입니다. 용량은 추정하지 않고 내보낸 후 실제 크기를 표시합니다.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation>내보내기</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 pixels</source>
+        <translation>출력: %1 × %2 픽셀</translation>
+    </message>
+    <message>
+        <source>Choose a smaller size: maximum 16 megapixels, 65535 pixels per edge and 16× enlargement.</source>
+        <translation>더 작은 크기를 선택하세요. 최대 1600만 픽셀, 각 변 65535픽셀, 확대는 최대 16배입니다.</translation>
+    </message>
+    <message>
+        <source>The installed GIF encoder is outdated. Build/install rust_libs/gifrecorder from this checkout before exporting.</source>
+        <translation>GIF 인코더가 오래되었습니다. 이 소스의 rust_libs/gifrecorder를 빌드/설치한 후 내보내세요.</translation>
+    </message>
+    <message>
+        <source>Export silent MP4</source>
+        <translation>무음 MP4 내보내기</translation>
+    </message>
+    <message>
+        <source>Silent MP4 output</source>
+        <translation>무음 MP4 출력</translation>
+    </message>
+    <message>
+        <source>Original timing (no audio)</source>
+        <translation>원래 시간 유지 (오디오 없음)</translation>
+    </message>
+    <message>
+        <source>Silent H.264 video, with no audio track. Trim and speed are retained. Odd dimensions add one black row or column on the bottom or right, without stretching. Timing uses 1 ms steps; equal timestamps are merged. File size is shown after export.</source>
+        <translation>오디오 트랙 없는 H.264 동영상입니다. 자르기와 속도를 유지합니다. 홀수 크기는 오른쪽 또는 아래에 검은 1픽셀 테두리를 추가하며 늘리지 않습니다. 시간 정밀도는 1ms이며 같은 타임스탬프는 병합합니다. 내보낸 후 실제 용량을 표시합니다.</translation>
+    </message>
+    <message>
+        <source>Choose a smaller MP4 size: maximum 16 megapixels, 8192 pixels per edge and 16× enlargement.</source>
+        <translation>더 작은 MP4 크기를 선택하세요. 최대 1600만 픽셀, 각 변 8192픽셀, 확대 16배입니다.</translation>
+    </message>
+    <message>
+        <source>H.264 encoding is unavailable. Install the required PyAV package or use GIF instead.</source>
+        <translation>H.264 인코더를 사용할 수 없습니다. 필요한 PyAV 패키지를 설치하거나 GIF를 사용하세요.</translation>
+    </message>
+</context>
+<context>
+    <name>ComposerProgressDialog</name>
+    <message>
+        <source>Exporting GIF</source>
+        <translation>GIF 내보내는 중</translation>
+    </message>
+    <message>
+        <source>Encoding GIF…</source>
+        <translation>GIF 인코딩 중…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>취소 중…</translation>
+    </message>
+    <message>
+        <source>GIF export failed</source>
+        <translation>GIF 내보내기 실패</translation>
+    </message>
+    <message>
+        <source>The GIF could not be exported. Check output size, encoder version, disk space and file permissions. Existing files were kept.</source>
+        <translation>GIF를 내보내지 못했습니다. 크기, 인코더 버전, 디스크 공간과 파일 권한을 확인하세요. 기존 파일은 유지되었습니다.</translation>
+    </message>
+    <message>
+        <source>Exporting silent MP4</source>
+        <translation>무음 MP4 내보내는 중</translation>
+    </message>
+    <message>
+        <source>Encoding silent MP4…</source>
+        <translation>무음 MP4 인코딩 중…</translation>
+    </message>
+    <message>
+        <source>MP4 export failed</source>
+        <translation>MP4 내보내기 실패</translation>
+    </message>
+    <message>
+        <source>The silent MP4 could not be exported. Check the H.264 encoder, output size, disk space and permissions. Existing files were kept.</source>
+        <translation>무음 MP4를 내보내지 못했습니다. H.264 인코더, 크기, 디스크 공간과 권한을 확인하세요. 기존 파일은 유지되었습니다.</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackController</name>
+    <message>
+        <source>Clipboard copy failed</source>
+        <translation>클립보드 복사 실패</translation>
+    </message>
+    <message>
+        <source>The GIF was saved, but could not be copied to the clipboard.</source>
+        <translation>GIF는 저장되었지만 클립보드에 복사하지 못했습니다.</translation>
+    </message>
+    <message>
+        <source>GIF saved: %1 × %2 pixels</source>
+        <translation>GIF 저장됨: %1 × %2 픽셀</translation>
+    </message>
+    <message>
+        <source>Actual file size: %1 bytes</source>
+        <translation>실제 파일 크기: %1 바이트</translation>
+    </message>
+    <message>
+        <source>File size could not be read.</source>
+        <translation>파일 크기를 읽을 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>GIF exported</source>
+        <translation>GIF 내보내기 완료</translation>
+    </message>
+    <message>
+        <source>Save recording</source>
+        <translation>녹화 저장</translation>
+    </message>
+    <message>
+        <source>Silent MP4 saved: %1 × %2 pixels</source>
+        <translation>무음 MP4 저장됨: %1 × %2 픽셀</translation>
+    </message>
+    <message>
+        <source>MP4 exported</source>
+        <translation>MP4 내보내기 완료</translation>
+    </message>
+</context>
+<context>
+<name>CapturePrivacy</name>
+<message><source>Sensitive capture · memory only. Only Copy writes to the system clipboard. Save, collection, projects, recording, text extraction and translation are unavailable. Pins and redaction keep this policy. Other apps may read copied pixels; no secure-erasure guarantee.</source><translation>민감 캡처 · 메모리 전용. 복사만 시스템 클립보드에 기록합니다. 저장, 수집, 프로젝트, 녹화, 텍스트 추출, 번역은 사용할 수 없습니다. 핀과 가림에도 적용됩니다. 다른 앱이 복사된 이미지를 읽을 수 있으며 안전 삭제를 보장하지 않습니다.</translation></message>
+<message><source>Sensitive capture</source><translation>민감 캡처</translation></message>
+<message><source>Sensitive capture unavailable</source><translation>민감 캡처 사용 불가</translation></message>
+<message><source>The private clipboard protocol is unavailable. Rebuild/install this checkout's pyclipboard module. No sensitive capture was started.</source><translation>비공개 클립보드 프로토콜이 없습니다. 이 소스의 pyclipboard를 빌드/설치하세요. 민감 캡처는 시작되지 않았습니다.</translation></message>
+<message><source>Sensitive copy failed</source><translation>민감 복사 실패</translation></message>
+<message><source>The image was not copied successfully. It was not saved or retried as an ordinary copy.</source><translation>이미지 복사에 실패했습니다. 저장하거나 일반 복사로 다시 시도하지 않았습니다.</translation></message>
+<message><source>Sensitive capture · no files or history · only explicit Copy</source><translation>민감 캡처 · 파일 및 기록 없음 · 명시적 복사만</translation></message>
+</context>
+<context>
+<name>TableRecognitionWindow</name>
+<message><source>Review recognized table</source><translation>인식된 표 검토</translation></message>
+<message><source>For clear, regular tables with separated OCR cells only. Merged cells, wrapped rows, missing cells and joined OCR lines need manual correction. Click a cell to compare its source region; edit in the cell or the editor below. No cloud upload.</source><translation>OCR 셀이 분리된 선명하고 규칙적인 표 전용입니다. 병합 셀, 줄바꿈, 누락 및 연결된 OCR 행은 수동 수정이 필요합니다. 셀을 클릭해 원본과 비교하고 셀이나 아래 편집기에서 수정하세요. 클라우드에 업로드하지 않습니다.</translation></message>
+<message><source>Tight row grouping</source><translation>좁은 행 그룹</translation></message>
+<message><source>Normal row grouping</source><translation>일반 행 그룹</translation></message>
+<message><source>Loose row grouping</source><translation>넓은 행 그룹</translation></message>
+<message><source>Rebuild from OCR</source><translation>OCR에서 재구성</translation></message>
+<message><source>Fit source</source><translation>원본 맞춤</translation></message>
+<message><source>Editable recognized table</source><translation>편집 가능한 인식 표</translation></message>
+<message><source>Selected cell text</source><translation>선택 셀 텍스트</translation></message>
+<message><source>Select a cell to edit multiline text</source><translation>셀을 선택하여 여러 줄 편집</translation></message>
+<message><source>Insert row</source><translation>행 삽입</translation></message>
+<message><source>Delete row</source><translation>행 삭제</translation></message>
+<message><source>Insert column</source><translation>열 삽입</translation></message>
+<message><source>Delete column</source><translation>열 삭제</translation></message>
+<message><source>Protect spreadsheet formula prefixes</source><translation>스프레드시트 수식 접두사 보호</translation></message>
+<message><source>TSV cells starting with =, +, - or @ are prefixed with an apostrophe. Spreadsheets may auto-convert dates and leading zeros; format destination cells as text when needed.</source><translation>=, +, -, @로 시작하는 TSV 셀에 작은따옴표를 붙입니다. 날짜나 선행 0이 자동 변환될 수 있으므로 필요하면 대상 셀을 텍스트 형식으로 지정하세요.</translation></message>
+<message><source>First row is Markdown header</source><translation>첫 행을 Markdown 헤더로 사용</translation></message>
+<message><source>Copy TSV</source><translation>TSV 복사</translation></message>
+<message><source>Save Markdown…</source><translation>Markdown 저장…</translation></message>
+<message><source>Close</source><translation>닫기</translation></message>
+<message><source>Rebuild table</source><translation>표 재구성</translation></message>
+<message><source>Discard table edits and reconstruct from the original OCR boxes?</source><translation>표 편집을 버리고 원본 OCR 상자에서 재구성할까요?</translation></message>
+<message><source>Could not reconstruct a table: no valid positioned text or table limits exceeded.</source><translation>표를 재구성할 수 없습니다. 유효한 좌표 텍스트가 없거나 제한을 초과했습니다.</translation></message>
+<message><source>Low confidence or ambiguous geometry. Check the source image.</source><translation>신뢰도가 낮거나 배치가 모호합니다. 원본을 확인하세요.</translation></message>
+<message><source>Review required: %1 warning categories, %2 uncertain cells. Complex layouts are not reconstructed reliably.</source><translation>검토 필요: 경고 %1종, 불확실한 셀 %2개. 복잡한 배치는 정확히 재구성되지 않습니다.</translation></message>
+<message><source>%1 rows × %2 columns · source image is unchanged</source><translation>%1행 × %2열 · 원본 이미지 변경 없음</translation></message>
+<message><source>Table structure changed. Review empty and shifted cells before export.</source><translation>표 구조가 변경되었습니다. 내보내기 전에 빈 셀과 이동한 셀을 검토하세요.</translation></message>
+<message><source>Export exceeds table limits.</source><translation>내보내기가 표 제한을 초과했습니다.</translation></message>
+<message><source>TSV copied. Verify cell placement and data types in the destination spreadsheet.</source><translation>TSV를 복사했습니다. 대상 스프레드시트에서 셀 위치와 데이터 형식을 확인하세요.</translation></message>
+<message><source>Save Markdown table</source><translation>Markdown 표 저장</translation></message>
+<message><source>Markdown saved</source><translation>Markdown 저장됨</translation></message>
+<message><source>Markdown save failed</source><translation>Markdown 저장 실패</translation></message>
+<message><source>Invalid OCR boxes skipped</source><translation>잘못된 OCR 상자 제외</translation></message>
+<message><source>Rotated text</source><translation>기울어진 텍스트</translation></message>
+<message><source>Too few rows or columns</source><translation>행 또는 열 부족</translation></message>
+<message><source>Overlapping columns</source><translation>열 겹침</translation></message>
+<message><source>Text spans column boundaries</source><translation>열 경계를 넘는 텍스트</translation></message>
+<message><source>Multiple boxes in one cell</source><translation>셀 하나에 여러 상자</translation></message>
+<message><source>Missing or uneven cells</source><translation>누락되거나 고르지 않은 셀</translation></message>
+<message><source>Uncertain cells highlighted</source><translation>불확실한 셀 강조</translation></message>
+</context>
+  <context>
+    <name>AnnotationPresetDialog</name>
+    <message>
+        <source>Annotation Presets</source>
+        <translation>주석 스타일 프리셋</translation>
+    </message>
+    <message>
+        <source>Tool</source>
+        <translation>도구</translation>
+    </message>
+    <message>
+        <source>Preset</source>
+        <translation>프리셋</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>이름</translation>
+    </message>
+    <message>
+        <source>Save current style</source>
+        <translation>현재 스타일 저장</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>적용</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>이름 변경</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>삭제</translation>
+    </message>
+    <message>
+        <source>With a matching item selected, Apply edits that item (undoable). Otherwise it changes the defaults for new annotations.</source>
+        <translation>같은 도구의 도형이 선택되어 있으면 "적용"은 그 도형을 바꿉니다(되돌리기 가능). 아니면 새 주석의 기본값을 바꿉니다.</translation>
+    </message>
+    <message>
+        <source>Give the preset a name first.</source>
+        <translation>먼저 프리셋 이름을 입력하세요.</translation>
+    </message>
+    <message>
+        <source>Could not save this preset.</source>
+        <translation>이 프리셋을 저장할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Saved.</source>
+        <translation>저장했습니다.</translation>
+    </message>
+    <message>
+        <source>Pick a preset first.</source>
+        <translation>먼저 프리셋을 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Applied to the selected item (undoable).</source>
+        <translation>선택한 도형에 적용했습니다(되돌리기 가능).</translation>
+    </message>
+    <message>
+        <source>Applied to the defaults for new annotations.</source>
+        <translation>새 주석 기본값에 적용했습니다.</translation>
+    </message>
+    <message>
+        <source>Nothing to apply.</source>
+        <translation>적용할 내용이 없습니다.</translation>
+    </message>
+    <message>
+        <source>Renamed.</source>
+        <translation>이름을 변경했습니다.</translation>
+    </message>
+    <message>
+        <source>Rename failed: empty or duplicate name.</source>
+        <translation>이름 변경 실패: 비어 있거나 중복입니다.</translation>
+    </message>
+    <message>
+        <source>Deleted.</source>
+        <translation>삭제했습니다.</translation>
+    </message>
+    <message>
+        <source>Could not delete this preset.</source>
+        <translation>이 프리셋을 삭제할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Arrow</source>
+        <translation>화살표</translation>
+    </message>
+    <message>
+        <source>Pen</source>
+        <translation>펜</translation>
+    </message>
+    <message>
+        <source>Highlighter</source>
+        <translation>형광펜</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>사각형</translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation>타원</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation>번호</translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation>텍스트</translation>
+    </message>
+    <message>
+        <source>Mosaic</source>
+        <translation>모자이크</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>텍스트 콜아웃</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>영역 확대</translation>
+    </message>
+  </context>
+  <context>
+    <name>MarkdownReportDialog</name>
+    <message>
+        <source>Markdown report</source>
+        <translation>Markdown 문제 보고서</translation>
+    </message>
+    <message>
+        <source>Report title</source>
+        <translation>보고서 제목</translation>
+    </message>
+    <message>
+        <source>Issue report</source>
+        <translation>문제 보고서</translation>
+    </message>
+    <message>
+        <source>Steps / description</source>
+        <translation>단계 / 설명</translation>
+    </message>
+    <message>
+        <source>Include approved source</source>
+        <translation>승인된 출처 포함</translation>
+    </message>
+    <message>
+        <source>Include time</source>
+        <translation>시간 포함</translation>
+    </message>
+    <message>
+        <source>Note for</source>
+        <translation>메모 대상</translation>
+    </message>
+    <message>
+        <source>Writes report.md plus an images/ folder next to it. Only the images in this collection are attached.</source>
+        <translation>report.md와 같은 위치에 images/ 폴더를 만듭니다. 첨부되는 것은 이 컬렉션의 이미지뿐입니다.</translation>
+    </message>
+    <message>
+        <source>Export report</source>
+        <translation>보고서 내보내기</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Export Markdown report</source>
+        <translation>Markdown 보고서 내보내기</translation>
+    </message>
+    <message>
+        <source>Could not write the report. Check the target folder and that images are still loaded.</source>
+        <translation>보고서를 쓸 수 없습니다. 대상 폴더와 이미지가 남아 있는지 확인하세요.</translation>
+    </message>
+    <message>
+        <source>Report written:</source>
+        <translation>보고서를 작성했습니다:</translation>
+    </message>
+  </context>
 </TS>

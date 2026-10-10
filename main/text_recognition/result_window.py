@@ -66,6 +66,10 @@ class TextRecognitionWindow(FrostedFramelessDialog):
         # 同扫码结果窗口：隐藏图标后标题会紧贴窗口左边，补回原生标题栏的留白
         title_bar.hBoxLayout.setContentsMargins(dialog_scaled(12), 0, 0, 0)
         self.setWindowTitle(_tr("Text recognition"))
+        from PySide6.QtGui import QImage
+        self._table_image = QImage(image)
+        self._table_result = None
+        self._closed = False
         self._original_text = ""
         self._query = query
         self._thread = None
@@ -84,6 +88,15 @@ class TextRecognitionWindow(FrostedFramelessDialog):
         footer = QHBoxLayout()
         footer.setSpacing(dialog_scaled(8))
         footer.addWidget(self.status_label, 1)
+        self.table_button = PushButton(_tr("Review table…"), self)
+        configure_dialog_control(self.table_button)
+        self.table_button.setEnabled(False)
+        self.table_button.clicked.connect(self._open_table)
+        footer.addWidget(self.table_button)
+        self.pdf_button = PushButton(_tr("PDF output…"), self)
+        configure_dialog_control(self.pdf_button)
+        self.pdf_button.clicked.connect(self._open_pdf_output)
+        footer.addWidget(self.pdf_button)
         footer.addWidget(self.copy_button)
 
         actions = QHBoxLayout()
@@ -118,11 +131,12 @@ class TextRecognitionWindow(FrostedFramelessDialog):
         self._place()
 
         if initial_result is not None:
+            self._on_table_details(initial_result, "")
             from ocr import format_ocr_result_text
             text = format_ocr_result_text(initial_result).strip()
             self._on_recognized(text, "" if text else NO_TEXT)
             return
-        self._thread = recognize_async(image, self._on_recognized)
+        self._thread = recognize_async(image, self._on_recognized, on_details=self._on_table_details)
         # 线程一结束就把引用放掉：它跑完就被回收，而取消掉的那次不会有结果回来，只有
         # finished 一定到。两个槽都是本窗口的方法，窗口先销毁时 Qt 会自己断开。
         self._thread.finished.connect(self._forget_thread)
@@ -146,6 +160,31 @@ class TextRecognitionWindow(FrostedFramelessDialog):
             min(dialog_scaled(self.HEIGHT), available.height()),
         )
         self.move(available.center() - self.rect().center())
+
+    def _open_pdf_output(self):
+        if self._closed or self._table_image is None:return
+        from ui.image_layout_dialog import ImageLayoutDialog
+        dialog=ImageLayoutDialog()
+        try:
+            dialog.add_image(_tr("Current image"),self._table_image)
+            dialog.mode.setCurrentIndex(dialog.mode.findData("pdf"))
+            dialog.update_preview()
+        except (ValueError,MemoryError):
+            dialog.close();dialog.deleteLater();return
+        track_modeless_dialog(dialog)
+        dialog.show();dialog.raise_();dialog.activateWindow()
+
+    def _on_table_details(self, result, reason):
+        if self._closed:return
+        self._table_result = result if isinstance(result, dict) and result.get("code") == 100 and not reason else None
+        self.table_button.setEnabled(self._table_result is not None and bool(self._table_result.get("data")))
+
+    def _open_table(self):
+        if self._closed or self._table_result is None:return
+        from .table_window import show_table_recognition
+        from .table import TableError
+        try:show_table_recognition(self._table_image,self._table_result)
+        except TableError:self.status_label.setText(_tr("Table preview unavailable. Use an image up to 32 megapixels with positioned text."))
 
     def _forget_thread(self):
         self._thread = None
@@ -246,6 +285,9 @@ class TextRecognitionWindow(FrostedFramelessDialog):
 
     @safe_event
     def closeEvent(self, event):
+        self._closed = True
+        self._table_result = None
+        self._table_image = None
         if self._thread is not None:
             self._thread.cancel()   # 结果不要了；线程自己跑完、自己回收
             self._thread = None

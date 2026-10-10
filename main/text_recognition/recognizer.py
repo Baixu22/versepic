@@ -32,9 +32,10 @@ class RecognizeThread(QThread):
     recognized = Signal(str, str)   # (识别出的文字, 失败原因键)；成功时原因为空串
     details_ready = Signal(object, str)  # 保留文字框，供索引和脱敏共用同一次识别。
 
-    def __init__(self, image: QImage):
+    def __init__(self, image: QImage, *, sensitive=False):
         super().__init__()
         self._image = image
+        self.sensitive = sensitive is True
         self._cancelled = False
 
     def cancel(self):
@@ -44,6 +45,8 @@ class RecognizeThread(QThread):
     def run(self):
         text, reason = "", FAILED
         result = {}
+        from core.capture_privacy import sensitive_ocr
+        privacy_token = sensitive_ocr.set(self.sensitive)
         try:
             from ocr import format_ocr_result_text, is_ocr_available, recognize_text
 
@@ -55,8 +58,10 @@ class RecognizeThread(QThread):
                     text = format_ocr_result_text(result).strip()
                     reason = "" if text else NO_TEXT
         except Exception as e:
-            log_error(T("文字识别失败: {e}", e=e), "OCR")
+            if not self.sensitive:
+                log_error(T("文字识别失败: {e}", e=e), "OCR")
         finally:
+            sensitive_ocr.reset(privacy_token)
             self._image = None   # 识别完就放掉，线程对象还要等主线程来收
 
         if not self._cancelled:
@@ -64,7 +69,7 @@ class RecognizeThread(QThread):
             self.recognized.emit(text, reason)
 
 
-def recognize_async(image: QImage, on_recognized=None, *, on_details=None) -> RecognizeThread:
+def recognize_async(image: QImage, on_recognized=None, *, on_details=None, sensitive=False) -> RecognizeThread:
     """后台识别 image，结果发给 on_recognized(文字, 失败原因键)。
 
     on_recognized 要是某个 QObject 的方法：Qt 在那个对象销毁时会自己断开连接，窗口先关、
@@ -73,7 +78,7 @@ def recognize_async(image: QImage, on_recognized=None, *, on_details=None) -> Re
     信号在 start 之前连好：识别可能在调用方拿到返回值之前就结束（本版本不带 OCR 时立刻
     就失败了），那时还没连上的话结果就丢了。
     """
-    thread = RecognizeThread(image)
+    thread = RecognizeThread(image, sensitive=True) if sensitive else RecognizeThread(image)
     if on_recognized is not None:
         thread.recognized.connect(on_recognized)
     if on_details is not None:

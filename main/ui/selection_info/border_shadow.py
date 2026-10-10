@@ -640,6 +640,11 @@ class BorderShadowLogic(QObject):
     # ------------------------------------------------------------------
     # Hook: ExportService.export() 导出时添加描边/阴影（通过 HookManager）
     # ------------------------------------------------------------------
+    @property
+    def export_padding(self):
+        """Physical pixels added on each side by the active border/shadow."""
+        return self._size if self._enabled else 0
+
     def _install_export_hook(self):
         logic = self
 

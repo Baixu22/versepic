@@ -104,9 +104,9 @@ class TestScreenshotToolbar:
     def test_default_layout_folds_low_frequency_buttons_and_ends_with_more(self, qapp):
         toolbar = Toolbar()
         assert _toolbar_row(toolbar) == [
-            key for key in DEFAULT_ORDER if key not in ("text_recognize", "smart_redact", "scan_code", "spotlight")
+            key for key in DEFAULT_ORDER if key not in ("text_recognize", "smart_redact", "scan_code", "insert_image", "collect_next", "collect_review", "multi_region", "editable_project", "spotlight", "magnify", "callout")
         ] + ["more"]
-        assert toolbar._folded_keys == ["text_recognize", "smart_redact", "scan_code", "spotlight"]
+        assert toolbar._folded_keys == ["text_recognize", "smart_redact", "scan_code", "insert_image", "collect_next", "collect_review", "multi_region", "editable_project", "spotlight", "magnify", "callout"]
         assert toolbar.copy_btn.isHidden()
         geometries = [toolbar._buttons[key].geometry() for key in _toolbar_row(toolbar)]
         for left, right in zip(geometries, geometries[1:]):
@@ -122,14 +122,16 @@ class TestScreenshotToolbar:
     def test_configured_layout_reorders_folds_and_hides(self, qapp):
         default_width = Toolbar().width()
         save_layout(_layout_with(
-            first="pin", mosaic=MORE, text=HIDE, scan_code=MORE, text_recognize=MORE, smart_redact=MORE))
+            first="pin", mosaic=MORE, text=HIDE, scan_code=MORE, text_recognize=MORE, smart_redact=MORE,
+            collect_next=MORE, collect_review=MORE, multi_region=MORE, editable_project=MORE,
+            spotlight=MORE, magnify=MORE, callout=MORE, insert_image=MORE))
 
         toolbar = Toolbar()
         row = _toolbar_row(toolbar)
         assert row[0] == "pin"
         assert row[-1] == "more"
         assert "mosaic" not in row and "text" not in row
-        assert toolbar._folded_keys == ["text_recognize", "smart_redact", "scan_code", "mosaic"]
+        assert toolbar._folded_keys == ["text_recognize", "smart_redact", "scan_code", "insert_image", "collect_next", "collect_review", "multi_region", "editable_project", "mosaic", "spotlight", "magnify", "callout"]
         assert toolbar.width() < default_width
 
     def test_hiding_a_tool_only_hides_its_button(self, qapp):

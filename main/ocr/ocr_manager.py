@@ -30,6 +30,9 @@ from core.logger import T
 
 def _ocr_log(msg, level: str = "INFO"):
     """写入日志（打包后使用 core.logger，否则 print）。msg 可以是 str 或 T() 构造的可翻译消息。"""
+    from core.capture_privacy import sensitive_ocr
+    if sensitive_ocr.get():
+        return
     try:
         from core.logger import log_info, log_warning, log_error, log_debug
         if level == "ERROR":

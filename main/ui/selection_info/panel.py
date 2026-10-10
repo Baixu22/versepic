@@ -36,6 +36,7 @@ class SelectionInfoPanel(QWidget):
     border_toggled   = Signal(bool)    # 边框/阴影开关
     rounded_toggled  = Signal(bool)    # 圆角截图开关
     lock_ratio_toggled = Signal(bool)  # 锁定纵横比开关
+    geometry_requested = Signal()
     refresh_pressed  = Signal()        # 刷新按钮按下（单击 / 长按开始）
     refresh_released = Signal()        # 刷新按钮松开（长按结束）
 
@@ -80,6 +81,8 @@ class SelectionInfoPanel(QWidget):
 
         # 按钮（顺序：圆角 → 纵横比 → 描边阴影）
         self._buttons = []
+        self.btn_geometry = self._make_btn("lucide/sliders-horizontal.svg", tip="Exact Region")
+        self.btn_geometry.clicked.connect(self.geometry_requested)
         self.btn_rounded = self._make_btn("圆角.svg", checkable=True,
                                            tip="Rounded Corners")
         self.btn_lock = self._make_btn("保持纵横比.svg", checkable=True,
@@ -87,7 +90,7 @@ class SelectionInfoPanel(QWidget):
         self.btn_border = self._make_btn("阴影描边.svg", checkable=True,
                                           tip="Border / Shadow")
 
-        for btn in (self.btn_rounded, self.btn_lock, self.btn_border):
+        for btn in (self.btn_geometry, self.btn_rounded, self.btn_lock, self.btn_border):
             lay.addWidget(btn)
 
         # 分隔线
@@ -109,7 +112,7 @@ class SelectionInfoPanel(QWidget):
 
         # 右侧按钮默认隐藏，选区确认后才显示
         self._action_widgets = [
-            self.btn_rounded, self.btn_lock, self.btn_border,
+            self.btn_geometry, self.btn_rounded, self.btn_lock, self.btn_border,
             self._sep, self.btn_refresh,
         ]
         for w in self._action_widgets:

@@ -7,7 +7,7 @@ from PySide6.QtCore import QRectF, QSize, Qt
 from PySide6.QtGui import QColor, QIcon, QPainter, QPalette
 from PySide6.QtWidgets import QButtonGroup, QPushButton, QStyle, QStyleOptionButton, QVBoxLayout, QWidget
 
-from core.ui_scale import configure_dialog_control, dialog_scaled, widget_scaled
+from core.ui_scale import dialog_scaled, widget_scaled
 from core.ui_theme import get_ui_theme
 from ui.motion import HoverAnimator
 

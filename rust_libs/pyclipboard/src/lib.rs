@@ -4,6 +4,7 @@ use pyo3::types::PyBytes;
 
 mod database;
 mod types;
+mod privacy;
 
 use database::Database;
 use types::{PyClipboardItem, PyQueryParams, PyPaginatedResult, PyGroup};
@@ -48,6 +49,8 @@ fn should_skip_callback(id: i64) -> bool {
 /// pyclipboard - Python 剪贴板管理库
 #[pymodule]
 fn pyclipboard(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    // Capability handshake for fail-closed application-side private copying.
+    m.add("PRIVATE_CAPTURE_PROTOCOL", if cfg!(target_os = "windows") { 1u32 } else { 0u32 })?;
     // 注册类
     m.add("__version__", env!("CARGO_PKG_VERSION"))?;
     m.add_class::<PyClipboardManager>()?;
@@ -801,6 +804,10 @@ impl PyClipboardManager {
                         return;
                     }
 
+                    // Reject before payload IO, thumbnails, SQLite and callbacks.
+                    let privacy_sequence = privacy::public_sequence();
+                    if privacy_sequence.is_none() { return; }
+
                     // ── 第一步：Ditto 风格按白名单读取格式数据 ────────────────
                     // raw_formats  = 白名单格式的完整数据（直接存 DB，已经过滤好）
                     // all_names    = 剪贴板上所有格式的 (id, name)（仅用于 fallback 探测）
@@ -822,6 +829,10 @@ impl PyClipboardManager {
                     let text_val  = ctx.get_text().ok().filter(|t| !t.trim().is_empty());
                     let files_val = ctx.get_files().ok().filter(|f| !f.is_empty());
                     let image_val = ctx.get_image().ok();
+
+                    // High-level APIs open separately; reject mixed/raced snapshots
+                    // before constructing or saving any item.
+                    if !privacy::unchanged_public_snapshot(privacy_sequence) { return; }
 
                     // 高层 API 全部失败时，检查白名单数据或全格式名称列表是否含图片类格式
                     // 场景：Word 复制多张图片时 get_image() 返回 None，但 raw_formats 里有 PNG/DIB

@@ -39,6 +39,7 @@ class SelectionInfoController:
             config_manager:   ToolSettingsManager (持久化设置)
         """
         self.panel = panel
+        self._geometry_dialog = None
         self.model = selection_model
         self.selection_item = selection_item
         self.export_service = export_service
@@ -97,6 +98,7 @@ class SelectionInfoController:
         self.model.confirmed.connect(self._on_confirmed)
 
         # panel 按钮 → 子模块
+        self.panel.geometry_requested.connect(self._edit_geometry)
         self.panel.border_toggled.connect(self._on_border_toggled)
         self.panel.rounded_toggled.connect(self._on_rounded_toggled)
         self.panel.lock_ratio_toggled.connect(self._on_lock_ratio_toggled)
@@ -154,6 +156,29 @@ class SelectionInfoController:
     # ------------------------------------------------------------------
     # 按钮回调 → 委托给子模块
     # ------------------------------------------------------------------
+    def _edit_geometry(self):
+        if self._parent_window is None or not self.model.is_confirmed or self._geometry_dialog is not None:
+            return
+        from PySide6.QtWidgets import QDialog
+        from .geometry_dialog import RegionGeometryDialog
+
+        dialog = RegionGeometryDialog(
+            self.model.rect().toAlignedRect(), self.export_service.scene.sceneRect().toAlignedRect(),
+            locked=self.panel.btn_lock.isChecked(), padding=self._border_shadow.export_padding,
+            config=self._config, parent=self._parent_window,
+        )
+        self._geometry_dialog = dialog
+        try:
+            if dialog.exec() == QDialog.DialogCode.Accepted and self._parent_window is not None:
+                rect = QRectF(dialog.selected_rect())
+                self.model.set_rect(rect)
+                locked = dialog.ratio() is not None
+                self.panel.btn_lock.setChecked(locked)
+                self._lock_ratio.set_enabled(locked, rect if locked else None)
+        finally:
+            self._geometry_dialog = None
+            dialog.deleteLater()
+
     def _on_border_toggled(self, checked: bool):
         """描边/阴影开关 → BorderShadowLogic"""
         self._border_shadow.set_enabled(checked)
@@ -200,7 +225,8 @@ class SelectionInfoController:
             if not getattr(win, '_exclude_from_capture_set', False):
                 win._set_exclude_from_capture(True)
                 win._exclude_from_capture_set = True
-            new_image, _ = CaptureService().capture_all_screens()
+            include_cursor = self._config.get_app_setting("screenshot_include_cursor", False) is True if self._config else False
+            new_image, _ = CaptureService(include_cursor=include_cursor).capture_all_screens()
             win.original_image = new_image
             win.scene.background.update_image(new_image)
         except Exception as e:
@@ -211,12 +237,15 @@ class SelectionInfoController:
     # ------------------------------------------------------------------
     def cleanup(self):
         """卸载所有 hook，停止定时器，恢复原始行为"""
+        if self._geometry_dialog is not None:
+            self._geometry_dialog.reject()
         # 停止定时器（必须最先，防止回调访问已销毁对象）
         self._long_press_timer.stop()
         self._refresh_timer.stop()
 
         # 断开信号（防止延迟排队的信号触发已销毁对象的回调）
         from core.qt_utils import safe_disconnect
+        safe_disconnect(self.panel.geometry_requested, self._edit_geometry)
         safe_disconnect(self.model.rectChanged, self._on_rect_changed)
         safe_disconnect(self.model.draggingChanged, self._on_dragging_changed)
         safe_disconnect(self.model.confirmed, self._on_confirmed)
