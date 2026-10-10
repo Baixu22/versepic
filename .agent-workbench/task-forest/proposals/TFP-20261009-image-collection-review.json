@@ -1,0 +1,486 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0003"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/core/save.py",
+          "历史库和贴图原图经显式选择进入集合，支持原生拖动排序、统一宽度、留白/背景和上下左右拼接；输入/输出资源上限与失败保护有测试。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0015"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "一图一页原图/A4/Letter PDF、页边距/方向与无损图像输出已验证；PDFium 和 Poppler 均确认最终三页顺序与渲染正确；未添加 OCR 文字层。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0016"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/save.py",
+          "截图工具栏实际更多菜单支持收集继续/收集查看，真实会话重用验证下一轮不继承标注或选区；Esc 保留收集结果，无自动复制或保存。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0017"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收。当前 9 个具体节点有本地实现及验证，其余 29 个仍开放。",
+          "尚未提交、打包或发布；不把部分实现和测试通过推广为完整目标或所有硬件平台完成。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "累计九个节点已有实现及对应验证；完整目标、后续开发和逐批验收继续开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第四批最终同进程全量：2725 passed、2 skipped、640 warnings；151.68 秒；exit 0。",
+          "本批新增39项，相关回归305 passed；全库Ruff通过。",
+          "中文100%和英文150%原生各7组通过；Poppler独立渲染最终3页PDF逐页检查。",
+          "证据：.ui_review/screenshot-expansion/collection-full.log",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-image-collection-verified-en/result.json",
+          ".ui_review/screenshot-expansion/collection-poppler-verified/verification.log",
+          ".ui_review/screenshot-expansion/collection-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    }
+  ],
+  "created_at": "2026-10-08T21:07:54.060460Z",
+  "proposal_id": "TFP-20261009-image-collection-review",
+  "rationale": "累计回写前9个完成本地实现和节点验证的任务，以及必要祖先与批次回归的进行中状态。覆盖此前未应用的累计回写提案范围，确认后仅应用本份。不关闭其余29项或声称已发布。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review",
+    "TFP-20261009-output-region-presets-review"
+  ],
+  "session_id": "session-20261009-image-collection",
+  "status": "proposed"
+}

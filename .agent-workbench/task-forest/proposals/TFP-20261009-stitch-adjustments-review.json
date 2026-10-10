@@ -1,0 +1,677 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标开放"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标开放"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标开放"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0003"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标开放"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/gif/cursor_overlay.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0014"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/core/save.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0015"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0016"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/save.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0017"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/canvas/view.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/core/export.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0018"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "功能及本地回归通过",
+          "配置恢复遗留未解决"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/tests/test_stitch_integration.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0019"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "功能及本地回归通过",
+          "配置恢复遗留未解决"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0020"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "功能及本地回归通过",
+          "配置恢复遗留未解决"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0021"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含所有38个具体任务；14项已有功能实现和本地证据，其余24项未完成。",
+          "本批原生驱动早期写入真实配置，根因已修复，但原配置恢复需要用户原值/备份；不能宣称安全收尾完成。",
+          "代码未提交、打包或发布；仅最后isolated原生运行具备强制隔离断言。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标开放"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "第六批：TF-0019检查点最多3份/96MiB，TF-0020可修正最新成功或失败接缝，TF-0021匹配排除区可视化且不裁剪输出。",
+          "最终同进程全量：2802 passed、2 skipped、657 warnings；158.36秒；exit0。定向200 passed；Ruff通过。",
+          "真实引擎四方向像素验证；最终中文100%/英文150%隔离原生四方向、撤销/修正/续接/生产保存通过。",
+          "配置隔离事故仍开放：真实剪贴板数据库配置与截图/日志目录、语言/缩放/格式/忽略参数被测试值改写；原值未备份，未猜测恢复。",
+          "详见 docs/screenshot-expansion-progress.md 第六批；.ui_review/screenshot-expansion/stitch-isolation-incident.json 只记录事故后值。",
+          ".ui_review/screenshot-expansion/stitch-adjustments-full-isolated.log",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-zh/result.json",
+          ".ui_review/screenshot-expansion/native-stitch-adjustments-isolated-en/result.json",
+          ".ui_review/screenshot-expansion/stitch-adjustments-source-hashes-isolated.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "已移除无用的导入期设置副作用，并增加独立进程导入无副作用测试及原生驱动写入前路径断言。重跑确认真实配置不再变化。仍须用户提供此前数据库/保存目录及其他设置原值或备份以准确恢复，不猜测覆盖。",
+        "created_at": "2026-10-09T00:02:41.344Z",
+        "id": "TFD-dd7b3195d8",
+        "kind": "acceptance_settings_isolation_failure",
+        "reason": "旧scroll_window在模块导入阶段调用全局设置单例；后续get_tool_settings_manager(QSettings(...))不能替换已建立的单例。",
+        "related_task_ids": [
+          "TF-0001",
+          "TF-0019",
+          "TF-0020",
+          "TF-0021",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "长截图原生驱动在隔离配置建立前导入模块，真实应用配置被测试值改写；恢复未完成。"
+      }
+    }
+  ],
+  "created_at": "2026-10-09T00:02:41.524468Z",
+  "proposal_id": "TFP-20261009-stitch-adjustments-review",
+  "rationale": "累计回写14个已有实现的节点。前三个长截图新节点保留90%待复核，因为虽然功能测试与修复后的隔离原生回归通过，真实配置恢复仍未完成。本份覆盖此前5份未应用回写提案，待用户确认，仅应用本份。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review",
+    "TFP-20261009-output-region-presets-review",
+    "TFP-20261009-image-collection-review",
+    "TFP-20261009-multi-region-cursor-review"
+  ],
+  "session_id": "session-20261009-stitch-adjustments",
+  "status": "proposed"
+}

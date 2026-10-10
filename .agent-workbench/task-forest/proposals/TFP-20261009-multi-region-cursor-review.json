@@ -1,0 +1,556 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0003"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/gif/cursor_overlay.py",
+          "真实静态指针通过CopyIcon/GetIconInfo/DrawIconEx合成，支持热点、边缘裁剪、单色XOR及原生位图尺寸；开启失败不静默省略指针。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0014"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0015"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0016"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0017"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现和节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/canvas/view.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/core/export.py",
+          "冻结底图多区域支持添加、顺序、删除、撤销重做和事务式收集；原生Qt事件验证修改屏幕后输出仍逐像素匹配原冻结帧，且不含既有标注/UI。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0018"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发及测试验收；当前11个具体节点有本地实现及证据，其余27项尚未完成。",
+          "代码未提交、打包或发布；原生Qt/Win32验证与完整硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "累计11个具体节点已有本地实现与对应验证；其余27项和完整交付门槛仍开放。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "第五批新增40项；相关224 passed，19.35秒，exit0。",
+          "最终同进程全量2765 passed、2 skipped、640 warnings，154.95秒，exit0；Ruff通过。",
+          "中文100%和英文150%原生各4组通过；前批连续收集和延时原生回归通过。",
+          "原生不同尺寸和重复50次GDI/USER资源测试通过；不等于完整混合DPI/HDR硬件矩阵。",
+          "证据：.ui_review/screenshot-expansion/multi-cursor-full.log",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-zh/result.json",
+          ".ui_review/screenshot-expansion/native-multi-cursor-verified-en/result.json",
+          ".ui_review/screenshot-expansion/multi-cursor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    }
+  ],
+  "created_at": "2026-10-08T22:33:41.509477Z",
+  "proposal_id": "TFP-20261009-multi-region-cursor-review",
+  "rationale": "累计回写TF-0008到TF-0018共11个已实现并完成本地节点验证的任务及必要祖先/批次回归状态。覆盖此前四份未应用回写提案范围，确认后只应用本份，不关闭其余27项或宣称完整目标完成。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review",
+    "TFP-20261009-output-region-presets-review",
+    "TFP-20261009-image-collection-review"
+  ],
+  "session_id": "session-20261009-multi-region-cursor",
+  "status": "proposed"
+}

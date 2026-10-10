@@ -1,0 +1,1844 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "本轮目标包含38项具体任务，目前36项有本地实现与对应证据（等待用户复核），其余2项未完成：TF-0030 与 TF-0045。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json",
+          "文件/历史/贴图只读A/B，三种比较模式、同步缩放平移、显式重采样、RGBA差异阈值及32MP限制实现。",
+          "42项新增比较测试；关联216 passed；最终闭包修正后比较/工具栏/设置字段82 passed，exit0。",
+          "最终同源码冻结全量3035 passed、2 skipped、666 warnings，206.68秒，exit0；86个代码/测试/资源/README摘要一致，Ruff及diff-check exit0。",
+          "此前冻结全量1 failed、3034 passed（Qt windowHandle返回QWidgetItem异常，exit1）；关联及全量复核未重现，根因未确认，详见新偏差，不声明稳定性问题已修复。",
+          "中文100%和英文150%各7组原生通过；80×60编辑准确检出4800差异像素；24MP输入资源样例及六轮关闭控件数均0；配置树摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十一批；.ui_review/screenshot-expansion/compare-full-recheck.log/xml、compare-full-release.log/xml、compare-source-hashes-release.json、compare-ruff-release.log",
+          "原生证据：.ui_review/screenshot-expansion/native-compare-verified-zh/result.json、native-compare-verified-en/result.json、compare-resources/result.json",
+          "GIF路径输出复用SaveService原子提交；取消/异常/空文件/替换失败不损坏已有目标，bytes暂存异常也清理，finished成功条件纠正。",
+          "新增11项安全回归；关联154 passed，6.03秒，exit0，包含真实Rust取消后重导出及Pillow解码。",
+          "最终全库3046 passed、2 skipped、666 warnings，205.84秒，exit0；88文件冻结摘要一致；Ruff和diff-check exit0。",
+          "真实QThread链路导出6帧81×61GIF并Pillow解码，配置树摘要不变。",
+          ".ui_review/screenshot-expansion/gif-safety-full.log/xml、gif-safety-source-hashes.json、gif-safety-thread/result.json；docs/screenshot-expansion-progress.md 第十二批进行中。",
+          "真实GIF基线检出首帧裁剪[0,0]导出全段、帧时长舍入漂移；当前宽度/帧率UI、时序/鼠标缩放、可见取消、体积反馈及原生交互仍未交付。",
+          "回放保存/复制接入原尺寸/指定宽度、最大帧率控制、当前裁剪/速度/光标；真实文件字节数反馈，可见取消/Esc/退出安全等待。",
+          "Rust绝对边界时序量化与帧率上限、None/0裁剪语义、奇数尺寸、长延迟拆块、结束flush；修正鼠标精灵预乘RGBA重复处理和未缩放的点击/滚轮偏移。",
+          "本节点累计57个Python新增用例、5个Rust新增时序用例。最终关联117 passed、4.48秒；Rust全部24 passed，exit0。",
+          "最终同进程全库3092 passed、2 skipped、666 warnings，209.51秒，exit0；96个累计源文件摘要一致；Ruff及diff-check exit0。",
+          "中文100%和英文150%原生各3组通过；实际321×180、2倍速、500ms和成品字节数匹配。六轮1920×1080输入真实导出后控件均0，样例进程峰值约197MiB，不是全尺寸性能保证。",
+          "界面依赖当前源码构建的本地gifrecorder；版本号仍0.3.1，未发布新包。用fps能力检测阻止旧二进制伪生效，README列明重建命令。安装包留待TF-0045。",
+          "现有255色全局调色板有损，微小罕见彩色精灵可能被量化为灰色；定位与RGBA测试分开，未宣称修复全部色彩精度。",
+          "docs/screenshot-expansion-progress.md 第十二批续；.ui_review/screenshot-expansion/gif-controls-full.log/xml、gif-controls-source-hashes.json、gif-controls-focused-release.log/xml、gif-timeline-rust-test-final.log",
+          "原生证据：native-gif-controls-verified-zh/result.json、native-gif-controls-verified-en/result.json；gif-controls-resources-final/result.json、gif-native-provenance.json，均在.ui_review/screenshot-expansion/。",
+          "保存录制可选择无声H.264/MP4，保留裁剪/速度/光标，原尺寸或指定宽度，奇数尺寸右下补黑边；逐帧解码，无NumPy或新增运行依赖。",
+          "复用原子保存/进度/取消，41项新增回归；关联142 passed、2.56秒；最终同进程全库3133 passed、2 skipped、666 warnings，212.13秒，exit0；101个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中100%及英150%原生各3组通过，实际保存入口导出322x180/30帧/500ms无音轨视频，Cancel/Esc保留原文件，源RGB摘要和真实配置不变。",
+          "独立Chromium152验证30帧1001ms、15帧250ms、33ms单帧、原生30帧500ms的尺寸/帧数/时长/首帧像素。33ms单帧显示并到片尾，但play()Promise返回end-of-playback AbortError；保留兼容性边界，不声称所有播放器API无异常。",
+          "标准构建脚本构建真实Windows onefile应用；frozen自检实际加载_MEI包内av，三段MP4+取消+源图+GIF回归均通过；包内avcodec/avformat/x264和PyAV许可证已核验。",
+          "最终exe74496850字节，sha256=77ac26184daa18a021f60b9578932a87b094ede21b55c9e5c6ee5061d3da7020；独立播放产物与最终包导出文件SHA256相同。未上传发布；完整安装包主路径与FFmpeg/x264再分发审核仍属TF-0045。",
+          "六轮1920x1080输入缩放960x540后窗口控件均0，进程样例峰值118484992字节约113MiB；3000帧长例2倍速50000ms，不是全尺寸硬件性能承诺。",
+          "docs/screenshot-expansion-progress.md 第十三批；.ui_review/screenshot-expansion/mp4-full.log/xml、mp4-source-hashes.json、mp4-focused-release.log/xml。",
+          "原生native-mp4-controls-zh/en、mp4-browser-acceptance.json、mp4-package-verified/result.json、mp4-package-inventory.json、mp4-browser-final-package-hashes.json、mp4-resources/result.json，均位于.ui_review/screenshot-expansion/。",
+          "截图及历史图片共用规则预览：18位身份证格式/日期/校验码、13-19位银行卡Luhn，有限O/I/l/竖线纠错；默认只保留既有手机/邮箱启用行为，候选不是身份或账户有效性证明。",
+          "命名预设最多20个，仅保存名称和五个布尔规则，不保存关键词/OCR/图片；内置组合、显式保存、实际No/Yes删除、新进程读取及损坏数据/写失败保护均覆盖。",
+          "原尺寸PNG/JPEG/PDF先扁平黑色遮盖，只创建新文件；拒绝已有目标和硬链接别名；更换被遮盖内容后PNG/JPEG字节相同、PDF渲染像素相同且无文字层，源图保持。",
+          "新增66项测试；最终关联216 passed、9.61秒；同进程全库3199 passed、2 skipped、666 warnings、211.32秒、exit0；105个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各5组通过：真实OCR四类合成信息、Qt拖动补盖/勾选、原生保存预设跨进程、PNG/JPEG/PDF保存、实际历史入口、真实删除确认；真实配置摘要不变。",
+          "六轮真实OCR预览/保存/关闭后控件和OCR线程均0；模型缓存仍驻留，样例峰值约449MiB，不承诺进程内存归零或最大图片上界。",
+          "已知边界：旧15位ID、B/8和S/5、跨行/错字可能漏报；Luhn有效订单号可误报；JPEG有损边缘不保证逐像素纯黑，但已覆盖源像素不进入输出。",
+          "docs/screenshot-expansion-progress.md 第十四批；.ui_review/screenshot-expansion/redaction-full.log/xml、redaction-rules-focused-final.log/xml、redaction-source-hashes.json。",
+          "原生native-redaction-rules-final-zh/en、redaction-resources/result.json、redaction-translations-*.log均位于.ui_review/screenshot-expansion/；可复跑驱动main/tests/native_redaction_rules.py。",
+          "本轮未重建包含新规则的安装包，先前MP4包不是本批功能打包证明；TF-0045及旧配置恢复/Qt偶发异常保持开放。",
+          "确认原生监听先图片落盘/缩略图/数据库后回调，不能在Python回调删除冒充不留存。新增VersePic.PrivateCapture.v1和标准排除标记过滤，在所有读取后、任何持久化前重新验证剪贴板序列。",
+          "敏感复制要求原生PRIVATE_CAPTURE_PROTOCOL=1，像素重建去元数据、同事务标记先于PNG/DIB，拒绝文件引用，失败不降级；单次投递在读设置/建文件/保存线程之前跳过自动保存，后续普通调用不受影响。",
+          "新增21项Python测试；关联71 passed、11 warnings、3.36秒；Rust7项通过；最终全库3220 passed、2 skipped、675 warnings，211.54秒，exit0，110个源码摘要一致。",
+          "真实原生验收未通过：两次CreateWindowStationW返回WinError5，均在Qt/剪贴板后端/内容访问前退出，未改动用户剪贴板，未提权或用真实剪贴板替代。已写测试不能算运行通过。",
+          "本节点仍缺少单次模式入口、会话复位、派生贴图/脱敏/复制传播、保存/收集/工程出口保护与真实无残留验收；保持in_progress/progress0，不提高22项验收计数。",
+          "本地j-clipboard 0.4.2源码wheel已安装，协议用能力字段检测，旧模块备份保留，未发布/未打完整应用包。原生二进制摘要与wheel一致；不声明本机真实监听已验收。",
+          "docs/screenshot-expansion-progress.md 第十五批进行中；.ui_review/screenshot-expansion/private-clipboard-full.log/xml、private-clipboard-focused-final.log/xml、privacy-clipboard-rust.log、private-clipboard-source-hashes.json。",
+          "原生环境失败：private-clipboard-native.log、private-clipboard-native-2.log；构建来源private-clipboard-provenance.json，均在.ui_review/screenshot-expansion/。",
+          "单次托盘入口只给本次后台采集请求传敏感动作，窗口首次/复用均建策略，Esc和结束复位；不改持久保存/监听/OCR设置，正在进行的普通会话不被重分类。",
+          "敏感钉图不再自动复制/OCR，显式Copy保持私密标记；截图保存/收集/工程/录制/文字/翻译出口执行前拒绝，贴图普通图像访问/工程/工作区快照/批量保存保护避免转存旁路。",
+          "脱敏继承敏感状态，本地OCR和手工复核可用但文件/预设写入不可用，复制仍带敏感标记。局部过滤器阻止原生文本复制/剪切/菜单旁路；敏感OCR异常日志上下文按线程隔离且复位。",
+          "新增39项用例；关联318 passed、9 warnings、10.12秒；最终全库3259 passed、2 skipped、675 warnings、219.28秒、exit0；116个累计源码摘要一致，Ruff/diff-check exit0。",
+          "原生中文100%及英文150%各4组UI流程通过，真实Qt交互与本地OCR，但采集输入为合成图、系统复制端点使用内存替身；结果明确real_clipboard_exclusion_verified=false，不代替原生监听零留存。",
+          "六轮截图到贴图关闭后控件/贴图均0，真实设置摘要不变。首轮exit0伴随已销毁父对象访问异常不计为通过；关闭时移除过滤器并校验对象有效性后重验，最终日志无Qt/Traceback异常。",
+          "CreateWindowStationW WinError5隔离环境限制仍开放；没触碰用户剪贴板、没提权或绕过。需要真实监听/数据库/文件/索引/日志零留存及恢复普通复制的闭环，节点保持in_progress/progress0。",
+          "docs/screenshot-expansion-progress.md 第十五批续；.ui_review/screenshot-expansion/sensitive-session-full.log/xml、sensitive-session-focused-release.log/xml、sensitive-session-source-hashes.json。",
+          "原生native-sensitive-session-verified-zh/、native-sensitive-session-en/以及sensitive-session-resources/result.json，均位于.ui_review/screenshot-expansion/；README明示开发态与真实监听未验收。",
+          "图片右键索引子菜单提供持久等待/识别/失败/排除/已索引/无文字状态；失败显式重试、重新识别、排除确认和恢复，列表状态原位更新，不改变原图和粘贴格式。",
+          "同库image_text_state持久状态和随机任务令牌，原子清索引/更新令牌；异步写回核对源图/条目/状态/令牌。排除再恢复、删除复用ID、换图/类型、停止和数据库移动后旧结果不得复活。",
+          "48项新增回归；关联119 passed、10.46秒；最终全库3307 passed、2 skipped、675 warnings、227.49秒、exit0。121个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%和英文150%实际历史窗口/右键子菜单/No-Yes确认各3组通过；真实本地OCR重试、恢复及重识别可检索，独立进程排除持久，原图SHA256和Rust原始粘贴格式字节相同。",
+          "六轮真实OCR排除/恢复/关闭后索引器和OCR线程均0，无历史窗口；其余应用控件稳定9个，不称所有控件归零。真实ToolSettings及ClipboardWindow设置均隔离且摘要不变。",
+          "失败/排除状态不会重启后自动补回；排除仅逻辑删除应用索引，不安全擦除SQLite页/WAL、备份或此前复制内容；人工临时OCR不会解除后台排除。",
+          "首轮原生计时器嵌套确认等待未通过，确认确切测试进程后仅关闭其测试确认框，修正独立singleShot响应后中英文重跑通过；失败日志保留。",
+          "docs/screenshot-expansion-progress.md 第十六批；.ui_review/screenshot-expansion/image-index-full.log/xml、image-index-focused-final.log/xml、image-index-source-hashes.json。",
+          "原生native-image-index-zh-2/、native-image-index-en/和image-index-resources/result.json位于.ui_review/screenshot-expansion/；驱动main/tests/native_image_index_controls.py。",
+          "没有重建包含本批索引控制的安装包；TF-0030真实零留存、配置恢复、Qt偶发异常及完整打包/许可继续开放。",
+          "现有OCR结果窗口复用坐标与原图进入可编辑表格，支持单元格/多行编辑、原图区域高亮/缩放、插入删除行列、分组阈值与重建确认；不按空格硬拆多词单元格。",
+          "简单分离文字框行列重建，缺格保留、跨列/碰撞/低分/旋转具体提示；200行/32列/4000格/50万字符和32MP预览限制。复杂合并/跨行和OCR漏格需人工校正，不宣称通用表格识别。",
+          "TSV按csv引号规则保留分隔符/换行，默认保护公式前缀；Markdown转义标签/链接图片语法/竖线和控制字符，使用原子写入。源图保持，无新增运行依赖或云端上传。",
+          "新增51项Python测试，关联129 passed、7.00秒；全库3358 passed、2 skipped、675 warnings、226.21秒、exit0；126个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各3组通过：真实OCR 3x3、校正/行操作、原图对应框、TSV和实际Markdown；系统复制端点在驱动中捕获文本，不读写用户剪贴板。",
+          "独立LibreOffice Calc专用隐藏实例导入相同TSV后getTransferable/insertTransferable跨工作表真实粘贴，普通3x3九格逐格一致；控制字符例格内Tab被Calc表为U+0001，位置/换行/公式保护保持，该差异明确记录而非宣称所有字符不变。",
+          "未验证操作系统剪贴板直接Ctrl+V；早期通用文本transferable未填表、源选区只选2行的失败均保留；最终实际落位不是普通纯文本导出。专用Calc文档关闭、terminate True和helper exit0。",
+          "六轮表格窗口关闭控件均0；实际Calc输入与最终中英文TSV导出SHA256一致。未重建包含本批功能的安装包，不用旧MP4exe作本批证据。",
+          "docs/screenshot-expansion-progress.md 第十七批；.ui_review/screenshot-expansion/table-full.log/xml、table-focused-release.log/xml、table-source-hashes.json。",
+          "native-table-final-zh/en、table-calc-final-paste.json、table-calc-ordinary-paste.json、table-export-provenance.json、table-resources/result.json均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0003"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json",
+          "文件/历史/贴图只读A/B，三种比较模式、同步缩放平移、显式重采样、RGBA差异阈值及32MP限制实现。",
+          "42项新增比较测试；关联216 passed；最终闭包修正后比较/工具栏/设置字段82 passed，exit0。",
+          "最终同源码冻结全量3035 passed、2 skipped、666 warnings，206.68秒，exit0；86个代码/测试/资源/README摘要一致，Ruff及diff-check exit0。",
+          "此前冻结全量1 failed、3034 passed（Qt windowHandle返回QWidgetItem异常，exit1）；关联及全量复核未重现，根因未确认，详见新偏差，不声明稳定性问题已修复。",
+          "中文100%和英文150%各7组原生通过；80×60编辑准确检出4800差异像素；24MP输入资源样例及六轮关闭控件数均0；配置树摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十一批；.ui_review/screenshot-expansion/compare-full-recheck.log/xml、compare-full-release.log/xml、compare-source-hashes-release.json、compare-ruff-release.log",
+          "原生证据：.ui_review/screenshot-expansion/native-compare-verified-zh/result.json、native-compare-verified-en/result.json、compare-resources/result.json",
+          "GIF路径输出复用SaveService原子提交；取消/异常/空文件/替换失败不损坏已有目标，bytes暂存异常也清理，finished成功条件纠正。",
+          "新增11项安全回归；关联154 passed，6.03秒，exit0，包含真实Rust取消后重导出及Pillow解码。",
+          "最终全库3046 passed、2 skipped、666 warnings，205.84秒，exit0；88文件冻结摘要一致；Ruff和diff-check exit0。",
+          "真实QThread链路导出6帧81×61GIF并Pillow解码，配置树摘要不变。",
+          ".ui_review/screenshot-expansion/gif-safety-full.log/xml、gif-safety-source-hashes.json、gif-safety-thread/result.json；docs/screenshot-expansion-progress.md 第十二批进行中。",
+          "真实GIF基线检出首帧裁剪[0,0]导出全段、帧时长舍入漂移；当前宽度/帧率UI、时序/鼠标缩放、可见取消、体积反馈及原生交互仍未交付。",
+          "回放保存/复制接入原尺寸/指定宽度、最大帧率控制、当前裁剪/速度/光标；真实文件字节数反馈，可见取消/Esc/退出安全等待。",
+          "Rust绝对边界时序量化与帧率上限、None/0裁剪语义、奇数尺寸、长延迟拆块、结束flush；修正鼠标精灵预乘RGBA重复处理和未缩放的点击/滚轮偏移。",
+          "本节点累计57个Python新增用例、5个Rust新增时序用例。最终关联117 passed、4.48秒；Rust全部24 passed，exit0。",
+          "最终同进程全库3092 passed、2 skipped、666 warnings，209.51秒，exit0；96个累计源文件摘要一致；Ruff及diff-check exit0。",
+          "中文100%和英文150%原生各3组通过；实际321×180、2倍速、500ms和成品字节数匹配。六轮1920×1080输入真实导出后控件均0，样例进程峰值约197MiB，不是全尺寸性能保证。",
+          "界面依赖当前源码构建的本地gifrecorder；版本号仍0.3.1，未发布新包。用fps能力检测阻止旧二进制伪生效，README列明重建命令。安装包留待TF-0045。",
+          "现有255色全局调色板有损，微小罕见彩色精灵可能被量化为灰色；定位与RGBA测试分开，未宣称修复全部色彩精度。",
+          "docs/screenshot-expansion-progress.md 第十二批续；.ui_review/screenshot-expansion/gif-controls-full.log/xml、gif-controls-source-hashes.json、gif-controls-focused-release.log/xml、gif-timeline-rust-test-final.log",
+          "原生证据：native-gif-controls-verified-zh/result.json、native-gif-controls-verified-en/result.json；gif-controls-resources-final/result.json、gif-native-provenance.json，均在.ui_review/screenshot-expansion/。",
+          "保存录制可选择无声H.264/MP4，保留裁剪/速度/光标，原尺寸或指定宽度，奇数尺寸右下补黑边；逐帧解码，无NumPy或新增运行依赖。",
+          "复用原子保存/进度/取消，41项新增回归；关联142 passed、2.56秒；最终同进程全库3133 passed、2 skipped、666 warnings，212.13秒，exit0；101个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中100%及英150%原生各3组通过，实际保存入口导出322x180/30帧/500ms无音轨视频，Cancel/Esc保留原文件，源RGB摘要和真实配置不变。",
+          "独立Chromium152验证30帧1001ms、15帧250ms、33ms单帧、原生30帧500ms的尺寸/帧数/时长/首帧像素。33ms单帧显示并到片尾，但play()Promise返回end-of-playback AbortError；保留兼容性边界，不声称所有播放器API无异常。",
+          "标准构建脚本构建真实Windows onefile应用；frozen自检实际加载_MEI包内av，三段MP4+取消+源图+GIF回归均通过；包内avcodec/avformat/x264和PyAV许可证已核验。",
+          "最终exe74496850字节，sha256=77ac26184daa18a021f60b9578932a87b094ede21b55c9e5c6ee5061d3da7020；独立播放产物与最终包导出文件SHA256相同。未上传发布；完整安装包主路径与FFmpeg/x264再分发审核仍属TF-0045。",
+          "六轮1920x1080输入缩放960x540后窗口控件均0，进程样例峰值118484992字节约113MiB；3000帧长例2倍速50000ms，不是全尺寸硬件性能承诺。",
+          "docs/screenshot-expansion-progress.md 第十三批；.ui_review/screenshot-expansion/mp4-full.log/xml、mp4-source-hashes.json、mp4-focused-release.log/xml。",
+          "原生native-mp4-controls-zh/en、mp4-browser-acceptance.json、mp4-package-verified/result.json、mp4-package-inventory.json、mp4-browser-final-package-hashes.json、mp4-resources/result.json，均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0004"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "本分支TF-0029、TF-0031～TF-0033已有本地实现/对应证据，TF-0030尚未完成，不关闭分支。",
+          "不承诺自动识别全部隐私；不进行云端识别或上传，当前规则预设不保存敏感文本。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "隐私及文字能力逐项推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "截图及历史图片共用规则预览：18位身份证格式/日期/校验码、13-19位银行卡Luhn，有限O/I/l/竖线纠错；默认只保留既有手机/邮箱启用行为，候选不是身份或账户有效性证明。",
+          "命名预设最多20个，仅保存名称和五个布尔规则，不保存关键词/OCR/图片；内置组合、显式保存、实际No/Yes删除、新进程读取及损坏数据/写失败保护均覆盖。",
+          "原尺寸PNG/JPEG/PDF先扁平黑色遮盖，只创建新文件；拒绝已有目标和硬链接别名；更换被遮盖内容后PNG/JPEG字节相同、PDF渲染像素相同且无文字层，源图保持。",
+          "新增66项测试；最终关联216 passed、9.61秒；同进程全库3199 passed、2 skipped、666 warnings、211.32秒、exit0；105个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各5组通过：真实OCR四类合成信息、Qt拖动补盖/勾选、原生保存预设跨进程、PNG/JPEG/PDF保存、实际历史入口、真实删除确认；真实配置摘要不变。",
+          "六轮真实OCR预览/保存/关闭后控件和OCR线程均0；模型缓存仍驻留，样例峰值约449MiB，不承诺进程内存归零或最大图片上界。",
+          "已知边界：旧15位ID、B/8和S/5、跨行/错字可能漏报；Luhn有效订单号可误报；JPEG有损边缘不保证逐像素纯黑，但已覆盖源像素不进入输出。",
+          "docs/screenshot-expansion-progress.md 第十四批；.ui_review/screenshot-expansion/redaction-full.log/xml、redaction-rules-focused-final.log/xml、redaction-source-hashes.json。",
+          "原生native-redaction-rules-final-zh/en、redaction-resources/result.json、redaction-translations-*.log均位于.ui_review/screenshot-expansion/；可复跑驱动main/tests/native_redaction_rules.py。",
+          "本轮未重建包含新规则的安装包，先前MP4包不是本批功能打包证明；TF-0045及旧配置恢复/Qt偶发异常保持开放。",
+          "确认原生监听先图片落盘/缩略图/数据库后回调，不能在Python回调删除冒充不留存。新增VersePic.PrivateCapture.v1和标准排除标记过滤，在所有读取后、任何持久化前重新验证剪贴板序列。",
+          "敏感复制要求原生PRIVATE_CAPTURE_PROTOCOL=1，像素重建去元数据、同事务标记先于PNG/DIB，拒绝文件引用，失败不降级；单次投递在读设置/建文件/保存线程之前跳过自动保存，后续普通调用不受影响。",
+          "新增21项Python测试；关联71 passed、11 warnings、3.36秒；Rust7项通过；最终全库3220 passed、2 skipped、675 warnings，211.54秒，exit0，110个源码摘要一致。",
+          "真实原生验收未通过：两次CreateWindowStationW返回WinError5，均在Qt/剪贴板后端/内容访问前退出，未改动用户剪贴板，未提权或用真实剪贴板替代。已写测试不能算运行通过。",
+          "本节点仍缺少单次模式入口、会话复位、派生贴图/脱敏/复制传播、保存/收集/工程出口保护与真实无残留验收；保持in_progress/progress0，不提高22项验收计数。",
+          "本地j-clipboard 0.4.2源码wheel已安装，协议用能力字段检测，旧模块备份保留，未发布/未打完整应用包。原生二进制摘要与wheel一致；不声明本机真实监听已验收。",
+          "docs/screenshot-expansion-progress.md 第十五批进行中；.ui_review/screenshot-expansion/private-clipboard-full.log/xml、private-clipboard-focused-final.log/xml、privacy-clipboard-rust.log、private-clipboard-source-hashes.json。",
+          "原生环境失败：private-clipboard-native.log、private-clipboard-native-2.log；构建来源private-clipboard-provenance.json，均在.ui_review/screenshot-expansion/。",
+          "单次托盘入口只给本次后台采集请求传敏感动作，窗口首次/复用均建策略，Esc和结束复位；不改持久保存/监听/OCR设置，正在进行的普通会话不被重分类。",
+          "敏感钉图不再自动复制/OCR，显式Copy保持私密标记；截图保存/收集/工程/录制/文字/翻译出口执行前拒绝，贴图普通图像访问/工程/工作区快照/批量保存保护避免转存旁路。",
+          "脱敏继承敏感状态，本地OCR和手工复核可用但文件/预设写入不可用，复制仍带敏感标记。局部过滤器阻止原生文本复制/剪切/菜单旁路；敏感OCR异常日志上下文按线程隔离且复位。",
+          "新增39项用例；关联318 passed、9 warnings、10.12秒；最终全库3259 passed、2 skipped、675 warnings、219.28秒、exit0；116个累计源码摘要一致，Ruff/diff-check exit0。",
+          "原生中文100%及英文150%各4组UI流程通过，真实Qt交互与本地OCR，但采集输入为合成图、系统复制端点使用内存替身；结果明确real_clipboard_exclusion_verified=false，不代替原生监听零留存。",
+          "六轮截图到贴图关闭后控件/贴图均0，真实设置摘要不变。首轮exit0伴随已销毁父对象访问异常不计为通过；关闭时移除过滤器并校验对象有效性后重验，最终日志无Qt/Traceback异常。",
+          "CreateWindowStationW WinError5隔离环境限制仍开放；没触碰用户剪贴板、没提权或绕过。需要真实监听/数据库/文件/索引/日志零留存及恢复普通复制的闭环，节点保持in_progress/progress0。",
+          "docs/screenshot-expansion-progress.md 第十五批续；.ui_review/screenshot-expansion/sensitive-session-full.log/xml、sensitive-session-focused-release.log/xml、sensitive-session-source-hashes.json。",
+          "原生native-sensitive-session-verified-zh/、native-sensitive-session-en/以及sensitive-session-resources/result.json，均位于.ui_review/screenshot-expansion/；README明示开发态与真实监听未验收。",
+          "图片右键索引子菜单提供持久等待/识别/失败/排除/已索引/无文字状态；失败显式重试、重新识别、排除确认和恢复，列表状态原位更新，不改变原图和粘贴格式。",
+          "同库image_text_state持久状态和随机任务令牌，原子清索引/更新令牌；异步写回核对源图/条目/状态/令牌。排除再恢复、删除复用ID、换图/类型、停止和数据库移动后旧结果不得复活。",
+          "48项新增回归；关联119 passed、10.46秒；最终全库3307 passed、2 skipped、675 warnings、227.49秒、exit0。121个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%和英文150%实际历史窗口/右键子菜单/No-Yes确认各3组通过；真实本地OCR重试、恢复及重识别可检索，独立进程排除持久，原图SHA256和Rust原始粘贴格式字节相同。",
+          "六轮真实OCR排除/恢复/关闭后索引器和OCR线程均0，无历史窗口；其余应用控件稳定9个，不称所有控件归零。真实ToolSettings及ClipboardWindow设置均隔离且摘要不变。",
+          "失败/排除状态不会重启后自动补回；排除仅逻辑删除应用索引，不安全擦除SQLite页/WAL、备份或此前复制内容；人工临时OCR不会解除后台排除。",
+          "首轮原生计时器嵌套确认等待未通过，确认确切测试进程后仅关闭其测试确认框，修正独立singleShot响应后中英文重跑通过；失败日志保留。",
+          "docs/screenshot-expansion-progress.md 第十六批；.ui_review/screenshot-expansion/image-index-full.log/xml、image-index-focused-final.log/xml、image-index-source-hashes.json。",
+          "原生native-image-index-zh-2/、native-image-index-en/和image-index-resources/result.json位于.ui_review/screenshot-expansion/；驱动main/tests/native_image_index_controls.py。",
+          "没有重建包含本批索引控制的安装包；TF-0030真实零留存、配置恢复、Qt偶发异常及完整打包/许可继续开放。",
+          "现有OCR结果窗口复用坐标与原图进入可编辑表格，支持单元格/多行编辑、原图区域高亮/缩放、插入删除行列、分组阈值与重建确认；不按空格硬拆多词单元格。",
+          "简单分离文字框行列重建，缺格保留、跨列/碰撞/低分/旋转具体提示；200行/32列/4000格/50万字符和32MP预览限制。复杂合并/跨行和OCR漏格需人工校正，不宣称通用表格识别。",
+          "TSV按csv引号规则保留分隔符/换行，默认保护公式前缀；Markdown转义标签/链接图片语法/竖线和控制字符，使用原子写入。源图保持，无新增运行依赖或云端上传。",
+          "新增51项Python测试，关联129 passed、7.00秒；全库3358 passed、2 skipped、675 warnings、226.21秒、exit0；126个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各3组通过：真实OCR 3x3、校正/行操作、原图对应框、TSV和实际Markdown；系统复制端点在驱动中捕获文本，不读写用户剪贴板。",
+          "独立LibreOffice Calc专用隐藏实例导入相同TSV后getTransferable/insertTransferable跨工作表真实粘贴，普通3x3九格逐格一致；控制字符例格内Tab被Calc表为U+0001，位置/换行/公式保护保持，该差异明确记录而非宣称所有字符不变。",
+          "未验证操作系统剪贴板直接Ctrl+V；早期通用文本transferable未填表、源选区只选2行的失败均保留；最终实际落位不是普通纯文本导出。专用Calc文档关闭、terminate True和helper exit0。",
+          "六轮表格窗口关闭控件均0；实际Calc输入与最终中英文TSV导出SHA256一致。未重建包含本批功能的安装包，不用旧MP4exe作本批证据。",
+          "docs/screenshot-expansion-progress.md 第十七批；.ui_review/screenshot-expansion/table-full.log/xml、table-focused-release.log/xml、table-source-hashes.json。",
+          "native-table-final-zh/en、table-calc-final-paste.json、table-calc-ordinary-paste.json、table-export-provenance.json、table-resources/result.json均位于.ui_review/screenshot-expansion/。",
+          "可搜索PDF只对旋转并白底扁平化后的实际像素重新OCR，默认仍为图片型；文字画在不透明图下，失败页回退并报告。",
+          "新增26个测试函数/37 collected；关联260 passed；冻结全库3395 passed、2 skipped、675 warnings、230.23秒、exit0；当时129个源码摘要一致，本轮复核PDF核心文件哈希未变。",
+          "中英原生各4组通过；pypdfium2实际搜索命中与pypdf抽字；脱敏页不嵌入SECRET；韩文行OCR未返回不宣称可搜索。",
+          "docs/screenshot-expansion-progress.md 第十八批；.ui_review/screenshot-expansion/searchable-pdf-full.log/xml、searchable-pdf-focused-final.log/xml、searchable-pdf-source-hashes.json。",
+          "native-searchable-pdf-final-zh/en、searchable-pdf-independent-final/result.json、searchable-pdf-resources/result.json均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0005"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json",
+          "保存录制可选择无声H.264/MP4，保留裁剪/速度/光标，原尺寸或指定宽度，奇数尺寸右下补黑边；逐帧解码，无NumPy或新增运行依赖。",
+          "复用原子保存/进度/取消，41项新增回归；关联142 passed、2.56秒；最终同进程全库3133 passed、2 skipped、666 warnings，212.13秒，exit0；101个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中100%及英150%原生各3组通过，实际保存入口导出322x180/30帧/500ms无音轨视频，Cancel/Esc保留原文件，源RGB摘要和真实配置不变。",
+          "独立Chromium152验证30帧1001ms、15帧250ms、33ms单帧、原生30帧500ms的尺寸/帧数/时长/首帧像素。33ms单帧显示并到片尾，但play()Promise返回end-of-playback AbortError；保留兼容性边界，不声称所有播放器API无异常。",
+          "标准构建脚本构建真实Windows onefile应用；frozen自检实际加载_MEI包内av，三段MP4+取消+源图+GIF回归均通过；包内avcodec/avformat/x264和PyAV许可证已核验。",
+          "最终exe74496850字节，sha256=77ac26184daa18a021f60b9578932a87b094ede21b55c9e5c6ee5061d3da7020；独立播放产物与最终包导出文件SHA256相同。未上传发布；完整安装包主路径与FFmpeg/x264再分发审核仍属TF-0045。",
+          "六轮1920x1080输入缩放960x540后窗口控件均0，进程样例峰值118484992字节约113MiB；3000帧长例2倍速50000ms，不是全尺寸硬件性能承诺。",
+          "docs/screenshot-expansion-progress.md 第十三批；.ui_review/screenshot-expansion/mp4-full.log/xml、mp4-source-hashes.json、mp4-focused-release.log/xml。",
+          "原生native-mp4-controls-zh/en、mp4-browser-acceptance.json、mp4-package-verified/result.json、mp4-package-inventory.json、mp4-browser-final-package-hashes.json、mp4-resources/result.json，均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/gif/cursor_overlay.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0014"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0015"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0016"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0017"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/canvas/view.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0018"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "功能本地验证通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/tests/test_stitch_integration.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0019"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "功能本地验证通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0020"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "功能本地验证通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0021"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/scroll_toolbar.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0022"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_canvas.py",
+          "当前相关实现或测试：main/pin/pin_image_transform.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0023"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/pin/pin_canvas.py",
+          "当前相关实现或测试：main/canvas/undo.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0024"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_thumbnail.py",
+          "手动选择贴图保存.vpins，独立进程恢复位置/缩放/透明度/置顶/缩略图/图元，屏幕外迁回及局部损坏编号报告；明确取消/删除确认与真实回收站测试通过。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0025"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json",
+          "保存录制可选择无声H.264/MP4，保留裁剪/速度/光标，原尺寸或指定宽度，奇数尺寸右下补黑边；逐帧解码，无NumPy或新增运行依赖。",
+          "复用原子保存/进度/取消，41项新增回归；关联142 passed、2.56秒；最终同进程全库3133 passed、2 skipped、666 warnings，212.13秒，exit0；101个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中100%及英150%原生各3组通过，实际保存入口导出322x180/30帧/500ms无音轨视频，Cancel/Esc保留原文件，源RGB摘要和真实配置不变。",
+          "独立Chromium152验证30帧1001ms、15帧250ms、33ms单帧、原生30帧500ms的尺寸/帧数/时长/首帧像素。33ms单帧显示并到片尾，但play()Promise返回end-of-playback AbortError；保留兼容性边界，不声称所有播放器API无异常。",
+          "标准构建脚本构建真实Windows onefile应用；frozen自检实际加载_MEI包内av，三段MP4+取消+源图+GIF回归均通过；包内avcodec/avformat/x264和PyAV许可证已核验。",
+          "最终exe74496850字节，sha256=77ac26184daa18a021f60b9578932a87b094ede21b55c9e5c6ee5061d3da7020；独立播放产物与最终包导出文件SHA256相同。未上传发布；完整安装包主路径与FFmpeg/x264再分发审核仍属TF-0045。",
+          "六轮1920x1080输入缩放960x540后窗口控件均0，进程样例峰值118484992字节约113MiB；3000帧长例2倍速50000ms，不是全尺寸硬件性能承诺。",
+          "docs/screenshot-expansion-progress.md 第十三批；.ui_review/screenshot-expansion/mp4-full.log/xml、mp4-source-hashes.json、mp4-focused-release.log/xml。",
+          "原生native-mp4-controls-zh/en、mp4-browser-acceptance.json、mp4-package-verified/result.json、mp4-package-inventory.json、mp4-browser-final-package-hashes.json、mp4-resources/result.json，均位于.ui_review/screenshot-expansion/。",
+          "截图及历史图片共用规则预览：18位身份证格式/日期/校验码、13-19位银行卡Luhn，有限O/I/l/竖线纠错；默认只保留既有手机/邮箱启用行为，候选不是身份或账户有效性证明。",
+          "命名预设最多20个，仅保存名称和五个布尔规则，不保存关键词/OCR/图片；内置组合、显式保存、实际No/Yes删除、新进程读取及损坏数据/写失败保护均覆盖。",
+          "原尺寸PNG/JPEG/PDF先扁平黑色遮盖，只创建新文件；拒绝已有目标和硬链接别名；更换被遮盖内容后PNG/JPEG字节相同、PDF渲染像素相同且无文字层，源图保持。",
+          "新增66项测试；最终关联216 passed、9.61秒；同进程全库3199 passed、2 skipped、666 warnings、211.32秒、exit0；105个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各5组通过：真实OCR四类合成信息、Qt拖动补盖/勾选、原生保存预设跨进程、PNG/JPEG/PDF保存、实际历史入口、真实删除确认；真实配置摘要不变。",
+          "六轮真实OCR预览/保存/关闭后控件和OCR线程均0；模型缓存仍驻留，样例峰值约449MiB，不承诺进程内存归零或最大图片上界。",
+          "已知边界：旧15位ID、B/8和S/5、跨行/错字可能漏报；Luhn有效订单号可误报；JPEG有损边缘不保证逐像素纯黑，但已覆盖源像素不进入输出。",
+          "docs/screenshot-expansion-progress.md 第十四批；.ui_review/screenshot-expansion/redaction-full.log/xml、redaction-rules-focused-final.log/xml、redaction-source-hashes.json。",
+          "原生native-redaction-rules-final-zh/en、redaction-resources/result.json、redaction-translations-*.log均位于.ui_review/screenshot-expansion/；可复跑驱动main/tests/native_redaction_rules.py。",
+          "本轮未重建包含新规则的安装包，先前MP4包不是本批功能打包证明；TF-0045及旧配置恢复/Qt偶发异常保持开放。",
+          "确认原生监听先图片落盘/缩略图/数据库后回调，不能在Python回调删除冒充不留存。新增VersePic.PrivateCapture.v1和标准排除标记过滤，在所有读取后、任何持久化前重新验证剪贴板序列。",
+          "敏感复制要求原生PRIVATE_CAPTURE_PROTOCOL=1，像素重建去元数据、同事务标记先于PNG/DIB，拒绝文件引用，失败不降级；单次投递在读设置/建文件/保存线程之前跳过自动保存，后续普通调用不受影响。",
+          "新增21项Python测试；关联71 passed、11 warnings、3.36秒；Rust7项通过；最终全库3220 passed、2 skipped、675 warnings，211.54秒，exit0，110个源码摘要一致。",
+          "真实原生验收未通过：两次CreateWindowStationW返回WinError5，均在Qt/剪贴板后端/内容访问前退出，未改动用户剪贴板，未提权或用真实剪贴板替代。已写测试不能算运行通过。",
+          "本节点仍缺少单次模式入口、会话复位、派生贴图/脱敏/复制传播、保存/收集/工程出口保护与真实无残留验收；保持in_progress/progress0，不提高22项验收计数。",
+          "本地j-clipboard 0.4.2源码wheel已安装，协议用能力字段检测，旧模块备份保留，未发布/未打完整应用包。原生二进制摘要与wheel一致；不声明本机真实监听已验收。",
+          "docs/screenshot-expansion-progress.md 第十五批进行中；.ui_review/screenshot-expansion/private-clipboard-full.log/xml、private-clipboard-focused-final.log/xml、privacy-clipboard-rust.log、private-clipboard-source-hashes.json。",
+          "原生环境失败：private-clipboard-native.log、private-clipboard-native-2.log；构建来源private-clipboard-provenance.json，均在.ui_review/screenshot-expansion/。",
+          "单次托盘入口只给本次后台采集请求传敏感动作，窗口首次/复用均建策略，Esc和结束复位；不改持久保存/监听/OCR设置，正在进行的普通会话不被重分类。",
+          "敏感钉图不再自动复制/OCR，显式Copy保持私密标记；截图保存/收集/工程/录制/文字/翻译出口执行前拒绝，贴图普通图像访问/工程/工作区快照/批量保存保护避免转存旁路。",
+          "脱敏继承敏感状态，本地OCR和手工复核可用但文件/预设写入不可用，复制仍带敏感标记。局部过滤器阻止原生文本复制/剪切/菜单旁路；敏感OCR异常日志上下文按线程隔离且复位。",
+          "新增39项用例；关联318 passed、9 warnings、10.12秒；最终全库3259 passed、2 skipped、675 warnings、219.28秒、exit0；116个累计源码摘要一致，Ruff/diff-check exit0。",
+          "原生中文100%及英文150%各4组UI流程通过，真实Qt交互与本地OCR，但采集输入为合成图、系统复制端点使用内存替身；结果明确real_clipboard_exclusion_verified=false，不代替原生监听零留存。",
+          "六轮截图到贴图关闭后控件/贴图均0，真实设置摘要不变。首轮exit0伴随已销毁父对象访问异常不计为通过；关闭时移除过滤器并校验对象有效性后重验，最终日志无Qt/Traceback异常。",
+          "CreateWindowStationW WinError5隔离环境限制仍开放；没触碰用户剪贴板、没提权或绕过。需要真实监听/数据库/文件/索引/日志零留存及恢复普通复制的闭环，节点保持in_progress/progress0。",
+          "docs/screenshot-expansion-progress.md 第十五批续；.ui_review/screenshot-expansion/sensitive-session-full.log/xml、sensitive-session-focused-release.log/xml、sensitive-session-source-hashes.json。",
+          "原生native-sensitive-session-verified-zh/、native-sensitive-session-en/以及sensitive-session-resources/result.json，均位于.ui_review/screenshot-expansion/；README明示开发态与真实监听未验收。",
+          "图片右键索引子菜单提供持久等待/识别/失败/排除/已索引/无文字状态；失败显式重试、重新识别、排除确认和恢复，列表状态原位更新，不改变原图和粘贴格式。",
+          "同库image_text_state持久状态和随机任务令牌，原子清索引/更新令牌；异步写回核对源图/条目/状态/令牌。排除再恢复、删除复用ID、换图/类型、停止和数据库移动后旧结果不得复活。",
+          "48项新增回归；关联119 passed、10.46秒；最终全库3307 passed、2 skipped、675 warnings、227.49秒、exit0。121个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%和英文150%实际历史窗口/右键子菜单/No-Yes确认各3组通过；真实本地OCR重试、恢复及重识别可检索，独立进程排除持久，原图SHA256和Rust原始粘贴格式字节相同。",
+          "六轮真实OCR排除/恢复/关闭后索引器和OCR线程均0，无历史窗口；其余应用控件稳定9个，不称所有控件归零。真实ToolSettings及ClipboardWindow设置均隔离且摘要不变。",
+          "失败/排除状态不会重启后自动补回；排除仅逻辑删除应用索引，不安全擦除SQLite页/WAL、备份或此前复制内容；人工临时OCR不会解除后台排除。",
+          "首轮原生计时器嵌套确认等待未通过，确认确切测试进程后仅关闭其测试确认框，修正独立singleShot响应后中英文重跑通过；失败日志保留。",
+          "docs/screenshot-expansion-progress.md 第十六批；.ui_review/screenshot-expansion/image-index-full.log/xml、image-index-focused-final.log/xml、image-index-source-hashes.json。",
+          "原生native-image-index-zh-2/、native-image-index-en/和image-index-resources/result.json位于.ui_review/screenshot-expansion/；驱动main/tests/native_image_index_controls.py。",
+          "没有重建包含本批索引控制的安装包；TF-0030真实零留存、配置恢复、Qt偶发异常及完整打包/许可继续开放。",
+          "现有OCR结果窗口复用坐标与原图进入可编辑表格，支持单元格/多行编辑、原图区域高亮/缩放、插入删除行列、分组阈值与重建确认；不按空格硬拆多词单元格。",
+          "简单分离文字框行列重建，缺格保留、跨列/碰撞/低分/旋转具体提示；200行/32列/4000格/50万字符和32MP预览限制。复杂合并/跨行和OCR漏格需人工校正，不宣称通用表格识别。",
+          "TSV按csv引号规则保留分隔符/换行，默认保护公式前缀；Markdown转义标签/链接图片语法/竖线和控制字符，使用原子写入。源图保持，无新增运行依赖或云端上传。",
+          "新增51项Python测试，关联129 passed、7.00秒；全库3358 passed、2 skipped、675 warnings、226.21秒、exit0；126个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各3组通过：真实OCR 3x3、校正/行操作、原图对应框、TSV和实际Markdown；系统复制端点在驱动中捕获文本，不读写用户剪贴板。",
+          "独立LibreOffice Calc专用隐藏实例导入相同TSV后getTransferable/insertTransferable跨工作表真实粘贴，普通3x3九格逐格一致；控制字符例格内Tab被Calc表为U+0001，位置/换行/公式保护保持，该差异明确记录而非宣称所有字符不变。",
+          "未验证操作系统剪贴板直接Ctrl+V；早期通用文本transferable未填表、源选区只选2行的失败均保留；最终实际落位不是普通纯文本导出。专用Calc文档关闭、terminate True和helper exit0。",
+          "六轮表格窗口关闭控件均0；实际Calc输入与最终中英文TSV导出SHA256一致。未重建包含本批功能的安装包，不用旧MP4exe作本批证据。",
+          "docs/screenshot-expansion-progress.md 第十七批；.ui_review/screenshot-expansion/table-full.log/xml、table-focused-release.log/xml、table-source-hashes.json。",
+          "native-table-final-zh/en、table-calc-final-paste.json、table-calc-ordinary-paste.json、table-export-provenance.json、table-resources/result.json均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前24项有本地实现和测试证据，其他14项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交或发布；已生成隔离MP4验收构建，完整安装包验收尚未完成。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与验收证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_image_transform.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/core/save.py",
+          "文件/历史/贴图只读A/B，三种比较模式、同步缩放平移、显式重采样、RGBA差异阈值及32MP限制实现。",
+          "42项新增比较测试；关联216 passed；最终闭包修正后比较/工具栏/设置字段82 passed，exit0。",
+          "最终同源码冻结全量3035 passed、2 skipped、666 warnings，206.68秒，exit0；86个代码/测试/资源/README摘要一致，Ruff及diff-check exit0。",
+          "此前冻结全量1 failed、3034 passed（Qt windowHandle返回QWidgetItem异常，exit1）；关联及全量复核未重现，根因未确认，详见新偏差，不声明稳定性问题已修复。",
+          "中文100%和英文150%各7组原生通过；80×60编辑准确检出4800差异像素；24MP输入资源样例及六轮关闭控件数均0；配置树摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十一批；.ui_review/screenshot-expansion/compare-full-recheck.log/xml、compare-full-release.log/xml、compare-source-hashes-release.json、compare-ruff-release.log",
+          "原生证据：.ui_review/screenshot-expansion/native-compare-verified-zh/result.json、native-compare-verified-en/result.json、compare-resources/result.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0026"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标38项中24项已有本地实现和测试证据，仍有14项未完成。",
+          "本地GIF导出控制已验收；依赖同源码构建的原生模块，不代表安装包/其他架构验证完成。",
+          "第六批真实配置尚未恢复，Qt偶发包装异常根因仍未确认；保留两项原偏差。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与验收证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/gif/composer.py",
+          "当前相关实现或测试：main/gif/playback_controller.py",
+          "当前相关实现或测试：main/gif/playback_toolbar.py",
+          "当前相关实现或测试：main/tests/test_gif_composer.py",
+          "GIF路径输出复用SaveService原子提交；取消/异常/空文件/替换失败不损坏已有目标，bytes暂存异常也清理，finished成功条件纠正。",
+          "新增11项安全回归；关联154 passed，6.03秒，exit0，包含真实Rust取消后重导出及Pillow解码。",
+          "最终全库3046 passed、2 skipped、666 warnings，205.84秒，exit0；88文件冻结摘要一致；Ruff和diff-check exit0。",
+          "真实QThread链路导出6帧81×61GIF并Pillow解码，配置树摘要不变。",
+          ".ui_review/screenshot-expansion/gif-safety-full.log/xml、gif-safety-source-hashes.json、gif-safety-thread/result.json；docs/screenshot-expansion-progress.md 第十二批进行中。",
+          "真实GIF基线检出首帧裁剪[0,0]导出全段、帧时长舍入漂移；当前宽度/帧率UI、时序/鼠标缩放、可见取消、体积反馈及原生交互仍未交付。",
+          "回放保存/复制接入原尺寸/指定宽度、最大帧率控制、当前裁剪/速度/光标；真实文件字节数反馈，可见取消/Esc/退出安全等待。",
+          "Rust绝对边界时序量化与帧率上限、None/0裁剪语义、奇数尺寸、长延迟拆块、结束flush；修正鼠标精灵预乘RGBA重复处理和未缩放的点击/滚轮偏移。",
+          "本节点累计57个Python新增用例、5个Rust新增时序用例。最终关联117 passed、4.48秒；Rust全部24 passed，exit0。",
+          "最终同进程全库3092 passed、2 skipped、666 warnings，209.51秒，exit0；96个累计源文件摘要一致；Ruff及diff-check exit0。",
+          "中文100%和英文150%原生各3组通过；实际321×180、2倍速、500ms和成品字节数匹配。六轮1920×1080输入真实导出后控件均0，样例进程峰值约197MiB，不是全尺寸性能保证。",
+          "界面依赖当前源码构建的本地gifrecorder；版本号仍0.3.1，未发布新包。用fps能力检测阻止旧二进制伪生效，README列明重建命令。安装包留待TF-0045。",
+          "现有255色全局调色板有损，微小罕见彩色精灵可能被量化为灰色；定位与RGBA测试分开，未宣称修复全部色彩精度。",
+          "docs/screenshot-expansion-progress.md 第十二批续；.ui_review/screenshot-expansion/gif-controls-full.log/xml、gif-controls-source-hashes.json、gif-controls-focused-release.log/xml、gif-timeline-rust-test-final.log",
+          "原生证据：native-gif-controls-verified-zh/result.json、native-gif-controls-verified-en/result.json；gif-controls-resources-final/result.json、gif-native-provenance.json，均在.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0027"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍有14项未完成；本节点的Windows包内编码能力已实际验证，不代表TF-0045全部打包/许可/发布条件达成。",
+          "单帧33ms在Chromium显示与时长正确，但play Promise会报告片尾中断；不声明所有播放器行为无差异。",
+          "真实配置旧值恢复与Qt偶发异常仍未解决；不猜测覆盖配置、不提交或上传发布。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与对应验收证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/gif/frame_recorder.py",
+          "当前相关实现或测试：main/gif/playback_controller.py",
+          "当前相关实现或测试：main/gif/composer.py",
+          "当前相关实现或测试：requirements.txt",
+          "当前相关实现或测试：rust_libs/gifrecorder/src/frame_store.rs",
+          "现有av17/libx264直接接收FrameStore RGB；合成81×61图像右下补边82×62，完整30帧约1001ms、裁剪2x15帧250ms、首帧33ms，无音轨，源图摘要保持。",
+          "仅隔离可行性脚本与PyAV重解码通过；构建脚本/spec仍排除av，独立播放器和产品入口未实现或验证。",
+          ".ui_review/screenshot-expansion/check-mp4-feasibility.py、mp4-feasibility/result.json；docs/screenshot-expansion-progress.md TF-0028段。",
+          "保存录制可选择无声H.264/MP4，保留裁剪/速度/光标，原尺寸或指定宽度，奇数尺寸右下补黑边；逐帧解码，无NumPy或新增运行依赖。",
+          "复用原子保存/进度/取消，41项新增回归；关联142 passed、2.56秒；最终同进程全库3133 passed、2 skipped、666 warnings，212.13秒，exit0；101个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中100%及英150%原生各3组通过，实际保存入口导出322x180/30帧/500ms无音轨视频，Cancel/Esc保留原文件，源RGB摘要和真实配置不变。",
+          "独立Chromium152验证30帧1001ms、15帧250ms、33ms单帧、原生30帧500ms的尺寸/帧数/时长/首帧像素。33ms单帧显示并到片尾，但play()Promise返回end-of-playback AbortError；保留兼容性边界，不声称所有播放器API无异常。",
+          "标准构建脚本构建真实Windows onefile应用；frozen自检实际加载_MEI包内av，三段MP4+取消+源图+GIF回归均通过；包内avcodec/avformat/x264和PyAV许可证已核验。",
+          "最终exe74496850字节，sha256=77ac26184daa18a021f60b9578932a87b094ede21b55c9e5c6ee5061d3da7020；独立播放产物与最终包导出文件SHA256相同。未上传发布；完整安装包主路径与FFmpeg/x264再分发审核仍属TF-0045。",
+          "六轮1920x1080输入缩放960x540后窗口控件均0，进程样例峰值118484992字节约113MiB；3000帧长例2倍速50000ms，不是全尺寸硬件性能承诺。",
+          "docs/screenshot-expansion-progress.md 第十三批；.ui_review/screenshot-expansion/mp4-full.log/xml、mp4-source-hashes.json、mp4-focused-release.log/xml。",
+          "原生native-mp4-controls-zh/en、mp4-browser-acceptance.json、mp4-package-verified/result.json、mp4-package-inventory.json、mp4-browser-final-package-hashes.json、mp4-resources/result.json，均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0028"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "本轮实际onefile应用构建及MP4/GIF包内编码自检只覆盖该门槛的一部分，不估算整体安装包完成百分比。",
+          "全部新增能力、既有截图/OCR主路径、所需模型、跨架构声明、完整FFmpeg/x264再分发许可仍需后续逐项验证。",
+          "仅保留隔离本地构建，没有发布或修改发布渠道。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "部分构建验证",
+          "完整安装包和发布门槛未完成"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：build_with_ocr_onefile.py",
+          "当前相关实现或测试：versepic.spec",
+          "当前相关实现或测试：README.md",
+          "当前相关实现或测试：README_zh-CN.md",
+          "当前相关实现或测试：README_JA.md",
+          "标准构建脚本构建真实Windows onefile应用；frozen自检实际加载_MEI包内av，三段MP4+取消+源图+GIF回归均通过；包内avcodec/avformat/x264和PyAV许可证已核验。",
+          "最终exe74496850字节，sha256=77ac26184daa18a021f60b9578932a87b094ede21b55c9e5c6ee5061d3da7020；独立播放产物与最终包导出文件SHA256相同。未上传发布；完整安装包主路径与FFmpeg/x264再分发审核仍属TF-0045。",
+          ".ui_review/screenshot-expansion/mp4-application-build-verified.log、mp4-package-verified/result.json、mp4-package-inventory.json、mp4-codec-license.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0045"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "格式/校验只产生候选，保留误报/漏报、人工预览和补盖；不承诺字符级定位或全部隐私识别。",
+          "本轮未重建安装包，完整目标其余14项仍开放。",
+          "旧配置恢复和Qt偶发异常根因未解决；不猜测覆盖设置、不提交或发布。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与验收证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/text_recognition/redaction.py",
+          "当前相关实现或测试：main/text_recognition/redaction_window.py",
+          "当前相关实现或测试：main/tests/test_screen_assistant.py",
+          "截图及历史图片共用规则预览：18位身份证格式/日期/校验码、13-19位银行卡Luhn，有限O/I/l/竖线纠错；默认只保留既有手机/邮箱启用行为，候选不是身份或账户有效性证明。",
+          "命名预设最多20个，仅保存名称和五个布尔规则，不保存关键词/OCR/图片；内置组合、显式保存、实际No/Yes删除、新进程读取及损坏数据/写失败保护均覆盖。",
+          "原尺寸PNG/JPEG/PDF先扁平黑色遮盖，只创建新文件；拒绝已有目标和硬链接别名；更换被遮盖内容后PNG/JPEG字节相同、PDF渲染像素相同且无文字层，源图保持。",
+          "新增66项测试；最终关联216 passed、9.61秒；同进程全库3199 passed、2 skipped、666 warnings、211.32秒、exit0；105个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各5组通过：真实OCR四类合成信息、Qt拖动补盖/勾选、原生保存预设跨进程、PNG/JPEG/PDF保存、实际历史入口、真实删除确认；真实配置摘要不变。",
+          "六轮真实OCR预览/保存/关闭后控件和OCR线程均0；模型缓存仍驻留，样例峰值约449MiB，不承诺进程内存归零或最大图片上界。",
+          "已知边界：旧15位ID、B/8和S/5、跨行/错字可能漏报；Luhn有效订单号可误报；JPEG有损边缘不保证逐像素纯黑，但已覆盖源像素不进入输出。",
+          "docs/screenshot-expansion-progress.md 第十四批；.ui_review/screenshot-expansion/redaction-full.log/xml、redaction-rules-focused-final.log/xml、redaction-source-hashes.json。",
+          "原生native-redaction-rules-final-zh/en、redaction-resources/result.json、redaction-translations-*.log均位于.ui_review/screenshot-expansion/；可复跑驱动main/tests/native_redaction_rules.py。",
+          "本轮未重建包含新规则的安装包，先前MP4包不是本批功能打包证明；TF-0045及旧配置恢复/Qt偶发异常保持开放。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0029"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "会话与派生出口已接线并有单元/原生UI证据，但真正Windows监听零留存尚未验证，不能以测试数量提升节点完成百分比。",
+          "目前隔离窗口站创建权限不足；未修改权限、未提权、未转为读写用户真实剪贴板。该子验收限制不等于完整目标已无可推进工作。",
+          "目前24项节点有验收证据，但本敏感模式仍未验收；其余14项及完整安装包和旧偏差保持开放；未提交或发布。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "底层协议与会话出口已接线",
+          "原生UI使用复制替身",
+          "真实零留存验收未完成"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/clipboard_utils.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/clipboard/core/image_text.py",
+          "当前相关实现或测试：main/text_recognition/redaction_window.py",
+          "确认原生监听先图片落盘/缩略图/数据库后回调，不能在Python回调删除冒充不留存。新增VersePic.PrivateCapture.v1和标准排除标记过滤，在所有读取后、任何持久化前重新验证剪贴板序列。",
+          "敏感复制要求原生PRIVATE_CAPTURE_PROTOCOL=1，像素重建去元数据、同事务标记先于PNG/DIB，拒绝文件引用，失败不降级；单次投递在读设置/建文件/保存线程之前跳过自动保存，后续普通调用不受影响。",
+          "新增21项Python测试；关联71 passed、11 warnings、3.36秒；Rust7项通过；最终全库3220 passed、2 skipped、675 warnings，211.54秒，exit0，110个源码摘要一致。",
+          "真实原生验收未通过：两次CreateWindowStationW返回WinError5，均在Qt/剪贴板后端/内容访问前退出，未改动用户剪贴板，未提权或用真实剪贴板替代。已写测试不能算运行通过。",
+          "本节点仍缺少单次模式入口、会话复位、派生贴图/脱敏/复制传播、保存/收集/工程出口保护与真实无残留验收；保持in_progress/progress0，不提高22项验收计数。",
+          "本地j-clipboard 0.4.2源码wheel已安装，协议用能力字段检测，旧模块备份保留，未发布/未打完整应用包。原生二进制摘要与wheel一致；不声明本机真实监听已验收。",
+          "docs/screenshot-expansion-progress.md 第十五批进行中；.ui_review/screenshot-expansion/private-clipboard-full.log/xml、private-clipboard-focused-final.log/xml、privacy-clipboard-rust.log、private-clipboard-source-hashes.json。",
+          "原生环境失败：private-clipboard-native.log、private-clipboard-native-2.log；构建来源private-clipboard-provenance.json，均在.ui_review/screenshot-expansion/。",
+          "单次托盘入口只给本次后台采集请求传敏感动作，窗口首次/复用均建策略，Esc和结束复位；不改持久保存/监听/OCR设置，正在进行的普通会话不被重分类。",
+          "敏感钉图不再自动复制/OCR，显式Copy保持私密标记；截图保存/收集/工程/录制/文字/翻译出口执行前拒绝，贴图普通图像访问/工程/工作区快照/批量保存保护避免转存旁路。",
+          "脱敏继承敏感状态，本地OCR和手工复核可用但文件/预设写入不可用，复制仍带敏感标记。局部过滤器阻止原生文本复制/剪切/菜单旁路；敏感OCR异常日志上下文按线程隔离且复位。",
+          "新增39项用例；关联318 passed、9 warnings、10.12秒；最终全库3259 passed、2 skipped、675 warnings、219.28秒、exit0；116个累计源码摘要一致，Ruff/diff-check exit0。",
+          "原生中文100%及英文150%各4组UI流程通过，真实Qt交互与本地OCR，但采集输入为合成图、系统复制端点使用内存替身；结果明确real_clipboard_exclusion_verified=false，不代替原生监听零留存。",
+          "六轮截图到贴图关闭后控件/贴图均0，真实设置摘要不变。首轮exit0伴随已销毁父对象访问异常不计为通过；关闭时移除过滤器并校验对象有效性后重验，最终日志无Qt/Traceback异常。",
+          "CreateWindowStationW WinError5隔离环境限制仍开放；没触碰用户剪贴板、没提权或绕过。需要真实监听/数据库/文件/索引/日志零留存及恢复普通复制的闭环，节点保持in_progress/progress0。",
+          "docs/screenshot-expansion-progress.md 第十五批续；.ui_review/screenshot-expansion/sensitive-session-full.log/xml、sensitive-session-focused-release.log/xml、sensitive-session-source-hashes.json。",
+          "原生native-sensitive-session-verified-zh/、native-sensitive-session-en/以及sensitive-session-resources/result.json，均位于.ui_review/screenshot-expansion/；README明示开发态与真实监听未验收。"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0030"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "后台文字索引排除不同于单次敏感截图，不能作为TF-0030真实零留存验收的替代。",
+          "排除仅删除当前逻辑索引，原图片/粘贴格式保留；不安全擦除SQLite页、备份或其他软件已经读取的文字。",
+          "完整目标尚有14项未完成，未提交或发布本批；既有偏差保持开放。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与对应验收证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/core/image_text.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/tests/test_screen_assistant.py",
+          "图片右键索引子菜单提供持久等待/识别/失败/排除/已索引/无文字状态；失败显式重试、重新识别、排除确认和恢复，列表状态原位更新，不改变原图和粘贴格式。",
+          "同库image_text_state持久状态和随机任务令牌，原子清索引/更新令牌；异步写回核对源图/条目/状态/令牌。排除再恢复、删除复用ID、换图/类型、停止和数据库移动后旧结果不得复活。",
+          "48项新增回归；关联119 passed、10.46秒；最终全库3307 passed、2 skipped、675 warnings、227.49秒、exit0。121个累计源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%和英文150%实际历史窗口/右键子菜单/No-Yes确认各3组通过；真实本地OCR重试、恢复及重识别可检索，独立进程排除持久，原图SHA256和Rust原始粘贴格式字节相同。",
+          "六轮真实OCR排除/恢复/关闭后索引器和OCR线程均0，无历史窗口；其余应用控件稳定9个，不称所有控件归零。真实ToolSettings及ClipboardWindow设置均隔离且摘要不变。",
+          "失败/排除状态不会重启后自动补回；排除仅逻辑删除应用索引，不安全擦除SQLite页/WAL、备份或此前复制内容；人工临时OCR不会解除后台排除。",
+          "首轮原生计时器嵌套确认等待未通过，确认确切测试进程后仅关闭其测试确认框，修正独立singleShot响应后中英文重跑通过；失败日志保留。",
+          "docs/screenshot-expansion-progress.md 第十六批；.ui_review/screenshot-expansion/image-index-full.log/xml、image-index-focused-final.log/xml、image-index-source-hashes.json。",
+          "原生native-image-index-zh-2/、native-image-index-en/和image-index-resources/result.json位于.ui_review/screenshot-expansion/；驱动main/tests/native_image_index_controls.py。",
+          "没有重建包含本批索引控制的安装包；TF-0030真实零留存、配置恢复、Qt偶发异常及完整打包/许可继续开放。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0031"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "仅清晰规整且OCR单元格分离的表格；人工校正承接合并/跨行/漏格，不承诺任意表格或公式识别。",
+          "独立表格粘贴验证使用TSV导入后Calc跨表Transferable粘贴，不是OS剪贴板直接Ctrl+V。格内Tab在Calc变为U+0001，兼容差异已记录；普通矩阵精确一致。",
+          "仍有12项未完成（TF-0030、TF-0035～TF-0045），原有偏差与完整打包门槛不关闭；未提交发布。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与对应证据",
+          "Calc导入后粘贴已验证",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ocr/ocr_manager.py",
+          "当前相关实现或测试：main/text_recognition/result_window.py",
+          "当前相关实现或测试：main/clipboard/core/image_text.py",
+          "现有OCR结果窗口复用坐标与原图进入可编辑表格，支持单元格/多行编辑、原图区域高亮/缩放、插入删除行列、分组阈值与重建确认；不按空格硬拆多词单元格。",
+          "简单分离文字框行列重建，缺格保留、跨列/碰撞/低分/旋转具体提示；200行/32列/4000格/50万字符和32MP预览限制。复杂合并/跨行和OCR漏格需人工校正，不宣称通用表格识别。",
+          "TSV按csv引号规则保留分隔符/换行，默认保护公式前缀；Markdown转义标签/链接图片语法/竖线和控制字符，使用原子写入。源图保持，无新增运行依赖或云端上传。",
+          "新增51项Python测试，关联129 passed、7.00秒；全库3358 passed、2 skipped、675 warnings、226.21秒、exit0；126个源码摘要一致，Ruff/diff-check exit0。",
+          "中文100%及英文150%原生各3组通过：真实OCR 3x3、校正/行操作、原图对应框、TSV和实际Markdown；系统复制端点在驱动中捕获文本，不读写用户剪贴板。",
+          "独立LibreOffice Calc专用隐藏实例导入相同TSV后getTransferable/insertTransferable跨工作表真实粘贴，普通3x3九格逐格一致；控制字符例格内Tab被Calc表为U+0001，位置/换行/公式保护保持，该差异明确记录而非宣称所有字符不变。",
+          "未验证操作系统剪贴板直接Ctrl+V；早期通用文本transferable未填表、源选区只选2行的失败均保留；最终实际落位不是普通纯文本导出。专用Calc文档关闭、terminate True和helper exit0。",
+          "六轮表格窗口关闭控件均0；实际Calc输入与最终中英文TSV导出SHA256一致。未重建包含本批功能的安装包，不用旧MP4exe作本批证据。",
+          "docs/screenshot-expansion-progress.md 第十七批；.ui_review/screenshot-expansion/table-full.log/xml、table-focused-release.log/xml、table-source-hashes.json。",
+          "native-table-final-zh/en、table-calc-final-paste.json、table-calc-ordinary-paste.json、table-export-provenance.json、table-resources/result.json均位于.ui_review/screenshot-expansion/。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0032"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "可搜索路径只识别本次导出像素，不复用历史/脱敏前OCR；OCR对复杂版面和部分语种可能漏字。",
+          "独立阅读器验证为pypdfium2搜索+pypdf抽取+Qt渲染对照，不是Adobe Acrobat GUI。合成样例韩文行未被OCR识别。",
+          "仍有12项未完成（TF-0030、TF-0035～TF-0045）。未提交发布。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与对应证据",
+          "独立阅读器已抽字搜索",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/ocr/ocr_manager.py",
+          "当前相关实现或测试：main/text_recognition/redaction.py",
+          "当前相关实现或测试：main/clipboard/core/image_text.py",
+          "收集/PDF对话框可选图片型或重新本地OCR的可搜索型；文字按框放在不透明图下，外观与图片型页一致。",
+          "空白/失败/缺字形回退图片型并逐页报告；取消保留原文件；不接受缓存OCR。",
+          "新增26个测试函数、参数化37项；关联260 passed、14.29秒；全库3395 passed、2 skipped、675 warnings、230.23秒、exit0。",
+          "中文100%及英文150%原生各4组通过；独立pypdfium2搜索SEARCHABLE/搜索/PUBLIC，脱敏秘密0命中。",
+          "docs/screenshot-expansion-progress.md 第十八批；searchable-pdf-full.log/xml、native-searchable-pdf-final-zh/en、searchable-pdf-independent-final/result.json。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0033"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "放大框只取背景原图像素，不含其他标注；导出图含框线/指引线。",
+          "本批原生验收走文件编辑器工具栏和视口，不是截图全屏窗口。未做操作系统剪贴板 Ctrl+V。",
+          "仍有12项未完成（TF-0030、TF-0035～TF-0045）。未提交发布。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与对应证据",
+          "原生编辑器已手势导出",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/canvas/items/magnify_item.py",
+          "当前相关实现或测试：main/tools/magnify.py",
+          "当前相关实现或测试：main/pin/pin_canvas.py",
+          "当前相关实现或测试：main/core/export.py",
+          "拖出源区生成2×放大框；移动不改取样；覆盖标注不进入取样；未知工程类型明确报错。",
+          "14项放大框测试；关联164 passed、5.73秒；全库3409 passed、2 skipped、675 warnings、297.03秒、exit0。首次15秒faulthandler全库ACCESS_VIOLATION已保留日志，60秒重跑通过。",
+          "中英原生编辑器各6组通过；六轮关闭控件0；源图哈希与真实注册表摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十九批；magnify-full.log/xml、native-magnify-zh/en、magnify-resources/result.json、magnify-source-hashes.json。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0034"
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "已移除无用的导入期设置副作用，并增加独立进程导入无副作用测试及原生驱动写入前路径断言。重跑确认真实配置不再变化。仍须用户提供此前数据库/保存目录及其他设置原值或备份以准确恢复，不猜测覆盖。",
+        "created_at": "2026-10-09T00:02:41.344Z",
+        "id": "TFD-dd7b3195d8",
+        "kind": "acceptance_settings_isolation_failure",
+        "reason": "旧scroll_window在模块导入阶段调用全局设置单例；后续get_tool_settings_manager(QSettings(...))不能替换已建立的单例。",
+        "related_task_ids": [
+          "TF-0001",
+          "TF-0019",
+          "TF-0020",
+          "TF-0021",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "长截图原生驱动在隔离配置建立前导入模块，真实应用配置被测试值改写；恢复未完成。"
+      }
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "保留compare-full-release失败日志。关联82项及相同冻结源码全量3035项复核通过；后续TF-0044继续稳定性复核，不删除失败、跳过用例或吞异常。",
+        "created_at": "2026-10-09T17:36:19.731Z",
+        "id": "TFD-6e1327a941",
+        "kind": "full_suite_transient_qt_wrapper",
+        "reason": "windowHandle()返回QWidgetItem而非QWindow，screenChanged访问失败。未发现相关方法替身；未取得可重复根因，不推断为比较功能缺陷或已修复。",
+        "related_task_ids": [
+          "TF-0001",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "比较功能收尾的一次全量在设置页第三方frameless初始化出现Qt包装类型异常；复核未复现，根因未确认。"
+      }
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "保留失败日志与可复跑隔离脚本；本轮已实现单次会话与派生出口，新增单元与原生UI证据但系统复制端点为替身。仍不以未运行的真实监听检查报通过；不提权、不回退用户交互剪贴板。在可用隔离环境验证完整零留存闭环后才可提议关闭节点。",
+        "created_at": "2026-10-09T20:45:27.207Z",
+        "id": "TFD-0130c1a942",
+        "kind": "native_private_clipboard_acceptance_unavailable",
+        "reason": "本机运行上下文拒绝创建隔离窗口站，两次请求不同访问权限均失败；不能在本轮证明真实原生监听/文件/SQLite零留存。",
+        "related_task_ids": [
+          "TF-0030",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "独立非交互窗口站原生不留存验收未能开始：CreateWindowStationW返回WinError5。"
+      }
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "context_tags": [
+          "截图拓展",
+          "教程标注分支已开始"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0006"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "组合标注只复用已有 ArrowItem / TextItem，不新增图元类型、不建独立图层系统；工程编解码与钉图克隆继续走既有路径。",
+          "本轮是 offscreen Qt + 真实 CanvasView 激活的本地单元/集成验收，未做原生系统鼠标手势、安装包或系统剪贴板验证。",
+          "工程保存后重新打开：箭头与气泡按保存坐标照常渲染，但两者之间的联动关系不恢复（工程格式未新增字段）。",
+          "累计27项待用户复核；TF-0030 的真实监听零留存验收仍受本机隔离环境限制。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "教程标注",
+          "组合标注",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_text_callout.py 13 项：创建即关联、空内容整条作废且不占撤销、过短拖拽忽略、气泡位移、文字变长、拖动箭头本体后再移动气泡、单删/批删连带另一半、独立箭头文字不受影响、callout/原生工具选择、导出与撤销逐像素比对、钉图继承关联、工具栏与排布入口。",
+          "关联回归 307 passed、233 warnings、10.42 秒、exit0（撤销/文字/工具栏/钉图/工程/翻译/i18n/README 目录树）。",
+          "全库回归（修正 i18n 上下文后）3423 passed、2 skipped、675 warnings、261.32 秒、exit0；首次全库的 4 个 test_i18n 精确上下文失败日志保留为 callout-full-fail-i18n.log/xml。",
+          "Ruff exit0（14 个改动/新增源码与测试文件）；四语言 app_*.xml/.qm 已补并重编译；三语 README 目录树与功能说明已补。",
+          "实现落点：main/canvas/items/callout_link.py、main/tools/callout.py、main/canvas/undo.py（Add/Remove/BatchRemove 连带组合标注另一半）、main/ui/toolbar_layout.py、main/ui/toolbar_layout_dialog.py、main/pin/pin_canvas.py、main/pin/pin_toolbar.py。",
+          "证据路径：.ui_review/screenshot-expansion/callout-focused.log/xml、callout-full.log/xml、callout-ruff.log、callout-full-fail-i18n.log/xml；docs/screenshot-expansion-progress.md 第二十批。",
+          "边界：未重建安装包；未读写系统剪贴板；未做原生鼠标手势端到端。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0035"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "说明只挂在编号图元上（NumberItem.caption），不新增图元类型；删除、撤销、重编号时说明跟着自己的图元走。",
+          "步骤列表在导出这一步合成：ExportService.export 保持原样，应用设置默认 off 时成图与以前完全一致。",
+          "工程格式新增可选 caption 字段：旧工程照常打开；含该字段的新工程在旧解码器上会被判为未知字段。",
+          "累计28项待用户复核；TF-0030 的真实监听零留存验收仍受本机隔离环境限制。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "教程标注",
+          "编号说明",
+          "步骤列表",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_number_legend.py 12 项：条目按编号排序且跳过空说明、说明命令可撤销、删除/撤销/重排编号后说明跟着自己的图元、工程往返保留说明且旧工程无 caption 字段照常打开、钉图克隆带走说明、折行不丢字（含显式换行与中英混排）、下方/右侧排版保留原图像素、关闭时导出尺寸不变、面板位置设置持久化、选中编号回填说明。",
+          "关联回归 228 passed、15.91 秒、exit0（编号样式、撤销、工程、工具栏、i18n、README 目录树、组合标注、放大框）。",
+          "全库回归 3435 passed、2 skipped、675 warnings、460.87 秒、exit0；第一次全库的 2 个失败（CanvasView 导出替身缺 export_with_legend、序号面板用了原始 QLineEdit 而不是共享控件）已修复并保留日志。",
+          "Ruff exit0；四语言 app_*.xml/.qm 已补并重编译；三语 README 目录树与功能说明已补。",
+          "实现落点：main/core/number_legend.py、main/core/export.py、main/core/editable_project.py、main/canvas/items/drawing_items.py、main/canvas/undo.py、main/tools/number.py、main/ui/number_settings_panel.py、main/ui/toolbar.py、main/ui/screenshot_window.py、main/pin/pin_canvas.py。",
+          "证据路径：.ui_review/screenshot-expansion/number-legend-focused.log/xml、number-legend-full.log/xml、number-legend-ruff.log；docs/screenshot-expansion-progress.md 第二十一批。",
+          "边界：说明为单行输入（导出时按宽度折行）；拼版只消费已合成成图；未做原生鼠标手势与安装包验收。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0036"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "插图只复用现有画布与工程资产机制，不新增图层系统、不长期引用外部文件。",
+          "插入时复制像素：源文件之后被移动或删除不影响已成图；超大/缺失/非图片一律拒绝。",
+          "层叠固定为 z=25（普通标注之上、文字之下），不做逐图元层级面板。",
+          "累计29项待用户复核；TF-0030 的真实监听零留存验收仍受本机隔离环境限制。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "教程标注",
+          "位图插图",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_image_stamp.py 9 项：插入居中且可撤销/重做、等比缩放、层叠（箭头<插图<文字）、透明合成进导出、空图/超边拒绝、缺失与损坏文件拒绝、工程往返保留 rect 与像素、删除撤销往返、钉图继承 rect 与像素。",
+          "定向回归 208 passed、9.75 秒、exit0；全库回归 3444 passed、2 skipped、675 warnings、247.84 秒、exit0。",
+          "Ruff exit0（12 个改动/新增文件）；四语言 app_*.xml/.qm 已补并重编译；三语 README 目录树与功能说明已补。",
+          "实现落点：main/canvas/items/image_stamp_item.py、main/canvas/scene.py（add_image_stamp / from_file / from_clipboard）、main/core/editable_project.py、main/pin/pin_canvas.py、main/canvas/smart_edit_controller.py、main/ui/toolbar.py、main/ui/toolbar_layout.py、main/ui/toolbar_layout_dialog.py、main/ui/screenshot_window.py。",
+          "证据路径：.ui_review/screenshot-expansion/image-stamp-focused.log/xml、image-stamp-full.log/xml、image-stamp-ruff.log；docs/screenshot-expansion-progress.md 第二十二批。",
+          "边界：只做位图插图（无滤镜/裁剪/贴纸库）；钉图与文件编辑工具栏固定排布里没有该按钮，钉图通过继承获得插图；未做原生鼠标手势与安装包验收。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0037"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "水印只作用于最终成图，原图/工程/源文件都不改；默认关闭（enabled=False）时既有导出逐像素不变。",
+          "文字只写用户填写的内容，不读取窗口标题或身份信息；图片水印受边/像素/文件体积上限约束，坏文件按没有水印处理。",
+          "预览与导出共用同一渲染函数；最终导出链是 成图 → 水印 → 编号说明，PNG/JPEG/WebP/PDF 用同一张已合成成图。",
+          "不做平铺/多重水印、旋转与自定义字体；三语 README 只补了目录树，功能段落留待下一轮。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "导出水印",
+          "设置页预览",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_watermark.py 11 项：默认关闭原样返回、右下/左上位置与边界、小图长文本收缩不裁切、透明底保持、不透明度生效、图片水印缩放与边界、缺失/损坏图片跳过、多余字段忽略、导出链仅在开启时改变成图、PNG/JPEG/WebP/PDF 四格式保存且源文件字节不变、设置控件构建与预览联动。",
+          "设置页「保存设置」新增水印分组（启停/类型/文字/图片选择/位置/不透明度/缩放 + 实时预览），控件挂在 dialog 上由 apply_settings 持久化；四语言 SettingsDialog 文案已编译。",
+          "全库回归：3455 passed、2 skipped、675 warnings、312.94 秒、exit0。",
+          "Ruff exit0。",
+          "实现落点：main/core/watermark.py、main/core/export.py（export_with_legend = 成图→水印→编号说明）、main/settings/tool_settings.py、main/ui/settings_ui/watermark_controls.py、main/ui/settings_ui/page_capture.py、main/ui/settings_ui/dialog.py。",
+          "证据路径：.ui_review/screenshot-expansion/watermark-full.log/xml、watermark-ruff.log；docs/screenshot-expansion-progress.md 第二十三批。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0038"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "预设只存每个工具的白名单字段，坏 JSON/过期条目/越界数值都有回退或夹取。",
+          "应用语义：有选中同工具图元时改该图元（可撤销），否则改新建默认值；两者在对话框里写明。",
+          "预设入口在「…」弹层，不进入工具栏排布配置。",
+          "马赛克的块大小与风格只在新建默认值语义下生效；预设不含位置/尺寸/文字内容。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "标注样式预设",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_annotation_presets.py 10 项：往返与重启保留、非法/过期字段回退与夹取、坏 JSON、同工具同名去重、重命名与重名拒绝、删除、应用到工具默认值、白名单抓取、未知工具与超长名、对话框保存/应用到选中图元（undo）/应用到默认值。",
+          "定向回归 192 passed、12.53 秒、exit0。",
+          "全库回归：3465 passed、2 skipped、675 warnings、341.81 秒、exit0。",
+          "Ruff exit0；四语言文案已编译；三语 README 目录树已补。",
+          "实现落点：main/core/annotation_presets.py、main/ui/preset_dialog.py、main/ui/toolbar.py（「…」弹层预设入口）。",
+          "证据路径：.ui_review/screenshot-expansion/annotation-presets-focused.log/xml、annotation-presets-full.log/xml、annotation-presets-ruff.log。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0039"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "默认全关：只有用户显式勾选并保留的来源/时间/备注才随导出；取消或清空后标题不传播。",
+          "来源检测尽力而为，取不到/权限不足/命中自身一律留空；不自动读取窗口标题写入文件名。",
+          "元信息只进最终成图的信息条，不写文件名、不写 EXIF、不动剪贴板来源字段。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "元信息",
+          "问题报告可追溯",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_capture_metadata.py 10 项：默认不导出、只导出勾选且非空部分、长备注折行不越界、保存/加载往返、取消不传播、来源排除自身、finder 异常与 API 不可用回退、进程查询失败保留标题、导出链仅在开启时加信息条、save.py 与剪贴板 models 不含 capture_meta。",
+          "设置页「保存设置」新增截图元信息分组（来源开关/可编辑来源/检测窗口/清除、时间开关、备注开关与文本、与导出同渲染的预览）；四语言 SettingsDialog 文案已编译；三语 README 目录树已补。",
+          "定向回归 130 passed + README 目录树 3 passed、exit0；全库回归：3475 passed、2 skipped、675 warnings、255.32 秒、exit0。",
+          "Ruff exit0。",
+          "实现落点：main/core/capture_metadata.py、main/core/export.py（成图→水印→元信息→编号说明）、main/settings/tool_settings.py、main/ui/settings_ui/metadata_controls.py、main/ui/settings_ui/page_capture.py、main/ui/settings_ui/dialog.py。",
+          "证据路径：.ui_review/screenshot-expansion/capture-metadata-focused.log/xml、capture-metadata-full.log/xml；docs/screenshot-expansion-progress.md 第二十五批。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0040"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "报告只用相对路径（report.md + images/），整个目录可搬走；不写绝对本机路径。",
+          "附件只包含用户传入的最终成图，不附带工程/底图；来源与时间只有用户勾选时才出现（复用 TF-0040）。",
+          "不做 HTML/PDF 模板、不自动上传工单平台、不引入账号或云端服务。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "问题报告",
+          "Markdown 导出",
+          "本地实现与对应证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/test_markdown_report.py 9 项：Markdown/HTML 转义、附件名净化与去重、相对路径与顺序、目录搬走后附件仍可访问、来源/时间仅显式包含、附件只含传入成图、非法条目拒绝、备注与标题转义、对话框导出与取消不写文件。",
+          "多图集合窗口新增「Markdown report…」入口与报告对话框（标题/步骤/逐张备注/可选来源与时间）；四语言文案已编译；三语 README 目录树已补。",
+          "定向回归 109 passed + 目录树 3 passed、exit0；全库回归：3484 passed、2 skipped、675 warnings、238.17 秒、exit0。",
+          "Ruff exit0。",
+          "实现落点：main/core/markdown_report.py、main/ui/markdown_report_dialog.py、main/ui/image_layout_dialog.py。",
+          "证据路径：.ui_review/screenshot-expansion/markdown-report-focused.log/xml、markdown-report-full.log/xml、markdown-report-ruff.log；docs/screenshot-expansion-progress.md 第二十六批。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0041"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "真实环境只有一块 150% 屏；100%/125%/200%、负坐标副屏与显示器重排按 unverified 记录，不算通过。",
+          "验收驱动复用生产 pre-Qt 设置（QT_ENABLE_HIGHDPI_SCALING=0 + per-monitor V2），offscreen/单元测试只作契约对照。",
+          "本轮没有发现需要修改产品代码的复现缺陷；修复的是验收驱动自身。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "混合DPI",
+          "多显示器",
+          "真实环境验收",
+          "未验证矩阵项",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/native_dpi_matrix.py：Win32 枚举显示器 + GetDpiForMonitor + mss 实拍；只留每屏 32x32 小裁剪；矩阵行区分 verified/unverified。",
+          "真实实测：虚拟桌面 Win32==mss=2560x1600；逐屏物理尺寸 2560x1600（150%）；Qt DPR=1 且 QT_ENABLE_HIGHDPI_SCALING=0；Qt 主屏几何==物理矩形；原生矩阵 exit0。",
+          "未验证项：scale 1.00 / 1.25 / 2.00 与负坐标副屏（本机无此环境），已在 result.json 与进度记录中标注。",
+          "发现：驱动最初未走生产 pre-Qt 设置时 Qt DPR=1.5、几何 1707x1067 与物理 2560x1600 不一致；改用生产设置后一致。修的是驱动，不是产品代码。",
+          "新增 main/tests/test_dpi_awareness.py 3 项（共 5 项通过）：setup_environment 关 Qt 缩放并请求 V2；矩阵驱动复用生产设置且在 QApplication 之前；CaptureService 返回物理虚拟桌面（模拟对照）。",
+          "全库回归：3487 passed、2 skipped、675 warnings、263.15 秒、exit0；Ruff exit0。",
+          "证据路径：.ui_review/screenshot-expansion/native-dpi-matrix/result.json、monitor-1-topleft.png、dpi-full.log/xml、dpi-focused.log。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0042"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "当前采集方案是抓 DWM 合成后的桌面：被遮挡/最小化按系统语义如实呈现，不做逐窗口离屏抓取。",
+          "HDR、硬件加速窗口、受保护内容在本机无法验证，按 unverified 记录；不尝试绕过保护，也不承诺支持。",
+          "按节点约定不评估替换整套采集后端。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "捕获兼容性",
+          "HDR未验证",
+          "受保护内容不绕过",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/native_capture_compatibility.py：真实 Win32 彩色窗口 + mss 取色比对；只留 48x48 小裁剪；passed 只由执行过的检查决定。",
+          "实测（exit0）：普通窗口 (220,20,20)==实测；遮挡处抓到上层绿色；最小化原位置 (25,25,25)!=窗口色；DWM composition=true。",
+          "未验证项：hdr_sdr_mixed_content（注册表 AdvancedColorEnabled 未找到）、hardware_accelerated_hwnd（无可复现 D3D 样例）、protected_drm_content（无样例且不绕过保护）。",
+          "新增 main/tests/test_capture_compatibility.py 2 项：驱动必须登记 unverified 且不伪造成果；采集路径不得使用 SetWindowDisplayAffinity / WDA_EXCLUDEFROMCAPTURE / PrintWindow。",
+          "环境：NVIDIA RTX 4060 Laptop（32.0.15.9597）+ GameViewer 虚拟显示适配器 + AMD Radeon iGPU；单屏 2560x1600。",
+          "全库回归：3489 passed、2 skipped、675 warnings、239.86 秒、exit0；Ruff exit0。",
+          "证据路径：.ui_review/screenshot-expansion/native-capture-compat/result.json 与三张裁剪、capture-compat-focused.log、compat-full.log/xml。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0043"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "每次运行都重新执行定向/全量回归与原生驱动，不复用历史通过数。",
+          "TF-0030 真实监听零留存、HDR/受保护内容、安装包（TF-0045）保留 unverified，不因可选条件阻塞核心批次。",
+          "资源释放检查按生产 teardown（cleanup+close+deleteLater）；本轮修的是检查自身，未发现产品资源泄漏。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "批次验收",
+          "隐私验收",
+          "资源释放",
+          "待用户复核"
+        ],
+        "evidence": [
+          "新增 main/tests/batch_acceptance.py（--run --output）：定向回归 + 全量回归 + 两个真实原生驱动 + 隐私矩阵 + 资源释放检查，输出 result.json/summary.md。",
+          "本轮实测：定向 114 passed（2.68s）、全量 3489 passed / 2 skipped / 675 warnings（232.70s）、两个原生驱动 exit0、隐私矩阵 7/7、资源释放通过（0→0），总体 passed=true。",
+          "隐私矩阵：水印/编号说明/元信息默认关；不勾选不产生元信息行；元信息不进文件名与剪贴板来源字段；测试隔离设置；不使用受保护内容绕过 API。",
+          "发现：首轮资源检查因只 close() 而误报 5/5 未释放；按生产 teardown 复测通过。修的是检查，不是产品代码。",
+          "未验证：TF-0030、HDR/硬件加速/受保护内容、TF-0045 安装包，均在 result.json 的 unverified 区列出。",
+          "证据路径：.ui_review/screenshot-expansion/batch-acceptance/result.json、summary.md、batch-acceptance.log。"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0044"
+    }
+  ],
+  "created_at": "2026-10-10T08:56:44.118376Z",
+  "proposal_id": "TFP-20261010-batch-acceptance-review",
+  "rationale": "第二十九批完成 TF-0044 批次收尾门槛：新增批次验收驱动，重新执行定向/全量回归、真实原生驱动、隐私矩阵与资源释放检查，全部通过；TF-0030、HDR/受保护内容与安装包保留 unverified。覆盖此前未应用的累计提案。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review",
+    "TFP-20261009-output-region-presets-review",
+    "TFP-20261009-image-collection-review",
+    "TFP-20261009-multi-region-cursor-review",
+    "TFP-20261009-stitch-adjustments-review",
+    "TFP-20261009-auto-scroll-review",
+    "TFP-20261009-image-editor-review",
+    "TFP-20261009-editable-project-review",
+    "TFP-20261009-pin-workspace-review",
+    "TFP-20261010-image-compare-review",
+    "TFP-20261010-gif-export-safety-progress",
+    "TFP-20261010-gif-export-controls-review",
+    "TFP-20261010-mp4-export-review",
+    "TFP-20261010-redaction-rules-review",
+    "TFP-20261010-private-clipboard-progress",
+    "TFP-20261010-sensitive-session-progress",
+    "TFP-20261010-image-index-controls-review",
+    "TFP-20261010-ocr-table-review",
+    "TFP-20261010-searchable-pdf-review",
+    "TFP-20261010-magnify-callout-review",
+    "TFP-20261010-text-callout-review",
+    "TFP-20261010-number-legend-review",
+    "TFP-20261010-insert-image-review",
+    "TFP-20261010-watermark-progress",
+    "TFP-20261010-watermark-review",
+    "TFP-20261010-annotation-presets-progress",
+    "TFP-20261010-annotation-presets-review",
+    "TFP-20261010-capture-metadata-review",
+    "TFP-20261010-markdown-report-review",
+    "TFP-20261010-dpi-matrix-review",
+    "TFP-20261010-capture-compat-review"
+  ],
+  "session_id": "session-20261010-batch-acceptance",
+  "status": "proposed"
+}

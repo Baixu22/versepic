@@ -1,0 +1,959 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json",
+          "文件/历史/贴图只读A/B，三种比较模式、同步缩放平移、显式重采样、RGBA差异阈值及32MP限制实现。",
+          "42项新增比较测试；关联216 passed；最终闭包修正后比较/工具栏/设置字段82 passed，exit0。",
+          "最终同源码冻结全量3035 passed、2 skipped、666 warnings，206.68秒，exit0；86个代码/测试/资源/README摘要一致，Ruff及diff-check exit0。",
+          "此前冻结全量1 failed、3034 passed（Qt windowHandle返回QWidgetItem异常，exit1）；关联及全量复核未重现，根因未确认，详见新偏差，不声明稳定性问题已修复。",
+          "中文100%和英文150%各7组原生通过；80×60编辑准确检出4800差异像素；24MP输入资源样例及六轮关闭控件数均0；配置树摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十一批；.ui_review/screenshot-expansion/compare-full-recheck.log/xml、compare-full-release.log/xml、compare-source-hashes-release.json、compare-ruff-release.log",
+          "原生证据：.ui_review/screenshot-expansion/native-compare-verified-zh/result.json、native-compare-verified-en/result.json、compare-resources/result.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0003"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json",
+          "文件/历史/贴图只读A/B，三种比较模式、同步缩放平移、显式重采样、RGBA差异阈值及32MP限制实现。",
+          "42项新增比较测试；关联216 passed；最终闭包修正后比较/工具栏/设置字段82 passed，exit0。",
+          "最终同源码冻结全量3035 passed、2 skipped、666 warnings，206.68秒，exit0；86个代码/测试/资源/README摘要一致，Ruff及diff-check exit0。",
+          "此前冻结全量1 failed、3034 passed（Qt windowHandle返回QWidgetItem异常，exit1）；关联及全量复核未重现，根因未确认，详见新偏差，不声明稳定性问题已修复。",
+          "中文100%和英文150%各7组原生通过；80×60编辑准确检出4800差异像素；24MP输入资源样例及六轮关闭控件数均0；配置树摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十一批；.ui_review/screenshot-expansion/compare-full-recheck.log/xml、compare-full-release.log/xml、compare-source-hashes-release.json、compare-ruff-release.log",
+          "原生证据：.ui_review/screenshot-expansion/native-compare-verified-zh/result.json、native-compare-verified-en/result.json、compare-resources/result.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0004"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/gif/cursor_overlay.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0014"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0015"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0016"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0017"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/canvas/view.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0018"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "功能本地验证通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/tests/test_stitch_integration.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0019"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "功能本地验证通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0020"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "功能本地验证通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0021"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/scroll_toolbar.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0022"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_canvas.py",
+          "当前相关实现或测试：main/pin/pin_image_transform.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0023"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/pin/pin_canvas.py",
+          "当前相关实现或测试：main/canvas/undo.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0024"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及对应验收完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_thumbnail.py",
+          "手动选择贴图保存.vpins，独立进程恢复位置/缩放/透明度/置顶/缩略图/图元，屏幕外迁回及局部损坏编号报告；明确取消/删除确认与真实回收站测试通过。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0025"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "累计18个具体节点具备本地实现和证据；其他20项和配置恢复遗留继续开放。",
+          "新增工作区39项、工程所有权2项、收集窗口销毁1项，共42项回归。关联329 passed、9 warnings，16.53秒，exit0。",
+          "最终同进程全量2993 passed、2 skipped、666 warnings，252.48秒，exit0；Ruff及Diff检查通过。",
+          "中文100%和英文150%原生各4组通过；六轮工作区恢复关闭后贴图/控件数量均0；真实配置树摘要无变化。",
+          "修复工程parentItem访问引起的PySide图元所有权变化，以及工作区/收集窗口reject-close重入，均有实际销毁/源像素保持回归。",
+          "详见 docs/screenshot-expansion-progress.md 第十批。",
+          ".ui_review/screenshot-expansion/workspace-full-release.log",
+          ".ui_review/screenshot-expansion/native-workspace-release-zh/result.json",
+          ".ui_review/screenshot-expansion/native-workspace-release-en/result.json",
+          ".ui_review/screenshot-expansion/workspace-retention/result.json",
+          ".ui_review/screenshot-expansion/workspace-source-hashes-release.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务，目前19项有本地实现和测试证据，其他19项未完成。",
+          "第六批真实配置恢复仍需用户原值或备份；本轮验证配置树摘要不变，不代表旧设置已恢复。",
+          "未提交代码、打包或发布。工作区是主动保存的原图/可编辑标注文件，不是脱敏分享格式。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "本地实现与验收证据",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_image_transform.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/core/save.py",
+          "文件/历史/贴图只读A/B，三种比较模式、同步缩放平移、显式重采样、RGBA差异阈值及32MP限制实现。",
+          "42项新增比较测试；关联216 passed；最终闭包修正后比较/工具栏/设置字段82 passed，exit0。",
+          "最终同源码冻结全量3035 passed、2 skipped、666 warnings，206.68秒，exit0；86个代码/测试/资源/README摘要一致，Ruff及diff-check exit0。",
+          "此前冻结全量1 failed、3034 passed（Qt windowHandle返回QWidgetItem异常，exit1）；关联及全量复核未重现，根因未确认，详见新偏差，不声明稳定性问题已修复。",
+          "中文100%和英文150%各7组原生通过；80×60编辑准确检出4800差异像素；24MP输入资源样例及六轮关闭控件数均0；配置树摘要不变。",
+          "docs/screenshot-expansion-progress.md 第十一批；.ui_review/screenshot-expansion/compare-full-recheck.log/xml、compare-full-release.log/xml、compare-source-hashes-release.json、compare-ruff-release.log",
+          "原生证据：.ui_review/screenshot-expansion/native-compare-verified-zh/result.json、native-compare-verified-en/result.json、compare-resources/result.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0026"
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "已移除无用的导入期设置副作用，并增加独立进程导入无副作用测试及原生驱动写入前路径断言。重跑确认真实配置不再变化。仍须用户提供此前数据库/保存目录及其他设置原值或备份以准确恢复，不猜测覆盖。",
+        "created_at": "2026-10-09T00:02:41.344Z",
+        "id": "TFD-dd7b3195d8",
+        "kind": "acceptance_settings_isolation_failure",
+        "reason": "旧scroll_window在模块导入阶段调用全局设置单例；后续get_tool_settings_manager(QSettings(...))不能替换已建立的单例。",
+        "related_task_ids": [
+          "TF-0001",
+          "TF-0019",
+          "TF-0020",
+          "TF-0021",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "长截图原生驱动在隔离配置建立前导入模块，真实应用配置被测试值改写；恢复未完成。"
+      }
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "保留compare-full-release失败日志。关联82项及相同冻结源码全量3035项复核通过；后续TF-0044继续稳定性复核，不删除失败、跳过用例或吞异常。",
+        "created_at": "2026-10-09T17:36:19.731Z",
+        "id": "TFD-6e1327a941",
+        "kind": "full_suite_transient_qt_wrapper",
+        "reason": "windowHandle()返回QWidgetItem而非QWindow，screenChanged访问失败。未发现相关方法替身；未取得可重复根因，不推断为比较功能缺陷或已修复。",
+        "related_task_ids": [
+          "TF-0001",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "比较功能收尾的一次全量在设置页第三方frameless初始化出现Qt包装类型异常；复核未复现，根因未确认。"
+      }
+    }
+  ],
+  "created_at": "2026-10-09T17:36:19.939581Z",
+  "proposal_id": "TFP-20261010-image-compare-review",
+  "rationale": "累计回写TF-0008～TF-0026的19项本地实现和验收，保留原配置恢复及本轮未复现Qt包装对象异常。需用户确认后应用，未提交、打包或发布，其他19项保持开放。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review",
+    "TFP-20261009-output-region-presets-review",
+    "TFP-20261009-image-collection-review",
+    "TFP-20261009-multi-region-cursor-review",
+    "TFP-20261009-stitch-adjustments-review",
+    "TFP-20261009-auto-scroll-review",
+    "TFP-20261009-image-editor-review",
+    "TFP-20261009-editable-project-review",
+    "TFP-20261009-pin-workspace-review"
+  ],
+  "session_id": "session-20261010-image-compare",
+  "status": "proposed"
+}

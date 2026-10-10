@@ -1,0 +1,222 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "源码及节点验证完成",
+          "待复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "源码及节点验证完成",
+          "待复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "源码及节点验证完成",
+          "待复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认完整开发与测试验收；任务登记不等于功能完成。",
+          "代码尚未提交、打包或发布；不将当前批次通过推广到其余开放节点。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "累计前三个具体节点的源码与节点验证已完成，其余 35 项未完成；详细边界见 docs/screenshot-expansion-progress.md。",
+          "第二批最终全量：2593 passed、2 skipped、640 warnings，142.15 秒，exit 0。",
+          "定向回归：217 passed；Ruff exit 0；原生快捷截取/几何 9 项通过，延时原生回归 3 项通过。",
+          "本次原生图像交付边界使用测试内存接收器保护真实剪贴板，不冒充安装包复制粘贴验收。",
+          "证据：.ui_review/screenshot-expansion/quick-geometry-full-final.log",
+          ".ui_review/screenshot-expansion/native-quick-geometry-complete/result.json",
+          ".ui_review/screenshot-expansion/quick-geometry-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    }
+  ],
+  "created_at": "2026-10-08T17:41:32.175630Z",
+  "proposal_id": "TFP-20261009-capture-entry-geometry-review",
+  "rationale": "累计回写已实现和验证的延时、快捷截取与精确选区三个节点，以及相关进行中父节点。本提案包含上一份尚未应用的 delayed-capture-review 的状态范围，建议确认本份累计提案，不重复应用旧提案。完整目标未完成，不关闭其他 35 项。",
+  "session_id": "session-20261009-screenshot-entry-geometry",
+  "status": "proposed"
+}
