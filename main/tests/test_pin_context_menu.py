@@ -25,6 +25,8 @@ from pin.pin_context_menu import PinContextMenu, _get_shortcut_display
 
 # 会被菜单项连接的父窗口回调
 CALLBACKS = (
+    "open_editable_project",
+    "compare_image",
     "copy_to_clipboard",
     "save_image",
     "_on_translate_clicked",
@@ -168,7 +170,7 @@ class TestThumbnailModeStructure:
 
     def test_thumbnail_mode_offers_exactly_five_actions(self, parent, stub_shortcuts):
         menu = _build(parent, thumbnail_mode=True)
-        assert len(_labels(menu)) == 5
+        assert len(_labels(menu)) == 7
 
 
 class TestTranslateAvailability:

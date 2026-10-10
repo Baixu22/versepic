@@ -1,0 +1,777 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0003"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0004"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/gif/cursor_overlay.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0014"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/clipboard/core/manager.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0015"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/clipboard/ui/windows/clipboard_window.py",
+          "当前相关实现或测试：main/pin/pin_manager.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0016"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/core/save.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0017"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/canvas/view.py",
+          "当前相关实现或测试：main/ui/screenshot_window.py",
+          "当前相关实现或测试：main/core/export.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0018"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地功能测试通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/tests/test_stitch_integration.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0019"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地功能测试通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0020"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地功能测试通过",
+          "配置恢复遗留"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/jietuba_long_stitch_unified.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 90,
+        "status": "review_needed"
+      },
+      "id": "TF-0021"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "按需候选",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/stitch/scroll_window.py",
+          "当前相关实现或测试：main/stitch/scroll_toolbar.py",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0022"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/pin/pin_window.py",
+          "当前相关实现或测试：main/pin/pin_canvas.py",
+          "当前相关实现或测试：main/pin/pin_image_transform.py",
+          "当前相关实现或测试：main/core/save.py",
+          "文件编辑宿主复用PinCanvas/CanvasView/PinToolbar；真实文件拖入、标注、非破坏裁剪旋转翻转、源文件和硬链接保护、异步另存为与本地OCR通过。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0023"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "完整目标仍包含38个具体任务；当前16项有本地实现和测试证据，其他22项未实现。",
+          "第六批真实配置恢复仍需要此前原值或备份；本轮测试有隔离断言并确认真实配置摘要不变，不表示旧设置已恢复。",
+          "代码未提交、打包或发布，正式收尾需保留原验收范围。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整目标继续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "累计16个具体节点已具备本地实现与测试，其他22项及配置恢复遗留仍开放。",
+          "记录：docs/screenshot-expansion-progress.md 第八批。",
+          "本批62项新增用例；关联318 passed、30 warnings；最终全量2909 passed、2 skipped、666 warnings，261.93秒，exit0；Ruff通过。",
+          "中文100%和英文150%各7组原生验收；原图SHA-256不变，真实本地OCR通过；重复8轮编辑器创建/关闭后控件数均为0。",
+          ".ui_review/screenshot-expansion/editor-full.log",
+          ".ui_review/screenshot-expansion/native-image-editor-final-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-image-editor-final-en150/result.json",
+          ".ui_review/screenshot-expansion/editor-retention/result.json",
+          ".ui_review/screenshot-expansion/editor-source-hashes.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    },
+    {
+      "action": "record_deviation",
+      "deviation": {
+        "correction": "已移除无用的导入期设置副作用，并增加独立进程导入无副作用测试及原生驱动写入前路径断言。重跑确认真实配置不再变化。仍须用户提供此前数据库/保存目录及其他设置原值或备份以准确恢复，不猜测覆盖。",
+        "created_at": "2026-10-09T00:02:41.344Z",
+        "id": "TFD-dd7b3195d8",
+        "kind": "acceptance_settings_isolation_failure",
+        "reason": "旧scroll_window在模块导入阶段调用全局设置单例；后续get_tool_settings_manager(QSettings(...))不能替换已建立的单例。",
+        "related_task_ids": [
+          "TF-0001",
+          "TF-0019",
+          "TF-0020",
+          "TF-0021",
+          "TF-0044"
+        ],
+        "status": "open",
+        "summary": "长截图原生驱动在隔离配置建立前导入模块，真实应用配置被测试值改写；恢复未完成。"
+      }
+    }
+  ],
+  "created_at": "2026-10-09T06:40:34.349155Z",
+  "proposal_id": "TFP-20261009-image-editor-review",
+  "rationale": "累计回写TF-0008到TF-0023的本地实现与验收；保留前三个长截图节点的配置恢复遗留和相关偏差。本份覆盖此前7份未应用回写提案，仅在用户确认后应用此累计提案，不关闭剩余22项或宣称完整目标完成。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review",
+    "TFP-20261009-output-region-presets-review",
+    "TFP-20261009-image-collection-review",
+    "TFP-20261009-multi-region-cursor-review",
+    "TFP-20261009-stitch-adjustments-review",
+    "TFP-20261009-auto-scroll-review"
+  ],
+  "session_id": "session-20261009-image-editor",
+  "status": "proposed"
+}

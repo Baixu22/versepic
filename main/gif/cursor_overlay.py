@@ -257,6 +257,8 @@ def _rasterize_qimage(w: int, h: int, draw_fn) -> bytes:
     p.setRenderHint(QPainter.RenderHint.Antialiasing)
     draw_fn(p, w, h)
     p.end()
+    # Rust alpha blending expects straight RGBA, not already-premultiplied RGB.
+    img = img.convertToFormat(QImage.Format.Format_RGBA8888)
     bpl = img.bytesPerLine()
     expected = w * 4
     ptr = img.bits()
@@ -285,6 +287,17 @@ def rasterize_cursor_sprites(scale: float = 1.0) -> dict:
       "scroll_up"         : (bytes, w, h)  — 向上滚动箭头
       "scroll_down"       : (bytes, w, h)  — 向下滚动箭头
     """
+    if not math.isfinite(scale) or not 0 < scale <= 16:
+        raise ValueError("Invalid cursor sprite scale")
+    if scale != 1.0:
+        result = {}
+        for name, (data, width, height) in rasterize_cursor_sprites().items():
+            image = QImage(data, width, height, width * 4, QImage.Format.Format_RGBA8888)
+            image = image.scaled(max(1, int(width * scale + .5)), max(1, int(height * scale + .5)),
+                                 Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            image = image.convertToFormat(QImage.Format.Format_RGBA8888)
+            result[name] = (bytes(image.constBits()), image.width(), image.height())
+        return result
     theme = ThemeManager().theme_color
 
     # 缩放后的尺寸参数

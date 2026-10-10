@@ -6,7 +6,7 @@
 
 import gc
 from PySide6.QtWidgets import QApplication, QWidget, QGraphicsTextItem
-from PySide6.QtCore import Qt, QTimer, QRect, QRectF
+from PySide6.QtCore import Qt, QTimer, QRect, QRectF, Signal
 from PySide6.QtGui import QPixmap
 from ui.dialogs import show_modeless_warning_dialog
 
@@ -190,6 +190,9 @@ class ScreenshotShortcutHandler(ShortcutHandler):
                 QCursor.setPos(p.x() + delta[0], p.y() + delta[1])
                 return True
 
+        from core.capture_privacy import is_sensitive
+        if is_sensitive(w) and key == Qt.Key.Key_C and event.modifiers() == Qt.KeyboardModifier.NoModifier:
+            return True  # no unmarked color-text copy in a sensitive capture
         # 取色（单键 C，无修饰键 — 保留硬编码）
         if key == Qt.Key.Key_C:
             if event.modifiers() == Qt.KeyboardModifier.NoModifier:
@@ -237,7 +240,10 @@ class ScreenshotShortcutHandler(ShortcutHandler):
 
 
 class ScreenshotWindow(QWidget):
-    def __init__(self, config_manager=None, prefetched_image=None, prefetched_rect=None):
+    collection_continue_requested = Signal()
+    session_ended = Signal()
+
+    def __init__(self, config_manager=None, prefetched_image=None, prefetched_rect=None, *, sensitive=False):
         super().__init__()
         
         # 不设置 WA_DeleteOnClose —— 窗口复用，由 main_app 管理生命周期
@@ -246,7 +252,10 @@ class ScreenshotWindow(QWidget):
         self.config_manager = config_manager if config_manager else get_tool_settings_manager()
         # 关闭标记，防止已销毁窗口继续响应回调
         self._is_closing = False
+        self._multi_region_dialog = None
         self._session_active = False
+        self.sensitive_capture = sensitive is True
+        self._privacy_label = None
         
         import time
         _t0 = time.perf_counter()
@@ -258,7 +267,7 @@ class ScreenshotWindow(QWidget):
             rect = prefetched_rect
             _timings['截屏'] = 0.0  # 预取，主线程耗时为 0
         else:
-            capture_service = CaptureService()
+            capture_service = CaptureService(include_cursor=self.config_manager.get_app_setting("screenshot_include_cursor", False) is True)
             self.original_image, rect = capture_service.capture_all_screens()
             _timings['截屏'] = (time.perf_counter() - _t0) * 1000
         
@@ -365,6 +374,7 @@ class ScreenshotWindow(QWidget):
         ShortcutManager.instance().register(self._shortcut_handler)
         
         self._session_active = True
+        self._apply_privacy()
         self.show()
         self.activateWindow()
         self.raise_()
@@ -399,7 +409,7 @@ class ScreenshotWindow(QWidget):
     # ------------------------------------------------------------------
     # 窗口复用：准备新的截图会话
     # ------------------------------------------------------------------
-    def prepare_new_session(self, prefetched_image, prefetched_rect):
+    def prepare_new_session(self, prefetched_image, prefetched_rect, *, sensitive=False):
         """复用已有窗口，准备新一次截图会话。
         
         释放旧会话的重数据（~66MB 图像），保留轻量 UI 壳（toolbar/magnifier 等），
@@ -409,6 +419,7 @@ class ScreenshotWindow(QWidget):
         _t0 = time.perf_counter()
         
         self._is_closing = False
+        self.sensitive_capture = sensitive is True
         
         image = prefetched_image
         rect = prefetched_rect
@@ -485,6 +496,7 @@ class ScreenshotWindow(QWidget):
         ShortcutManager.instance().register(self._shortcut_handler)
         
         self._session_active = True
+        self._apply_privacy()
         self.show()
         self.activateWindow()
         self.raise_()
@@ -497,6 +509,25 @@ class ScreenshotWindow(QWidget):
     # ------------------------------------------------------------------
     # 会话结束：释放重数据，保留 UI 壳
     # ------------------------------------------------------------------
+    def _apply_privacy(self):
+        from core.capture_privacy import badge_text, notice, install_text_guard
+        install_text_guard(self)
+        from PySide6.QtWidgets import QLabel
+        self.scene.sensitive_capture = self.sensitive_capture
+        if self._privacy_label is None:
+            self._privacy_label = QLabel(self)
+            self._privacy_label.setWordWrap(True)
+            self._privacy_label.setStyleSheet("background: #291d07; color: #fff2c6; padding: 10px; border: 1px solid #bd8d22; border-radius: 8px;")
+            self._privacy_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self._privacy_label.setText(badge_text())
+        self._privacy_label.setToolTip(notice())
+        self._privacy_label.setAccessibleDescription(notice())
+        self._privacy_label.setFixedWidth(min(740, max(200, self.width()-40)))
+        self._privacy_label.adjustSize()
+        self._privacy_label.move(max(0, (self.width()-self._privacy_label.width())//2), 16)
+        self._privacy_label.setVisible(self.sensitive_capture)
+        self._privacy_label.raise_()
+
     def _teardown_session(self):
         """释放本次截图会话的重数据（~66MB 图像 + scene/view），
         保留 toolbar/magnifier/mask_overlay/info_panel 等可复用的轻量 UI 壳。
@@ -504,6 +535,13 @@ class ScreenshotWindow(QWidget):
         if not self._session_active:
             return
         self._session_active = False
+        self.sensitive_capture = False
+        from core.capture_privacy import remove_text_guard
+        remove_text_guard(self)
+        if self._privacy_label is not None:
+            self._privacy_label.hide()
+        if self._multi_region_dialog is not None:
+            self._multi_region_dialog.reject()
         self._is_closing = True
         
         # 立即隐藏窗口
@@ -657,6 +695,10 @@ class ScreenshotWindow(QWidget):
             self.toolbar.number_next_changed.connect(self.on_number_next_changed)
         if hasattr(self.toolbar, "number_style_changed"):
             self.toolbar.number_style_changed.connect(self.on_number_style_changed)
+        if hasattr(self.toolbar, "number_caption_changed"):
+            self.toolbar.number_caption_changed.connect(self.on_number_caption_changed)
+        if hasattr(self.toolbar, "insert_image_clicked"):
+            self.toolbar.insert_image_clicked.connect(self._insert_image_stamp)
         if hasattr(self.toolbar, "mosaic_style_changed"):
             self.toolbar.mosaic_style_changed.connect(self.on_mosaic_style_changed)
         if hasattr(self.toolbar, "mosaic_block_size_changed"):
@@ -674,6 +716,10 @@ class ScreenshotWindow(QWidget):
         self.toolbar.screenshot_translate_clicked.connect(self._handle_screenshot_translate)
         self.toolbar.text_recognize_clicked.connect(self._handle_text_recognize)
         self.toolbar.smart_redact_clicked.connect(self._handle_smart_redact)
+        self.toolbar.editable_project_clicked.connect(self._open_editable_project)
+        self.toolbar.multi_region_clicked.connect(self._handle_multi_region)
+        self.toolbar.collect_next_clicked.connect(lambda: self.action_handler.handle_collect(True))
+        self.toolbar.collect_review_clicked.connect(lambda: self.action_handler.handle_collect(False))
         self.toolbar.scan_code_clicked.connect(self._handle_scan_code)
         self.toolbar.gif_record_clicked.connect(self.start_gif_record_mode)
 
@@ -721,6 +767,92 @@ class ScreenshotWindow(QWidget):
     def _handle_scan_code(self):
         if self.action_handler:
             self.action_handler.handle_scan_code()
+
+    def _insert_image_stamp(self):
+        """从文件插入一张位图（TF-0037）；缺失/超大/格式不支持只提示，不写入坏数据。"""
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
+        if not self._session_active or not self.scene.selection_model.is_confirmed:
+            return
+        from PySide6.QtWidgets import QFileDialog
+        from ui.dialogs import show_warning_dialog
+
+        path, _selected = QFileDialog.getOpenFileName(
+            self,
+            self.tr("Insert image"),
+            "",
+            self.tr("Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)"),
+        )
+        if not path:
+            return
+        try:
+            self.scene.add_image_stamp_from_file(path)
+        except ValueError:
+            show_warning_dialog(
+                self,
+                self.tr("Insert image failed"),
+                self.tr("The image is missing, too large, or not a supported bitmap."),
+            )
+
+    def _open_editable_project(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
+        if not self._session_active or not self.scene.selection_model.is_confirmed:
+            return
+        from ui.image_editor import open_scene_as_project
+        from ui.dialogs import show_warning_dialog
+        self.action_handler._temporarily_exit_editing()
+        try:
+            editor=open_scene_as_project(self.scene,region=self.scene.selection_model.rect())
+        except Exception:
+            show_warning_dialog(self,self.tr("Project unavailable"),self.tr("Could not transfer the editable image. Original content was kept."))
+            return
+        if editor is not None:
+            self.cleanup_and_close()
+            editor.raise_()
+            editor.activateWindow()
+
+    def _handle_multi_region(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
+        from PySide6.QtWidgets import QDialog
+        from ui.multi_region_dialog import MultiRegionDialog
+        from ui.image_layout_dialog import get_image_layout_window, show_image_layout
+        from core.image_layout import MAX_IMAGES
+        from ui.dialogs import show_warning_dialog
+
+        if not self._session_active or self._multi_region_dialog is not None:
+            return
+        collection = get_image_layout_window()
+        if collection._worker is not None or len(collection.entries) >= MAX_IMAGES:
+            show_warning_dialog(self, self.tr("Collection unavailable"), self.tr("Finish exporting or remove images before selecting more regions."))
+            return
+        bounds = QRect(round(self.virtual_x), round(self.virtual_y), self.original_image.width(), self.original_image.height())
+        dialog = MultiRegionDialog(self.original_image, bounds, max_regions=MAX_IMAGES-len(collection.entries),
+                                   max_pixels=collection.remaining_pixels(), parent=self)
+        self._multi_region_dialog = dialog
+        try:
+            if dialog.exec() != QDialog.DialogCode.Accepted or not self._session_active:
+                return
+            regions = dialog.selection.regions
+            # Decode no new frame, export no selection overlays or existing annotations.
+            crops = [(self.tr("Region %1").replace("%1", str(i+1)), dialog.source.copy(rect)) for i, rect in enumerate(regions)]
+            collection.add_images_atomic(crops)
+            from core.last_capture_region import set_last_region
+            set_last_region(regions[-1].translated(bounds.topLeft()))
+        except (ValueError, MemoryError):
+            show_warning_dialog(self, self.tr("Collection unavailable"), self.tr("Regions could not be collected. Existing images were kept."))
+            return
+        finally:
+            self._multi_region_dialog = None
+            dialog.source = type(dialog.source)()
+            dialog.deleteLater()
+        self.cleanup_and_close()
+        collection._hidden_for_capture = False
+        show_image_layout()
 
     def _handle_smart_redact(self):
         if self.action_handler:
@@ -879,7 +1011,10 @@ class ScreenshotWindow(QWidget):
     
     def cleanup_and_close(self):
         """结束当前截图会话 - 释放重数据，保留 UI 壳供下次复用。"""
+        active = self._session_active
         self._teardown_session()
+        if active:
+            QTimer.singleShot(0, self, self.session_ended.emit)
         # 释放工作集（去抖：多次快速截图只触发最后一次，避免 page fault 风暴）
         from core.platform_utils import request_trim_working_set
         request_trim_working_set(1500)
@@ -969,6 +1104,12 @@ class ScreenshotWindow(QWidget):
         from tools.number import NumberTool
 
         NumberTool.apply_style_change(style, getattr(self, "view", None), self.scene.undo_stack)
+
+    def on_number_caption_changed(self, caption: str):
+        """选中的序号填了说明，推一条可撤销命令。"""
+        from tools.number import NumberTool
+
+        NumberTool.apply_caption_change(caption, getattr(self, "view", None), self.scene.undo_stack)
 
     def on_color_changed(self, color):
         view = getattr(self, 'view', None)
@@ -1092,6 +1233,9 @@ class ScreenshotWindow(QWidget):
             self.scene.undo_stack.redo()
     
     def start_gif_record_mode(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
         """启动 GIF 录制模式"""
         log_info(T("启动GIF录制模式"), "ScreenshotWindow")
         
@@ -1137,6 +1281,9 @@ class ScreenshotWindow(QWidget):
             show_modeless_warning_dialog(self, "警告", "请先选择一个有效的截图区域！")
 
     def start_long_screenshot_mode(self):
+        from core.capture_privacy import blocked
+        if blocked(self):
+            return
         """启动长截图模式"""
         log_info(T("启动长截图模式"), "ScreenshotWindow")
         

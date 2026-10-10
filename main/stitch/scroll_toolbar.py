@@ -74,6 +74,10 @@ class FloatingToolbar(QWidget):
 
     # 信号定义
     direction_changed = Signal()
+    auto_requested = Signal()
+    undo_requested = Signal()
+    repair_requested = Signal()
+    ignore_requested = Signal()
     manual_capture = Signal()
     pin_clicked = Signal()   # 钉图信号
     finish_clicked = Signal()
@@ -114,7 +118,8 @@ class FloatingToolbar(QWidget):
 
     def apply_scale(self):
         """按当前比例重算浮动工具栏的尺寸，方向、按钮状态都不动。"""
-        self.setFixedHeight(scaled(self.BASE_HEIGHT))
+        self.setMinimumHeight(scaled(self.BASE_HEIGHT))
+        self.setMaximumHeight(16777215)
         self.setMinimumWidth(scaled(self.BASE_MIN_WIDTH))
         self._container.setStyleSheet(self._container_qss())
         self._row_layout.setContentsMargins(0, 0, scaled(10), 0)
@@ -180,6 +185,26 @@ class FloatingToolbar(QWidget):
         self.manual_capture_btn.clicked.connect(self.manual_capture.emit)
         toolbar_layout.addWidget(self.manual_capture_btn, 0, Qt.AlignmentFlag.AlignVCenter)
 
+        for attr, label, icon, signal in (
+            ("undo_btn", "Undo last stitch", "svg/撤回.svg", self.undo_requested),
+            ("repair_btn", "Adjust latest seam", "svg/lucide/sliders-horizontal.svg", self.repair_requested),
+            ("ignore_btn", "Ignore fixed header / scrollbar", "svg/方框.svg", self.ignore_requested),
+        ):
+            button = QPushButton()
+            button.setIcon(ResourceManager.get_icon(ResourceManager.get_resource_path(icon)))
+            button.setToolTip(self.tr(label))
+            button.setEnabled(False)
+            button.clicked.connect(signal.emit)
+            self._icon_buttons.append(button)
+            setattr(self, attr, button)
+            toolbar_layout.addWidget(button, 0, Qt.AlignmentFlag.AlignVCenter)
+
+        self.auto_btn = QPushButton(self.tr("Auto scroll"))
+        self.auto_btn.setEnabled(False)
+        self.auto_btn.setStyleSheet(self._direction_btn_style())
+        self.auto_btn.clicked.connect(self.auto_requested.emit)
+        toolbar_layout.addWidget(self.auto_btn)
+
         # 钉图按钮
         self.pin_btn = QPushButton()
         self.pin_btn.setIcon(ResourceManager.get_icon(ResourceManager.get_resource_path("svg/钉图.svg")))
@@ -204,7 +229,21 @@ class FloatingToolbar(QWidget):
         self.cancel_btn.clicked.connect(self.cancel_clicked.emit)
         toolbar_layout.addWidget(self.cancel_btn, 0, Qt.AlignmentFlag.AlignVCenter)
 
+        from ui.fluent_lite import CaptionLabel
+        self.auto_status = CaptionLabel(container)
+        self.auto_status.setWordWrap(True)
+        self.auto_status.setMaximumWidth(scaled(480))
+        self.auto_status.hide()
+        main_layout.addWidget(self.auto_status)
+        from core.ui_theme import get_ui_theme
+        get_ui_theme().theme_changed.connect(self._auto_theme)
+        self._auto_theme()
         self.apply_scale()
+
+    def _auto_theme(self,*_):
+        from core.ui_theme import get_ui_theme
+        t=get_ui_theme().tokens
+        self.auto_status.setStyleSheet(f"background: {t.surface}; color: {t.text}; padding: {scaled(8)}px; border: 1px solid {t.border}; border-radius: {scaled(5)}px;")
 
     @staticmethod
     def _direction_btn_style() -> str:

@@ -74,6 +74,8 @@ class PinOCRManager:
         self._text_selection_enabled = bool(
             config_manager and config_manager.get_ocr_enabled()
         )
+        if getattr(pin_window, "sensitive_capture", False) is True:
+            self._text_selection_enabled = False
         self._temporary_enabled = True
 
     # ------------------------------------------------------------------
@@ -102,6 +104,10 @@ class PinOCRManager:
         默认调用用于钉图后的自动识别，会遵守自动 OCR 设置；``force`` 用于
         翻译、文字选择等用户主动发起的操作，不受自动识别设置影响。
         """
+        from core.capture_privacy import is_sensitive
+        if is_sensitive(self._win):
+            self._text_selection_enabled = False
+            return False
         try:
             from ocr import is_ocr_available, initialize_ocr
             from pin.ocr_text_layer import OCRTextLayer

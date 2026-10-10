@@ -164,6 +164,9 @@ canvas/
     ├── background_item.py   # BackgroundItem — 选区背景底图
     ├── mosaic_item.py       # MosaicItem — 马赛克图形项
     ├── spotlight_item.py    # SpotlightItem / SpotlightCurtain — 聚光灯的孔与共用幕布
+    ├── magnify_item.py      # MagnifyCalloutItem — 可导出的原图像素局部放大框
+    ├── callout_link.py      # callout_link — 箭头与文字气泡组合标注的关联与几何同步
+    ├── image_stamp_item.py  # ImageStampItem — 插入的位图（等比缩放、可撤销、随工程保存）
     ├── selection_item.py    # SelectionItem — 选中项的边界显示框
     ├── arrow_item.py        # ArrowItem — 箭头图元，九种样式的箭杆/端头/描边几何
     └── text_item.py         # TextItem — 文字图元，描边/阴影/背景色块与三态交互框
@@ -192,6 +195,10 @@ canvas/
 capture/
 ├── __init__.py
 ├── capture_service.py       # CaptureService — 截图服务，屏幕截图核心逻辑
+├── quick_capture.py         # 快捷截取的屏幕、窗口、上次区域目标校验
+├── region_presets.py        # 命名区域与显示器布局、DPI 校验
+├── cursor_capture.py        # Windows 真实指针快照与热点合成
+├── multi_region.py          # 同帧多区域顺序与撤销/重做
 ├── uia_element_finder.py    # 后台 UI Automation 元素检测与选区快照缓存
 └── window_finder.py         # WindowFinder — 窗口查找器，智能选择窗口，识别光标下的窗口
 ```
@@ -305,8 +312,21 @@ core/
 ├── shortcut_manager.py      # HotkeySystem / ShortcutManager — 全局热键和应用内快捷键管理
 ├── last_capture_region.py   # 进程内存的"上次截图区域"，供恢复选区快捷键使用
 ├── save.py                  # SaveService — 文件保存服务（自动命名、路径管理、高质量 PDF 输出）
+├── searchable_pdf.py       # 基于最终像素的可搜索PDF与逐页回退报告
+├── image_output.py          # 不可变图片导出配置与安全命名模板
+├── image_layout.py          # 受限内存的图片拼版与一图一页 PDF 渲染
+├── image_compare.py         # 有界且感知透明度的像素差异计算
+├── image_document.py        # 非破坏性文件图片几何与源路径保护
+├── editable_project.py      # 有界可编辑图片工程归档与标注编解码
 ├── export.py                # ExportService — 图像导出服务
+├── number_legend.py         # 编号说明步骤列表的排版与导出（成图下方/右侧）
+├── watermark.py             # 导出水印（TF-0038）：文字/图片、位置/边距/透明度，默认关闭
+├── annotation_presets.py    # 常用标注样式预设（TF-0039）：按工具保存命名样式并应用到新建默认值
+├── capture_metadata.py      # 截图元信息（TF-0040）：来源/时间/备注，默认全关
+├── markdown_report.py       # Markdown 问题报告（TF-0041）：相对路径附件、转义与顺序
+├── packaged_self_check.py   # 打包自检（TF-0045）：在安装包内跑本批核心链路
 ├── clipboard_utils.py       # copy_image_to_clipboard() — 图像复制到系统剪贴板
+├── capture_privacy.py       # 单次截图和派生窗口的内存隐私策略
 ├── platform_utils.py        # DPI感知设置、AppUserModelID、进程管理等 Windows API 工具
 ├── qt_utils.py              # safe_disconnect() — Qt 信号安全断开工具
 ├── log_translations/        # 各模块日志文本翻译辅助
@@ -348,6 +368,9 @@ gif/
 ├── playback_controller.py   # PlaybackController — 回放控制器，管理回放UI和导出
 ├── playback_toolbar.py      # PlaybackToolbar / RangeSlider — 回放工具栏，进度条、速度控制
 ├── composer.py              # _ComposeWorker / ComposerProgressDialog — GIF合成，将帧合成为GIF/视频
+├── export_dialog.py         # GifExportDialog — GIF导出尺寸和帧率控制
+├── mp4_export.py            # 无声H.264/MP4逐帧导出
+├── mp4_diagnostics.py       # 安装包显式合成素材导出自检
 ├── cursor_overlay.py        # CursorOverlay — 光标渲染和点击动画
 └── _widgets.py              # ClickMenuButton / svg_icon() — 自定义小部件
 ```
@@ -400,6 +423,8 @@ pin/
 ├── pin_canvas_view.py       # PinCanvasView — 钉图画布视图（唯一内容渲染者）
 ├── pin_canvas.py            # 钉图画布对象
 ├── pin_manager.py           # PinManager — 管理所有钉图窗口（单例）
+├── workspace.py            # 有界可编辑贴图工作区文件与安全恢复
+├── workspace_dialog.py     # 主动选择贴图、保存、恢复与回收站删除入口
 ├── pin_toolbar.py           # PinToolbar — 钉图工具栏
 ├── pin_controls.py          # PinControlButtons — 控制按钮（关闭、编辑、复制等）
 ├── pin_context_menu.py      # PinContextMenu — 右键菜单
@@ -458,6 +483,10 @@ stitch/
 ├── __init__.py
 ├── jietuba_long_stitch_unified.py   # 长截图拼接接口（调用 Rust longstitch）
 ├── scroll_window.py                 # ScrollCaptureWindow — 滚动截图窗口
+├── session.py              # 有界长截图检查点与可撤销的接缝修正
+├── adjustment_dialog.py    # 接缝及匹配忽略区可视化复核窗口
+├── auto_scroll.py          # 可取消、有上限的前台目标定向滚动
+├── auto_scroll_dialog.py   # 自动滚动范围设置与显式启动对话框
 └── scroll_toolbar.py                # 滚动截图工具栏
 ```
 
@@ -487,11 +516,13 @@ tools/
 ├── rect.py                  # RectTool — 矩形工具（实心/空心）
 ├── ellipse.py               # EllipseTool — 椭圆工具
 ├── arrow.py                 # ArrowTool — 箭头工具
+├── callout.py               # CalloutTool — 箭头 + 文字气泡组合标注
 ├── text.py                  # TextTool — 文字工具
 ├── number.py                # NumberTool — 数字编号工具（自动递增）
 ├── highlighter.py           # HighlighterTool — 荧光笔工具
 ├── mosaic.py                # MosaicTool — 马赛克工具
 ├── spotlight.py             # SpotlightTool — 聚光灯工具（压暗框外区域）
+├── magnify.py               # MagnifyTool — 把原图像素的局部放大框放进成图
 ├── cursor.py                # CursorTool — 光标/选择工具
 ├── eraser.py                # EraserTool — 橡皮擦工具
 └── cursor_manager.py        # CursorManager — 光标样式管理器
@@ -590,6 +621,11 @@ ui/
 ├── reorderable_rows.py      # DragGrip / DraggableRow / ReorderableRowList — 可拖动重排的行列表
 ├── tray_menu.py             # TrayMenu — 系统托盘菜单
 ├── screenshot_window.py     # ScreenshotWindow — 截图主窗口（全屏覆盖、选区绘制）
+├── capture_countdown.py     # CaptureCountdown — 不抢焦点、可取消的延时截图浮层
+├── image_layout_dialog.py   # 图片收集、排序、预览与异步导出
+├── image_compare.py         # 只读并排、滑杆和差异对比窗口
+├── image_editor.py          # 复用贴图画布和标注工具栏的文件图片编辑器
+├── multi_region_dialog.py   # 全桌面多区域选择与原子收集
 ├── dialogs.py               # StandardDialog / 对话框函数集 — 确认、警告、信息、错误对话框
 ├── component_gallery.py     # 共用 Qt 组件交互展示页；对齐与复用约定见 docs/qt-components.md
 ├── magnifier.py             # MagnifierOverlay — 放大镜覆盖层（像素级取色）
@@ -626,6 +662,10 @@ ui/
 │   ├── components.py        # SettingCardGroup / ToggleSwitch — 设置组件库
 │   ├── page_appearance.py   # 外观设置页（主题、语言等）
 │   ├── page_capture.py      # 截图设置页
+├── watermark_controls.py  # Export watermark settings group (TF-0038)
+├── metadata_controls.py   # Capture metadata settings group (TF-0040)
+├── markdown_report_dialog.py # Markdown 报告对话框（TF-0041）
+├── preset_dialog.py       # Annotation style presets dialog (TF-0039)
 │   ├── color_format_dialog.py # ColorFormatDialog — 放大镜颜色格式管理窗口
 │   ├── page_clipboard.py    # 剪贴板设置页
 │   ├── page_hotkey.py       # 快捷键设置页
@@ -652,6 +692,7 @@ ui/
     ├── __init__.py
     ├── controller.py        # 选区信息控制器
     ├── panel.py             # 选区信息面板（尺寸、坐标）
+    ├── geometry_dialog.py   # 选区坐标、尺寸与纵横比编辑
     ├── hook_manager.py      # 钩子管理
     ├── border_shadow.py     # 选区边框阴影效果
     ├── lock_ratio.py        # 锁定宽高比功能
@@ -686,6 +727,8 @@ tests/
 ├── test_drawing_tools.py    # 绘图工具测试（笔/矩形/箭头/文字/数字/荧光笔）
 ├── test_mosaic_tool.py      # 马赛克工具测试
 ├── test_spotlight.py        # 聚光灯测试
+├── test_magnify_callout.py  # 局部放大框测试
+├── test_text_callout.py     # 组合标注（箭头 + 文字气泡）测试
 ├── test_functional_handles.py # 控制点编辑测试
 ├── test_capture_service.py  # 截图服务测试
 ├── test_clipboard_api.py    # 剪贴板公共 API 测试
@@ -705,3 +748,41 @@ tests/
 </details>
 
 ---
+
+当前截图拓展开发包含 GIF 导出尺寸/帧率控制，需要从本工作区重建并安装 `rust_libs/gifrecorder`；公开的 j-gif 0.3.1 二进制不具备新增接口。构建方法见原生模块 README。这是本地开发状态，不代表安装包已验证或发布。
+
+录制回放 → 保存 → MP4 可导出无声 H.264 视频，保留当前裁剪、速度和鼠标效果；奇数尺寸右侧/底部补边，不拉伸，不采集音频。可显式运行 `versepic.exe --verify-mp4-export <空输出目录>` 做包内合成素材编码自检，绕过正常启动，只在指定目录写入测试媒体与结果。构建包保留 PyAV 许可证；FFmpeg/x264 分发许可检查及完整安装包验收仍是发布前门槛。
+
+智能脱敏增加可选的身份证日期/校验码、银行卡 Luhn 规则和有限的 OCR O/I/l 纠错。命名预设只保存规则开关，不保存关键词、OCR 文字或图像。匹配只是供人工复核的候选；校验通过不代表身份或账户真实，OCR 错字、分行可能漏报。PNG/JPEG/PDF 按预览原始尺寸将黑色遮盖扁平化到新文件，拒绝覆盖任何已有文件。
+
+本地源码已接通托盘“单次敏感截图”：策略随贴图和脱敏窗口传递，阻止持久化、录制、文字和翻译出口，仅允许主动带标记复制图片。需要本地私密剪贴板协议。因隔离窗口站创建被拒绝，真实 Windows 监听零留存验收仍未完成；原生界面检查使用系统复制替身。此开发中功能不能视为已验证的隐私保证，也无法擦除其他软件已读取的内容、系统换页或崩溃转储。
+
+历史图片右键 → 图片文字索引，可查看等待/识别中/失败/已排除/已索引/无文字状态，并重试、重新识别、排除或恢复。排除会移除当前 OCR 搜索元数据，重启后仍保持排除，直到主动恢复；原图和粘贴格式不变。失败项不再每次重启自动重试。任务令牌阻止排除、删除、换图或数据库迁移后的迟到结果写回；不承诺安全擦除 SQLite 页、数据库备份或此前复制的文字。
+
+文字识别 → 复核表格，使用原始 OCR 文字框（不是纯文本编辑框的修改）将规整、单元格分离的截图重建为可编辑表格，保留原图对照。支持单元格、多行文字和行列校正、带引号转义的 TSV 复制及 Markdown 导出。限制200行、32列、4000格、50万字符，预览图最多3200万像素。合并单元格、折行或多格合并成一条OCR需人工校正。TSV默认给公式前缀加单引号；表格软件导入设置仍可能转换日期、前导零或嵌入控制字符。不增加云端上传或自动入历史。
+
+多图 PDF 提供图片型（默认）与重新本地 OCR 的可搜索型选择，支持0/90/180/270度图像旋转。可搜索路径只识别旋转并以白底扁平化后的实际像素，不接受历史缓存或脱敏前OCR；文字按坐标放在不透明原图下，外观不变但可搜索/提取。空白、OCR失败和缺少字形会回退图片型并在逐页报告中说明；错字和复杂阅读顺序仍需复核。文字识别窗口也可为当前图像打开PDF输出，不把纯文本编辑框内容当作隐藏文字层。
+
+截图、钉图和文件编辑画布可以把选中的源区域做成可导出的局部放大框。放大内容只取原图像素（最近邻），不含其他标注、放大框自身或编辑手柄；移动放大框不会改取样区域。这与取色用的屏幕放大镜不是同一功能。截图工具栏默认放在「…」里，钉图和文件编辑工具栏在绘制行显示。不含该图元的旧工程仍可打开；含该图元的新工程在旧版本中会报不支持的标注类型，而不会变成普通矩形。
+
+截图、钉图和文件编辑画布可以一次拖出「箭头 + 文字气泡」的组合标注：从气泡要放的位置拖到要指的位置，松手即输入说明；文字为空并在别处点击，整条标注作废。气泡移动或文字变长时，箭尾重新落到气泡边缘，尖端仍指向原目标；删除、批量删除和撤销把两半当一个整体，单独的箭头与文字行为不变。截图工具栏默认放在「…」里，钉图和文件编辑工具栏在绘制行显示。工程重新打开后箭头和气泡仍按保存的坐标画在原处，只是不再联动。
+
+编号工具现在可以给每个编号填一句说明（选中编号后在序号面板的输入框里写）。导出时可以选择把说明排成步骤列表放在成图下方或右侧：列表按编号顺序排列，编号和说明始终绑定，删除、撤销、重排编号都不会错配；长说明按像素宽度自动折行，中英日韩混排与显式换行都不会截断。默认「不附带说明」，所以既有截图行为不变；说明随工程保存，钉图克隆也会带走。
+
+截图工具栏「…」里新增「插入图片…」：从本地文件显式插入一张位图（PNG/JPG/BMP/WebP），落在选区中央，可移动、用角手柄等比缩放、删除与撤销，并压在普通标注之上、文字之下。透明像素按原样合成；插入时只读一次像素，之后源文件被移动或删除都不影响成图。超出尺寸/像素/文件上限、文件缺失或不是图片都会被拒绝并给出提示；插图随工程保存，钉图继承也会保留。
+
+## 本次新增截图能力（开发批）
+
+以下能力已通过定向/全量回归与真实原生驱动验收（逐批证据见 docs/screenshot-expansion-progress.md 第二十至第二十九批）：
+
+- **组合标注（TF-0035）**：一次拖出「箭头 + 文字气泡」；移动气泡时箭尾重落、尖端不动，删除/撤销按整体处理。
+- **编号说明列表（TF-0036）**：给每个编号填说明，导出时可排成下方或右侧步骤列表；默认不附带。
+- **插图（TF-0037）**：从文件插入 PNG/JPG/BMP/WebP，等比缩放、可撤销；超限与坏文件会被拒绝。
+- **导出水印（TF-0038）**：文字或图片、四角/居中、不透明度与缩放，默认关闭；设置页有实时预览。
+- **标注样式预设（TF-0039）**：按工具保存/应用/重命名/删除命名样式；可应用到新建默认值或选中的图元（可撤销）。
+- **截图元信息（TF-0040）**：来源/时间/备注，默认全关，只有显式保留的内容才随导出；不读取窗口标题写文件名。
+- **Markdown 问题报告（TF-0041）**：多图集合导出 report.md 与 images/ 相对路径附件，顺序与备注一致。
+- **混合 DPI 验收（TF-0042）**：150% 单屏实测 Win32 / mss / Qt 物理矩形一致；100%/125%/200% 与负坐标副屏未验证。
+- **捕获兼容性（TF-0043）**：普通/被遮挡/最小化窗口与 DWM 合成有实测结论；HDR、硬件加速窗口、受保护内容未验证，不尝试绕过保护。
+
+**未验证/未交付**：真实监听零留存（TF-0030，需要隔离 Windows 环境或明确授权的验证方式）；HDR 与受保护内容；完整安装包主路径（TF-0045 之后补）。

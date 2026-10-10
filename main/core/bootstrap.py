@@ -509,6 +509,11 @@ def run():
     # 2. 模块路径
     ensure_module_path()
 
+    # 2.1 打包自检：不建 GUI、不写用户配置，跑一遍本批核心链路
+    if "--self-check" in sys.argv:
+        from core.packaged_self_check import run_self_check
+        sys.exit(run_self_check())
+
     # 3. 锁定打包资源，防止运行期被系统清理工具删除
     pin_bundled_resources()
 

@@ -1,4 +1,4 @@
-﻿"""
+"""
 智能编辑控制器 - Smart Edit Controller
 基于 QGraphicsItem 架构，提供智能选择和编辑功能
 
@@ -17,7 +17,9 @@ from shiboken6 import isValid as _cpp_object_is_alive
 
 from canvas.items import (
     StrokeItem, RectItem, EllipseItem, ArrowItem, TextItem, NumberItem, MosaicItem, SpotlightItem,
+    MagnifyCalloutItem, ImageStampItem,
 )
+from canvas.items.callout_link import is_callout_part
 from canvas.handle_editor import HandleType, LayerEditor
 from canvas.undo import EditItemCommand
 from core.logger import log_exception
@@ -190,6 +192,10 @@ class SmartEditController(QObject):
             # 自由涂抹跟画笔/荧光笔的自由笔画一样归入 PATH——必须 Ctrl+点击
             # 才能选中，悬停不显示十字光标。
             return ItemType.SHAPE if item.fill_mode() else ItemType.PATH
+        elif isinstance(item, MagnifyCalloutItem):
+            return ItemType.SHAPE
+        elif isinstance(item, ImageStampItem):
+            return ItemType.SHAPE
         else:
             return ItemType.OTHER
 
@@ -199,6 +205,10 @@ class SmartEditController(QObject):
             return "highlighter" if getattr(item, "is_highlighter", False) else "pen"
         if isinstance(item, SpotlightItem):
             return "spotlight"
+        if isinstance(item, MagnifyCalloutItem):
+            return "magnify"
+        if isinstance(item, ImageStampItem):
+            return "insert_image"
         if isinstance(item, RectItem):
             if getattr(item, "is_highlighter_rect", False):
                 return "highlighter"
@@ -253,6 +263,13 @@ class SmartEditController(QObject):
         # 聚光灯工具也选不中普通形状（下面的 tool_to_type 里没有它）
         if isinstance(item, SpotlightItem):
             return self.current_tool_id == "spotlight"
+        if isinstance(item, MagnifyCalloutItem):
+            return self.current_tool_id == "magnify"
+        if isinstance(item, ImageStampItem):
+            return self.current_tool_id == "insert_image"
+        # 组合标注的两半仍是普通箭头/文字：callout 工具下可选，切回箭头/文字工具也照样能选
+        if is_callout_part(item) and self.current_tool_id == "callout":
+            return True
 
         # 1. 画笔/荧光笔路径：必须 Ctrl+点击
         if item_type == ItemType.PATH:
@@ -298,6 +315,13 @@ class SmartEditController(QObject):
 
         if isinstance(item, SpotlightItem):
             return self.current_tool_id == "spotlight"
+        if isinstance(item, MagnifyCalloutItem):
+            return self.current_tool_id == "magnify"
+        if isinstance(item, ImageStampItem):
+            return self.current_tool_id == "insert_image"
+        # 组合标注的两半仍是普通箭头/文字：callout 工具下可选，切回箭头/文字工具也照样能选
+        if is_callout_part(item) and self.current_tool_id == "callout":
+            return True
 
         # 画笔/荧光笔路径：不显示十字光标（需要 Ctrl 才能交互）
         if item_type == ItemType.PATH:

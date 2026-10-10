@@ -10,7 +10,7 @@
 //! 所有帧共享一个全局 palette，用于消除逐帧独立调色板造成的颜色抖动。
 
 use std::fs::File;
-use std::io::BufWriter;
+use std::io::{BufWriter, Write};
 use std::sync::Arc;
 
 use color_quant::NeuQuant;
@@ -47,8 +47,10 @@ pub struct GifExportOptions {
     pub repeat: u16,
     /// 起始帧索引（含，0 表示从头）
     pub frame_start: usize,
-    /// 结束帧索引（含，0 表示到最后一帧）
-    pub frame_end: usize,
+    /// 结束帧索引（含，None 表示最后一帧；Some(0)只选首帧）
+    pub frame_end: Option<usize>,
+    /// 最大输出帧率，0保留时间线（GIF最小延迟20ms）；不复制帧。
+    pub fps: u32,
     /// 鼠标光标 sprite 集合（None = 不叠加光标）
     pub cursor_sprites: Option<CursorSprites>,
     /// 每帧的光标参数（None = 不叠加，长度 = 帧数）
@@ -105,15 +107,14 @@ pub fn export_gif(
         return Err("no frames to export".into());
     }
 
-    // 计算实际导出的帧范围 [start, end]（均含）
-    let start = opts.frame_start.min(total_n - 1);
-    let end = if opts.frame_end == 0 || opts.frame_end >= total_n {
-        total_n - 1
-    } else {
-        opts.frame_end.min(total_n - 1)
-    };
-    let end = end.max(start);
-    let n = end - start + 1; // 实际要导出的帧数
+    let start = opts.frame_start;
+    let end = opts.frame_end.unwrap_or(total_n - 1);
+    if start > end || end >= total_n {
+        return Err("invalid inclusive frame range".into());
+    }
+    let timestamps = store.frame_timestamps();
+    let schedule = frame_schedule(&timestamps, start, end, store.fps(), opts.speed_multiplier, opts.fps)?;
+    let n = schedule.len();
 
     let src_w = store.width();
     let src_h = store.height();
@@ -124,14 +125,13 @@ pub fn export_gif(
     // 重置取消标志
     store.set_cancel(false);
 
-    // ── 预计算每帧延迟 (需要全部时间戳，但只是 u32 很小) ──
-    let timestamps = store.frame_timestamps();
-    if timestamps.len() <= end {
-        return Err(format!(
-            "timestamps count ({}) < required ({})",
-            timestamps.len(),
-            end + 1
-        ));
+    // Fail before allocation/file creation, rather than truncating u32 into GIF u16.
+    if dst_w == 0 || dst_h == 0 || dst_w > 65535 || dst_h > 65535
+        || u64::from(dst_w) * u64::from(dst_h) > 16_000_000 {
+        return Err("GIF output exceeds 16 megapixels or 65535 pixels per edge".into());
+    }
+    if let Some(ref cb) = progress {
+        if !cb(0, n) { store.set_cancel(true); return Err("cancelled".into()); }
     }
 
     let global_palette = build_global_palette(
@@ -172,7 +172,7 @@ pub fn export_gif(
 
         let batch_end = (batch_start + BATCH_SIZE).min(n);
         // 将批次内偏移量转换为真实帧索引
-        let indices: Vec<usize> = (batch_start..batch_end).map(|i| start + i).collect();
+        let indices: Vec<usize> = (batch_start..batch_end).map(|i| schedule[i].0).collect();
 
         // 并行: clone_jpeg → decode → resize → RGBA → cursor blend
         // sprites/infos 通过 Arc 共享，满足 par_iter 的 Send 要求
@@ -204,20 +204,7 @@ pub fn export_gif(
                 return Err("cancelled".into());
             }
 
-            // 计算帧延迟（使用原始帧时间戳，idx 是真实帧索引）
-            let delay_ms = if idx < end {
-                timestamps[idx + 1].saturating_sub(timestamps[idx])
-            } else if n > 1 {
-                let total_dur = timestamps[end].saturating_sub(timestamps[start]);
-                total_dur / (n as u32 - 1)
-            } else {
-                100
-            };
-            // 应用速度倍率（2x → 延迟减半；0.5x → 延迟翻倍）
-            let speed = opts.speed_multiplier.max(0.1);
-            let delay_ms = ((delay_ms as f32 / speed).round() as u32).max(1);
-            // GIF delay 单位是厘秒 (1/100s)，最小 2 (20ms)
-            let delay_cs = ((delay_ms + 5) / 10).max(2) as u16;
+            let delay_cs = schedule[encoded].1;
 
             if let Some(ref prev) = prev_rgba {
                 // ── 帧差分编码 ──
@@ -275,7 +262,63 @@ pub fn export_gif(
         // 本批次内存在此作用域结束后释放
     }
 
+    // BufWriter drop ignores IO errors. Surface final trailer/flush failures.
+    let mut writer = encoder.into_inner().map_err(|e| format!("finish GIF: {e}"))?;
+    writer.flush().map_err(|e| format!("flush GIF: {e}"))?;
     Ok(())
+}
+
+/// Retain source frames, never synthesize intermediate pixels. Quantize absolute
+/// timeline boundaries (not individual delays) so rounding cannot accumulate.
+/// Frames closer than the requested interval/20ms are dropped, not slowed down.
+fn frame_schedule(
+    timestamps: &[u32], start: usize, end: usize, source_fps: u32, speed: f32, fps: u32,
+) -> Result<Vec<(usize, u16)>, String> {
+    if start > end || end >= timestamps.len() || !speed.is_finite()
+        || !(0.1..=16.0).contains(&speed) || fps > 50 {
+        return Err("invalid GIF timing options".into());
+    }
+    if timestamps.windows(2).any(|pair| pair[1] < pair[0]) {
+        return Err("frame timestamps must be monotonic".into());
+    }
+    let speed = f64::from(speed);
+    let base = f64::from(timestamps[start]);
+    // A trimmed last frame retains its real following interval. At the recording
+    // end there is no stop timestamp: use the last positive interval, else FPS.
+    let tail = if end + 1 < timestamps.len() {
+        f64::from(timestamps[end + 1] - timestamps[end])
+    } else if end > 0 && timestamps[end] > timestamps[end - 1] {
+        f64::from(timestamps[end] - timestamps[end - 1])
+    } else {
+        1000.0 / f64::from(source_fps.max(1))
+    };
+    let duration_ms = (f64::from(timestamps[end]) - base + tail) / speed;
+    let total_cs = (duration_ms / 10.0).round().max(2.0) as u64;
+    let interval_ms = if fps == 0 { 20.0 } else { 1000.0 / f64::from(fps) };
+    let mut retained = vec![(start, 0u64)];
+    let mut last_ms = 0.0;
+    for index in start + 1..=end {
+        let ms = (f64::from(timestamps[index]) - base) / speed;
+        let cs = (ms / 10.0).round() as u64;
+        if ms - last_ms + 1e-6 >= interval_ms
+            && cs >= retained.last().unwrap().1 + 2 && cs + 2 <= total_cs {
+            retained.push((index, cs));
+            last_ms = ms;
+        }
+    }
+    let mut schedule = Vec::with_capacity(retained.len());
+    for (position, &(index, cs)) in retained.iter().enumerate() {
+        let next = retained.get(position + 1).map(|p| p.1).unwrap_or(total_cs);
+        let mut delay = next - cs;
+        // Long holds need multiple GIF blocks; never overflow the 16-bit delay.
+        while delay > u16::MAX as u64 {
+            let chunk = (u16::MAX as u64).min(delay - 2);
+            schedule.push((index, chunk as u16));
+            delay -= chunk;
+        }
+        schedule.push((index, delay as u16));
+    }
+    Ok(schedule)
 }
 
 fn render_frame_rgba(
@@ -313,8 +356,8 @@ fn render_frame_rgba(
                 } else {
                     &sprites.burst_right[f]
                 };
-                let bx = ci.x - (burst.w as i32) / 2 + 6;
-                let by = ci.y - (burst.h as i32) / 2 + 6;
+                let bx = ci.x - (burst.w as i32) / 2 + (6.0 * dst_w as f64 / store.width() as f64).round() as i32;
+                let by = ci.y - (burst.h as i32) / 2 + (6.0 * dst_h as f64 / store.height() as f64).round() as i32;
                 alpha_blend_sprite(&mut rgba, dst_w, dst_h, &burst.data, burst.w, burst.h, bx, by);
             }
             if ci.scroll != 0 {
@@ -323,7 +366,8 @@ fn render_frame_rgba(
                 } else {
                     &sprites.scroll_down
                 };
-                let sx = ci.x + sprites.cursor.w as i32 + 10;
+                let sx = ci.x + sprites.cursor.w as i32
+                    + (10.0 * dst_w as f64 / store.width() as f64).round() as i32 - scroll_sp.w as i32 / 2;
                 let sy = ci.y + sprites.cursor.h as i32 / 2 - scroll_sp.h as i32 / 2;
                 alpha_blend_sprite(&mut rgba, dst_w, dst_h, &scroll_sp.data, scroll_sp.w, scroll_sp.h, sx, sy);
             }
@@ -587,6 +631,51 @@ fn alpha_blend_sprite(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn timeline_rounds_boundaries_without_cumulative_drift() {
+        let timestamps: Vec<u32> = (0..300).map(|i| (i as f64 * 1000.0 / 30.0).round() as u32).collect();
+        for (speed, total) in [(1.0, 1000), (2.0, 500), (0.5, 2000)] {
+            let schedule = frame_schedule(&timestamps, 0, 299, 30, speed, 0).unwrap();
+            assert_eq!(schedule.iter().map(|p| u64::from(p.1)).sum::<u64>(), total);
+            assert!(schedule.iter().all(|p| p.1 >= 2));
+            assert_eq!(schedule[0].0, 0);
+        }
+    }
+
+    #[test]
+    fn trim_first_frame_and_single_recording_use_real_duration() {
+        assert_eq!(frame_schedule(&[0, 33, 67], 0, 0, 30, 1.0, 0).unwrap(), vec![(0, 3)]);
+        assert_eq!(frame_schedule(&[300], 0, 0, 10, 1.0, 0).unwrap(), vec![(0, 10)]);
+        assert_eq!(frame_schedule(&[0, 40, 150, 250], 1, 2, 10, 2.0, 0).unwrap(), vec![(1, 6), (2, 5)]);
+    }
+
+    #[test]
+    fn fps_limit_drops_pixels_but_preserves_total_duration() {
+        let times: Vec<u32> = (0..100).map(|i| i * 10).collect();
+        let schedule = frame_schedule(&times, 0, 99, 100, 1.0, 10).unwrap();
+        assert_eq!(schedule.len(), 10);
+        assert_eq!(schedule.iter().map(|p| p.0).collect::<Vec<_>>(), (0..100).step_by(10).collect::<Vec<_>>());
+        assert_eq!(schedule.iter().map(|p| u64::from(p.1)).sum::<u64>(), 100);
+        assert_eq!(frame_schedule(&times, 0, 99, 100, 1.0, 0).unwrap().len(), 50);
+    }
+
+    #[test]
+    fn long_holds_split_without_wrapping_or_tiny_delays() {
+        let schedule = frame_schedule(&[0, 655360], 0, 0, 1, 1.0, 0).unwrap();
+        assert_eq!(schedule.iter().map(|p| u64::from(p.1)).sum::<u64>(), 65536);
+        assert!(schedule.iter().all(|p| p.0 == 0 && p.1 >= 2));
+    }
+
+    #[test]
+    fn invalid_timing_is_rejected() {
+        assert!(frame_schedule(&[], 0, 0, 30, 1.0, 0).is_err());
+        assert!(frame_schedule(&[0, 30], 1, 0, 30, 1.0, 0).is_err());
+        assert!(frame_schedule(&[30, 0], 0, 1, 30, 1.0, 0).is_err());
+        assert!(frame_schedule(&[0], 0, 0, 30, f32::NAN, 0).is_err());
+        assert!(frame_schedule(&[0], 0, 0, 30, 0.0, 0).is_err());
+        assert!(frame_schedule(&[0], 0, 0, 30, 1.0, 51).is_err());
+    }
 
     #[test]
     fn test_rgb_to_rgba() {

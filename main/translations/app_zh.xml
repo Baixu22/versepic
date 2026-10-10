@@ -9,6 +9,134 @@
 <context>
     <name>SettingsDialog</name>
     <message>
+        <source>Include Source Info</source>
+        <translation>包含来源信息</translation>
+    </message>
+    <message>
+        <source>Only the text you keep below is exported. Window titles are never read automatically.</source>
+        <translation>只导出你保留下面的文字；不会自动读取窗口标题。</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>来源</translation>
+    </message>
+    <message>
+        <source>Detect window</source>
+        <translation>检测当前窗口</translation>
+    </message>
+    <message>
+        <source>Include Time</source>
+        <translation>包含时间</translation>
+    </message>
+    <message>
+        <source>Writes the export time next to the image. Off by default.</source>
+        <translation>把导出时间写在图片旁边。默认关闭。</translation>
+    </message>
+    <message>
+        <source>Include Note</source>
+        <translation>包含备注</translation>
+    </message>
+    <message>
+        <source>Your own note; empty notes are not exported.</source>
+        <translation>你自己写的备注；空备注不会导出。</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>备注</translation>
+    </message>
+    <message>
+        <source>Metadata Preview</source>
+        <translation>元信息预览</translation>
+    </message>
+    <message>
+        <source>Shows exactly what will be appended to the exported image.</source>
+        <translation>显示将要附加到导出图片上的内容。</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>图片 (*.png *.jpg *.jpeg *.bmp *.webp);;所有文件 (*)</translation>
+    </message>
+    <message>
+        <source>The preview uses the same renderer as export.</source>
+        <translation>预览与导出使用同一套渲染。</translation>
+    </message>
+    <message>
+        <source>Watermark Preview</source>
+        <translation>水印预览</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>大小</translation>
+    </message>
+    <message>
+        <source>Opacity</source>
+        <translation>不透明度</translation>
+    </message>
+    <message>
+        <source>Watermark Opacity and Size</source>
+        <translation>水印不透明度与大小</translation>
+    </message>
+    <message>
+        <source>Center</source>
+        <translation>居中</translation>
+    </message>
+    <message>
+        <source>Top left</source>
+        <translation>左上</translation>
+    </message>
+    <message>
+        <source>Top right</source>
+        <translation>右上</translation>
+    </message>
+    <message>
+        <source>Bottom left</source>
+        <translation>左下</translation>
+    </message>
+    <message>
+        <source>Bottom right</source>
+        <translation>右下</translation>
+    </message>
+    <message>
+        <source>Watermark Position</source>
+        <translation>水印位置</translation>
+    </message>
+    <message>
+        <source>Choose…</source>
+        <translation>选择…</translation>
+    </message>
+    <message>
+        <source>PNG/JPG/BMP/WebP. Missing or oversized files are ignored.</source>
+        <translation>支持 PNG/JPG/BMP/WebP；文件缺失或过大时按没有水印处理。</translation>
+    </message>
+    <message>
+        <source>Watermark Image</source>
+        <translation>水印图片</translation>
+    </message>
+    <message>
+        <source>Only the text you type here is written; window titles and identities are never read.</source>
+        <translation>只写入你在这里填的文字，不会读取窗口标题或身份信息。</translation>
+    </message>
+    <message>
+        <source>Watermark Text</source>
+        <translation>水印文字</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>图片</translation>
+    </message>
+    <message>
+        <source>Watermark Type</source>
+        <translation>水印类型</translation>
+    </message>
+    <message>
+        <source>Adds a text or image mark to exported images. Off by default; the original image and project are never changed.</source>
+        <translation>给导出的图片叠加文字或图片标识。默认关闭；原图与工程都不会被改写。</translation>
+    </message>
+    <message>
+        <source>Export Watermark</source>
+        <translation>导出水印</translation>
+    </message>
+    <message>
         <source>Shortcuts</source>
         <translation>快捷键</translation>
     </message>
@@ -940,6 +1068,130 @@ Replace it?</source>
         <source>No models returned</source>
         <translation>服务未返回可用模型。</translation>
     </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>截取鼠标所在屏幕</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>截取活动窗口</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>重截上次区域</translation>
+    </message>
+    <message>
+        <source>Quick Capture Result</source>
+        <translation>快捷截取后</translation>
+    </message>
+    <message>
+        <source>Copy also follows the auto-save setting. Ordinary screenshots are unchanged.</source>
+        <translation>直接复制也遵循自动保存设置，不影响普通截图。</translation>
+    </message>
+    <message>
+        <source>Open in editor</source>
+        <translation>进入编辑</translation>
+    </message>
+    <message>
+        <source>Copy directly</source>
+        <translation>直接复制</translation>
+    </message>
+    <message>
+        <source>Saved Image Size</source>
+        <translation>保存图片尺寸</translation>
+    </message>
+    <message>
+        <source>These settings affect saved files; clipboard images keep their original size.</source>
+        <translation>这些设置只影响文件导出；剪贴板位图保持原始尺寸。</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>原始尺寸</translation>
+    </message>
+    <message>
+        <source>50% size</source>
+        <translation>50% 尺寸</translation>
+    </message>
+    <message>
+        <source>Specified width</source>
+        <translation>指定宽度</translation>
+    </message>
+    <message>
+        <source>Image Quality</source>
+        <translation>图片质量</translation>
+    </message>
+    <message>
+        <source>Applies to JPG and WebP only. PNG and BMP remain lossless.</source>
+        <translation>仅适用于 JPG 和 WebP；PNG 和 BMP 保持无损编码。</translation>
+    </message>
+    <message>
+        <source>Output Presets</source>
+        <translation>输出预设</translation>
+    </message>
+    <message>
+        <source>Original PNG</source>
+        <translation>原图 PNG</translation>
+    </message>
+    <message>
+        <source>Share WebP</source>
+        <translation>分享 WebP</translation>
+    </message>
+    <message>
+        <source>Automatic File Names</source>
+        <translation>自动文件命名</translation>
+    </message>
+    <message>
+        <source>Leave empty for the original naming. Fields: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.</source>
+        <translation>留空沿用原命名。支持：{date}、{time}、{timestamp}、{index}、{project}、{prefix}、{suffix}。</translation>
+    </message>
+    <message>
+        <source>Project Name</source>
+        <translation>项目名称</translation>
+    </message>
+    <message>
+        <source>Optional text for the {project} field. Window titles are never added automatically.</source>
+        <translation>用于 {project} 的可选文字；不会自动附加窗口标题。</translation>
+    </message>
+    <message>
+        <source>Date Subfolders</source>
+        <translation>按日期建子目录</translation>
+    </message>
+    <message>
+        <source>Place automatically named images in a YYYY-MM-DD folder.</source>
+        <translation>将自动命名的图片保存到 YYYY-MM-DD 子目录。</translation>
+    </message>
+    <message>
+        <source>File Name Preview</source>
+        <translation>文件名预览</translation>
+    </message>
+    <message>
+        <source>Example for a normal screenshot; capture time and collisions determine the final name.</source>
+        <translation>普通截图命名示例；实际名称取决于截图时间和已有文件。</translation>
+    </message>
+    <message>
+        <source>Invalid template: use only the listed fields, without formatting.</source>
+        <translation>模板无效：只能使用列出的字段，不支持格式化语法。</translation>
+    </message>
+    <message>
+        <source>Invalid File Name Template</source>
+        <translation>文件名模板无效</translation>
+    </message>
+    <message>
+        <source>Use only the listed filename fields, without formatting.</source>
+        <translation>只能使用列出的文件名字段，不支持格式化语法。</translation>
+    </message>
+    <message>
+        <source>Transparent areas use white in JPG, BMP and PDF.</source>
+        <translation>JPG、BMP 和 PDF 会将透明区域合成为白色。</translation>
+    </message>
+    <message>
+        <source>Include Mouse Pointer</source>
+        <translation>包含鼠标指针</translation>
+    </message>
+    <message>
+        <source>Capture the real pointer at its current position. Applies to static captures, not GIF or scrolling capture.</source>
+        <translation>在当前位置截入真实指针；适用于静态截图，不影响 GIF 和滚动截图。</translation>
+    </message>
 </context>
 
 <context>
@@ -972,6 +1224,26 @@ Replace it?</source>
         <source>Please configure DeepL API key in Settings.</source>
         <translation>请先在设置中配置 DeepL API 密钥</translation>
     </message>
+    <message>
+        <source>Save Failed</source>
+        <translation>保存失败</translation>
+    </message>
+    <message>
+        <source>Failed to save image.</source>
+        <translation>无法保存图片。</translation>
+    </message>
+    <message>
+        <source>Screenshot %1</source>
+        <translation>截图 %1</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>暂时无法收集</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images from the collection before adding more.</source>
+        <translation>请先完成导出或移除部分图片，再继续收集。</translation>
+    </message>
 </context>
 
 <context>
@@ -989,6 +1261,14 @@ Replace it?</source>
 <!-- ========== Toolbar ========== -->
 <context>
     <name>Toolbar</name>
+    <message>
+        <source>Presets</source>
+        <translation>预设</translation>
+    </message>
+    <message>
+        <source>Insert image…</source>
+        <translation>插入图片…</translation>
+    </message>
     <message>
         <source>More</source>
         <translation>更多</translation>
@@ -1008,6 +1288,14 @@ Replace it?</source>
     <message>
         <source>Spotlight (dim outside the box)</source>
         <translation>聚光灯（压暗框外区域）</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>局部放大框</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>文字气泡标注（从气泡拖到要指的位置）</translation>
     </message>
     <message>
         <source>Long screenshot (scroll)</source>
@@ -1154,6 +1442,22 @@ Replace it?</source>
         <source>Record</source>
         <translation>录屏</translation>
     </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>收集并继续截图</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>收集并查看图片</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>从冻结画面截取多个区域</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>编辑或保存工程…</translation>
+    </message>
 </context>
 
 <!-- ========== Pin Window ========== -->
@@ -1267,6 +1571,22 @@ Replace it?</source>
         <source>Save Pin Image</source>
         <translation>保存钉图</translation>
     </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>编辑或保存工程…</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>工程暂不可用</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>无法转入可编辑图片，原有内容已保留。</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>对比这张图片…</translation>
+    </message>
 </context>
 
 <!-- ========== Scroll Screenshot (Long Screenshot) ========== -->
@@ -1332,6 +1652,22 @@ Replace it?</source>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
+    <message>
+        <source>Undo last stitch</source>
+        <translation>撤销最近拼接</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>调整最新接缝</translation>
+    </message>
+    <message>
+        <source>Ignore fixed header / scrollbar</source>
+        <translation>忽略固定栏／滚动条</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>自动滚动</translation>
+    </message>
 </context>
 
 <!-- ========== System Tray ========== -->
@@ -1375,6 +1711,51 @@ Replace it?</source>
     <message><source>Choose folder to save pinned images</source><translation>选择保存钉图的文件夹</translation></message>
     <message><source>Save Failed</source><translation>保存失败</translation></message>
     <message><source>Saved {saved} pinned images, failed {failed}.</source><translation>已保存 {saved} 个钉图，失败 {failed} 个。</translation></message>
+    <message>
+        <source>Delayed screenshot</source>
+        <translation>延时截图</translation>
+    </message>
+    <message>
+        <source>After %1 seconds</source>
+        <translation>%1 秒后截图</translation>
+    </message>
+    <message>
+        <source>Quick capture</source>
+        <translation>快捷截取</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>截取鼠标所在屏幕</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>截取活动窗口</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>重截上次区域</translation>
+    </message>
+    <message>
+        <source>Image layout / PDF</source>
+        <translation>多图拼版 / PDF</translation>
+    </message>
+    <message>
+        <source>Arrange pinned images…</source>
+        <translation>整理贴图并导出…</translation>
+    </message>
+    <message>
+        <source>Open image editor…</source>
+        <translation>打开图片编辑器…</translation>
+    </message>
+    <message>
+        <source>Pin workspaces…</source>
+        <translation>贴图工作区…</translation>
+    </message>
+    <message>
+        <source>Compare images…</source>
+        <translation>对比图片…</translation>
+    </message>
+<message><source>Sensitive screenshot (once)</source><translation>单次敏感截图</translation></message>
 </context>
 
 <!-- ========== Main App (Tray Menu) ========== -->
@@ -1435,6 +1816,38 @@ Replace it?</source>
     <message>
         <source>The hotkey may be occupied by other programs. Please try a different combination.</source>
         <translation>可能已被其他应用占用，请更换按键组合。</translation>
+    </message>
+    <message>
+        <source>Screenshot failed</source>
+        <translation>截图失败</translation>
+    </message>
+    <message>
+        <source>Could not capture the screen. Please try again.</source>
+        <translation>未能获取屏幕画面，请重试。</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>截取鼠标所在屏幕</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>截取活动窗口</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>重截上次区域</translation>
+    </message>
+    <message>
+        <source>Capture target is unavailable or moved. Use region capture or choose another target.</source>
+        <translation>目标不可用或已移动，请改用区域截图或重新选择目标。</translation>
+    </message>
+    <message>
+        <source>Save failed</source>
+        <translation>保存失败</translation>
+    </message>
+    <message>
+        <source>Could not save the image. Check the output size, folder permissions and free space.</source>
+        <translation>无法保存图片，请检查输出尺寸、文件夹权限和剩余空间。</translation>
     </message>
 </context>
 
@@ -2124,6 +2537,31 @@ This action cannot be undone.</source>
         <source>Use Move Up / Move Down in the context menu</source>
         <translation>右键记录，选择上移或下移调整顺序</translation>
     </message>
+    <message>
+        <source>Add to image layout / PDF</source>
+        <translation>添加到拼版 / PDF</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>对比这张图片…</translation>
+    </message>
+<message><source>OCR: waiting</source><translation>OCR：等待识别</translation></message>
+<message><source>OCR: recognizing</source><translation>OCR：正在识别</translation></message>
+<message><source>OCR: failed</source><translation>OCR：识别失败</translation></message>
+<message><source>OCR: excluded</source><translation>OCR：已排除</translation></message>
+<message><source>OCR: indexed</source><translation>OCR：已索引</translation></message>
+<message><source>OCR: no text</source><translation>OCR：未发现文字</translation></message>
+<message><source>OCR engine unavailable</source><translation>OCR 引擎不可用</translation></message>
+<message><source>Image could not be read</source><translation>无法读取图片</translation></message>
+<message><source>OCR recognition failed</source><translation>OCR 识别失败</translation></message>
+<message><source>OCR interrupted; waiting to retry</source><translation>OCR 已中断，等待重试</translation></message>
+<message><source>Restore image text indexing</source><translation>恢复此图文字索引</translation></message>
+<message><source>Retry failed OCR</source><translation>重试失败的识别</translation></message>
+<message><source>Recognize image text again</source><translation>重新识别此图文字</translation></message>
+<message><source>Exclude image from text index</source><translation>从文字索引排除此图</translation></message>
+<message><source>Image text index</source><translation>图片文字索引</translation></message>
+<message><source>Remove stored OCR text for this image and stop automatic indexing until restored? Original image and paste formats stay unchanged. Database backups and previously copied text are not erased.</source><translation>删除此图已存的 OCR 文字并停止自动索引，直到主动恢复？原图和粘贴格式不变；不会擦除数据库备份或此前复制的文字。</translation></message>
+<message><source>The image index could not be updated. Check that the item and database are still available.</source><translation>无法更新图片索引，请检查条目和数据库是否仍可用。</translation></message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
@@ -2650,6 +3088,30 @@ This action cannot be undone.</source>
 
 <context>
     <name>ArrowSettingsPanel</name>
+    <message>
+        <source>Step note</source>
+        <translation>步骤说明</translation>
+    </message>
+    <message>
+        <source>Caption shown in the exported step list</source>
+        <translation>导出步骤列表时显示的说明</translation>
+    </message>
+    <message>
+        <source>No caption list</source>
+        <translation>不附带说明</translation>
+    </message>
+    <message>
+        <source>Caption list below</source>
+        <translation>说明列表在下方</translation>
+    </message>
+    <message>
+        <source>Caption list at right</source>
+        <translation>说明列表在右侧</translation>
+    </message>
+    <message>
+        <source>Export numbered captions as a step list</source>
+        <translation>把编号说明导出为步骤列表</translation>
+    </message>
     <message>
         <source>Solid Arrow</source>
         <translation>实心箭头</translation>
@@ -3417,6 +3879,10 @@ This action cannot be undone.</source>
     <message><source>Rounded Corners</source><translation>圆角截图</translation></message>
     <message><source>Lock Aspect Ratio</source><translation>锁定纵横比</translation></message>
     <message><source>Refresh Background</source><translation>刷新背景</translation></message>
+    <message>
+        <source>Exact Region</source>
+        <translation>精确选区</translation>
+    </message>
 </context>
 
 <!-- ========== Border Shadow Popup ========== -->
@@ -3787,6 +4253,10 @@ SOFTWARE.</translation></message>
 <context>
     <name>ToolbarLayoutDialog</name>
     <message>
+        <source>Insert image…</source>
+        <translation>插入图片…</translation>
+    </message>
+    <message>
         <source>Customize Toolbar</source>
         <translation>自定义工具栏</translation>
     </message>
@@ -3863,8 +4333,20 @@ SOFTWARE.</translation></message>
         <translation>聚光灯</translation>
     </message>
     <message>
+        <source>Magnify region</source>
+        <translation>局部放大框</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>文字气泡标注（从气泡拖到要指的位置）</translation>
+    </message>
+    <message>
         <source>Arrow</source>
         <translation>箭头</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>文字气泡标注</translation>
     </message>
     <message>
         <source>Number</source>
@@ -3905,6 +4387,22 @@ SOFTWARE.</translation></message>
     <message>
         <source>Confirm</source>
         <translation>确定</translation>
+    </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>收集并继续截图</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>收集并查看图片</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>从冻结画面截取多个区域</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>编辑或保存工程…</translation>
     </message>
 </context>
 <context>
@@ -3972,6 +4470,10 @@ SOFTWARE.</translation></message>
         <source>Copied</source>
         <translation>已复制</translation>
     </message>
+<message><source>Review table…</source><translation>复核表格…</translation></message>
+<message><source>Table preview unavailable. Use an image up to 32 megapixels with positioned text.</source><translation>表格预览不可用，请使用不超过 3200 万像素且带文字坐标的图片。</translation></message>
+<message><source>PDF output…</source><translation>PDF 输出…</translation></message>
+<message><source>Current image</source><translation>当前图像</translation></message>
 </context>
 <context>
     <name>InAppShortcut</name>
@@ -4067,6 +4569,106 @@ SOFTWARE.</translation></message>
     <message><source>%1 areas covered</source><translation>已遮盖 %1 个区域</translation></message>
     <message><source>Recognizing...</source><translation>正在识别…</translation></message>
     <message><source>Copied</source><translation>已复制</translation></message>
+    <message>
+        <source>Chinese IDs (date + checksum)</source>
+        <translation>身份证号（日期与校验码）</translation>
+    </message>
+    <message>
+        <source>Bank cards (Luhn checksum)</source>
+        <translation>银行卡号（Luhn 校验）</translation>
+    </message>
+    <message>
+        <source>Try OCR O/I/l substitutions</source>
+        <translation>尝试 OCR O/I/l 字符纠错</translation>
+    </message>
+    <message>
+        <source>Rule presets</source>
+        <translation>规则预设</translation>
+    </message>
+    <message>
+        <source>Save rules…</source>
+        <translation>保存规则…</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>删除预设</translation>
+    </message>
+    <message>
+        <source>Presets save rule switches only, never keywords, OCR text or images.</source>
+        <translation>预设只保存规则开关，不保存关键词、OCR 文字或图像。</translation>
+    </message>
+    <message>
+        <source>Candidates are not proof of identity or complete privacy detection. OCR errors, split lines and unchecked rules can miss data. Review every line; uncheck false positives and drag to cover missed areas. Exports flatten black covers into new files at this resolution.</source>
+        <translation>候选不代表身份验证，也不保证检出全部隐私。OCR 错字、分行和未启用的规则可能漏报。请逐行复核，取消误报并拖动补盖遗漏区域。导出按当前原始尺寸生成实色遮盖的新文件。</translation>
+    </message>
+    <message>
+        <source>Current rules</source>
+        <translation>当前规则</translation>
+    </message>
+    <message>
+        <source>Contact details</source>
+        <translation>联系信息</translation>
+    </message>
+    <message>
+        <source>Identity and bank cards</source>
+        <translation>身份证与银行卡</translation>
+    </message>
+    <message>
+        <source>All checks (strict)</source>
+        <translation>全部校验（严格）</translation>
+    </message>
+    <message>
+        <source>Saved rule presets could not be read. Existing settings were not changed.</source>
+        <translation>无法读取规则预设，原有设置未改动。</translation>
+    </message>
+    <message>
+        <source>Save rule preset</source>
+        <translation>保存规则预设</translation>
+    </message>
+    <message>
+        <source>Preset name (rule switches only)</source>
+        <translation>预设名称（只保存规则开关）</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>预设名称</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <source>Rule switches saved. Keywords and image data were not saved.</source>
+        <translation>规则开关已保存，未保存关键词或图像数据。</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Use a unique name (1–40 characters), up to 20 presets, and writable settings.</source>
+        <translation>无法保存预设。请使用不重复的 1–40 字名称；最多 20 个预设，且设置需可写入。</translation>
+    </message>
+    <message>
+        <source>Delete only this saved rule combination? Images and history will not be changed.</source>
+        <translation>只删除这个已保存的规则组合？图像与历史记录不会改变。</translation>
+    </message>
+    <message>
+        <source>Preset deleted. Current switches and images were kept.</source>
+        <translation>预设已删除，当前开关和图像未改动。</translation>
+    </message>
+    <message>
+        <source>Could not delete preset. Existing data was kept.</source>
+        <translation>无法删除预设，已有数据已保留。</translation>
+    </message>
+    <message>
+        <source>Choose a new filename. Redaction never overwrites an existing file.</source>
+        <translation>请选择新文件名，脱敏导出不覆盖任何已有文件。</translation>
+    </message>
+    <message>
+        <source>Save failed. Choose a new PNG, JPEG or PDF file.</source>
+        <translation>保存失败，请选择新的 PNG、JPEG 或 PDF 文件。</translation>
+    </message>
 </context>
 <context>
     <name>ClipboardWindow</name>
@@ -4131,4 +4733,1657 @@ SOFTWARE.</translation></message>
         <translation>重置截图设置</translation>
     </message>
 </context>
+<context>
+    <name>CaptureCountdown</name>
+    <message>
+        <source>Open a menu or tooltip. Esc cancels.</source>
+        <translation>现在可展开菜单或提示，按 Esc 取消。</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Screenshot in %1 s</source>
+        <translation>%1 秒后截图</translation>
+    </message>
+</context>
+<context>
+    <name>RegionGeometryDialog</name>
+    <message>
+        <source>Exact Region</source>
+        <translation>精确选区</translation>
+    </message>
+    <message>
+        <source>Physical pixels. Negative coordinates are valid on other screens.</source>
+        <translation>使用物理像素；其他屏幕上的负坐标也是有效坐标。</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X 坐标</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y 坐标</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>宽度</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>高度</translation>
+    </message>
+    <message>
+        <source>Aspect Ratio</source>
+        <translation>纵横比</translation>
+    </message>
+    <message>
+        <source>Free</source>
+        <translation>自由</translation>
+    </message>
+    <message>
+        <source>Current ratio</source>
+        <translation>保持当前比例</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <source>Ratio presets use whole-pixel multiples.</source>
+        <translation>比例预设会调整为整数像素倍数。</translation>
+    </message>
+    <message>
+        <source>The region or ratio does not fit the captured desktop.</source>
+        <translation>选区或比例超出当前已捕获的桌面范围。</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>输出尺寸：%1 × %2 像素</translation>
+    </message>
+    <message>
+        <source> (including border/shadow)</source>
+        <translation>（含描边／阴影）</translation>
+    </message>
+    <message>
+        <source>Saved Regions</source>
+        <translation>命名区域</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>预设名称</translation>
+    </message>
+    <message>
+        <source>Save preset</source>
+        <translation>保存预设</translation>
+    </message>
+    <message>
+        <source>Update preset</source>
+        <translation>更新预设</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>重命名</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>删除预设</translation>
+    </message>
+    <message>
+        <source>Preset changes are saved immediately; Apply changes the selection.</source>
+        <translation>预设操作立即保存；“应用”只更新当前选区。</translation>
+    </message>
+    <message>
+        <source>Saved region data is invalid. Existing data was left unchanged.</source>
+        <translation>区域预设数据无效，已有数据未被改动。</translation>
+    </message>
+    <message>
+        <source>No preset</source>
+        <translation>不使用预设</translation>
+    </message>
+    <message>
+        <source>Saved region loaded.</source>
+        <translation>已载入区域预设。</translation>
+    </message>
+    <message>
+        <source>Screen layout or scale changed. Review the current region and update the preset, or choose No preset.</source>
+        <translation>屏幕布局或缩放已改变，请检查当前选区并更新预设，或选择“不使用预设”。</translation>
+    </message>
+    <message>
+        <source>Preset saved.</source>
+        <translation>预设已保存。</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Check the name and settings location.</source>
+        <translation>无法保存预设，请检查名称和设置目录。</translation>
+    </message>
+    <message>
+        <source>Preset renamed.</source>
+        <translation>预设已重命名。</translation>
+    </message>
+    <message>
+        <source>Could not rename preset. Names must be unique.</source>
+        <translation>无法重命名，预设名称不能重复。</translation>
+    </message>
+    <message>
+        <source>Preset deleted.</source>
+        <translation>预设已删除。</translation>
+    </message>
+    <message>
+        <source>Could not delete preset.</source>
+        <translation>无法删除预设。</translation>
+    </message>
+    <message>
+        <source>Saved file: %1 × %2 px</source>
+        <translation>保存文件：%1 × %2 像素</translation>
+    </message>
+    <message>
+        <source>Saved file would be too large. Reduce the output width.</source>
+        <translation>保存文件过大，请减小输出宽度。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageSourcePicker</name>
+    <message>
+        <source>Choose Images</source>
+        <translation>选择图片</translation>
+    </message>
+    <message>
+        <source>Search image history</source>
+        <translation>搜索历史图片</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+    <message>
+        <source>Load more</source>
+        <translation>加载更多</translation>
+    </message>
+    <message>
+        <source>Add selected</source>
+        <translation>添加选中项</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Ctrl / Shift selects multiple images. Nothing is copied or deleted.</source>
+        <translation>按 Ctrl / Shift 多选；此操作不会复制或删除历史。</translation>
+    </message>
+    <message>
+        <source>Pinned image %1</source>
+        <translation>贴图 %1</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>图片</translation>
+    </message>
+    <message>
+        <source>Showing up to 1000 records. Search to narrow the list.</source>
+        <translation>最多显示 1000 条记录，请搜索缩小范围。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageLayoutDialog</name>
+    <message>
+        <source>Markdown report…</source>
+        <translation>Markdown 报告…</translation>
+    </message>
+    <message>
+        <source>Image Layout and PDF</source>
+        <translation>多图拼版与 PDF</translation>
+    </message>
+    <message>
+        <source>Add history images</source>
+        <translation>添加历史图片</translation>
+    </message>
+    <message>
+        <source>Add pinned images</source>
+        <translation>添加贴图</translation>
+    </message>
+    <message>
+        <source>Add image files</source>
+        <translation>添加图片文件</translation>
+    </message>
+    <message>
+        <source>Combined image</source>
+        <translation>拼成一张图片</translation>
+    </message>
+    <message>
+        <source>One image per PDF page</source>
+        <translation>每张图片一页 PDF</translation>
+    </message>
+    <message>
+        <source>Vertical</source>
+        <translation>上下拼接</translation>
+    </message>
+    <message>
+        <source>Horizontal</source>
+        <translation>左右拼接</translation>
+    </message>
+    <message>
+        <source>Original widths</source>
+        <translation>各自原宽</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation>白色</translation>
+    </message>
+    <message>
+        <source>Transparent</source>
+        <translation>透明</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>深色</translation>
+    </message>
+    <message>
+        <source>Original size (96 pixels/inch)</source>
+        <translation>原图尺寸（96 像素/英寸）</translation>
+    </message>
+    <message>
+        <source>A4</source>
+        <translation>A4</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation>Letter</translation>
+    </message>
+    <message>
+        <source>Portrait</source>
+        <translation>纵向</translation>
+    </message>
+    <message>
+        <source>Landscape</source>
+        <translation>横向</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation>输出类型</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>拼接方向</translation>
+    </message>
+    <message>
+        <source>Common width (px)</source>
+        <translation>统一宽度（像素）</translation>
+    </message>
+    <message>
+        <source>Gap (px)</source>
+        <translation>图片间距（像素）</translation>
+    </message>
+    <message>
+        <source>Padding (px)</source>
+        <translation>画布留白（像素）</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation>画布底色</translation>
+    </message>
+    <message>
+        <source>PDF paper</source>
+        <translation>PDF 纸张</translation>
+    </message>
+    <message>
+        <source>Orientation</source>
+        <translation>纸张方向</translation>
+    </message>
+    <message>
+        <source>Page margins</source>
+        <translation>页边距</translation>
+    </message>
+    <message>
+        <source>Drag images to reorder. Layout size is used exactly; file quality follows settings. PDF pages have a white background and no OCR text layer.</source>
+        <translation>拖动图片调整顺序。按预览尺寸导出，文件质量沿用设置。PDF 使用白底，不含 OCR 文字层。</translation>
+    </message>
+    <message>
+        <source>Image order</source>
+        <translation>图片顺序</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>上移</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>下移</translation>
+    </message>
+    <message>
+        <source>Remove image</source>
+        <translation>移除图片</translation>
+    </message>
+    <message>
+        <source>Clear collection</source>
+        <translation>清空收集篮</translation>
+    </message>
+    <message>
+        <source>Add images to begin. Up to 50 images and 64 megapixels in total.</source>
+        <translation>添加图片开始；最多 50 张、合计 6400 万像素。</translation>
+    </message>
+    <message>
+        <source>Cancel export</source>
+        <translation>取消导出</translation>
+    </message>
+    <message>
+        <source>Export…</source>
+        <translation>导出…</translation>
+    </message>
+    <message>
+        <source>Image %1</source>
+        <translation>图片 %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>贴图</translation>
+    </message>
+    <message>
+        <source>%1 image(s) could not be added: missing, invalid, or over the collection limit.</source>
+        <translation>%1 张图片未能添加：数据失效、格式无效或超过收集限制。</translation>
+    </message>
+    <message>
+        <source>%1 pages · Previewing page %2</source>
+        <translation>共 %1 页 · 正在预览第 %2 页</translation>
+    </message>
+    <message>
+        <source>%1 images · %2 × %3 px</source>
+        <translation>%1 张图片 · %2 × %3 像素</translation>
+    </message>
+    <message>
+        <source>This layout exceeds the image or page size limit. Reduce the width or choose A4 / Letter.</source>
+        <translation>超出图片或页面尺寸限制，请减小宽度或选择 A4 / Letter。</translation>
+    </message>
+    <message>
+        <source>Export collection</source>
+        <translation>导出图片集合</translation>
+    </message>
+    <message>
+        <source>Choose a file extension matching the selected output.</source>
+        <translation>请选择与输出类型一致的文件扩展名。</translation>
+    </message>
+    <message>
+        <source>Exporting…</source>
+        <translation>正在导出…</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>正在取消…</translation>
+    </message>
+    <message>
+        <source>Export saved.</source>
+        <translation>已导出文件。</translation>
+    </message>
+    <message>
+        <source>Export cancelled.</source>
+        <translation>导出已取消。</translation>
+    </message>
+    <message>
+        <source>Export failed. Check image limits, folder permissions and free space.</source>
+        <translation>导出失败，请检查图片限制、目录权限和剩余空间。</translation>
+    </message>
+    <message>
+        <source>Choose Images</source>
+        <translation>选择图片</translation>
+    </message>
+<message><source>%1° clockwise</source><translation>顺时针 %1°</translation></message>
+<message><source>Searchable PDF (fresh local OCR)</source><translation>可搜索 PDF（重新本地识别）</translation></message>
+<message><source>Rotate PDF images</source><translation>旋转 PDF 图像</translation></message>
+<message><source>PDF text report</source><translation>PDF 文字层报告</translation></message>
+<message><source>Searchable PDF re-runs OCR on the exact rotated output pixels. Never reuses cached text. Blank/failed pages or missing glyphs fall back to image-only and are reported. OCR can be wrong; review the result. Redacted exports never reuse pre-redaction text.</source><translation>可搜索 PDF 会对旋转后的实际输出像素重新 OCR，不复用缓存文字。空白、识别失败或缺字页面会回退为图片并报告。OCR 可能有误，请复核；脱敏图不复用遮盖前文字。</translation></message>
+<message><source>Recognizing PDF pages and exporting… Cancellation waits for the current local OCR call.</source><translation>正在识别并导出 PDF… 取消需等待当前本地 OCR 调用结束。</translation></message>
+<message><source>PDF saved: %1 of %2 pages have searchable text. Review the PDF text report.</source><translation>PDF 已保存：%2 页中 %1 页有可搜索文字。请查看文字层报告。</translation></message>
+<message><source>OCR failed or unavailable</source><translation>OCR 失败或不可用</translation></message>
+<message><source>Invalid OCR result</source><translation>无效的 OCR 结果</translation></message>
+<message><source>Text limit exceeded</source><translation>超过文字量限制</translation></message>
+<message><source>Unsupported or invalid text box</source><translation>不支持或无效的文字框</translation></message>
+<message><source>Low confidence text</source><translation>低置信文字</translation></message>
+<message><source>Missing font glyphs</source><translation>缺少字体字形</translation></message>
+<message><source>Page %1: %2 text lines</source><translation>第 %1 页：%2 行文字</translation></message>
+<message><source>Image-only page</source><translation>图片型页面</translation></message>
+<message><source>No text recognized</source><translation>未识别到文字</translation></message>
+</context>
+<context>
+    <name>MultiRegionDialog</name>
+    <message>
+        <source>Multiple Regions</source>
+        <translation>多区域截图</translation>
+    </message>
+    <message>
+        <source>Drag to add regions from this frozen frame. Overlaps are exported separately. Existing annotations are not included.</source>
+        <translation>拖动添加冻结画面中的区域；重叠区域分别导出，不包含之前的标注。</translation>
+    </message>
+    <message>
+        <source>Region order</source>
+        <translation>区域顺序</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>上移</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>下移</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>移除</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>撤销</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation>重做</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>清空</translation>
+    </message>
+    <message>
+        <source>Move controls</source>
+        <translation>移动控制面板</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Collect regions</source>
+        <translation>收集这些区域</translation>
+    </message>
+    <message>
+        <source>Region is too small or exceeds the remaining collection capacity.</source>
+        <translation>区域过小，或超过收集篮剩余容量。</translation>
+    </message>
+    <message>
+        <source>%1 regions · Tab hides controls · Enter collects · Esc cancels</source>
+        <translation>%1 个区域 · Tab 隐藏面板 · Enter 收集 · Esc 取消</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenshotWindow</name>
+    <message>
+        <source>Insert image</source>
+        <translation>插入图片</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>图片 (*.png *.jpg *.jpeg *.bmp *.webp);;所有文件 (*)</translation>
+    </message>
+    <message>
+        <source>Insert image failed</source>
+        <translation>插入图片失败</translation>
+    </message>
+    <message>
+        <source>The image is missing, too large, or not a supported bitmap.</source>
+        <translation>图片不存在、过大或不是支持的位图格式。</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>暂时无法收集</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images before selecting more regions.</source>
+        <translation>请先完成导出或移除部分图片，再选择更多区域。</translation>
+    </message>
+    <message>
+        <source>Region %1</source>
+        <translation>区域 %1</translation>
+    </message>
+    <message>
+        <source>Regions could not be collected. Existing images were kept.</source>
+        <translation>未能收集这些区域，已有图片未被改动。</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>工程暂不可用</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>无法转入可编辑图片，原有内容已保留。</translation>
+    </message>
+</context>
+<context>
+    <name>StitchAdjustmentDialog</name>
+    <message>
+        <source>Matching exclusions</source>
+        <translation>匹配忽略区</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>调整最新接缝</translation>
+    </message>
+    <message>
+        <source>Highlighted pixels are excluded from matching only, not removed from the output. Coordinates follow the original screen, even for horizontal or reverse capture.</source>
+        <translation>高亮区域只从匹配中排除，不会裁掉输出像素。坐标始终对应原屏幕，包括横向和反向截图。</translation>
+    </message>
+    <message>
+        <source>Review the two latest frames. Overlap counts pixels already present; adjust it to remove duplicate rows or restore missing content. Capturing is paused while this window is open.</source>
+        <translation>检查最近两帧。重叠值表示已有的像素长度，可调整重复或缺失内容。此窗口打开期间暂停采集。</translation>
+    </message>
+    <message>
+        <source>Click to set header height</source>
+        <translation>点击设置顶部忽略高度</translation>
+    </message>
+    <message>
+        <source>Click to set scrollbar width</source>
+        <translation>点击设置右侧忽略宽度</translation>
+    </message>
+    <message>
+        <source>Top exclusion (px)</source>
+        <translation>顶部忽略（像素）</translation>
+    </message>
+    <message>
+        <source>Right exclusion (px)</source>
+        <translation>右侧忽略（像素）</translation>
+    </message>
+    <message>
+        <source>Preview action</source>
+        <translation>预览点击操作</translation>
+    </message>
+    <message>
+        <source>Append below / right</source>
+        <translation>新帧在下方／右方</translation>
+    </message>
+    <message>
+        <source>Prepend above / left</source>
+        <translation>新帧在上方／左方</translation>
+    </message>
+    <message>
+        <source>Overlap (px)</source>
+        <translation>重叠长度（像素）</translation>
+    </message>
+    <message>
+        <source>New frame direction</source>
+        <translation>新帧方向</translation>
+    </message>
+    <message>
+        <source>No exclusions</source>
+        <translation>不忽略任何区域</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <source>These settings affect future matching; the existing stitched image stays unchanged.</source>
+        <translation>这些设置影响后续匹配；已有拼接图片保持不变。</translation>
+    </message>
+    <message>
+        <source>New content: %1 px. Red line marks the join; only this preview includes it.</source>
+        <translation>新增内容：%1 像素。红线标记接缝，仅在此预览显示。</translation>
+    </message>
+</context>
+<context>
+    <name>ScrollCaptureWindow</name>
+    <message>
+        <source>Undo last stitch (%1 retained; up to 3 checkpoints / 96 MiB)</source>
+        <translation>撤销最近拼接（保留 %1 份；最多 3 份／96 MiB）</translation>
+    </message>
+    <message>
+        <source>No reliable overlap. Scroll less and retry, or adjust the latest seam.</source>
+        <translation>未找到可靠重叠。请减小滚动幅度重试，或手动调整接缝。</translation>
+    </message>
+    <message>
+        <source>The frame is unchanged. Scroll to new content before capturing again.</source>
+        <translation>画面未变化，请滚动到新内容后再次采集。</translation>
+    </message>
+    <message>
+        <source>Could not stitch this frame. Existing content was kept; reduce the region or repair the seam.</source>
+        <translation>本帧拼接失败，已有内容已保留；请缩小区域或修正接缝。</translation>
+    </message>
+    <message>
+        <source>Last stitch undone. Return the page to this preview before continuing.</source>
+        <translation>已撤销最近拼接。继续前请将页面滚回此预览对应的位置。</translation>
+    </message>
+    <message>
+        <source>Undo all seams or start a new capture before switching direction.</source>
+        <translation>切换方向前，请撤销所有接缝或重新开始截图。</translation>
+    </message>
+    <message>
+        <source>Matching exclusions updated. Existing output pixels were not cropped.</source>
+        <translation>匹配忽略区已更新，已有输出像素未被裁剪。</translation>
+    </message>
+    <message>
+        <source>Seam updated. Check the preview before continuing.</source>
+        <translation>接缝已更新，继续前请检查预览。</translation>
+    </message>
+    <message>
+        <source>Adjustment failed. Existing content was kept.</source>
+        <translation>调整失败，已有内容保持不变。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: the cancel key is unavailable.</source>
+        <translation>无法启动自动滚动：取消按键不可用。</translation>
+    </message>
+    <message>
+        <source>Activate the target and put the pointer inside the capture region within 3 seconds. Esc stops.</source>
+        <translation>请在3秒内激活目标窗口并将鼠标放在选区内，Esc停止。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped because the cancel key became unavailable.</source>
+        <translation>取消按键失效，自动滚动已停止。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the starting frame did not match the preview.</source>
+        <translation>自动滚动已停止：起始画面与预览不匹配。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the time limit.</source>
+        <translation>自动滚动已达到时间上限。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the frame did not change (end of page or unsupported target).</source>
+        <translation>自动滚动已停止：画面未变化（已到底或目标不支持）。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: overlap failed. Review or repair the last seam.</source>
+        <translation>自动滚动已停止：重叠匹配失败，请检查或修复最新接缝。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling is running. Esc or Stop ends it without discarding images.</source>
+        <translation>正在自动滚动；Esc或“停止”结束，不丢弃已采集图片。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: target focus, position, or input access changed.</source>
+        <translation>自动滚动已停止：目标焦点、位置或输入权限发生变化。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped. Existing content was kept.</source>
+        <translation>自动滚动已停止，已有内容保留。</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>自动滚动</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: check the current direction and starting frame.</source>
+        <translation>无法启动自动滚动，请检查当前方向和起始画面。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the frame limit.</source>
+        <translation>自动滚动已达到次数上限。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the image length limit.</source>
+        <translation>自动滚动已达到图片长度上限。</translation>
+    </message>
+</context>
+<context>
+    <name>AutoScrollDialog</name>
+    <message>
+        <source>Automatic scrolling</source>
+        <translation>自动滚动</translation>
+    </message>
+    <message>
+        <source>After Start, activate the intended app and put the pointer inside the selected capture area within 3 seconds. Scrolling is addressed only to that window. Keep it visible and focused. Esc stops; some applications may not support this input.</source>
+        <translation>点击开始后，请在3秒内激活目标应用，并将鼠标放在选区内。仅向该窗口发送滚动。请保持窗口可见且位于前台。Esc停止；部分应用可能不支持这种输入。</translation>
+    </message>
+    <message>
+        <source>Down / right</source>
+        <translation>向下／向右</translation>
+    </message>
+    <message>
+        <source>Up / left</source>
+        <translation>向上／向左</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>方向</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Start in 3 seconds</source>
+        <translation>3秒后开始</translation>
+    </message>
+    <message>
+        <source>Wheel notches per step</source>
+        <translation>每次滚动格数</translation>
+    </message>
+    <message>
+        <source>Wait after each scroll (ms)</source>
+        <translation>滚动后等待（毫秒）</translation>
+    </message>
+    <message>
+        <source>Maximum scroll steps</source>
+        <translation>最多滚动次数</translation>
+    </message>
+    <message>
+        <source>Maximum duration (seconds)</source>
+        <translation>最长运行时间（秒）</translation>
+    </message>
+    <message>
+        <source>Maximum image length (px)</source>
+        <translation>最长图片长度（像素）</translation>
+    </message>
+</context>
+<context>
+    <name>GeometryEditor</name>
+    <message>
+        <source>Crop and Resize</source>
+        <translation>裁剪与调整尺寸</translation>
+    </message>
+    <message>
+        <source>Crop coordinates refer to the original image. Rotation and flipping preserve editable annotations. Output width 0 keeps the cropped image size.</source>
+        <translation>裁剪坐标以原图为准。旋转和翻转保留可编辑标注；输出宽度为0时保持裁剪后的尺寸。</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X 坐标</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y 坐标</translation>
+    </message>
+    <message>
+        <source>Crop width</source>
+        <translation>裁剪宽度</translation>
+    </message>
+    <message>
+        <source>Crop height</source>
+        <translation>裁剪高度</translation>
+    </message>
+    <message>
+        <source>Output width (0 = original)</source>
+        <translation>输出宽度（0为原尺寸）</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>输出：%1 × %2 像素</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>裁剪或输出尺寸超出图片限制。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageEditor</name>
+    <message>
+        <source>Crop</source>
+        <translation>裁剪</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>裁剪或输出尺寸超出图片限制。</translation>
+    </message>
+    <message>
+        <source>Image Editor</source>
+        <translation>图片编辑器</translation>
+    </message>
+    <message>
+        <source>Crop by dragging</source>
+        <translation>拖动裁剪</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>适应窗口</translation>
+    </message>
+    <message>
+        <source>Open or drop one PNG, JPEG, BMP or WebP image. The source file is never overwritten.</source>
+        <translation>打开或拖入一张 PNG、JPEG、BMP 或 WebP 图片。不会覆盖原文件。</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>取消保存</translation>
+    </message>
+    <message>
+        <source>Unsaved image</source>
+        <translation>图片尚未保存</translation>
+    </message>
+    <message>
+        <source>Discard the unsaved edits? The source image will stay unchanged.</source>
+        <translation>放弃未保存的修改吗？原图片保持不变。</translation>
+    </message>
+    <message>
+        <source>Open image</source>
+        <translation>打开图片</translation>
+    </message>
+    <message>
+        <source>Open image…</source>
+        <translation>打开图片…</translation>
+    </message>
+    <message>
+        <source>Save as…</source>
+        <translation>另存为…</translation>
+    </message>
+    <message>
+        <source>Recognize text</source>
+        <translation>识别文字</translation>
+    </message>
+    <message>
+        <source>Crop / resize…</source>
+        <translation>裁剪／尺寸…</translation>
+    </message>
+    <message>
+        <source>Rotate left</source>
+        <translation>向左旋转</translation>
+    </message>
+    <message>
+        <source>Rotate right</source>
+        <translation>向右旋转</translation>
+    </message>
+    <message>
+        <source>Flip horizontal</source>
+        <translation>水平翻转</translation>
+    </message>
+    <message>
+        <source>Flip vertical</source>
+        <translation>垂直翻转</translation>
+    </message>
+    <message>
+        <source>Could not open image. Use one supported local image within 32 megapixels and 64 MiB.</source>
+        <translation>无法打开图片，请选择支持的本地图片，最多3200万像素、64 MiB。</translation>
+    </message>
+    <message>
+        <source>Could not allocate the editor canvas. Existing edits were kept.</source>
+        <translation>无法创建编辑画布，已有修改已保留。</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Cropping preserves hidden source pixels only in this session.</source>
+        <translation>输出：%1 × %2 像素 · 裁剪隐藏的原图像素仅在当前会话保留。</translation>
+    </message>
+    <message>
+        <source>Transform image</source>
+        <translation>变换图片</translation>
+    </message>
+    <message>
+        <source>Crop and resize</source>
+        <translation>裁剪与调整尺寸</translation>
+    </message>
+    <message>
+        <source>Save edited image</source>
+        <translation>保存编辑后的图片</translation>
+    </message>
+    <message>
+        <source>Choose a different file. The source image cannot be overwritten.</source>
+        <translation>请选择不同的文件，不允许覆盖原图片。</translation>
+    </message>
+    <message>
+        <source>Choose PNG, JPEG, WebP, BMP or PDF for the output.</source>
+        <translation>请选择 PNG、JPEG、WebP、BMP 或 PDF 输出格式。</translation>
+    </message>
+    <message>
+        <source>Could not render this image. Reduce the output dimensions.</source>
+        <translation>无法渲染图片，请减小输出尺寸。</translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation>正在保存…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>正在取消保存…</translation>
+    </message>
+    <message>
+        <source>Edited image saved. Source file unchanged.</source>
+        <translation>编辑图片已保存，原文件未改动。</translation>
+    </message>
+    <message>
+        <source>Save cancelled. Edits are still available.</source>
+        <translation>保存已取消，修改仍保留。</translation>
+    </message>
+    <message>
+        <source>Save failed. Edits and the existing file were kept.</source>
+        <translation>保存失败，修改和已有文件均已保留。</translation>
+    </message>
+    <message>
+        <source>Edited image copied.</source>
+        <translation>编辑图片已复制。</translation>
+    </message>
+    <message>
+        <source>Save project…</source>
+        <translation>保存工程…</translation>
+    </message>
+    <message>
+        <source>Untitled project</source>
+        <translation>未命名工程</translation>
+    </message>
+    <message>
+        <source>Could not open image or project. Check the format, version and resource limits.</source>
+        <translation>无法打开图片或工程，请检查格式、版本和资源限制。</translation>
+    </message>
+    <message>
+        <source>Editable project contains original pixels</source>
+        <translation>可编辑工程包含原始像素</translation>
+    </message>
+    <message>
+        <source>Projects retain the original image, cropped-out pixels and removable annotations. Do not share them as redacted images. Continue?</source>
+        <translation>工程会保留原图、裁剪外像素和可移除的标注，不能当作已脱敏图片分享。继续保存吗？</translation>
+    </message>
+    <message>
+        <source>Save editable project</source>
+        <translation>保存可编辑工程</translation>
+    </message>
+    <message>
+        <source>Could not save this project: unsupported annotation or resource limit. Edits were kept.</source>
+        <translation>无法保存工程：标注不受支持或资源超限。已有修改已保留。</translation>
+    </message>
+    <message>
+        <source>Saving editable project…</source>
+        <translation>正在保存可编辑工程…</translation>
+    </message>
+    <message>
+        <source>Editable project saved. It contains original pixels; use image export for sharing.</source>
+        <translation>工程已保存，包含原始像素；分享时请导出图片。</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Images are flattened; projects retain original pixels and annotations.</source>
+        <translation>输出：%1 × %2 像素 · 图片合成输出；工程保留原始像素和标注。</translation>
+    </message>
+</context>
+<context>
+    <name>PinWorkspaceDialog</name>
+    <message>
+        <source>Pin Workspaces</source>
+        <translation>贴图工作区</translation>
+    </message>
+    <message>
+        <source>Select the pins to keep. Saving is manual; workspaces contain original images and editable annotations. Restoring adds pins without closing existing ones.</source>
+        <translation>选择要保留的贴图。仅手动保存；工作区包含原图和可编辑标注。恢复会添加贴图，不关闭已有窗口。</translation>
+    </message>
+    <message>
+        <source>Workspace name</source>
+        <translation>工作区名称</translation>
+    </message>
+    <message>
+        <source>Reference board</source>
+        <translation>参考图片板</translation>
+    </message>
+    <message>
+        <source>Pins to save</source>
+        <translation>要保存的贴图</translation>
+    </message>
+    <message>
+        <source>Refresh pins</source>
+        <translation>刷新贴图</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>全选</translation>
+    </message>
+    <message>
+        <source>Select none</source>
+        <translation>全不选</translation>
+    </message>
+    <message>
+        <source>Up to 20 pins, 64 megapixels in total. Closing this dialog does not save anything automatically.</source>
+        <translation>最多20张、总计6400万像素。关闭此窗口不会自动保存。</translation>
+    </message>
+    <message>
+        <source>Save selected…</source>
+        <translation>保存选中贴图…</translation>
+    </message>
+    <message>
+        <source>Open workspace…</source>
+        <translation>打开工作区…</translation>
+    </message>
+    <message>
+        <source>Delete workspace…</source>
+        <translation>删除工作区…</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>取消保存</translation>
+    </message>
+    <message>
+        <source>Thumbnail</source>
+        <translation>缩略图</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>贴图</translation>
+    </message>
+    <message>
+        <source>Enter a name and select between 1 and 20 pins.</source>
+        <translation>请输入名称并选择1到20张贴图。</translation>
+    </message>
+    <message>
+        <source>Workspace contains original images</source>
+        <translation>工作区包含原始图片</translation>
+    </message>
+    <message>
+        <source>This file keeps original pixels and removable annotations. It is not a redacted sharing format. Save the selected pins?</source>
+        <translation>此文件保留原始像素和可移除标注，不能当作脱敏图片分享。保存选中的贴图吗？</translation>
+    </message>
+    <message>
+        <source>Save pin workspace</source>
+        <translation>保存贴图工作区</translation>
+    </message>
+    <message>
+        <source>Use the .vpins extension for pin workspaces.</source>
+        <translation>贴图工作区请使用 .vpins 扩展名。</translation>
+    </message>
+    <message>
+        <source>Could not prepare workspace. Check selected pins, name and resource limits. Nothing was saved.</source>
+        <translation>无法准备工作区，请检查选中贴图、名称和资源限制。未保存任何文件。</translation>
+    </message>
+    <message>
+        <source>Saving workspace…</source>
+        <translation>正在保存工作区…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>正在取消保存…</translation>
+    </message>
+    <message>
+        <source>Workspace saved. Source images and existing pins were not changed.</source>
+        <translation>工作区已保存，原图片和已有贴图未被改动。</translation>
+    </message>
+    <message>
+        <source>Workspace save cancelled. Existing files were kept.</source>
+        <translation>保存已取消，已有文件已保留。</translation>
+    </message>
+    <message>
+        <source>Could not save workspace. Existing files and pins were kept.</source>
+        <translation>无法保存工作区，已有文件和贴图已保留。</translation>
+    </message>
+    <message>
+        <source>Open pin workspace</source>
+        <translation>打开贴图工作区</translation>
+    </message>
+    <message>
+        <source>Workspace format or resource limits are invalid. Existing pins were not changed.</source>
+        <translation>工作区格式或资源限制无效，已有贴图未被改动。</translation>
+    </message>
+    <message>
+        <source>No valid pins could be restored. The workspace may be missing or contain damaged projects.</source>
+        <translation>没有可恢复的有效贴图，工作区可能缺少或包含损坏的工程。</translation>
+    </message>
+    <message>
+        <source>Restore %1 pins from '%2'? Existing pins stay open. The saved original images will be visible on screen.</source>
+        <translation>从“%2”恢复%1张贴图吗？已有贴图保持打开，保存的原图片会显示在屏幕上。</translation>
+    </message>
+    <message>
+        <source>Restore pin workspace</source>
+        <translation>恢复贴图工作区</translation>
+    </message>
+    <message>
+        <source>Restored %1 pins; %2 failed; %3 moved onto an available screen.</source>
+        <translation>已恢复%1张；%2张失败；%3张已移到可用屏幕。</translation>
+    </message>
+    <message>
+        <source>Failed entries: %1. Missing, invalid or over the resource limit.</source>
+        <translation>失败条目：%1。工程缺失、无效或超过资源限制。</translation>
+    </message>
+    <message>
+        <source>Delete pin workspace</source>
+        <translation>删除贴图工作区</translation>
+    </message>
+    <message>
+        <source>Move this workspace file to the Recycle Bin? Open pins and source image files will not be deleted.
+%1</source>
+        <translation>将此工作区文件移到回收站吗？不会删除打开的贴图或原图片文件。
+%1</translation>
+    </message>
+    <message>
+        <source>Workspace moved to the Recycle Bin. Open pins were kept.</source>
+        <translation>工作区已移到回收站，打开的贴图仍保留。</translation>
+    </message>
+    <message>
+        <source>Could not move the workspace to the Recycle Bin. Nothing was permanently deleted.</source>
+        <translation>无法将工作区移到回收站，未永久删除任何文件。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCompareWindow</name>
+    <message>
+        <source>Image A</source>
+        <translation>图片 A</translation>
+    </message>
+    <message>
+        <source>Image B</source>
+        <translation>图片 B</translation>
+    </message>
+    <message>
+        <source>Image Comparison</source>
+        <translation>图片对比</translation>
+    </message>
+    <message>
+        <source>Replace image A</source>
+        <translation>替换图片 A</translation>
+    </message>
+    <message>
+        <source>Replace image B</source>
+        <translation>替换图片 B</translation>
+    </message>
+    <message>
+        <source>Original pixels, align top-left</source>
+        <translation>原始像素，左上对齐</translation>
+    </message>
+    <message>
+        <source>Resize B to A (may distort)</source>
+        <translation>将 B 缩放至 A（可能变形）</translation>
+    </message>
+    <message>
+        <source>Pixel difference threshold</source>
+        <translation>像素差异阈值</translation>
+    </message>
+    <message>
+        <source>Threshold</source>
+        <translation>阈值</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>适应窗口</translation>
+    </message>
+    <message>
+        <source>Read-only comparison. Original pixels align at the top-left; missing areas are differences. Wheel zooms both views; drag pans. Resizing B may introduce interpolation differences. Pixel differences are not a correctness verdict.</source>
+        <translation>只读对比。原始像素左上对齐，缺失区域也算差异。滚轮同步缩放，拖动平移。缩放 B 可能产生插值差异；像素差异不是正确性结论。</translation>
+    </message>
+    <message>
+        <source>A / B split position</source>
+        <translation>A / B 分割位置</translation>
+    </message>
+    <message>
+        <source>Choose two images to compare. No source files are changed.</source>
+        <translation>选择两张图片开始对比，不会修改源文件。</translation>
+    </message>
+    <message>
+        <source>Could not load image: missing data, unsupported format or comparison limit (32 megapixels total). Existing images were kept.</source>
+        <translation>无法加载图片：数据缺失、格式不支持或超过合计3200万像素限制。已有图片已保留。</translation>
+    </message>
+    <message>
+        <source>Choose comparison image</source>
+        <translation>选择对比图片</translation>
+    </message>
+    <message>
+        <source>History image %1</source>
+        <translation>历史图片 %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>贴图</translation>
+    </message>
+    <message>
+        <source>Comparison canvas exceeds 32 megapixels. Use another image pair or resize B to A.</source>
+        <translation>对比画布超过3200万像素，请更换图片组合或将 B 缩放至 A。</translation>
+    </message>
+    <message>
+        <source>Comparing pixels…</source>
+        <translation>正在比较像素…</translation>
+    </message>
+    <message>
+        <source>%1 of %2 pixels differ (%3%). Alpha is compared; invisible RGB is ignored.</source>
+        <translation>%2 个像素中有 %1 个不同（%3%）。比较透明度，忽略不可见的 RGB。</translation>
+    </message>
+    <message>
+        <source>Read-only · %1 × %2 comparison pixels · A on the left, B on the right.</source>
+        <translation>只读 · %1 × %2 对比像素 · 左侧 A，右侧 B。</translation>
+    </message>
+    <message>
+        <source>Comparison failed. Reduce image sizes or choose another pair.</source>
+        <translation>对比失败，请减小图片尺寸或选择其他图片。</translation>
+    </message>
+    <message>
+        <source>Choose file…</source>
+        <translation>选择文件…</translation>
+    </message>
+    <message>
+        <source>Choose history image…</source>
+        <translation>选择历史图片…</translation>
+    </message>
+    <message>
+        <source>Choose pinned image…</source>
+        <translation>选择贴图…</translation>
+    </message>
+    <message>
+        <source>Swap A / B</source>
+        <translation>交换 A / B</translation>
+    </message>
+    <message>
+        <source>Clear images</source>
+        <translation>清空图片</translation>
+    </message>
+    <message>
+        <source>Side by side</source>
+        <translation>并排对照</translation>
+    </message>
+    <message>
+        <source>Slider comparison</source>
+        <translation>滑杆对照</translation>
+    </message>
+    <message>
+        <source>Difference overlay</source>
+        <translation>差异高亮</translation>
+    </message>
+</context>
+<context>
+    <name>GifExportDialog</name>
+    <message>
+        <source>Export GIF</source>
+        <translation>导出 GIF</translation>
+    </message>
+    <message>
+        <source>GIF output</source>
+        <translation>GIF 输出</translation>
+    </message>
+    <message>
+        <source>Frames %1–%2 · speed %3× · cursor %4</source>
+        <translation>第 %1–%2 帧 · 速度 %3× · 指针%4</translation>
+    </message>
+    <message>
+        <source>on</source>
+        <translation>开启</translation>
+    </message>
+    <message>
+        <source>off</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>原始尺寸</translation>
+    </message>
+    <message>
+        <source>Custom width</source>
+        <translation>指定宽度</translation>
+    </message>
+    <message>
+        <source>Keep timing (up to 50 fps)</source>
+        <translation>保留时序（最高 50 fps）</translation>
+    </message>
+    <message>
+        <source>Limit to %1 fps</source>
+        <translation>限制为最高 %1 fps</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>尺寸</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>宽度</translation>
+    </message>
+    <message>
+        <source>Frame rate</source>
+        <translation>帧率</translation>
+    </message>
+    <message>
+        <source>Frame-rate limits drop frames, never add frames. GIF uses 10 ms timing steps and at least 20 ms per frame. Total time is rounded once; very short clips last at least 20 ms. File size is shown after export, not estimated.</source>
+        <translation>帧率限制只删减帧，不补帧。GIF 时长以 10 毫秒为单位，每帧至少 20 毫秒；总时长统一取整，极短片段至少播放 20 毫秒。导出后显示实际文件大小，不作体积估算。</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation>导出</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 pixels</source>
+        <translation>输出：%1 × %2 像素</translation>
+    </message>
+    <message>
+        <source>Choose a smaller size: maximum 16 megapixels, 65535 pixels per edge and 16× enlargement.</source>
+        <translation>请选择更小的尺寸：最多 1600 万像素，单边不超过 65535 像素，最多放大 16 倍。</translation>
+    </message>
+    <message>
+        <source>The installed GIF encoder is outdated. Build/install rust_libs/gifrecorder from this checkout before exporting.</source>
+        <translation>已安装的 GIF 编码器版本过旧。请先从当前源码构建并安装 rust_libs/gifrecorder，再导出。</translation>
+    </message>
+    <message>
+        <source>Export silent MP4</source>
+        <translation>导出无声 MP4</translation>
+    </message>
+    <message>
+        <source>Silent MP4 output</source>
+        <translation>无声 MP4 输出</translation>
+    </message>
+    <message>
+        <source>Original timing (no audio)</source>
+        <translation>保留原时序（无音轨）</translation>
+    </message>
+    <message>
+        <source>Silent H.264 video, with no audio track. Trim and speed are retained. Odd dimensions add one black row or column on the bottom or right, without stretching. Timing uses 1 ms steps; equal timestamps are merged. File size is shown after export.</source>
+        <translation>无音轨的 H.264 视频，保留裁剪和速度。奇数尺寸在右侧或底部补一列或一行黑边，不拉伸。时间精度为 1 毫秒，相同时间戳合并；导出后显示实际文件大小。</translation>
+    </message>
+    <message>
+        <source>Choose a smaller MP4 size: maximum 16 megapixels, 8192 pixels per edge and 16× enlargement.</source>
+        <translation>请选择更小的 MP4 尺寸：最多 1600 万像素，单边 8192 像素，最多放大 16 倍。</translation>
+    </message>
+    <message>
+        <source>H.264 encoding is unavailable. Install the required PyAV package or use GIF instead.</source>
+        <translation>H.264 编码不可用。请安装所需的 PyAV 包，或改用 GIF。</translation>
+    </message>
+</context>
+<context>
+    <name>ComposerProgressDialog</name>
+    <message>
+        <source>Exporting GIF</source>
+        <translation>正在导出 GIF</translation>
+    </message>
+    <message>
+        <source>Encoding GIF…</source>
+        <translation>正在编码 GIF…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>正在取消…</translation>
+    </message>
+    <message>
+        <source>GIF export failed</source>
+        <translation>GIF 导出失败</translation>
+    </message>
+    <message>
+        <source>The GIF could not be exported. Check output size, encoder version, disk space and file permissions. Existing files were kept.</source>
+        <translation>无法导出 GIF。请检查输出尺寸、编码器版本、磁盘空间和文件权限。原有文件已保留。</translation>
+    </message>
+    <message>
+        <source>Exporting silent MP4</source>
+        <translation>正在导出无声 MP4</translation>
+    </message>
+    <message>
+        <source>Encoding silent MP4…</source>
+        <translation>正在编码无声 MP4…</translation>
+    </message>
+    <message>
+        <source>MP4 export failed</source>
+        <translation>MP4 导出失败</translation>
+    </message>
+    <message>
+        <source>The silent MP4 could not be exported. Check the H.264 encoder, output size, disk space and permissions. Existing files were kept.</source>
+        <translation>无法导出无声 MP4。请检查 H.264 编码器、输出尺寸、磁盘空间与权限。原有文件已保留。</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackController</name>
+    <message>
+        <source>Clipboard copy failed</source>
+        <translation>复制到剪贴板失败</translation>
+    </message>
+    <message>
+        <source>The GIF was saved, but could not be copied to the clipboard.</source>
+        <translation>GIF 已保存，但未能复制到剪贴板。</translation>
+    </message>
+    <message>
+        <source>GIF saved: %1 × %2 pixels</source>
+        <translation>GIF 已保存：%1 × %2 像素</translation>
+    </message>
+    <message>
+        <source>Actual file size: %1 bytes</source>
+        <translation>实际文件大小：%1 字节</translation>
+    </message>
+    <message>
+        <source>File size could not be read.</source>
+        <translation>无法读取文件大小。</translation>
+    </message>
+    <message>
+        <source>GIF exported</source>
+        <translation>GIF 导出完成</translation>
+    </message>
+    <message>
+        <source>Save recording</source>
+        <translation>保存录制</translation>
+    </message>
+    <message>
+        <source>Silent MP4 saved: %1 × %2 pixels</source>
+        <translation>无声 MP4 已保存：%1 × %2 像素</translation>
+    </message>
+    <message>
+        <source>MP4 exported</source>
+        <translation>MP4 导出完成</translation>
+    </message>
+</context>
+<context>
+<name>CapturePrivacy</name>
+<message><source>Sensitive capture · memory only. Only Copy writes to the system clipboard. Save, collection, projects, recording, text extraction and translation are unavailable. Pins and redaction keep this policy. Other apps may read copied pixels; no secure-erasure guarantee.</source><translation>敏感截图 · 仅驻留内存。仅“复制”会写入系统剪贴板。禁用保存、收集、工程、录制、文字提取与翻译；贴图和脱敏结果继续遵守此规则。其他软件可能读取已复制像素，不承诺安全擦除。</translation></message>
+<message><source>Sensitive capture</source><translation>敏感截图</translation></message>
+<message><source>Sensitive capture unavailable</source><translation>敏感截图不可用</translation></message>
+<message><source>The private clipboard protocol is unavailable. Rebuild/install this checkout's pyclipboard module. No sensitive capture was started.</source><translation>私密剪贴板协议不可用，请重建并安装当前源码的 pyclipboard 模块。未启动敏感截图。</translation></message>
+<message><source>Sensitive copy failed</source><translation>敏感复制失败</translation></message>
+<message><source>The image was not copied successfully. It was not saved or retried as an ordinary copy.</source><translation>图像未能成功复制。未保存文件，也未降级重试为普通复制。</translation></message>
+<message><source>Sensitive capture · no files or history · only explicit Copy</source><translation>敏感截图 · 不落盘、不入历史 · 仅主动复制</translation></message>
+</context>
+<context>
+<name>TableRecognitionWindow</name>
+<message><source>Review recognized table</source><translation>复核识别表格</translation></message>
+<message><source>For clear, regular tables with separated OCR cells only. Merged cells, wrapped rows, missing cells and joined OCR lines need manual correction. Click a cell to compare its source region; edit in the cell or the editor below. No cloud upload.</source><translation>仅适用于 OCR 单元格分离、清晰规整的表格。合并单元格、折行、空缺或连成一行的 OCR 需人工校正。点击单元格对照原图，可直接编辑或使用下方编辑框。不上传云端。</translation></message>
+<message><source>Tight row grouping</source><translation>严格行分组</translation></message>
+<message><source>Normal row grouping</source><translation>常规行分组</translation></message>
+<message><source>Loose row grouping</source><translation>宽松行分组</translation></message>
+<message><source>Rebuild from OCR</source><translation>从 OCR 重建</translation></message>
+<message><source>Fit source</source><translation>适应原图</translation></message>
+<message><source>Editable recognized table</source><translation>可编辑的识别表格</translation></message>
+<message><source>Selected cell text</source><translation>当前单元格文字</translation></message>
+<message><source>Select a cell to edit multiline text</source><translation>选择单元格以编辑多行文字</translation></message>
+<message><source>Insert row</source><translation>插入行</translation></message>
+<message><source>Delete row</source><translation>删除行</translation></message>
+<message><source>Insert column</source><translation>插入列</translation></message>
+<message><source>Delete column</source><translation>删除列</translation></message>
+<message><source>Protect spreadsheet formula prefixes</source><translation>防止表格公式前缀执行</translation></message>
+<message><source>TSV cells starting with =, +, - or @ are prefixed with an apostrophe. Spreadsheets may auto-convert dates and leading zeros; format destination cells as text when needed.</source><translation>以 =、+、- 或 @ 开头的 TSV 内容会加单引号前缀。表格软件可能自动转换日期或去除前导零；需要时请把目标单元格设为文本。</translation></message>
+<message><source>First row is Markdown header</source><translation>首行作为 Markdown 表头</translation></message>
+<message><source>Copy TSV</source><translation>复制 TSV</translation></message>
+<message><source>Save Markdown…</source><translation>保存 Markdown…</translation></message>
+<message><source>Close</source><translation>关闭</translation></message>
+<message><source>Rebuild table</source><translation>重建表格</translation></message>
+<message><source>Discard table edits and reconstruct from the original OCR boxes?</source><translation>放弃表格修改并从原始 OCR 文字框重建？</translation></message>
+<message><source>Could not reconstruct a table: no valid positioned text or table limits exceeded.</source><translation>无法重建表格：无有效坐标文字或超出表格限制。</translation></message>
+<message><source>Low confidence or ambiguous geometry. Check the source image.</source><translation>置信度较低或位置归属不明确，请核对原图。</translation></message>
+<message><source>Review required: %1 warning categories, %2 uncertain cells. Complex layouts are not reconstructed reliably.</source><translation>请复核：%1 类布局提醒，%2 个不确定单元格。复杂布局无法可靠重建。</translation></message>
+<message><source>%1 rows × %2 columns · source image is unchanged</source><translation>%1 行 × %2 列 · 原图不变</translation></message>
+<message><source>Table structure changed. Review empty and shifted cells before export.</source><translation>表格结构已改变，导出前请复核空格和移动的单元格。</translation></message>
+<message><source>Export exceeds table limits.</source><translation>导出超出表格限制。</translation></message>
+<message><source>TSV copied. Verify cell placement and data types in the destination spreadsheet.</source><translation>TSV 已复制，请在目标表格软件中复核单元格位置和数据类型。</translation></message>
+<message><source>Save Markdown table</source><translation>保存 Markdown 表格</translation></message>
+<message><source>Markdown saved</source><translation>Markdown 已保存</translation></message>
+<message><source>Markdown save failed</source><translation>Markdown 保存失败</translation></message>
+<message><source>Invalid OCR boxes skipped</source><translation>已跳过无效 OCR 坐标</translation></message>
+<message><source>Rotated text</source><translation>文字倾斜</translation></message>
+<message><source>Too few rows or columns</source><translation>行数或列数不足</translation></message>
+<message><source>Overlapping columns</source><translation>列重叠</translation></message>
+<message><source>Text spans column boundaries</source><translation>文字跨越列边界</translation></message>
+<message><source>Multiple boxes in one cell</source><translation>同一单元格包含多个框</translation></message>
+<message><source>Missing or uneven cells</source><translation>单元格缺失或不齐</translation></message>
+<message><source>Uncertain cells highlighted</source><translation>不确定单元格已高亮</translation></message>
+</context>
+  <context>
+    <name>AnnotationPresetDialog</name>
+    <message>
+        <source>Annotation Presets</source>
+        <translation>标注样式预设</translation>
+    </message>
+    <message>
+        <source>Tool</source>
+        <translation>工具</translation>
+    </message>
+    <message>
+        <source>Preset</source>
+        <translation>预设</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>名称</translation>
+    </message>
+    <message>
+        <source>Save current style</source>
+        <translation>保存当前样式</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>重命名</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>With a matching item selected, Apply edits that item (undoable). Otherwise it changes the defaults for new annotations.</source>
+        <translation>选中了同工具的图元时，「应用」修改该图元（可撤销）；否则改的是以后新建标注的默认值。</translation>
+    </message>
+    <message>
+        <source>Give the preset a name first.</source>
+        <translation>请先给预设起个名字。</translation>
+    </message>
+    <message>
+        <source>Could not save this preset.</source>
+        <translation>无法保存这个预设。</translation>
+    </message>
+    <message>
+        <source>Saved.</source>
+        <translation>已保存。</translation>
+    </message>
+    <message>
+        <source>Pick a preset first.</source>
+        <translation>请先选择一个预设。</translation>
+    </message>
+    <message>
+        <source>Applied to the selected item (undoable).</source>
+        <translation>已应用到选中的图元（可撤销）。</translation>
+    </message>
+    <message>
+        <source>Applied to the defaults for new annotations.</source>
+        <translation>已应用到新建标注的默认值。</translation>
+    </message>
+    <message>
+        <source>Nothing to apply.</source>
+        <translation>没有可应用的内容。</translation>
+    </message>
+    <message>
+        <source>Renamed.</source>
+        <translation>已重命名。</translation>
+    </message>
+    <message>
+        <source>Rename failed: empty or duplicate name.</source>
+        <translation>重命名失败：名称为空或已存在。</translation>
+    </message>
+    <message>
+        <source>Deleted.</source>
+        <translation>已删除。</translation>
+    </message>
+    <message>
+        <source>Could not delete this preset.</source>
+        <translation>无法删除这个预设。</translation>
+    </message>
+    <message>
+        <source>Arrow</source>
+        <translation>箭头</translation>
+    </message>
+    <message>
+        <source>Pen</source>
+        <translation>画笔</translation>
+    </message>
+    <message>
+        <source>Highlighter</source>
+        <translation>荧光笔</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>矩形</translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation>椭圆</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation>序号</translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation>文字</translation>
+    </message>
+    <message>
+        <source>Mosaic</source>
+        <translation>马赛克</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>气泡标注</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>局部放大框</translation>
+    </message>
+  </context>
+  <context>
+    <name>MarkdownReportDialog</name>
+    <message>
+        <source>Markdown report</source>
+        <translation>Markdown 问题报告</translation>
+    </message>
+    <message>
+        <source>Report title</source>
+        <translation>报告标题</translation>
+    </message>
+    <message>
+        <source>Issue report</source>
+        <translation>问题报告</translation>
+    </message>
+    <message>
+        <source>Steps / description</source>
+        <translation>步骤 / 说明</translation>
+    </message>
+    <message>
+        <source>Include approved source</source>
+        <translation>附带已批准的来源</translation>
+    </message>
+    <message>
+        <source>Include time</source>
+        <translation>附带时间</translation>
+    </message>
+    <message>
+        <source>Note for</source>
+        <translation>备注对象</translation>
+    </message>
+    <message>
+        <source>Writes report.md plus an images/ folder next to it. Only the images in this collection are attached.</source>
+        <translation>写出 report.md 和同目录的 images/ 文件夹；只附带当前集合里的图片。</translation>
+    </message>
+    <message>
+        <source>Export report</source>
+        <translation>导出报告</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <source>Export Markdown report</source>
+        <translation>导出 Markdown 报告</translation>
+    </message>
+    <message>
+        <source>Could not write the report. Check the target folder and that images are still loaded.</source>
+        <translation>无法写出报告。请检查目标目录，以及图片是否仍在集合里。</translation>
+    </message>
+    <message>
+        <source>Report written:</source>
+        <translation>报告已写出：</translation>
+    </message>
+  </context>
 </TS>

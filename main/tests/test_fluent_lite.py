@@ -205,3 +205,56 @@ def test_frontend_uses_shared_text_editor_controls():
                 offenders.append(f"{path.relative_to(source_root)}:{node.lineno}")
 
     assert offenders == []
+def test_frosted_frameless_dialog_survives_bad_window_handle_wrapper(qapp, monkeypatch):
+    """第三方 frameless 的 screenChanged 连接拿到错误包装类型时，构造不应被中断。
+
+    对应偏差 TFD-6e1327a941：全量跑里 windowHandle() 偶发返回 QWidgetItem 而非 QWindow。
+    """
+    import pytest
+    from qframelesswindow import FramelessDialog
+
+    from ui.fluent_lite.frameless import FrostedFramelessDialog
+
+    calls = {"broken": 0}
+
+    class _StubButton:
+        def hide(self):
+            pass
+
+    class _StubTitleBar:
+        def __init__(self):
+            self.minBtn = _StubButton()
+            self.maxBtn = _StubButton()
+
+        def raise_(self):
+            pass
+
+        def setDoubleClickEnabled(self, _enabled):
+            pass
+
+    class _StubWindowEffect:
+        def disableMaximizeButton(self, *_args):
+            pass
+
+    def broken_init(self):
+        # 复现第三方库失败时的真实partial状态：titleBar/windowEffect 已建，连接 screenChanged 时炸
+        self.titleBar = _StubTitleBar()
+        self.windowEffect = _StubWindowEffect()
+        calls["broken"] += 1
+        raise AttributeError("'PySide6.QtWidgets.QWidgetItem' object has no attribute 'screenChanged'")
+
+    monkeypatch.setattr(FramelessDialog, "_initFrameless", broken_init, raising=True)
+    dialog = FrostedFramelessDialog()
+    try:
+        assert calls["broken"] == 1
+        assert dialog.titleBar is not None, "被跳过的收尾步骤要补上"
+        assert (dialog.width(), dialog.height()) == (500, 500)
+    finally:
+        dialog.deleteLater()
+
+    def other_error(self):
+        raise AttributeError("unrelated failure")
+
+    monkeypatch.setattr(FramelessDialog, "_initFrameless", other_error, raising=True)
+    with pytest.raises(AttributeError):
+        FrostedFramelessDialog()

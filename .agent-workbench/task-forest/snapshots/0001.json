@@ -1,0 +1,75 @@
+{
+  "created_at": "2026-10-08T16:08:00.799422Z",
+  "graph": {
+    "cross_edges": [],
+    "edge_index": {},
+    "edge_type_counts": {
+      "child_of": 0,
+      "clarifies": 0,
+      "contributes_to": 0,
+      "depends_on": 0,
+      "derived_from": 0,
+      "duplicates": 0,
+      "related_to": 0,
+      "supersedes": 0
+    },
+    "edge_type_legend": {
+      "child_of": "子任务关系：起点任务是目标任务的子任务，构成默认树/森林",
+      "clarifies": "澄清边，起点任务澄清目标任务的要求或问题",
+      "contributes_to": "多目标贡献边，不改变主父节点",
+      "depends_on": "执行依赖边，起点任务必须等待目标任务完成",
+      "derived_from": "来源边，起点任务从目标任务拆解或派生",
+      "duplicates": "重复语义边，通常应合并或废止其中一个节点",
+      "related_to": "弱相关边，不影响 ready 或进度判断",
+      "supersedes": "替代边，from 替代 to"
+    },
+    "edges": {},
+    "event_id": null,
+    "generated_at": "2026-10-08T16:08:00.799422Z",
+    "nodes": {},
+    "reason": "before_proposal_applied",
+    "roots": [],
+    "schema_version": 1,
+    "status_legend": {
+      "archived": "已归档，通常不参与当前 todo",
+      "blocked": "被依赖、信息或外部条件阻塞",
+      "deprecated": "已废止但保留历史",
+      "done": "已完成并通过验收",
+      "in_progress": "正在推进或作为长期目标持续演进",
+      "proposed": "已提出但尚未确认或排期",
+      "ready": "可开始执行，当前没有未满足依赖",
+      "review_needed": "产物或判断已到可检查阶段，但需要复核验收标准、证据、不足风险和实际结果后，才能标为已完成。"
+    },
+    "status_queues": {
+      "actionable_todos": [],
+      "blocked": [],
+      "by_status": {
+        "archived": [],
+        "blocked": [],
+        "deprecated": [],
+        "done": [],
+        "in_progress": [],
+        "proposed": [],
+        "ready": [],
+        "review_needed": []
+      },
+      "evergreen_open_goals": [],
+      "open": [],
+      "ready": [],
+      "review_needed": []
+    },
+    "summary": {
+      "blocked_count": 0,
+      "done_count": 0,
+      "edge_count": 0,
+      "node_count": 0,
+      "open_count": 0,
+      "review_needed_count": 0
+    },
+    "tree_edges": [],
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "graph_hash": "e1ebf79ca8d6a3a4ee2118dd0c85c3375669171bda6219d1fd91994b882a577a",
+  "snapshot_id": "0001",
+  "todos": []
+}

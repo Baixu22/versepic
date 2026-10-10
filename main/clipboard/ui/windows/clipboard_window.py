@@ -1611,8 +1611,14 @@ class ClipboardWindow(QWidget, FramelessMixin):
             "paste": lambda: self._paste_item_to_clipboard(item_id),
             "pin_image": lambda: self._create_pin_window(item_id),
             "save_image_as": lambda: self._save_image_as(item_id),
+            "image_layout": lambda: self._add_to_image_layout(item_id),
+            "compare_image": lambda: self._compare_image(item_id),
             "recognize_image": lambda: self._process_image(item_id),
             "redact_image": lambda: self._process_image(item_id, redact=True),
+            "image_index_retry": lambda: self._change_image_index(item_id, "retry"),
+            "image_index_reindex": lambda: self._change_image_index(item_id, "reindex"),
+            "image_index_exclude": lambda: self._change_image_index(item_id, "exclude"),
+            "image_index_restore": lambda: self._change_image_index(item_id, "restore"),
             "toggle_pin": lambda: self._toggle_pin(item_id),
             "filter_by_source": lambda: self._filter_by_source(item_id),
             "open_file_location": lambda: self._open_file_location(item_id),
@@ -1628,6 +1634,7 @@ class ClipboardWindow(QWidget, FramelessMixin):
             self._image_indexer = indexer
             if indexer is not None:
                 indexer.updated.connect(self._on_image_text_indexed)
+                indexer.item_state_changed.connect(self._on_image_index_state)
                 indexer.state_changed.connect(self._on_index_state_changed)
         self._image_indexing = bool(indexer is not None and indexer.busy)
 
@@ -1636,10 +1643,46 @@ class ClipboardWindow(QWidget, FramelessMixin):
         self._update_scope_bar()
         self._update_empty_state()
 
-    def _on_image_text_indexed(self, _item_id):
-        # Refresh a visible search without interrupting an unfiltered clipboard list.
+    def _on_image_index_state(self, item_id):
+        from clipboard.core.image_text import INDEX_LABELS, INDEX_ERRORS
+        item = self.manager.get_item(item_id)
+        if item is None:
+            return
+        for i, current in enumerate(self.controller.current_items):
+            if current.id == item_id:
+                self.controller.current_items[i] = item
+                break
+        for row in range(self.list_widget.count()):
+            entry = self.list_widget.item(row)
+            if entry.data(ROLE_ITEM_ID) == item_id:
+                entry.setData(ROLE_ITEM_DATA, item)
+                label = self.tr(INDEX_LABELS.get(item.ocr_status, INDEX_LABELS["pending"]))
+                if item.ocr_error in INDEX_ERRORS:
+                    label += " · " + self.tr(INDEX_ERRORS[item.ocr_error])
+                entry.setToolTip(label)
+                break
+
+    def _on_image_text_indexed(self, item_id):
+        # Search membership can change. An unfiltered list keeps selection/scroll.
         if self.isVisible() and self.search_input.text().strip():
             self.controller.load_history()
+        else:
+            self._on_image_index_state(item_id)
+
+    def _change_image_index(self, item_id, action):
+        from ui.dialogs import show_confirm_dialog, show_warning_dialog
+        if action == "exclude" and not show_confirm_dialog(self, self.tr("Exclude image from text index"),
+            self.tr("Remove stored OCR text for this image and stop automatic indexing until restored? Original image and paste formats stay unchanged. Database backups and previously copied text are not erased."), plain_text=True):
+            return
+        try:
+            self.manager.change_image_index(item_id, action)
+            # A command may have created the first indexer; connect before its timer fires.
+            if action != "exclude":
+                self._start_image_indexing()
+            self._on_image_text_indexed(item_id)
+        except Exception:
+            show_warning_dialog(self, self.tr("Image text index"),
+                                self.tr("The image index could not be updated. Check that the item and database are still available."))
 
     def _process_image(self, item_id, redact=False):
         from PySide6.QtGui import QImage
@@ -1805,6 +1848,18 @@ class ClipboardWindow(QWidget, FramelessMixin):
             item_id, on_close_callback=self._paste_close_callback(), explicit=True
         ):
             self.item_pasted.emit(item_id)
+
+    def _compare_image(self,item_id):
+        from ui.image_compare import show_image_compare
+        self.close()
+        show_image_compare().load_history(self.manager,item_id)
+
+    def _add_to_image_layout(self, item_id):
+        from ui.image_layout_dialog import get_image_layout_window, show_image_layout
+        window = get_image_layout_window()
+        self.close()
+        window.add_history_ids(self.manager, [item_id])
+        show_image_layout()
 
     def _save_image_as(self, item_id: int):
         import os

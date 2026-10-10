@@ -1,9 +1,9 @@
-﻿"""
+"""
 画布场景 - 管理所有图层和绘图工具
 """
 
 from PySide6.QtWidgets import QGraphicsScene
-from PySide6.QtCore import Signal, Qt
+from PySide6.QtCore import QPointF, QRectF, Signal, Qt
 
 from .items import BackgroundItem, SelectionItem, SpotlightCurtain
 from .selection_model import SelectionModel
@@ -89,7 +89,8 @@ class CanvasScene(QGraphicsScene):
         from tools import ToolController, ToolContext
         from tools import (
             PenTool, RectTool, EllipseTool, ArrowTool,
-            TextTool, NumberTool, HighlighterTool, CursorTool, EraserTool, MosaicTool, SpotlightTool
+            TextTool, NumberTool, HighlighterTool, CursorTool, EraserTool, MosaicTool, SpotlightTool, MagnifyTool,
+            CalloutTool
         )
 
         ctx = ToolContext(
@@ -116,11 +117,74 @@ class CanvasScene(QGraphicsScene):
         if enable_mosaic:
             self.tool_controller.register(MosaicTool())
         self.tool_controller.register(SpotlightTool())
+        self.tool_controller.register(MagnifyTool())
+        self.tool_controller.register(CalloutTool())
         self.tool_controller.register(EraserTool())  # 橡皮擦工具
         
         # 默认激活光标工具（表示无绘制工具激活，SmartEditController负责选择/编辑交互）
         self.tool_controller.activate("cursor")
     
+    # ------------------------------------------------------------------
+    # 插图（TF-0037）：从文件/剪贴板显式插入位图
+    # ------------------------------------------------------------------
+
+    def add_image_stamp(self, image, pos=None, rect=None):
+        """把一张位图插进画布：校验、默认落在选区中央、可撤销并自动选中。"""
+        from canvas.items import ImageStampItem
+        from canvas.undo import AddItemCommand
+
+        image = ImageStampItem.validate_image(image)
+        item = ImageStampItem(image)
+        target = self._image_stamp_rect(image, rect)
+        if pos is not None:
+            target.moveTopLeft(QPointF(pos))
+        item.setRect(target)
+        self.addItem(item)
+        self.undo_stack.push(AddItemCommand(self, item))
+        self.item_auto_select_requested.emit(item)
+        return item
+
+    def add_image_stamp_from_file(self, path, pos=None):
+        """从文件插入；文件缺失/超大/不是图片时抛 ValueError，由调用方提示。"""
+        from canvas.items import ImageStampItem
+
+        return self.add_image_stamp(ImageStampItem.load_file(path), pos=pos)
+
+    def add_image_stamp_from_clipboard(self, pos=None):
+        """插入系统剪贴板里的图片；剪贴板里没有图片时返回 None。"""
+        from PySide6.QtWidgets import QApplication
+
+        from canvas.items import ImageStampItem
+
+        clipboard = QApplication.clipboard()
+        image = clipboard.image() if clipboard is not None else None
+        try:
+            ImageStampItem.validate_image(image)
+        except ValueError:
+            return None
+        return self.add_image_stamp(image, pos=pos)
+
+    def _image_stamp_rect(self, image, rect=None):
+        """默认把插图放在选区中央，最多占选区 60%，且不放大超过原始像素。"""
+        from canvas.items import ImageStampItem
+
+        if rect is not None:
+            return QRectF(rect)
+        area = self.selection_model.rect() if self.selection_model else None
+        if area is None or area.isEmpty():
+            area = self.sceneRect()
+        limit_w = max(ImageStampItem.MIN_SIZE, area.width() * 0.6)
+        limit_h = max(ImageStampItem.MIN_SIZE, area.height() * 0.6)
+        scale = min(1.0, limit_w / max(1, image.width()), limit_h / max(1, image.height()))
+        width = max(ImageStampItem.MIN_SIZE, image.width() * scale)
+        height = width * image.height() / max(1, image.width())
+        return QRectF(
+            area.center().x() - width / 2.0,
+            area.center().y() - height / 2.0,
+            width,
+            height,
+        )
+
     def confirm_selection(self):
         """
         确认选区

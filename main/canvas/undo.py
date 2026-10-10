@@ -1,4 +1,4 @@
-﻿"""
+"""
 undo.py - QUndoStack 的矢量图形撤销/重做（命令模式）
 
 包含：
@@ -166,6 +166,15 @@ def _apply_number_values(values: Dict[QGraphicsItem, int]):
             log_exception(e, T("应用序号重排"))
 
 
+def _with_callout_partners(items):
+    """组合标注的箭头和气泡算一个整体：入栈、出栈、删除都要一起走。"""
+    from canvas.items.callout_link import expand_with_partners
+
+    if isinstance(items, (list, tuple, set)):
+        return expand_with_partners(list(items))
+    return expand_with_partners([items])
+
+
 class AddItemCommand(QUndoCommand):
     """添加图元命令"""
 
@@ -173,14 +182,17 @@ class AddItemCommand(QUndoCommand):
         super().__init__(text)
         self.scene = scene
         self.item = item
+        self.items = _with_callout_partners(item)
 
     def undo(self):
-        if self.item is not None and self.item.scene() == self.scene:
-            self.scene.removeItem(self.item)
+        for entry in self.items:
+            if entry is not None and entry.scene() == self.scene:
+                self.scene.removeItem(entry)
 
     def redo(self):
-        if self.item is not None and self.item.scene() != self.scene:
-            self.scene.addItem(self.item)
+        for entry in self.items:
+            if entry is not None and entry.scene() != self.scene:
+                self.scene.addItem(entry)
 
 
 class AddNumberCommand(AddItemCommand):
@@ -216,14 +228,17 @@ class RemoveItemCommand(QUndoCommand):
         super().__init__(text)
         self.scene = scene
         self.item = item
+        self.items = _with_callout_partners(item)
 
     def undo(self):
-        if self.item is not None and self.item.scene() != self.scene:
-            self.scene.addItem(self.item)
+        for entry in self.items:
+            if entry is not None and entry.scene() != self.scene:
+                self.scene.addItem(entry)
 
     def redo(self):
-        if self.item is not None and self.item.scene() == self.scene:
-            self.scene.removeItem(self.item)
+        for entry in self.items:
+            if entry is not None and entry.scene() == self.scene:
+                self.scene.removeItem(entry)
 
 
 class ClearTextItemCommand(RemoveItemCommand):
@@ -329,7 +344,7 @@ class BatchRemoveCommand(QUndoCommand):
     def __init__(self, scene: QGraphicsScene, items: list, text: str = "Remove Items", number_next_before: Optional[int] = None):
         super().__init__(text)
         self.scene = scene
-        self.items = list(items)  # 复制列表避免外部修改
+        self.items = _with_callout_partners(list(items))  # 组合标注连带另一半，复制列表避免外部修改
         self._has_number_items = _items_contain_number(self.items)
         self.number_next_before = number_next_before
         self._first_redo = True
@@ -375,6 +390,24 @@ class NumberStyleCommand(QUndoCommand):
 
     def redo(self):
         self.item.set_style(self.new_style)
+
+
+class NumberCaptionCommand(QUndoCommand):
+    """给单个序号图元设置说明文字；说明是会被导出的内容，改它必须可撤销。"""
+
+    def __init__(self, item, old_caption: str, new_caption: str, text: str = None):
+        super().__init__(text or _undo_tr("Edit Number Caption"))
+        self.item = item
+        self.old_caption = "" if old_caption is None else str(old_caption)
+        self.new_caption = "" if new_caption is None else str(new_caption)
+
+    def undo(self):
+        if self.item is not None:
+            self.item.set_caption(self.old_caption)
+
+    def redo(self):
+        if self.item is not None:
+            self.item.set_caption(self.new_caption)
 
 
 class EditItemCommand(QUndoCommand):
@@ -467,6 +500,10 @@ class EditItemCommand(QUndoCommand):
                 log_exception(e, T("恢复number属性"))
 
         # rect（RectItem/EllipseItem 等）
+        source = state.get("source_rect")
+        if isinstance(source, QRectF) and hasattr(self.item, "set_source_rect"):
+            self.item.set_source_rect(QRectF(source))
+
         rect = state.get("rect")
         if isinstance(rect, QRectF):
             if hasattr(self.item, "setRect") and callable(self.item.setRect):
@@ -572,6 +609,14 @@ class EditItemCommand(QUndoCommand):
                 self.item.update_geometry()
             except Exception as e:
                 log_exception(e, "update_geometry")
+
+        # 编号说明（NumberItem）：跟着编号值一起走，撤销/重做要恢复同一份文字
+        caption = state.get("caption")
+        if isinstance(caption, str) and hasattr(self.item, "set_caption"):
+            try:
+                self.item.set_caption(caption)
+            except Exception as e:
+                log_exception(e, T("恢复编号说明"))
 
         # 圆角半径（RectItem）
         corner_radius = state.get("corner_radius")

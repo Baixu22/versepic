@@ -4,7 +4,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QFileDialog, QMenu
 
@@ -43,9 +43,46 @@ def create_tray_menu(app) -> QMenu:
     action_screenshot.triggered.connect(app.start_screenshot)
     menu.addAction(action_screenshot)
 
+    delayed_menu = CustomTrayMenu(_tr("Delayed screenshot"), menu)
+    menu.addMenu(delayed_menu)
+    menu.delayed_capture_menu = delayed_menu
+    for seconds in (3, 5, 10):
+        action = delayed_menu.addAction(_tr("After %1 seconds").replace("%1", str(seconds)))
+        action.triggered.connect(lambda checked=False, delay=seconds: app.start_delayed_screenshot(delay))
+
+    from settings.tool_settings import QUICK_CAPTURE_ACTIONS
+    quick_menu = CustomTrayMenu(_tr("Quick capture"), menu)
+    menu.addMenu(quick_menu)
+    menu.quick_capture_menu = quick_menu
+    for kind, label in QUICK_CAPTURE_ACTIONS:
+        action = quick_menu.addAction(_tr(label))
+        action.triggered.connect(
+            lambda checked=False, capture_kind=kind:
+            QTimer.singleShot(100, app, lambda: app.start_quick_capture(capture_kind)))
+
+    private_action = QAction(_tr("Sensitive screenshot (once)"), app)
+    private_action.triggered.connect(lambda checked=False: QTimer.singleShot(100, app, app.start_sensitive_screenshot))
+    menu.addAction(private_action)
+
     action_clipboard = QAction(_tr("Clipboard"), app)
     action_clipboard.triggered.connect(app.open_clipboard_window)
     menu.addAction(action_clipboard)
+
+    editor_action = QAction(_tr("Open image editor…"), app)
+    editor_action.triggered.connect(_open_image_editor)
+    menu.addAction(editor_action)
+
+    compare_action = QAction(_tr("Compare images…"), app)
+    compare_action.triggered.connect(_open_image_compare)
+    menu.addAction(compare_action)
+
+    workspace_action = QAction(_tr("Pin workspaces…"), app)
+    workspace_action.triggered.connect(_open_pin_workspaces)
+    menu.addAction(workspace_action)
+
+    layout_action = QAction(_tr("Image layout / PDF"), app)
+    layout_action.triggered.connect(_open_image_layout)
+    menu.addAction(layout_action)
 
     action_translate = QAction(_tr("Translation"), app)
     action_translate.triggered.connect(app.open_translator)
@@ -157,6 +194,8 @@ def _add_pin_actions(menu: QMenu, app):
     save_all_action = QAction(_tr("Save all pins as..."), app)
     save_all_action.triggered.connect(lambda: _save_all_pins_as(app, pin_manager))
     pins_menu.addAction(save_all_action)
+    layout_action = pins_menu.addAction(_tr("Arrange pinned images…"))
+    layout_action.triggered.connect(_arrange_pinned_images)
 
     menu.addMenu(pins_menu)
 
@@ -187,3 +226,28 @@ def _save_all_pins_as(app, pin_manager):
                 failed=failed,
             ),
         )
+
+
+def _open_image_layout():
+    from ui.image_layout_dialog import show_image_layout
+    return show_image_layout()
+
+
+def _arrange_pinned_images():
+    window = _open_image_layout()
+    window.add_pins()
+
+
+def _open_image_editor():
+    from ui.image_editor import show_image_editor
+    return show_image_editor()
+
+
+def _open_pin_workspaces():
+    from pin.workspace_dialog import show_pin_workspaces
+    return show_pin_workspaces()
+
+
+def _open_image_compare():
+    from ui.image_compare import show_image_compare
+    return show_image_compare()

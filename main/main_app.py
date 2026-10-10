@@ -7,6 +7,14 @@
 import sys
 import os
 
+# Explicit package diagnostics must run before normal imports/bootstrap so they
+# cannot touch personal settings, clipboard data, hotkeys or the running instance.
+if __name__ == "__main__" and "--verify-mp4-export" in sys.argv[1:]:
+    if len(sys.argv) != 3 or sys.argv[1] != "--verify-mp4-export":
+        sys.exit(2)
+    from gif.mp4_diagnostics import run as verify_mp4_export
+    sys.exit(verify_mp4_export(sys.argv[2]))
+
 from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 from PySide6.QtGui import QIcon, QPixmap, QPainter, QColor, QBrush, QFont
 from PySide6.QtCore import QObject, Qt, Signal, Slot
@@ -107,6 +115,8 @@ class MainApp(QObject):
         setup_logger(self.config_manager)
         self._logger = get_logger()
         self.app.aboutToQuit.connect(self._on_about_to_quit)
+        from core.save import save_notifications
+        save_notifications().failed.connect(self._on_image_save_failed)
 
         # Qt 的自动高 DPI 缩放已关闭。首次进入欢迎向导前，按 Windows 的
         # 显示缩放为两套界面比例选一个初始档位；已有值（包括用户选择）不覆盖。
@@ -172,9 +182,21 @@ class MainApp(QObject):
         self.tray_icon = None
         self.settings_window = None
         self.screenshot_window = None
+        self._capture_countdown = None
+        self._quitting = False
+        self._capture_busy = False
+        self._collection_resume_timer = None
         self.clipboard_window = None
         # 剪贴板管理器
         self.clipboard_manager = None
+
+        from clipboard.controllers.foreground_tracker import (
+            ForegroundWindowTracker, get_current_pid, get_window_pid,
+        )
+        self._capture_foreground_tracker = ForegroundWindowTracker()
+        own_pid = get_current_pid()
+        self._capture_foreground_tracker.set_excluded(lambda hwnd: get_window_pid(hwnd) == own_pid)
+        self._capture_foreground_tracker.start()
 
         from translation.smart_translation_controller import SmartTranslationController
         self.smart_translation_controller = SmartTranslationController(self)
@@ -190,6 +212,7 @@ class MainApp(QObject):
 
     def _on_about_to_quit(self):
         """应用退出前收尾"""
+        self._cancel_pending_capture()
         if self.clipboard_manager:
             self.clipboard_manager.stop_image_indexing()
         try:
@@ -304,6 +327,14 @@ class MainApp(QObject):
             else:
                 log_warning(T("截图热键注册失败: {hotkey}", hotkey=hotkey), "Hotkey")
                 failed_hotkeys.append((self.tr("Screenshot"), hotkey))
+
+        from settings.tool_settings import QUICK_CAPTURE_ACTIONS
+        for kind, label in QUICK_CAPTURE_ACTIONS:
+            for suffix in ("", "_2"):
+                key = self.config_manager.get_app_setting(f"quick_{kind}_hotkey{suffix}", "")
+                if key and not self.hotkey_system.register_hotkey(
+                        key, lambda capture_kind=kind: self.start_quick_capture(capture_kind)):
+                    failed_hotkeys.append((self.tr(label), key))
 
         # 注册截图备用热键
         hotkey_2 = self.config_manager.get_hotkey_2()
@@ -436,8 +467,169 @@ class MainApp(QObject):
         modal.activateWindow()
         return True
             
-    def start_screenshot(self):
+    def start_delayed_screenshot(self, seconds):
+        """Schedule one capture without taking focus from the target application."""
+        if getattr(self, "_quitting", False):
+            return
+        if self.screenshot_window and getattr(self.screenshot_window, "_session_active", False):
+            self.start_screenshot()
+            return
+        thread = getattr(self, "_capture_thread", None)
+        if (getattr(self, "_capture_busy", False) or (thread and thread.isRunning())
+                or self._activate_blocking_modal()):
+            return
+        if getattr(self, "_capture_countdown", None) is None:
+            from ui.capture_countdown import CaptureCountdown
+            self._capture_countdown = CaptureCountdown()
+            self._capture_countdown.finished.connect(self.start_screenshot)
+            self._capture_countdown.failed.connect(self._on_capture_failed)
+        try:
+            self._capture_countdown.start(seconds)
+        except Exception as exc:
+            log_exception(exc, "Start delayed screenshot")
+            self._on_capture_failed()
+
+    def _cancel_pending_capture(self):
+        self._quitting = True
+        timer = getattr(self, "_collection_resume_timer", None)
+        if timer is not None:
+            timer.stop()
+        countdown = getattr(self, "_capture_countdown", None)
+        if countdown is not None:
+            countdown.cancel()
+        tracker = getattr(self, "_capture_foreground_tracker", None)
+        if tracker is not None:
+            tracker.stop()
+
+    def _continue_collection_capture(self):
+        if getattr(self, "_quitting", False):
+            return
+        from PySide6.QtCore import QTimer
+        if getattr(self, "_collection_resume_timer", None) is None:
+            self._collection_resume_timer = QTimer(self)
+            self._collection_resume_timer.setSingleShot(True)
+            self._collection_resume_timer.timeout.connect(self._start_collection_capture)
+        self._collection_resume_timer.start(100)
+
+    def _start_collection_capture(self):
+        self.start_screenshot()
+        if not getattr(self, "_capture_busy", False):
+            self._restore_image_collection()
+
+    def _restore_image_collection(self):
+        timer = getattr(self, "_collection_resume_timer", None)
+        if getattr(self, "_quitting", False) or (timer and timer.isActive()):
+            return
+        if self.screenshot_window and getattr(self.screenshot_window, "_session_active", False):
+            return
+        collection = getattr(self.app, "_image_layout_window", None)
+        if collection is not None and collection._hidden_for_capture:
+            collection._hidden_for_capture = False
+            collection.show()
+            collection.raise_()
+            collection.activateWindow()
+
+    def _on_image_save_failed(self, _path):
+        if not getattr(self, "_quitting", False) and self.tray_icon:
+            self.tray_icon.showMessage(
+                self.tr("Save failed"),
+                self.tr("Could not save the image. Check the output size, folder permissions and free space."),
+                QSystemTrayIcon.MessageIcon.Warning,
+            )
+
+    def _on_capture_failed(self, reason=""):
+        self._capture_busy = False
+        self._restore_image_collection()
+        if not getattr(self, "_quitting", False) and self.tray_icon:
+            self.tray_icon.showMessage(
+                self.tr("Screenshot failed"),
+                (self.tr("Capture target is unavailable or moved. Use region capture or choose another target.")
+                 if reason == "target_unavailable" else
+                 self.tr("Could not capture the screen. Please try again.")),
+                QSystemTrayIcon.MessageIcon.Warning,
+            )
+
+    def start_quick_capture(self, kind):
+        from PySide6.QtGui import QCursor
+        from capture.quick_capture import make_quick_capture_request
+        from core.last_capture_region import get_last_region
+
+        if getattr(self, "_quitting", False) or getattr(self, "_capture_busy", False):
+            return
+        countdown = getattr(self, "_capture_countdown", None)
+        if countdown is not None and countdown.is_pending:
+            return
+        if self.screenshot_window and getattr(self.screenshot_window, "_session_active", False):
+            self.start_screenshot()
+            return
+        try:
+            tracker = getattr(self, "_capture_foreground_tracker", None)
+            if tracker is not None:
+                tracker.sample()
+            action = self.config_manager.get_app_setting("quick_capture_result", "edit")
+            if action not in ("edit", "copy"):
+                action = "edit"
+            request = make_quick_capture_request(
+                kind, point=QCursor.pos(), hwnd=tracker.target_hwnd if tracker else None,
+                last_region=get_last_region(), action=action,
+            )
+        except Exception as exc:
+            log_exception(exc, "Resolve quick capture target")
+            self._on_capture_failed("target_unavailable")
+            return
+        self.start_screenshot(request=request)
+
+    def _on_capture_result(self, image, desktop, selection, action):
+        self._capture_busy = False
+        if getattr(self, "_quitting", False):
+            return
+        if selection is None:
+            if action == "private":
+                self._on_capture_ready(image, desktop, sensitive=True)
+                return
+            self._on_capture_ready(image, desktop)
+            return
+        if self._activate_blocking_modal():
+            return
+        if action == "copy":
+            from core.clipboard_utils import deliver_image_async
+            from core.last_capture_region import set_last_region
+            from core.save import SaveService
+
+            image = image.copy(selection.translated(-round(desktop.x()), -round(desktop.y())))
+            config = self.config_manager
+            save = config.get_screenshot_save_enabled()
+            deliver_image_async(
+                image, save_service=SaveService(config) if save else None,
+                save_kwargs={"directory": config.get_screenshot_save_path(), "prefix": "",
+                             "image_format": config.get_screenshot_format()} if save else None,
+                write_file_reference=config.get_clipboard_file_reference_enabled() if save else False,
+            )
+            set_last_region(selection)
+            self._restore_image_collection()
+        else:
+            window = self._on_capture_ready(image, desktop)
+            if window is not None:
+                from PySide6.QtCore import QRectF
+                window.scene.selection_model.initialize_confirmed_rect(QRectF(selection))
+
+    def start_sensitive_screenshot(self):
+        from core.capture_privacy import ensure_supported
+        countdown = getattr(self, "_capture_countdown", None)
+        if countdown is not None and countdown.is_pending:
+            # An ordinary delayed capture must not fire after the user asked for a
+            # one-shot private session. Cancel does not emit finished.
+            countdown.cancel()
+        if ensure_supported():
+            self.start_screenshot(sensitive=True)
+
+    def start_screenshot(self, *, request=None, sensitive=False):
         """启动截图 - 管理截图窗口生命周期"""
+        if getattr(self, "_quitting", False):
+            return
+        countdown = getattr(self, "_capture_countdown", None)
+        if countdown is not None and countdown.is_pending:
+            return
         
         # 已有截图窗口且会话活跃 → 忽略重复触发，并把焦点还给截图窗口
         if self.screenshot_window and getattr(self.screenshot_window, '_session_active', False):
@@ -460,9 +652,15 @@ class MainApp(QObject):
             return
         
         # 后台截图线程正在运行时也忽略重复触发
-        if getattr(self, '_capture_thread', None) and self._capture_thread.isRunning():
+        if (getattr(self, "_capture_busy", False)
+                or (getattr(self, "_capture_thread", None) and self._capture_thread.isRunning())):
             log_debug(T("后台截图线程进行中，忽略重复触发"), "MainApp")
             return
+
+        if sensitive:
+            from core.capture_privacy import ensure_supported
+            if request is not None or not ensure_supported():
+                return
 
         # 关闭所有已打开的颜色选择器（避免其遮挡截图界面或触发焦点冲突）
         from PySide6.QtWidgets import QApplication, QColorDialog
@@ -479,28 +677,51 @@ class MainApp(QObject):
         except Exception as e:
             log_exception(e, T("关闭剪贴板窗口"))
 
+        collection = getattr(self.app, "_image_layout_window", None)
+        if collection is not None and collection.isVisible():
+            collection._hidden_for_capture = True
+            collection.hide()
+
         log_info(T("启动后台截图线程"), "MainApp")
         
         # 在后台线程执行 mss.grab()，避免主线程被阻塞 100~500ms
         from PySide6.QtCore import QThread, Signal
 
+        include_cursor = self.config_manager.get_app_setting("screenshot_include_cursor", False) is True
+
         class CaptureThread(QThread):
-            captured = Signal(object, object)  # (QImage, QRectF)
+            captured = Signal(object, object, object, str)
+            failed = Signal(str)
 
             def run(self):
                 try:
                     from capture.capture_service import CaptureService
-                    image, rect = CaptureService().capture_all_screens()
-                    self.captured.emit(image, rect)
+                    service = CaptureService(include_cursor=include_cursor)
+                    if request is None:
+                        image, rect = service.capture_all_screens()
+                        self.captured.emit(image, rect, None, "private" if sensitive else "edit")
+                    else:
+                        from capture.quick_capture import CaptureTargetUnavailable
+                        try:
+                            image, rect, selection = request.capture(service)
+                        except CaptureTargetUnavailable:
+                            self.failed.emit("target_unavailable")
+                            return
+                        self.captured.emit(image, rect, selection, request.action)
                 except Exception as e:
                     log_exception(e, T("后台截图失败"))
+                    self.failed.emit("")
 
+        self._capture_busy = True
         self._capture_thread = CaptureThread()
-        self._capture_thread.captured.connect(self._on_capture_ready)
+        self._capture_thread.captured.connect(self._on_capture_result)
+        self._capture_thread.failed.connect(self._on_capture_failed)
         self._capture_thread.start()
 
-    def _on_capture_ready(self, image, rect):
+    def _on_capture_ready(self, image, rect, *, sensitive=False):
         """后台截图完成后，在主线程创建或复用截图窗口"""
+        if getattr(self, "_quitting", False):
+            return
         log_debug(T("后台截图完成，准备截图窗口"), "MainApp")
 
         # 截图采集期间也可能弹出模态窗口，避免在线程结束后创建一个被锁死的界面。
@@ -510,7 +731,10 @@ class MainApp(QObject):
         if self.screenshot_window is not None:
             # 复用已有窗口（节省 ~250ms 的 UI 壳创建时间）
             log_debug(T("复用已有截图窗口"), "MainApp")
-            self.screenshot_window.prepare_new_session(image, rect)
+            if sensitive:
+                self.screenshot_window.prepare_new_session(image, rect, sensitive=True)
+            else:
+                self.screenshot_window.prepare_new_session(image, rect)
         else:
             # 首次创建
             log_debug(T("首次创建截图窗口"), "MainApp")
@@ -523,7 +747,11 @@ class MainApp(QObject):
                 self.config_manager,
                 prefetched_image=image,
                 prefetched_rect=rect,
+                **({"sensitive": True} if sensitive else {}),
             )
+            self.screenshot_window.collection_continue_requested.connect(self._continue_collection_capture)
+            self.screenshot_window.session_ended.connect(self._restore_image_collection)
+        return self.screenshot_window
     
     def open_settings(self):
         """打开设置窗口"""
@@ -735,6 +963,7 @@ class MainApp(QObject):
             log_exception(e, T("钉住剪贴板图片失败"))
         
     def quit_app(self):
+        self._cancel_pending_capture()
         # 完全销毁缓存的截图窗口
         if self.screenshot_window:
             try:

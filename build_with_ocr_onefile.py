@@ -43,6 +43,7 @@ hidden_imports = [
     'pyclipboard',
     'longstitch',
     'gifrecorder',
+    'av',  # Silent MP4 export; PyInstaller's av hook collects its bundled codecs.
     'ppocr_rust',
     'zxingcpp',
     'PIL',
@@ -83,7 +84,6 @@ excludes = [
     'rapidocr_onnxruntime',
     'onnxruntime',
     'keyboard',
-    'av',
     'windows_media_ocr',
     'pythoncom',
     'win32com',
@@ -143,7 +143,21 @@ excludes = [
 ]
 
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='Build the VersePic onefile application')
+    parser.add_argument('--distpath', default=DIST_DIR)
+    parser.add_argument('--workpath', default=BUILD_DIR)
+    args = parser.parse_args()
+    DIST_DIR, BUILD_DIR = args.distpath, args.workpath
     os.chdir(REPO_DIR)
+
+    # Retain PyAV copyright/license files alongside its bundled codec binaries.
+    # Full FFmpeg/x264 redistribution compliance is a separate release check.
+    from importlib.metadata import distribution
+    av_distribution = distribution("av")
+    for entry in av_distribution.files or ():
+        if str(entry).endswith(("/licenses/LICENSE.txt", "/licenses/AUTHORS.rst")):
+            datas.append(f"{av_distribution.locate_file(entry)};licenses/PyAV")
 
     # Generate the UIA typelib wrapper before Analysis so the onefile build
     # includes its dynamic imports without requiring a writable runtime cache.

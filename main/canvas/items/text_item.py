@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from PySide6.QtWidgets import (
+    QGraphicsItem,
     QGraphicsTextItem,
     QStyle, QStyleOptionGraphicsItem,
 )
@@ -485,7 +486,12 @@ class TextItem(DrawingItemMixin, QGraphicsTextItem):
             if scene is None:
                 return
             if self._provisional or undo_stack is None:
-                scene.removeItem(self)
+                # 组合标注的文字清空 = 整条标注作废：连箭头一起撤出场景。
+                from .callout_link import expand_with_partners
+
+                for node in expand_with_partners([self]):
+                    if node.scene() is scene:
+                        scene.removeItem(node)
                 log_debug(T("内容为空，自动删除"), "TextItem")
             else:
                 from canvas.undo import ClearTextItemCommand
@@ -502,6 +508,14 @@ class TextItem(DrawingItemMixin, QGraphicsTextItem):
                 from canvas.undo import AddItemCommand
                 undo_stack.push(AddItemCommand(scene, self))
             
+    def itemChange(self, change, value):
+        """气泡移动时把箭尾重算到新的气泡边缘，尖端仍留在目标点。"""
+        if change == QGraphicsItem.GraphicsItemChange.ItemPositionHasChanged:
+            from .callout_link import sync_arrow_to_bubble
+
+            sync_arrow_to_bubble(self)
+        return super().itemChange(change, value)
+
     @safe_event
     def mouseDoubleClickEvent(self, event):
         """双击进入编辑模式"""

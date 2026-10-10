@@ -24,6 +24,15 @@ from PySide6.QtGui import QColor
 # 智能选区的三档，顺序就是设置页下拉框的顺序。off 是总开关关掉，不作为
 # smart_selection_mode 的取值落盘，所以 STORED_… 从第二项起。
 SMART_SELECTION_MODES = ("off", "window", "element")
+
+# Shared identifiers for quick-capture actions, settings and shortcut editors.
+QUICK_CAPTURE_ACTIONS = (("screen", "Capture Current Screen"),
+                         ("window", "Capture Active Window"),
+                         ("last", "Capture Last Region"))
+QUICK_CAPTURE_HOTKEY_FIELDS = tuple(
+    (f"quick_{kind}_hotkey{suffix}_edit", f"quick_{kind}_hotkey{suffix}")
+    for kind, _label in QUICK_CAPTURE_ACTIONS for suffix in ("", "_2")
+)
 STORED_SMART_SELECTION_MODES = SMART_SELECTION_MODES[1:]
 
 
@@ -126,6 +135,17 @@ class ToolSettingsManager(QObject):
         "spotlight": {
             "opacity": 0.7,  # 幕布暗度（整个场景一张黑色幕布，所有聚光灯共用）
         },
+        "magnify": {
+            "color": "#FF0000",
+            "stroke_width": 3,
+            "opacity": 1.0,
+        },
+        "callout": {
+            "color": "#FF0000",
+            "stroke_width": 9,
+            "opacity": 1.0,
+            "arrow_style": "single",  # 取值见 ArrowItem.STYLES
+        },
         "rect": {
             "color": "#FF0000",  # 红色
             "stroke_width": 9,
@@ -179,6 +199,8 @@ class ToolSettingsManager(QObject):
         # ==================== 1. 快捷键 ====================
         "hotkey": "ctrl+1",                        # 截图热键
         "hotkey_2": "",                            # 截图备用热键
+        **{key: "" for _attr, key in QUICK_CAPTURE_HOTKEY_FIELDS},
+        "quick_capture_result": "edit",
         "clipboard_hotkey": "ctrl+2",              # 剪贴板管理器的快捷键
         "clipboard_hotkey_2": "",                  # 剪贴板管理器的备用快捷键
         "pin_clipboard_hotkey": "",                # 钉住剪贴板图片的快捷键（默认不占键，需手动设置）
@@ -210,7 +232,24 @@ class ToolSettingsManager(QObject):
         "double_click_copy_close": True,      # 双击选区复制到剪贴板并关闭
         "cross_tool_selection": True,         # Ctrl 临时跨工具选择标注
         "text_always_on_top": True,           # 文字标注始终高于其他绘制标注
+        "screenshot_include_cursor": False,
         "screenshot_toolbar_layout": "",      # 截图工具栏按钮排布（JSON，空 = 默认排布，见 ui/toolbar_layout.py）
+        "number_legend_placement": "off",     # 编号说明导出位置：off / bottom / side（TF-0036）
+        # 导出水印（TF-0038）：默认关闭，只作用于最终成图，不改原图/工程
+        "watermark_enabled": False,
+        "watermark_kind": "text",              # text / image
+        "watermark_text": "",
+        "watermark_image_path": "",
+        "watermark_position": "bottom_right",  # bottom_right / bottom_left / top_right / top_left / center
+        "watermark_opacity": 0.6,
+        "watermark_scale": 1.0,
+        # 截图元信息（TF-0040）：默认全关，只有用户显式选择的内容才随导出
+        "capture_meta_source_enabled": False,
+        "capture_meta_time_enabled": False,
+        "capture_meta_note_enabled": False,
+        "capture_meta_source": "",
+        "capture_meta_note": "",
+        "capture_meta_time": "",
 
         # 智能选择
         "smart_selection": True,              # 智能选区总开关
@@ -223,6 +262,12 @@ class ToolSettingsManager(QObject):
         "screenshot_save_enabled": True,       # 自动保存截图
         "screenshot_save_path": os.path.join(os.path.expanduser("~"), "Pictures", "jietuba_photos"),  # 默认保存路径
         "screenshot_format": "PNG",            # 保存格式: PNG / JPG / BMP / WEBP / PDF
+        "screenshot_size_mode": "original",
+        "screenshot_output_width": 1600,
+        "screenshot_name_template": "",
+        "screenshot_project_name": "",
+        "screenshot_date_folders": False,
+        "capture_region_presets": "[]",
         "screenshot_quality": 85,              # 有损格式质量 (1-100, PNG/BMP忽略)
         "clipboard_file_reference_enabled": True,  # 复制时同时写入文件路径（CF_HDROP），需自动保存截图开启才生效
 
@@ -349,6 +394,7 @@ class ToolSettingsManager(QObject):
         "long_stitch_engine": "hash_rust",     # 长截图引擎（hash_rust）
         "long_stitch_debug": False,            # 长截图调试模式
         "scroll_cooldown": 0.15,               # 滚动后等待时间（秒，0.05-1.0）
+        "long_stitch_ignore_right_pixels": 20,
         "long_stitch_ignore_top_pixels": 0,    # 后续截图顶部忽略像素（0-300）
 
         # 启动预加载（重启生效）

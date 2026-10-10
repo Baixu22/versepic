@@ -9,6 +9,90 @@
 <context>
     <name>SettingsDialog</name>
     <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</translation>
+    </message>
+    <message>
+        <source>The preview uses the same renderer as export.</source>
+        <translation>The preview uses the same renderer as export.</translation>
+    </message>
+    <message>
+        <source>Watermark Preview</source>
+        <translation>Watermark Preview</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Size</translation>
+    </message>
+    <message>
+        <source>Opacity</source>
+        <translation>Opacity</translation>
+    </message>
+    <message>
+        <source>Watermark Opacity and Size</source>
+        <translation>Watermark Opacity and Size</translation>
+    </message>
+    <message>
+        <source>Center</source>
+        <translation>Center</translation>
+    </message>
+    <message>
+        <source>Top left</source>
+        <translation>Top left</translation>
+    </message>
+    <message>
+        <source>Top right</source>
+        <translation>Top right</translation>
+    </message>
+    <message>
+        <source>Bottom left</source>
+        <translation>Bottom left</translation>
+    </message>
+    <message>
+        <source>Bottom right</source>
+        <translation>Bottom right</translation>
+    </message>
+    <message>
+        <source>Watermark Position</source>
+        <translation>Watermark Position</translation>
+    </message>
+    <message>
+        <source>Choose…</source>
+        <translation>Choose…</translation>
+    </message>
+    <message>
+        <source>PNG/JPG/BMP/WebP. Missing or oversized files are ignored.</source>
+        <translation>PNG/JPG/BMP/WebP. Missing or oversized files are ignored.</translation>
+    </message>
+    <message>
+        <source>Watermark Image</source>
+        <translation>Watermark Image</translation>
+    </message>
+    <message>
+        <source>Only the text you type here is written; window titles and identities are never read.</source>
+        <translation>Only the text you type here is written; window titles and identities are never read.</translation>
+    </message>
+    <message>
+        <source>Watermark Text</source>
+        <translation>Watermark Text</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>Image</translation>
+    </message>
+    <message>
+        <source>Watermark Type</source>
+        <translation>Watermark Type</translation>
+    </message>
+    <message>
+        <source>Adds a text or image mark to exported images. Off by default; the original image and project are never changed.</source>
+        <translation>Adds a text or image mark to exported images. Off by default; the original image and project are never changed.</translation>
+    </message>
+    <message>
+        <source>Export Watermark</source>
+        <translation>Export Watermark</translation>
+    </message>
+    <message>
         <source>Shortcuts</source>
         <translation>Shortcuts</translation>
     </message>
@@ -816,6 +900,130 @@ Replace it?</translation>
     <message><source>Color Formats</source><translation>Color Formats</translation></message>
     <message><source>Which formats the magnifier shows, and which one the copy shortcut uses.</source><translation>Which formats the magnifier shows, and which one the copy shortcut uses.</translation></message>
     <message><source>Manage Color Formats</source><translation>Manage Color Formats</translation></message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>Capture Current Screen</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>Capture Active Window</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>Capture Last Region</translation>
+    </message>
+    <message>
+        <source>Quick Capture Result</source>
+        <translation>Quick Capture Result</translation>
+    </message>
+    <message>
+        <source>Copy also follows the auto-save setting. Ordinary screenshots are unchanged.</source>
+        <translation>Copy also follows the auto-save setting. Ordinary screenshots are unchanged.</translation>
+    </message>
+    <message>
+        <source>Open in editor</source>
+        <translation>Open in editor</translation>
+    </message>
+    <message>
+        <source>Copy directly</source>
+        <translation>Copy directly</translation>
+    </message>
+    <message>
+        <source>Saved Image Size</source>
+        <translation>Saved Image Size</translation>
+    </message>
+    <message>
+        <source>These settings affect saved files; clipboard images keep their original size.</source>
+        <translation>These settings affect saved files; clipboard images keep their original size.</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>Original size</translation>
+    </message>
+    <message>
+        <source>50% size</source>
+        <translation>50% size</translation>
+    </message>
+    <message>
+        <source>Specified width</source>
+        <translation>Specified width</translation>
+    </message>
+    <message>
+        <source>Image Quality</source>
+        <translation>Image Quality</translation>
+    </message>
+    <message>
+        <source>Applies to JPG and WebP only. PNG and BMP remain lossless.</source>
+        <translation>Applies to JPG and WebP only. PNG and BMP remain lossless.</translation>
+    </message>
+    <message>
+        <source>Output Presets</source>
+        <translation>Output Presets</translation>
+    </message>
+    <message>
+        <source>Original PNG</source>
+        <translation>Original PNG</translation>
+    </message>
+    <message>
+        <source>Share WebP</source>
+        <translation>Share WebP</translation>
+    </message>
+    <message>
+        <source>Automatic File Names</source>
+        <translation>Automatic File Names</translation>
+    </message>
+    <message>
+        <source>Leave empty for the original naming. Fields: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.</source>
+        <translation>Leave empty for the original naming. Fields: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.</translation>
+    </message>
+    <message>
+        <source>Project Name</source>
+        <translation>Project Name</translation>
+    </message>
+    <message>
+        <source>Optional text for the {project} field. Window titles are never added automatically.</source>
+        <translation>Optional text for the {project} field. Window titles are never added automatically.</translation>
+    </message>
+    <message>
+        <source>Date Subfolders</source>
+        <translation>Date Subfolders</translation>
+    </message>
+    <message>
+        <source>Place automatically named images in a YYYY-MM-DD folder.</source>
+        <translation>Place automatically named images in a YYYY-MM-DD folder.</translation>
+    </message>
+    <message>
+        <source>File Name Preview</source>
+        <translation>File Name Preview</translation>
+    </message>
+    <message>
+        <source>Example for a normal screenshot; capture time and collisions determine the final name.</source>
+        <translation>Example for a normal screenshot; capture time and collisions determine the final name.</translation>
+    </message>
+    <message>
+        <source>Invalid template: use only the listed fields, without formatting.</source>
+        <translation>Invalid template: use only the listed fields, without formatting.</translation>
+    </message>
+    <message>
+        <source>Invalid File Name Template</source>
+        <translation>Invalid File Name Template</translation>
+    </message>
+    <message>
+        <source>Use only the listed filename fields, without formatting.</source>
+        <translation>Use only the listed filename fields, without formatting.</translation>
+    </message>
+    <message>
+        <source>Transparent areas use white in JPG, BMP and PDF.</source>
+        <translation>Transparent areas use white in JPG, BMP and PDF.</translation>
+    </message>
+    <message>
+        <source>Include Mouse Pointer</source>
+        <translation>Include Mouse Pointer</translation>
+    </message>
+    <message>
+        <source>Capture the real pointer at its current position. Applies to static captures, not GIF or scrolling capture.</source>
+        <translation>Capture the real pointer at its current position. Applies to static captures, not GIF or scrolling capture.</translation>
+    </message>
 </context>
 
 <context>
@@ -848,6 +1056,26 @@ Replace it?</translation>
         <source>Please configure DeepL API key in Settings.</source>
         <translation>Please configure DeepL API key in Settings.</translation>
     </message>
+    <message>
+        <source>Save Failed</source>
+        <translation>Save Failed</translation>
+    </message>
+    <message>
+        <source>Failed to save image.</source>
+        <translation>Failed to save image.</translation>
+    </message>
+    <message>
+        <source>Screenshot %1</source>
+        <translation>Screenshot %1</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>Collection unavailable</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images from the collection before adding more.</source>
+        <translation>Finish exporting or remove images from the collection before adding more.</translation>
+    </message>
 </context>
 
 <context>
@@ -865,6 +1093,10 @@ Replace it?</translation>
 <!-- ========== Toolbar ========== -->
 <context>
     <name>Toolbar</name>
+    <message>
+        <source>Insert image…</source>
+        <translation>Insert image…</translation>
+    </message>
     <message>
         <source>More</source>
         <translation>More</translation>
@@ -884,6 +1116,14 @@ Replace it?</translation>
     <message>
         <source>Spotlight (dim outside the box)</source>
         <translation>Spotlight (dim outside the box)</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>Magnify region</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>Text callout (drag from bubble to target)</translation>
     </message>
     <message>
         <source>Long screenshot (scroll)</source>
@@ -1025,6 +1265,22 @@ Replace it?</translation>
         <source>Record</source>
         <translation>Record</translation>
     </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>Collect and capture next</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>Collect and review images</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>Multiple regions from frozen frame</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>Edit or save project…</translation>
+    </message>
 </context>
 
 <!-- ========== Pin Window ========== -->
@@ -1138,6 +1394,22 @@ Replace it?</translation>
         <source>Save Pin Image</source>
         <translation>Save Pin Image</translation>
     </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>Edit or save project…</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>Project unavailable</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>Could not transfer the editable image. Original content was kept.</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>Compare image…</translation>
+    </message>
 </context>
 
 <!-- ========== Scroll Screenshot (Long Screenshot) ========== -->
@@ -1203,6 +1475,22 @@ Replace it?</translation>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
+    <message>
+        <source>Undo last stitch</source>
+        <translation>Undo last stitch</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>Adjust latest seam</translation>
+    </message>
+    <message>
+        <source>Ignore fixed header / scrollbar</source>
+        <translation>Ignore fixed header / scrollbar</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>Auto scroll</translation>
+    </message>
 </context>
 
 <!-- ========== System Tray ========== -->
@@ -1246,6 +1534,51 @@ Replace it?</translation>
     <message><source>Choose folder to save pinned images</source><translation>Choose folder to save pinned images</translation></message>
     <message><source>Save Failed</source><translation>Save Failed</translation></message>
     <message><source>Saved {saved} pinned images, failed {failed}.</source><translation>Saved {saved} pinned images, failed {failed}.</translation></message>
+    <message>
+        <source>Delayed screenshot</source>
+        <translation>Delayed screenshot</translation>
+    </message>
+    <message>
+        <source>After %1 seconds</source>
+        <translation>After %1 seconds</translation>
+    </message>
+    <message>
+        <source>Quick capture</source>
+        <translation>Quick capture</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>Capture Current Screen</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>Capture Active Window</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>Capture Last Region</translation>
+    </message>
+    <message>
+        <source>Image layout / PDF</source>
+        <translation>Image layout / PDF</translation>
+    </message>
+    <message>
+        <source>Arrange pinned images…</source>
+        <translation>Arrange pinned images…</translation>
+    </message>
+    <message>
+        <source>Open image editor…</source>
+        <translation>Open image editor…</translation>
+    </message>
+    <message>
+        <source>Pin workspaces…</source>
+        <translation>Pin workspaces…</translation>
+    </message>
+    <message>
+        <source>Compare images…</source>
+        <translation>Compare images…</translation>
+    </message>
+<message><source>Sensitive screenshot (once)</source><translation>Sensitive screenshot (once)</translation></message>
 </context>
 
 <!-- ========== Main App (Tray Menu) ========== -->
@@ -1275,6 +1608,38 @@ Replace it?</translation>
     <message><source>Choose folder to save pinned images</source><translation>Choose folder to save pinned images</translation></message>
     <message><source>Save Failed</source><translation>Save Failed</translation></message>
     <message><source>Saved {saved} pinned images, failed {failed}.</source><translation>Saved {saved} pinned images, failed {failed}.</translation></message>
+    <message>
+        <source>Screenshot failed</source>
+        <translation>Screenshot failed</translation>
+    </message>
+    <message>
+        <source>Could not capture the screen. Please try again.</source>
+        <translation>Could not capture the screen. Please try again.</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>Capture Current Screen</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>Capture Active Window</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>Capture Last Region</translation>
+    </message>
+    <message>
+        <source>Capture target is unavailable or moved. Use region capture or choose another target.</source>
+        <translation>Capture target is unavailable or moved. Use region capture or choose another target.</translation>
+    </message>
+    <message>
+        <source>Save failed</source>
+        <translation>Save failed</translation>
+    </message>
+    <message>
+        <source>Could not save the image. Check the output size, folder permissions and free space.</source>
+        <translation>Could not save the image. Check the output size, folder permissions and free space.</translation>
+    </message>
 </context>
 
 <!-- ========== Translation Dialog ========== -->
@@ -1843,6 +2208,31 @@ This cannot be undone.</translation>
         <source>Use Move Up / Move Down in the context menu</source>
         <translation>Use Move Up / Move Down in the context menu</translation>
     </message>
+    <message>
+        <source>Add to image layout / PDF</source>
+        <translation>Add to image layout / PDF</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>Compare image…</translation>
+    </message>
+<message><source>OCR: waiting</source><translation>OCR: waiting</translation></message>
+<message><source>OCR: recognizing</source><translation>OCR: recognizing</translation></message>
+<message><source>OCR: failed</source><translation>OCR: failed</translation></message>
+<message><source>OCR: excluded</source><translation>OCR: excluded</translation></message>
+<message><source>OCR: indexed</source><translation>OCR: indexed</translation></message>
+<message><source>OCR: no text</source><translation>OCR: no text</translation></message>
+<message><source>OCR engine unavailable</source><translation>OCR engine unavailable</translation></message>
+<message><source>Image could not be read</source><translation>Image could not be read</translation></message>
+<message><source>OCR recognition failed</source><translation>OCR recognition failed</translation></message>
+<message><source>OCR interrupted; waiting to retry</source><translation>OCR interrupted; waiting to retry</translation></message>
+<message><source>Restore image text indexing</source><translation>Restore image text indexing</translation></message>
+<message><source>Retry failed OCR</source><translation>Retry failed OCR</translation></message>
+<message><source>Recognize image text again</source><translation>Recognize image text again</translation></message>
+<message><source>Exclude image from text index</source><translation>Exclude image from text index</translation></message>
+<message><source>Image text index</source><translation>Image text index</translation></message>
+<message><source>Remove stored OCR text for this image and stop automatic indexing until restored? Original image and paste formats stay unchanged. Database backups and previously copied text are not erased.</source><translation>Remove stored OCR text for this image and stop automatic indexing until restored? Original image and paste formats stay unchanged. Database backups and previously copied text are not erased.</translation></message>
+<message><source>The image index could not be updated. Check that the item and database are still available.</source><translation>The image index could not be updated. Check that the item and database are still available.</translation></message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
@@ -2364,6 +2754,30 @@ This cannot be undone.</translation>
 
 <context>
     <name>ArrowSettingsPanel</name>
+    <message>
+        <source>Step note</source>
+        <translation>Step note</translation>
+    </message>
+    <message>
+        <source>Caption shown in the exported step list</source>
+        <translation>Caption shown in the exported step list</translation>
+    </message>
+    <message>
+        <source>No caption list</source>
+        <translation>No caption list</translation>
+    </message>
+    <message>
+        <source>Caption list below</source>
+        <translation>Caption list below</translation>
+    </message>
+    <message>
+        <source>Caption list at right</source>
+        <translation>Caption list at right</translation>
+    </message>
+    <message>
+        <source>Export numbered captions as a step list</source>
+        <translation>Export numbered captions as a step list</translation>
+    </message>
     <message>
         <source>Solid Arrow</source>
         <translation>Solid Arrow</translation>
@@ -3107,6 +3521,10 @@ You can tweak more options in Settings anytime.</translation>
     <message><source>Rounded Corners</source><translation>Rounded Corners</translation></message>
     <message><source>Lock Aspect Ratio</source><translation>Lock Aspect Ratio</translation></message>
     <message><source>Refresh Background</source><translation>Refresh Background</translation></message>
+    <message>
+        <source>Exact Region</source>
+        <translation>Exact Region</translation>
+    </message>
 </context>
 
 <!-- ========== Border Shadow Popup ========== -->
@@ -3461,6 +3879,10 @@ SOFTWARE.</translation></message>
 <context>
     <name>ToolbarLayoutDialog</name>
     <message>
+        <source>Insert image…</source>
+        <translation>Insert image…</translation>
+    </message>
+    <message>
         <source>Customize Toolbar</source>
         <translation>Customize Toolbar</translation>
     </message>
@@ -3537,8 +3959,20 @@ SOFTWARE.</translation></message>
         <translation>Spotlight</translation>
     </message>
     <message>
+        <source>Magnify region</source>
+        <translation>Magnify region</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>Text callout (drag from bubble to target)</translation>
+    </message>
+    <message>
         <source>Arrow</source>
         <translation>Arrow</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>Text callout</translation>
     </message>
     <message>
         <source>Number</source>
@@ -3579,6 +4013,22 @@ SOFTWARE.</translation></message>
     <message>
         <source>Confirm</source>
         <translation>Confirm</translation>
+    </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>Collect and capture next</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>Collect and review images</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>Multiple regions from frozen frame</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>Edit or save project…</translation>
     </message>
 </context>
 <context>
@@ -3646,6 +4096,10 @@ SOFTWARE.</translation></message>
         <source>Copied</source>
         <translation>Copied</translation>
     </message>
+<message><source>Review table…</source><translation>Review table…</translation></message>
+<message><source>Table preview unavailable. Use an image up to 32 megapixels with positioned text.</source><translation>Table preview unavailable. Use an image up to 32 megapixels with positioned text.</translation></message>
+<message><source>PDF output…</source><translation>PDF output…</translation></message>
+<message><source>Current image</source><translation>Current image</translation></message>
 </context>
 <context>
     <name>ColorFormatDialog</name>
@@ -3728,6 +4182,106 @@ SOFTWARE.</translation></message>
     <message><source>%1 areas covered</source><translation>%1 areas covered</translation></message>
     <message><source>Recognizing...</source><translation>Recognizing...</translation></message>
     <message><source>Copied</source><translation>Copied</translation></message>
+    <message>
+        <source>Chinese IDs (date + checksum)</source>
+        <translation>Chinese IDs (date + checksum)</translation>
+    </message>
+    <message>
+        <source>Bank cards (Luhn checksum)</source>
+        <translation>Bank cards (Luhn checksum)</translation>
+    </message>
+    <message>
+        <source>Try OCR O/I/l substitutions</source>
+        <translation>Try OCR O/I/l substitutions</translation>
+    </message>
+    <message>
+        <source>Rule presets</source>
+        <translation>Rule presets</translation>
+    </message>
+    <message>
+        <source>Save rules…</source>
+        <translation>Save rules…</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>Delete preset</translation>
+    </message>
+    <message>
+        <source>Presets save rule switches only, never keywords, OCR text or images.</source>
+        <translation>Presets save rule switches only, never keywords, OCR text or images.</translation>
+    </message>
+    <message>
+        <source>Candidates are not proof of identity or complete privacy detection. OCR errors, split lines and unchecked rules can miss data. Review every line; uncheck false positives and drag to cover missed areas. Exports flatten black covers into new files at this resolution.</source>
+        <translation>Candidates are not proof of identity or complete privacy detection. OCR errors, split lines and unchecked rules can miss data. Review every line; uncheck false positives and drag to cover missed areas. Exports flatten black covers into new files at this resolution.</translation>
+    </message>
+    <message>
+        <source>Current rules</source>
+        <translation>Current rules</translation>
+    </message>
+    <message>
+        <source>Contact details</source>
+        <translation>Contact details</translation>
+    </message>
+    <message>
+        <source>Identity and bank cards</source>
+        <translation>Identity and bank cards</translation>
+    </message>
+    <message>
+        <source>All checks (strict)</source>
+        <translation>All checks (strict)</translation>
+    </message>
+    <message>
+        <source>Saved rule presets could not be read. Existing settings were not changed.</source>
+        <translation>Saved rule presets could not be read. Existing settings were not changed.</translation>
+    </message>
+    <message>
+        <source>Save rule preset</source>
+        <translation>Save rule preset</translation>
+    </message>
+    <message>
+        <source>Preset name (rule switches only)</source>
+        <translation>Preset name (rule switches only)</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>Preset name</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Save</translation>
+    </message>
+    <message>
+        <source>Rule switches saved. Keywords and image data were not saved.</source>
+        <translation>Rule switches saved. Keywords and image data were not saved.</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Use a unique name (1–40 characters), up to 20 presets, and writable settings.</source>
+        <translation>Could not save preset. Use a unique name (1–40 characters), up to 20 presets, and writable settings.</translation>
+    </message>
+    <message>
+        <source>Delete only this saved rule combination? Images and history will not be changed.</source>
+        <translation>Delete only this saved rule combination? Images and history will not be changed.</translation>
+    </message>
+    <message>
+        <source>Preset deleted. Current switches and images were kept.</source>
+        <translation>Preset deleted. Current switches and images were kept.</translation>
+    </message>
+    <message>
+        <source>Could not delete preset. Existing data was kept.</source>
+        <translation>Could not delete preset. Existing data was kept.</translation>
+    </message>
+    <message>
+        <source>Choose a new filename. Redaction never overwrites an existing file.</source>
+        <translation>Choose a new filename. Redaction never overwrites an existing file.</translation>
+    </message>
+    <message>
+        <source>Save failed. Choose a new PNG, JPEG or PDF file.</source>
+        <translation>Save failed. Choose a new PNG, JPEG or PDF file.</translation>
+    </message>
 </context>
 <context>
     <name>ClipboardWindow</name>
@@ -3791,5 +4345,1476 @@ SOFTWARE.</translation></message>
         <source>Reset Capture Settings</source>
         <translation>Reset Capture Settings</translation>
     </message>
+</context>
+<context>
+    <name>CaptureCountdown</name>
+    <message>
+        <source>Open a menu or tooltip. Esc cancels.</source>
+        <translation>Open a menu or tooltip. Esc cancels.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Screenshot in %1 s</source>
+        <translation>Screenshot in %1 s</translation>
+    </message>
+</context>
+<context>
+    <name>RegionGeometryDialog</name>
+    <message>
+        <source>Exact Region</source>
+        <translation>Exact Region</translation>
+    </message>
+    <message>
+        <source>Physical pixels. Negative coordinates are valid on other screens.</source>
+        <translation>Physical pixels. Negative coordinates are valid on other screens.</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Width</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>Height</translation>
+    </message>
+    <message>
+        <source>Aspect Ratio</source>
+        <translation>Aspect Ratio</translation>
+    </message>
+    <message>
+        <source>Free</source>
+        <translation>Free</translation>
+    </message>
+    <message>
+        <source>Current ratio</source>
+        <translation>Current ratio</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <source>Ratio presets use whole-pixel multiples.</source>
+        <translation>Ratio presets use whole-pixel multiples.</translation>
+    </message>
+    <message>
+        <source>The region or ratio does not fit the captured desktop.</source>
+        <translation>The region or ratio does not fit the captured desktop.</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>Output: %1 × %2 px</translation>
+    </message>
+    <message>
+        <source> (including border/shadow)</source>
+        <translation> (including border/shadow)</translation>
+    </message>
+    <message>
+        <source>Saved Regions</source>
+        <translation>Saved Regions</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>Preset name</translation>
+    </message>
+    <message>
+        <source>Save preset</source>
+        <translation>Save preset</translation>
+    </message>
+    <message>
+        <source>Update preset</source>
+        <translation>Update preset</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>Rename</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>Delete preset</translation>
+    </message>
+    <message>
+        <source>Preset changes are saved immediately; Apply changes the selection.</source>
+        <translation>Preset changes are saved immediately; Apply changes the selection.</translation>
+    </message>
+    <message>
+        <source>Saved region data is invalid. Existing data was left unchanged.</source>
+        <translation>Saved region data is invalid. Existing data was left unchanged.</translation>
+    </message>
+    <message>
+        <source>No preset</source>
+        <translation>No preset</translation>
+    </message>
+    <message>
+        <source>Saved region loaded.</source>
+        <translation>Saved region loaded.</translation>
+    </message>
+    <message>
+        <source>Screen layout or scale changed. Review the current region and update the preset, or choose No preset.</source>
+        <translation>Screen layout or scale changed. Review the current region and update the preset, or choose No preset.</translation>
+    </message>
+    <message>
+        <source>Preset saved.</source>
+        <translation>Preset saved.</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Check the name and settings location.</source>
+        <translation>Could not save preset. Check the name and settings location.</translation>
+    </message>
+    <message>
+        <source>Preset renamed.</source>
+        <translation>Preset renamed.</translation>
+    </message>
+    <message>
+        <source>Could not rename preset. Names must be unique.</source>
+        <translation>Could not rename preset. Names must be unique.</translation>
+    </message>
+    <message>
+        <source>Preset deleted.</source>
+        <translation>Preset deleted.</translation>
+    </message>
+    <message>
+        <source>Could not delete preset.</source>
+        <translation>Could not delete preset.</translation>
+    </message>
+    <message>
+        <source>Saved file: %1 × %2 px</source>
+        <translation>Saved file: %1 × %2 px</translation>
+    </message>
+    <message>
+        <source>Saved file would be too large. Reduce the output width.</source>
+        <translation>Saved file would be too large. Reduce the output width.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageSourcePicker</name>
+    <message>
+        <source>Choose Images</source>
+        <translation>Choose Images</translation>
+    </message>
+    <message>
+        <source>Search image history</source>
+        <translation>Search image history</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>Search</translation>
+    </message>
+    <message>
+        <source>Load more</source>
+        <translation>Load more</translation>
+    </message>
+    <message>
+        <source>Add selected</source>
+        <translation>Add selected</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Ctrl / Shift selects multiple images. Nothing is copied or deleted.</source>
+        <translation>Ctrl / Shift selects multiple images. Nothing is copied or deleted.</translation>
+    </message>
+    <message>
+        <source>Pinned image %1</source>
+        <translation>Pinned image %1</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>Image</translation>
+    </message>
+    <message>
+        <source>Showing up to 1000 records. Search to narrow the list.</source>
+        <translation>Showing up to 1000 records. Search to narrow the list.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageLayoutDialog</name>
+    <message>
+        <source>Image Layout and PDF</source>
+        <translation>Image Layout and PDF</translation>
+    </message>
+    <message>
+        <source>Add history images</source>
+        <translation>Add history images</translation>
+    </message>
+    <message>
+        <source>Add pinned images</source>
+        <translation>Add pinned images</translation>
+    </message>
+    <message>
+        <source>Add image files</source>
+        <translation>Add image files</translation>
+    </message>
+    <message>
+        <source>Combined image</source>
+        <translation>Combined image</translation>
+    </message>
+    <message>
+        <source>One image per PDF page</source>
+        <translation>One image per PDF page</translation>
+    </message>
+    <message>
+        <source>Vertical</source>
+        <translation>Vertical</translation>
+    </message>
+    <message>
+        <source>Horizontal</source>
+        <translation>Horizontal</translation>
+    </message>
+    <message>
+        <source>Original widths</source>
+        <translation>Original widths</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation>White</translation>
+    </message>
+    <message>
+        <source>Transparent</source>
+        <translation>Transparent</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Dark</translation>
+    </message>
+    <message>
+        <source>Original size (96 pixels/inch)</source>
+        <translation>Original size (96 pixels/inch)</translation>
+    </message>
+    <message>
+        <source>A4</source>
+        <translation>A4</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation>Letter</translation>
+    </message>
+    <message>
+        <source>Portrait</source>
+        <translation>Portrait</translation>
+    </message>
+    <message>
+        <source>Landscape</source>
+        <translation>Landscape</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation>Output</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direction</translation>
+    </message>
+    <message>
+        <source>Common width (px)</source>
+        <translation>Common width (px)</translation>
+    </message>
+    <message>
+        <source>Gap (px)</source>
+        <translation>Gap (px)</translation>
+    </message>
+    <message>
+        <source>Padding (px)</source>
+        <translation>Padding (px)</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation>Background</translation>
+    </message>
+    <message>
+        <source>PDF paper</source>
+        <translation>PDF paper</translation>
+    </message>
+    <message>
+        <source>Orientation</source>
+        <translation>Orientation</translation>
+    </message>
+    <message>
+        <source>Page margins</source>
+        <translation>Page margins</translation>
+    </message>
+    <message>
+        <source>Drag images to reorder. Layout size is used exactly; file quality follows settings. PDF pages have a white background and no OCR text layer.</source>
+        <translation>Drag images to reorder. Layout size is used exactly; file quality follows settings. PDF pages have a white background and no OCR text layer.</translation>
+    </message>
+    <message>
+        <source>Image order</source>
+        <translation>Image order</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Move up</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Move down</translation>
+    </message>
+    <message>
+        <source>Remove image</source>
+        <translation>Remove image</translation>
+    </message>
+    <message>
+        <source>Clear collection</source>
+        <translation>Clear collection</translation>
+    </message>
+    <message>
+        <source>Add images to begin. Up to 50 images and 64 megapixels in total.</source>
+        <translation>Add images to begin. Up to 50 images and 64 megapixels in total.</translation>
+    </message>
+    <message>
+        <source>Cancel export</source>
+        <translation>Cancel export</translation>
+    </message>
+    <message>
+        <source>Export…</source>
+        <translation>Export…</translation>
+    </message>
+    <message>
+        <source>Image %1</source>
+        <translation>Image %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>Pinned image</translation>
+    </message>
+    <message>
+        <source>%1 image(s) could not be added: missing, invalid, or over the collection limit.</source>
+        <translation>%1 image(s) could not be added: missing, invalid, or over the collection limit.</translation>
+    </message>
+    <message>
+        <source>%1 pages · Previewing page %2</source>
+        <translation>%1 pages · Previewing page %2</translation>
+    </message>
+    <message>
+        <source>%1 images · %2 × %3 px</source>
+        <translation>%1 images · %2 × %3 px</translation>
+    </message>
+    <message>
+        <source>This layout exceeds the image or page size limit. Reduce the width or choose A4 / Letter.</source>
+        <translation>This layout exceeds the image or page size limit. Reduce the width or choose A4 / Letter.</translation>
+    </message>
+    <message>
+        <source>Export collection</source>
+        <translation>Export collection</translation>
+    </message>
+    <message>
+        <source>Choose a file extension matching the selected output.</source>
+        <translation>Choose a file extension matching the selected output.</translation>
+    </message>
+    <message>
+        <source>Exporting…</source>
+        <translation>Exporting…</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>Cancelling…</translation>
+    </message>
+    <message>
+        <source>Export saved.</source>
+        <translation>Export saved.</translation>
+    </message>
+    <message>
+        <source>Export cancelled.</source>
+        <translation>Export cancelled.</translation>
+    </message>
+    <message>
+        <source>Export failed. Check image limits, folder permissions and free space.</source>
+        <translation>Export failed. Check image limits, folder permissions and free space.</translation>
+    </message>
+    <message>
+        <source>Choose Images</source>
+        <translation>Choose Images</translation>
+    </message>
+<message><source>%1° clockwise</source><translation>%1° clockwise</translation></message>
+<message><source>Searchable PDF (fresh local OCR)</source><translation>Searchable PDF (fresh local OCR)</translation></message>
+<message><source>Rotate PDF images</source><translation>Rotate PDF images</translation></message>
+<message><source>PDF text report</source><translation>PDF text report</translation></message>
+<message><source>Searchable PDF re-runs OCR on the exact rotated output pixels. Never reuses cached text. Blank/failed pages or missing glyphs fall back to image-only and are reported. OCR can be wrong; review the result. Redacted exports never reuse pre-redaction text.</source><translation>Searchable PDF re-runs OCR on the exact rotated output pixels. Never reuses cached text. Blank/failed pages or missing glyphs fall back to image-only and are reported. OCR can be wrong; review the result. Redacted exports never reuse pre-redaction text.</translation></message>
+<message><source>Recognizing PDF pages and exporting… Cancellation waits for the current local OCR call.</source><translation>Recognizing PDF pages and exporting… Cancellation waits for the current local OCR call.</translation></message>
+<message><source>PDF saved: %1 of %2 pages have searchable text. Review the PDF text report.</source><translation>PDF saved: %1 of %2 pages have searchable text. Review the PDF text report.</translation></message>
+<message><source>OCR failed or unavailable</source><translation>OCR failed or unavailable</translation></message>
+<message><source>Invalid OCR result</source><translation>Invalid OCR result</translation></message>
+<message><source>Text limit exceeded</source><translation>Text limit exceeded</translation></message>
+<message><source>Unsupported or invalid text box</source><translation>Unsupported or invalid text box</translation></message>
+<message><source>Low confidence text</source><translation>Low confidence text</translation></message>
+<message><source>Missing font glyphs</source><translation>Missing font glyphs</translation></message>
+<message><source>Page %1: %2 text lines</source><translation>Page %1: %2 text lines</translation></message>
+<message><source>Image-only page</source><translation>Image-only page</translation></message>
+<message><source>No text recognized</source><translation>No text recognized</translation></message>
+</context>
+<context>
+    <name>MultiRegionDialog</name>
+    <message>
+        <source>Multiple Regions</source>
+        <translation>Multiple Regions</translation>
+    </message>
+    <message>
+        <source>Drag to add regions from this frozen frame. Overlaps are exported separately. Existing annotations are not included.</source>
+        <translation>Drag to add regions from this frozen frame. Overlaps are exported separately. Existing annotations are not included.</translation>
+    </message>
+    <message>
+        <source>Region order</source>
+        <translation>Region order</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Move up</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Move down</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Remove</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>Undo</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation>Redo</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Clear</translation>
+    </message>
+    <message>
+        <source>Move controls</source>
+        <translation>Move controls</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Collect regions</source>
+        <translation>Collect regions</translation>
+    </message>
+    <message>
+        <source>Region is too small or exceeds the remaining collection capacity.</source>
+        <translation>Region is too small or exceeds the remaining collection capacity.</translation>
+    </message>
+    <message>
+        <source>%1 regions · Tab hides controls · Enter collects · Esc cancels</source>
+        <translation>%1 regions · Tab hides controls · Enter collects · Esc cancels</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenshotWindow</name>
+    <message>
+        <source>Insert image</source>
+        <translation>Insert image</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</translation>
+    </message>
+    <message>
+        <source>Insert image failed</source>
+        <translation>Insert image failed</translation>
+    </message>
+    <message>
+        <source>The image is missing, too large, or not a supported bitmap.</source>
+        <translation>The image is missing, too large, or not a supported bitmap.</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>Collection unavailable</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images before selecting more regions.</source>
+        <translation>Finish exporting or remove images before selecting more regions.</translation>
+    </message>
+    <message>
+        <source>Region %1</source>
+        <translation>Region %1</translation>
+    </message>
+    <message>
+        <source>Regions could not be collected. Existing images were kept.</source>
+        <translation>Regions could not be collected. Existing images were kept.</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>Project unavailable</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>Could not transfer the editable image. Original content was kept.</translation>
+    </message>
+</context>
+<context>
+    <name>StitchAdjustmentDialog</name>
+    <message>
+        <source>Matching exclusions</source>
+        <translation>Matching exclusions</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>Adjust latest seam</translation>
+    </message>
+    <message>
+        <source>Highlighted pixels are excluded from matching only, not removed from the output. Coordinates follow the original screen, even for horizontal or reverse capture.</source>
+        <translation>Highlighted pixels are excluded from matching only, not removed from the output. Coordinates follow the original screen, even for horizontal or reverse capture.</translation>
+    </message>
+    <message>
+        <source>Review the two latest frames. Overlap counts pixels already present; adjust it to remove duplicate rows or restore missing content. Capturing is paused while this window is open.</source>
+        <translation>Review the two latest frames. Overlap counts pixels already present; adjust it to remove duplicate rows or restore missing content. Capturing is paused while this window is open.</translation>
+    </message>
+    <message>
+        <source>Click to set header height</source>
+        <translation>Click to set header height</translation>
+    </message>
+    <message>
+        <source>Click to set scrollbar width</source>
+        <translation>Click to set scrollbar width</translation>
+    </message>
+    <message>
+        <source>Top exclusion (px)</source>
+        <translation>Top exclusion (px)</translation>
+    </message>
+    <message>
+        <source>Right exclusion (px)</source>
+        <translation>Right exclusion (px)</translation>
+    </message>
+    <message>
+        <source>Preview action</source>
+        <translation>Preview action</translation>
+    </message>
+    <message>
+        <source>Append below / right</source>
+        <translation>Append below / right</translation>
+    </message>
+    <message>
+        <source>Prepend above / left</source>
+        <translation>Prepend above / left</translation>
+    </message>
+    <message>
+        <source>Overlap (px)</source>
+        <translation>Overlap (px)</translation>
+    </message>
+    <message>
+        <source>New frame direction</source>
+        <translation>New frame direction</translation>
+    </message>
+    <message>
+        <source>No exclusions</source>
+        <translation>No exclusions</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <source>These settings affect future matching; the existing stitched image stays unchanged.</source>
+        <translation>These settings affect future matching; the existing stitched image stays unchanged.</translation>
+    </message>
+    <message>
+        <source>New content: %1 px. Red line marks the join; only this preview includes it.</source>
+        <translation>New content: %1 px. Red line marks the join; only this preview includes it.</translation>
+    </message>
+</context>
+<context>
+    <name>ScrollCaptureWindow</name>
+    <message>
+        <source>Undo last stitch (%1 retained; up to 3 checkpoints / 96 MiB)</source>
+        <translation>Undo last stitch (%1 retained; up to 3 checkpoints / 96 MiB)</translation>
+    </message>
+    <message>
+        <source>No reliable overlap. Scroll less and retry, or adjust the latest seam.</source>
+        <translation>No reliable overlap. Scroll less and retry, or adjust the latest seam.</translation>
+    </message>
+    <message>
+        <source>The frame is unchanged. Scroll to new content before capturing again.</source>
+        <translation>The frame is unchanged. Scroll to new content before capturing again.</translation>
+    </message>
+    <message>
+        <source>Could not stitch this frame. Existing content was kept; reduce the region or repair the seam.</source>
+        <translation>Could not stitch this frame. Existing content was kept; reduce the region or repair the seam.</translation>
+    </message>
+    <message>
+        <source>Last stitch undone. Return the page to this preview before continuing.</source>
+        <translation>Last stitch undone. Return the page to this preview before continuing.</translation>
+    </message>
+    <message>
+        <source>Undo all seams or start a new capture before switching direction.</source>
+        <translation>Undo all seams or start a new capture before switching direction.</translation>
+    </message>
+    <message>
+        <source>Matching exclusions updated. Existing output pixels were not cropped.</source>
+        <translation>Matching exclusions updated. Existing output pixels were not cropped.</translation>
+    </message>
+    <message>
+        <source>Seam updated. Check the preview before continuing.</source>
+        <translation>Seam updated. Check the preview before continuing.</translation>
+    </message>
+    <message>
+        <source>Adjustment failed. Existing content was kept.</source>
+        <translation>Adjustment failed. Existing content was kept.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: the cancel key is unavailable.</source>
+        <translation>Automatic scrolling could not start: the cancel key is unavailable.</translation>
+    </message>
+    <message>
+        <source>Activate the target and put the pointer inside the capture region within 3 seconds. Esc stops.</source>
+        <translation>Activate the target and put the pointer inside the capture region within 3 seconds. Esc stops.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped because the cancel key became unavailable.</source>
+        <translation>Automatic scrolling stopped because the cancel key became unavailable.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the starting frame did not match the preview.</source>
+        <translation>Automatic scrolling stopped: the starting frame did not match the preview.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the time limit.</source>
+        <translation>Automatic scrolling reached the time limit.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the frame did not change (end of page or unsupported target).</source>
+        <translation>Automatic scrolling stopped: the frame did not change (end of page or unsupported target).</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: overlap failed. Review or repair the last seam.</source>
+        <translation>Automatic scrolling stopped: overlap failed. Review or repair the last seam.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling is running. Esc or Stop ends it without discarding images.</source>
+        <translation>Automatic scrolling is running. Esc or Stop ends it without discarding images.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: target focus, position, or input access changed.</source>
+        <translation>Automatic scrolling stopped: target focus, position, or input access changed.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped. Existing content was kept.</source>
+        <translation>Automatic scrolling stopped. Existing content was kept.</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>Stop</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>Auto scroll</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: check the current direction and starting frame.</source>
+        <translation>Automatic scrolling could not start: check the current direction and starting frame.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the frame limit.</source>
+        <translation>Automatic scrolling reached the frame limit.</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the image length limit.</source>
+        <translation>Automatic scrolling reached the image length limit.</translation>
+    </message>
+</context>
+<context>
+    <name>AutoScrollDialog</name>
+    <message>
+        <source>Automatic scrolling</source>
+        <translation>Automatic scrolling</translation>
+    </message>
+    <message>
+        <source>After Start, activate the intended app and put the pointer inside the selected capture area within 3 seconds. Scrolling is addressed only to that window. Keep it visible and focused. Esc stops; some applications may not support this input.</source>
+        <translation>After Start, activate the intended app and put the pointer inside the selected capture area within 3 seconds. Scrolling is addressed only to that window. Keep it visible and focused. Esc stops; some applications may not support this input.</translation>
+    </message>
+    <message>
+        <source>Down / right</source>
+        <translation>Down / right</translation>
+    </message>
+    <message>
+        <source>Up / left</source>
+        <translation>Up / left</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direction</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Start in 3 seconds</source>
+        <translation>Start in 3 seconds</translation>
+    </message>
+    <message>
+        <source>Wheel notches per step</source>
+        <translation>Wheel notches per step</translation>
+    </message>
+    <message>
+        <source>Wait after each scroll (ms)</source>
+        <translation>Wait after each scroll (ms)</translation>
+    </message>
+    <message>
+        <source>Maximum scroll steps</source>
+        <translation>Maximum scroll steps</translation>
+    </message>
+    <message>
+        <source>Maximum duration (seconds)</source>
+        <translation>Maximum duration (seconds)</translation>
+    </message>
+    <message>
+        <source>Maximum image length (px)</source>
+        <translation>Maximum image length (px)</translation>
+    </message>
+</context>
+<context>
+    <name>GeometryEditor</name>
+    <message>
+        <source>Crop and Resize</source>
+        <translation>Crop and Resize</translation>
+    </message>
+    <message>
+        <source>Crop coordinates refer to the original image. Rotation and flipping preserve editable annotations. Output width 0 keeps the cropped image size.</source>
+        <translation>Crop coordinates refer to the original image. Rotation and flipping preserve editable annotations. Output width 0 keeps the cropped image size.</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y</translation>
+    </message>
+    <message>
+        <source>Crop width</source>
+        <translation>Crop width</translation>
+    </message>
+    <message>
+        <source>Crop height</source>
+        <translation>Crop height</translation>
+    </message>
+    <message>
+        <source>Output width (0 = original)</source>
+        <translation>Output width (0 = original)</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>Apply</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>Output: %1 × %2 px</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>Crop or output dimensions are outside the image limits.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageEditor</name>
+    <message>
+        <source>Crop</source>
+        <translation>Crop</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>Crop or output dimensions are outside the image limits.</translation>
+    </message>
+    <message>
+        <source>Image Editor</source>
+        <translation>Image Editor</translation>
+    </message>
+    <message>
+        <source>Crop by dragging</source>
+        <translation>Crop by dragging</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>Fit</translation>
+    </message>
+    <message>
+        <source>Open or drop one PNG, JPEG, BMP or WebP image. The source file is never overwritten.</source>
+        <translation>Open or drop one PNG, JPEG, BMP or WebP image. The source file is never overwritten.</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>Cancel save</translation>
+    </message>
+    <message>
+        <source>Unsaved image</source>
+        <translation>Unsaved image</translation>
+    </message>
+    <message>
+        <source>Discard the unsaved edits? The source image will stay unchanged.</source>
+        <translation>Discard the unsaved edits? The source image will stay unchanged.</translation>
+    </message>
+    <message>
+        <source>Open image</source>
+        <translation>Open image</translation>
+    </message>
+    <message>
+        <source>Open image…</source>
+        <translation>Open image…</translation>
+    </message>
+    <message>
+        <source>Save as…</source>
+        <translation>Save as…</translation>
+    </message>
+    <message>
+        <source>Recognize text</source>
+        <translation>Recognize text</translation>
+    </message>
+    <message>
+        <source>Crop / resize…</source>
+        <translation>Crop / resize…</translation>
+    </message>
+    <message>
+        <source>Rotate left</source>
+        <translation>Rotate left</translation>
+    </message>
+    <message>
+        <source>Rotate right</source>
+        <translation>Rotate right</translation>
+    </message>
+    <message>
+        <source>Flip horizontal</source>
+        <translation>Flip horizontal</translation>
+    </message>
+    <message>
+        <source>Flip vertical</source>
+        <translation>Flip vertical</translation>
+    </message>
+    <message>
+        <source>Could not open image. Use one supported local image within 32 megapixels and 64 MiB.</source>
+        <translation>Could not open image. Use one supported local image within 32 megapixels and 64 MiB.</translation>
+    </message>
+    <message>
+        <source>Could not allocate the editor canvas. Existing edits were kept.</source>
+        <translation>Could not allocate the editor canvas. Existing edits were kept.</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Cropping preserves hidden source pixels only in this session.</source>
+        <translation>Output: %1 × %2 px · Cropping preserves hidden source pixels only in this session.</translation>
+    </message>
+    <message>
+        <source>Transform image</source>
+        <translation>Transform image</translation>
+    </message>
+    <message>
+        <source>Crop and resize</source>
+        <translation>Crop and resize</translation>
+    </message>
+    <message>
+        <source>Save edited image</source>
+        <translation>Save edited image</translation>
+    </message>
+    <message>
+        <source>Choose a different file. The source image cannot be overwritten.</source>
+        <translation>Choose a different file. The source image cannot be overwritten.</translation>
+    </message>
+    <message>
+        <source>Choose PNG, JPEG, WebP, BMP or PDF for the output.</source>
+        <translation>Choose PNG, JPEG, WebP, BMP or PDF for the output.</translation>
+    </message>
+    <message>
+        <source>Could not render this image. Reduce the output dimensions.</source>
+        <translation>Could not render this image. Reduce the output dimensions.</translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation>Saving…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>Cancelling save…</translation>
+    </message>
+    <message>
+        <source>Edited image saved. Source file unchanged.</source>
+        <translation>Edited image saved. Source file unchanged.</translation>
+    </message>
+    <message>
+        <source>Save cancelled. Edits are still available.</source>
+        <translation>Save cancelled. Edits are still available.</translation>
+    </message>
+    <message>
+        <source>Save failed. Edits and the existing file were kept.</source>
+        <translation>Save failed. Edits and the existing file were kept.</translation>
+    </message>
+    <message>
+        <source>Edited image copied.</source>
+        <translation>Edited image copied.</translation>
+    </message>
+    <message>
+        <source>Save project…</source>
+        <translation>Save project…</translation>
+    </message>
+    <message>
+        <source>Untitled project</source>
+        <translation>Untitled project</translation>
+    </message>
+    <message>
+        <source>Could not open image or project. Check the format, version and resource limits.</source>
+        <translation>Could not open image or project. Check the format, version and resource limits.</translation>
+    </message>
+    <message>
+        <source>Editable project contains original pixels</source>
+        <translation>Editable project contains original pixels</translation>
+    </message>
+    <message>
+        <source>Projects retain the original image, cropped-out pixels and removable annotations. Do not share them as redacted images. Continue?</source>
+        <translation>Projects retain the original image, cropped-out pixels and removable annotations. Do not share them as redacted images. Continue?</translation>
+    </message>
+    <message>
+        <source>Save editable project</source>
+        <translation>Save editable project</translation>
+    </message>
+    <message>
+        <source>Could not save this project: unsupported annotation or resource limit. Edits were kept.</source>
+        <translation>Could not save this project: unsupported annotation or resource limit. Edits were kept.</translation>
+    </message>
+    <message>
+        <source>Saving editable project…</source>
+        <translation>Saving editable project…</translation>
+    </message>
+    <message>
+        <source>Editable project saved. It contains original pixels; use image export for sharing.</source>
+        <translation>Editable project saved. It contains original pixels; use image export for sharing.</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Images are flattened; projects retain original pixels and annotations.</source>
+        <translation>Output: %1 × %2 px · Images are flattened; projects retain original pixels and annotations.</translation>
+    </message>
+</context>
+<context>
+    <name>PinWorkspaceDialog</name>
+    <message>
+        <source>Pin Workspaces</source>
+        <translation>Pin Workspaces</translation>
+    </message>
+    <message>
+        <source>Select the pins to keep. Saving is manual; workspaces contain original images and editable annotations. Restoring adds pins without closing existing ones.</source>
+        <translation>Select the pins to keep. Saving is manual; workspaces contain original images and editable annotations. Restoring adds pins without closing existing ones.</translation>
+    </message>
+    <message>
+        <source>Workspace name</source>
+        <translation>Workspace name</translation>
+    </message>
+    <message>
+        <source>Reference board</source>
+        <translation>Reference board</translation>
+    </message>
+    <message>
+        <source>Pins to save</source>
+        <translation>Pins to save</translation>
+    </message>
+    <message>
+        <source>Refresh pins</source>
+        <translation>Refresh pins</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Select all</translation>
+    </message>
+    <message>
+        <source>Select none</source>
+        <translation>Select none</translation>
+    </message>
+    <message>
+        <source>Up to 20 pins, 64 megapixels in total. Closing this dialog does not save anything automatically.</source>
+        <translation>Up to 20 pins, 64 megapixels in total. Closing this dialog does not save anything automatically.</translation>
+    </message>
+    <message>
+        <source>Save selected…</source>
+        <translation>Save selected…</translation>
+    </message>
+    <message>
+        <source>Open workspace…</source>
+        <translation>Open workspace…</translation>
+    </message>
+    <message>
+        <source>Delete workspace…</source>
+        <translation>Delete workspace…</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>Cancel save</translation>
+    </message>
+    <message>
+        <source>Thumbnail</source>
+        <translation>Thumbnail</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>Pinned image</translation>
+    </message>
+    <message>
+        <source>Enter a name and select between 1 and 20 pins.</source>
+        <translation>Enter a name and select between 1 and 20 pins.</translation>
+    </message>
+    <message>
+        <source>Workspace contains original images</source>
+        <translation>Workspace contains original images</translation>
+    </message>
+    <message>
+        <source>This file keeps original pixels and removable annotations. It is not a redacted sharing format. Save the selected pins?</source>
+        <translation>This file keeps original pixels and removable annotations. It is not a redacted sharing format. Save the selected pins?</translation>
+    </message>
+    <message>
+        <source>Save pin workspace</source>
+        <translation>Save pin workspace</translation>
+    </message>
+    <message>
+        <source>Use the .vpins extension for pin workspaces.</source>
+        <translation>Use the .vpins extension for pin workspaces.</translation>
+    </message>
+    <message>
+        <source>Could not prepare workspace. Check selected pins, name and resource limits. Nothing was saved.</source>
+        <translation>Could not prepare workspace. Check selected pins, name and resource limits. Nothing was saved.</translation>
+    </message>
+    <message>
+        <source>Saving workspace…</source>
+        <translation>Saving workspace…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>Cancelling save…</translation>
+    </message>
+    <message>
+        <source>Workspace saved. Source images and existing pins were not changed.</source>
+        <translation>Workspace saved. Source images and existing pins were not changed.</translation>
+    </message>
+    <message>
+        <source>Workspace save cancelled. Existing files were kept.</source>
+        <translation>Workspace save cancelled. Existing files were kept.</translation>
+    </message>
+    <message>
+        <source>Could not save workspace. Existing files and pins were kept.</source>
+        <translation>Could not save workspace. Existing files and pins were kept.</translation>
+    </message>
+    <message>
+        <source>Open pin workspace</source>
+        <translation>Open pin workspace</translation>
+    </message>
+    <message>
+        <source>Workspace format or resource limits are invalid. Existing pins were not changed.</source>
+        <translation>Workspace format or resource limits are invalid. Existing pins were not changed.</translation>
+    </message>
+    <message>
+        <source>No valid pins could be restored. The workspace may be missing or contain damaged projects.</source>
+        <translation>No valid pins could be restored. The workspace may be missing or contain damaged projects.</translation>
+    </message>
+    <message>
+        <source>Restore %1 pins from '%2'? Existing pins stay open. The saved original images will be visible on screen.</source>
+        <translation>Restore %1 pins from '%2'? Existing pins stay open. The saved original images will be visible on screen.</translation>
+    </message>
+    <message>
+        <source>Restore pin workspace</source>
+        <translation>Restore pin workspace</translation>
+    </message>
+    <message>
+        <source>Restored %1 pins; %2 failed; %3 moved onto an available screen.</source>
+        <translation>Restored %1 pins; %2 failed; %3 moved onto an available screen.</translation>
+    </message>
+    <message>
+        <source>Failed entries: %1. Missing, invalid or over the resource limit.</source>
+        <translation>Failed entries: %1. Missing, invalid or over the resource limit.</translation>
+    </message>
+    <message>
+        <source>Delete pin workspace</source>
+        <translation>Delete pin workspace</translation>
+    </message>
+    <message>
+        <source>Move this workspace file to the Recycle Bin? Open pins and source image files will not be deleted.
+%1</source>
+        <translation>Move this workspace file to the Recycle Bin? Open pins and source image files will not be deleted.
+%1</translation>
+    </message>
+    <message>
+        <source>Workspace moved to the Recycle Bin. Open pins were kept.</source>
+        <translation>Workspace moved to the Recycle Bin. Open pins were kept.</translation>
+    </message>
+    <message>
+        <source>Could not move the workspace to the Recycle Bin. Nothing was permanently deleted.</source>
+        <translation>Could not move the workspace to the Recycle Bin. Nothing was permanently deleted.</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCompareWindow</name>
+    <message>
+        <source>Image A</source>
+        <translation>Image A</translation>
+    </message>
+    <message>
+        <source>Image B</source>
+        <translation>Image B</translation>
+    </message>
+    <message>
+        <source>Image Comparison</source>
+        <translation>Image Comparison</translation>
+    </message>
+    <message>
+        <source>Replace image A</source>
+        <translation>Replace image A</translation>
+    </message>
+    <message>
+        <source>Replace image B</source>
+        <translation>Replace image B</translation>
+    </message>
+    <message>
+        <source>Original pixels, align top-left</source>
+        <translation>Original pixels, align top-left</translation>
+    </message>
+    <message>
+        <source>Resize B to A (may distort)</source>
+        <translation>Resize B to A (may distort)</translation>
+    </message>
+    <message>
+        <source>Pixel difference threshold</source>
+        <translation>Pixel difference threshold</translation>
+    </message>
+    <message>
+        <source>Threshold</source>
+        <translation>Threshold</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>Fit</translation>
+    </message>
+    <message>
+        <source>Read-only comparison. Original pixels align at the top-left; missing areas are differences. Wheel zooms both views; drag pans. Resizing B may introduce interpolation differences. Pixel differences are not a correctness verdict.</source>
+        <translation>Read-only comparison. Original pixels align at the top-left; missing areas are differences. Wheel zooms both views; drag pans. Resizing B may introduce interpolation differences. Pixel differences are not a correctness verdict.</translation>
+    </message>
+    <message>
+        <source>A / B split position</source>
+        <translation>A / B split position</translation>
+    </message>
+    <message>
+        <source>Choose two images to compare. No source files are changed.</source>
+        <translation>Choose two images to compare. No source files are changed.</translation>
+    </message>
+    <message>
+        <source>Could not load image: missing data, unsupported format or comparison limit (32 megapixels total). Existing images were kept.</source>
+        <translation>Could not load image: missing data, unsupported format or comparison limit (32 megapixels total). Existing images were kept.</translation>
+    </message>
+    <message>
+        <source>Choose comparison image</source>
+        <translation>Choose comparison image</translation>
+    </message>
+    <message>
+        <source>History image %1</source>
+        <translation>History image %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>Pinned image</translation>
+    </message>
+    <message>
+        <source>Comparison canvas exceeds 32 megapixels. Use another image pair or resize B to A.</source>
+        <translation>Comparison canvas exceeds 32 megapixels. Use another image pair or resize B to A.</translation>
+    </message>
+    <message>
+        <source>Comparing pixels…</source>
+        <translation>Comparing pixels…</translation>
+    </message>
+    <message>
+        <source>%1 of %2 pixels differ (%3%). Alpha is compared; invisible RGB is ignored.</source>
+        <translation>%1 of %2 pixels differ (%3%). Alpha is compared; invisible RGB is ignored.</translation>
+    </message>
+    <message>
+        <source>Read-only · %1 × %2 comparison pixels · A on the left, B on the right.</source>
+        <translation>Read-only · %1 × %2 comparison pixels · A on the left, B on the right.</translation>
+    </message>
+    <message>
+        <source>Comparison failed. Reduce image sizes or choose another pair.</source>
+        <translation>Comparison failed. Reduce image sizes or choose another pair.</translation>
+    </message>
+    <message>
+        <source>Choose file…</source>
+        <translation>Choose file…</translation>
+    </message>
+    <message>
+        <source>Choose history image…</source>
+        <translation>Choose history image…</translation>
+    </message>
+    <message>
+        <source>Choose pinned image…</source>
+        <translation>Choose pinned image…</translation>
+    </message>
+    <message>
+        <source>Swap A / B</source>
+        <translation>Swap A / B</translation>
+    </message>
+    <message>
+        <source>Clear images</source>
+        <translation>Clear images</translation>
+    </message>
+    <message>
+        <source>Side by side</source>
+        <translation>Side by side</translation>
+    </message>
+    <message>
+        <source>Slider comparison</source>
+        <translation>Slider comparison</translation>
+    </message>
+    <message>
+        <source>Difference overlay</source>
+        <translation>Difference overlay</translation>
+    </message>
+</context>
+<context>
+    <name>GifExportDialog</name>
+    <message>
+        <source>Export GIF</source>
+        <translation>Export GIF</translation>
+    </message>
+    <message>
+        <source>GIF output</source>
+        <translation>GIF output</translation>
+    </message>
+    <message>
+        <source>Frames %1–%2 · speed %3× · cursor %4</source>
+        <translation>Frames %1–%2 · speed %3× · cursor %4</translation>
+    </message>
+    <message>
+        <source>on</source>
+        <translation>on</translation>
+    </message>
+    <message>
+        <source>off</source>
+        <translation>off</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>Original size</translation>
+    </message>
+    <message>
+        <source>Custom width</source>
+        <translation>Custom width</translation>
+    </message>
+    <message>
+        <source>Keep timing (up to 50 fps)</source>
+        <translation>Keep timing (up to 50 fps)</translation>
+    </message>
+    <message>
+        <source>Limit to %1 fps</source>
+        <translation>Limit to %1 fps</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Size</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>Width</translation>
+    </message>
+    <message>
+        <source>Frame rate</source>
+        <translation>Frame rate</translation>
+    </message>
+    <message>
+        <source>Frame-rate limits drop frames, never add frames. GIF uses 10 ms timing steps and at least 20 ms per frame. Total time is rounded once; very short clips last at least 20 ms. File size is shown after export, not estimated.</source>
+        <translation>Frame-rate limits drop frames, never add frames. GIF uses 10 ms timing steps and at least 20 ms per frame. Total time is rounded once; very short clips last at least 20 ms. File size is shown after export, not estimated.</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation>Export</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 pixels</source>
+        <translation>Output: %1 × %2 pixels</translation>
+    </message>
+    <message>
+        <source>Choose a smaller size: maximum 16 megapixels, 65535 pixels per edge and 16× enlargement.</source>
+        <translation>Choose a smaller size: maximum 16 megapixels, 65535 pixels per edge and 16× enlargement.</translation>
+    </message>
+    <message>
+        <source>The installed GIF encoder is outdated. Build/install rust_libs/gifrecorder from this checkout before exporting.</source>
+        <translation>The installed GIF encoder is outdated. Build/install rust_libs/gifrecorder from this checkout before exporting.</translation>
+    </message>
+    <message>
+        <source>Export silent MP4</source>
+        <translation>Export silent MP4</translation>
+    </message>
+    <message>
+        <source>Silent MP4 output</source>
+        <translation>Silent MP4 output</translation>
+    </message>
+    <message>
+        <source>Original timing (no audio)</source>
+        <translation>Original timing (no audio)</translation>
+    </message>
+    <message>
+        <source>Silent H.264 video, with no audio track. Trim and speed are retained. Odd dimensions add one black row or column on the bottom or right, without stretching. Timing uses 1 ms steps; equal timestamps are merged. File size is shown after export.</source>
+        <translation>Silent H.264 video, with no audio track. Trim and speed are retained. Odd dimensions add one black row or column on the bottom or right, without stretching. Timing uses 1 ms steps; equal timestamps are merged. File size is shown after export.</translation>
+    </message>
+    <message>
+        <source>Choose a smaller MP4 size: maximum 16 megapixels, 8192 pixels per edge and 16× enlargement.</source>
+        <translation>Choose a smaller MP4 size: maximum 16 megapixels, 8192 pixels per edge and 16× enlargement.</translation>
+    </message>
+    <message>
+        <source>H.264 encoding is unavailable. Install the required PyAV package or use GIF instead.</source>
+        <translation>H.264 encoding is unavailable. Install the required PyAV package or use GIF instead.</translation>
+    </message>
+</context>
+<context>
+    <name>ComposerProgressDialog</name>
+    <message>
+        <source>Exporting GIF</source>
+        <translation>Exporting GIF</translation>
+    </message>
+    <message>
+        <source>Encoding GIF…</source>
+        <translation>Encoding GIF…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>Cancelling…</translation>
+    </message>
+    <message>
+        <source>GIF export failed</source>
+        <translation>GIF export failed</translation>
+    </message>
+    <message>
+        <source>The GIF could not be exported. Check output size, encoder version, disk space and file permissions. Existing files were kept.</source>
+        <translation>The GIF could not be exported. Check output size, encoder version, disk space and file permissions. Existing files were kept.</translation>
+    </message>
+    <message>
+        <source>Exporting silent MP4</source>
+        <translation>Exporting silent MP4</translation>
+    </message>
+    <message>
+        <source>Encoding silent MP4…</source>
+        <translation>Encoding silent MP4…</translation>
+    </message>
+    <message>
+        <source>MP4 export failed</source>
+        <translation>MP4 export failed</translation>
+    </message>
+    <message>
+        <source>The silent MP4 could not be exported. Check the H.264 encoder, output size, disk space and permissions. Existing files were kept.</source>
+        <translation>The silent MP4 could not be exported. Check the H.264 encoder, output size, disk space and permissions. Existing files were kept.</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackController</name>
+    <message>
+        <source>Clipboard copy failed</source>
+        <translation>Clipboard copy failed</translation>
+    </message>
+    <message>
+        <source>The GIF was saved, but could not be copied to the clipboard.</source>
+        <translation>The GIF was saved, but could not be copied to the clipboard.</translation>
+    </message>
+    <message>
+        <source>GIF saved: %1 × %2 pixels</source>
+        <translation>GIF saved: %1 × %2 pixels</translation>
+    </message>
+    <message>
+        <source>Actual file size: %1 bytes</source>
+        <translation>Actual file size: %1 bytes</translation>
+    </message>
+    <message>
+        <source>File size could not be read.</source>
+        <translation>File size could not be read.</translation>
+    </message>
+    <message>
+        <source>GIF exported</source>
+        <translation>GIF exported</translation>
+    </message>
+    <message>
+        <source>Save recording</source>
+        <translation>Save recording</translation>
+    </message>
+    <message>
+        <source>Silent MP4 saved: %1 × %2 pixels</source>
+        <translation>Silent MP4 saved: %1 × %2 pixels</translation>
+    </message>
+    <message>
+        <source>MP4 exported</source>
+        <translation>MP4 exported</translation>
+    </message>
+</context>
+<context>
+<name>CapturePrivacy</name>
+<message><source>Sensitive capture · memory only. Only Copy writes to the system clipboard. Save, collection, projects, recording, text extraction and translation are unavailable. Pins and redaction keep this policy. Other apps may read copied pixels; no secure-erasure guarantee.</source><translation>Sensitive capture · memory only. Only Copy writes to the system clipboard. Save, collection, projects, recording, text extraction and translation are unavailable. Pins and redaction keep this policy. Other apps may read copied pixels; no secure-erasure guarantee.</translation></message>
+<message><source>Sensitive capture</source><translation>Sensitive capture</translation></message>
+<message><source>Sensitive capture unavailable</source><translation>Sensitive capture unavailable</translation></message>
+<message><source>The private clipboard protocol is unavailable. Rebuild/install this checkout's pyclipboard module. No sensitive capture was started.</source><translation>The private clipboard protocol is unavailable. Rebuild/install this checkout's pyclipboard module. No sensitive capture was started.</translation></message>
+<message><source>Sensitive copy failed</source><translation>Sensitive copy failed</translation></message>
+<message><source>The image was not copied successfully. It was not saved or retried as an ordinary copy.</source><translation>The image was not copied successfully. It was not saved or retried as an ordinary copy.</translation></message>
+<message><source>Sensitive capture · no files or history · only explicit Copy</source><translation>Sensitive capture · no files or history · only explicit Copy</translation></message>
+</context>
+<context>
+<name>TableRecognitionWindow</name>
+<message><source>Review recognized table</source><translation>Review recognized table</translation></message>
+<message><source>For clear, regular tables with separated OCR cells only. Merged cells, wrapped rows, missing cells and joined OCR lines need manual correction. Click a cell to compare its source region; edit in the cell or the editor below. No cloud upload.</source><translation>For clear, regular tables with separated OCR cells only. Merged cells, wrapped rows, missing cells and joined OCR lines need manual correction. Click a cell to compare its source region; edit in the cell or the editor below. No cloud upload.</translation></message>
+<message><source>Tight row grouping</source><translation>Tight row grouping</translation></message>
+<message><source>Normal row grouping</source><translation>Normal row grouping</translation></message>
+<message><source>Loose row grouping</source><translation>Loose row grouping</translation></message>
+<message><source>Rebuild from OCR</source><translation>Rebuild from OCR</translation></message>
+<message><source>Fit source</source><translation>Fit source</translation></message>
+<message><source>Editable recognized table</source><translation>Editable recognized table</translation></message>
+<message><source>Selected cell text</source><translation>Selected cell text</translation></message>
+<message><source>Select a cell to edit multiline text</source><translation>Select a cell to edit multiline text</translation></message>
+<message><source>Insert row</source><translation>Insert row</translation></message>
+<message><source>Delete row</source><translation>Delete row</translation></message>
+<message><source>Insert column</source><translation>Insert column</translation></message>
+<message><source>Delete column</source><translation>Delete column</translation></message>
+<message><source>Protect spreadsheet formula prefixes</source><translation>Protect spreadsheet formula prefixes</translation></message>
+<message><source>TSV cells starting with =, +, - or @ are prefixed with an apostrophe. Spreadsheets may auto-convert dates and leading zeros; format destination cells as text when needed.</source><translation>TSV cells starting with =, +, - or @ are prefixed with an apostrophe. Spreadsheets may auto-convert dates and leading zeros; format destination cells as text when needed.</translation></message>
+<message><source>First row is Markdown header</source><translation>First row is Markdown header</translation></message>
+<message><source>Copy TSV</source><translation>Copy TSV</translation></message>
+<message><source>Save Markdown…</source><translation>Save Markdown…</translation></message>
+<message><source>Close</source><translation>Close</translation></message>
+<message><source>Rebuild table</source><translation>Rebuild table</translation></message>
+<message><source>Discard table edits and reconstruct from the original OCR boxes?</source><translation>Discard table edits and reconstruct from the original OCR boxes?</translation></message>
+<message><source>Could not reconstruct a table: no valid positioned text or table limits exceeded.</source><translation>Could not reconstruct a table: no valid positioned text or table limits exceeded.</translation></message>
+<message><source>Low confidence or ambiguous geometry. Check the source image.</source><translation>Low confidence or ambiguous geometry. Check the source image.</translation></message>
+<message><source>Review required: %1 warning categories, %2 uncertain cells. Complex layouts are not reconstructed reliably.</source><translation>Review required: %1 warning categories, %2 uncertain cells. Complex layouts are not reconstructed reliably.</translation></message>
+<message><source>%1 rows × %2 columns · source image is unchanged</source><translation>%1 rows × %2 columns · source image is unchanged</translation></message>
+<message><source>Table structure changed. Review empty and shifted cells before export.</source><translation>Table structure changed. Review empty and shifted cells before export.</translation></message>
+<message><source>Export exceeds table limits.</source><translation>Export exceeds table limits.</translation></message>
+<message><source>TSV copied. Verify cell placement and data types in the destination spreadsheet.</source><translation>TSV copied. Verify cell placement and data types in the destination spreadsheet.</translation></message>
+<message><source>Save Markdown table</source><translation>Save Markdown table</translation></message>
+<message><source>Markdown saved</source><translation>Markdown saved</translation></message>
+<message><source>Markdown save failed</source><translation>Markdown save failed</translation></message>
+<message><source>Invalid OCR boxes skipped</source><translation>Invalid OCR boxes skipped</translation></message>
+<message><source>Rotated text</source><translation>Rotated text</translation></message>
+<message><source>Too few rows or columns</source><translation>Too few rows or columns</translation></message>
+<message><source>Overlapping columns</source><translation>Overlapping columns</translation></message>
+<message><source>Text spans column boundaries</source><translation>Text spans column boundaries</translation></message>
+<message><source>Multiple boxes in one cell</source><translation>Multiple boxes in one cell</translation></message>
+<message><source>Missing or uneven cells</source><translation>Missing or uneven cells</translation></message>
+<message><source>Uncertain cells highlighted</source><translation>Uncertain cells highlighted</translation></message>
 </context>
 </TS>

@@ -12,6 +12,9 @@ class CaptureService:
     负责使用 mss 获取多显示器截图
     """
     
+    def __init__(self, include_cursor=False):
+        self.include_cursor = bool(include_cursor)
+
     def capture_all_screens(self):
         """
         捕获所有屏幕
@@ -21,7 +24,13 @@ class CaptureService:
             - QImage: 包含所有屏幕的完整截图
             - QRectF: 虚拟桌面的几何信息 (x, y, width, height)
         """
-        with mss.mss() as sct:
+        from contextlib import nullcontext
+        if self.include_cursor:
+            from .cursor_capture import cursor_snapshot, composite_cursor
+            snapshot_context = cursor_snapshot(True)
+        else:
+            snapshot_context = nullcontext(None)
+        with mss.mss() as sct, snapshot_context as cursor:
             # monitors[0] 是所有显示器的合并区域 (虚拟桌面)
             monitors = sct.monitors
             all_monitors = monitors[0]
@@ -49,5 +58,7 @@ class CaptureService:
             
             rect = QRectF(virtual_x, virtual_y, virtual_width, virtual_height)
             
+            if cursor is not None:
+                original_image = composite_cursor(original_image, rect, cursor)
             return original_image, rect
  

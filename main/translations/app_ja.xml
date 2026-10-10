@@ -10,6 +10,134 @@
 <context>
     <name>SettingsDialog</name>
     <message>
+        <source>Include Source Info</source>
+        <translation>来源情報を含める</translation>
+    </message>
+    <message>
+        <source>Only the text you keep below is exported. Window titles are never read automatically.</source>
+        <translation>下に残した文字だけを出力します。ウィンドウタイトルは自動では読み取りません。</translation>
+    </message>
+    <message>
+        <source>Source</source>
+        <translation>来源</translation>
+    </message>
+    <message>
+        <source>Detect window</source>
+        <translation>現在のウィンドウを検出</translation>
+    </message>
+    <message>
+        <source>Include Time</source>
+        <translation>時刻を含める</translation>
+    </message>
+    <message>
+        <source>Writes the export time next to the image. Off by default.</source>
+        <translation>出力時刻を画像の横に書き込みます。既定はオフです。</translation>
+    </message>
+    <message>
+        <source>Include Note</source>
+        <translation>メモを含める</translation>
+    </message>
+    <message>
+        <source>Your own note; empty notes are not exported.</source>
+        <translation>自分で書いたメモ。空のメモは出力しません。</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>メモ</translation>
+    </message>
+    <message>
+        <source>Metadata Preview</source>
+        <translation>メタ情報のプレビュー</translation>
+    </message>
+    <message>
+        <source>Shows exactly what will be appended to the exported image.</source>
+        <translation>出力画像に追加される内容をそのまま表示します。</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>画像 (*.png *.jpg *.jpeg *.bmp *.webp);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>The preview uses the same renderer as export.</source>
+        <translation>プレビューと書き出しは同じ描画を使います。</translation>
+    </message>
+    <message>
+        <source>Watermark Preview</source>
+        <translation>ウォーターマークのプレビュー</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>サイズ</translation>
+    </message>
+    <message>
+        <source>Opacity</source>
+        <translation>不透明度</translation>
+    </message>
+    <message>
+        <source>Watermark Opacity and Size</source>
+        <translation>ウォーターマークの不透明度とサイズ</translation>
+    </message>
+    <message>
+        <source>Center</source>
+        <translation>中央</translation>
+    </message>
+    <message>
+        <source>Top left</source>
+        <translation>左上</translation>
+    </message>
+    <message>
+        <source>Top right</source>
+        <translation>右上</translation>
+    </message>
+    <message>
+        <source>Bottom left</source>
+        <translation>左下</translation>
+    </message>
+    <message>
+        <source>Bottom right</source>
+        <translation>右下</translation>
+    </message>
+    <message>
+        <source>Watermark Position</source>
+        <translation>ウォーターマークの位置</translation>
+    </message>
+    <message>
+        <source>Choose…</source>
+        <translation>選択…</translation>
+    </message>
+    <message>
+        <source>PNG/JPG/BMP/WebP. Missing or oversized files are ignored.</source>
+        <translation>PNG/JPG/BMP/WebP に対応。ファイルが無い・大きすぎる場合はウォーターマーク無しとして扱います。</translation>
+    </message>
+    <message>
+        <source>Watermark Image</source>
+        <translation>ウォーターマーク画像</translation>
+    </message>
+    <message>
+        <source>Only the text you type here is written; window titles and identities are never read.</source>
+        <translation>ここに入力した文字だけを書き込み、ウィンドウタイトルや身元情報は読み取りません。</translation>
+    </message>
+    <message>
+        <source>Watermark Text</source>
+        <translation>ウォーターマークの文字</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>画像</translation>
+    </message>
+    <message>
+        <source>Watermark Type</source>
+        <translation>ウォーターマークの種類</translation>
+    </message>
+    <message>
+        <source>Adds a text or image mark to exported images. Off by default; the original image and project are never changed.</source>
+        <translation>出力画像に文字または画像のマークを重ねます。既定はオフで、元画像とプロジェクトは変更しません。</translation>
+    </message>
+    <message>
+        <source>Export Watermark</source>
+        <translation>出力ウォーターマーク</translation>
+    </message>
+    <message>
         <source>Shortcuts</source>
         <translation>ショートカット</translation>
     </message>
@@ -938,6 +1066,130 @@ Replace it?</source>
         <source>No models returned</source>
         <translation>モデルが返されませんでした</translation>
     </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>カーソルのある画面を撮影</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>アクティブウィンドウを撮影</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>前回の範囲を再撮影</translation>
+    </message>
+    <message>
+        <source>Quick Capture Result</source>
+        <translation>クイック撮影後の動作</translation>
+    </message>
+    <message>
+        <source>Copy also follows the auto-save setting. Ordinary screenshots are unchanged.</source>
+        <translation>直接コピーも自動保存設定に従います。通常の撮影には影響しません。</translation>
+    </message>
+    <message>
+        <source>Open in editor</source>
+        <translation>編集画面を開く</translation>
+    </message>
+    <message>
+        <source>Copy directly</source>
+        <translation>直接コピー</translation>
+    </message>
+    <message>
+        <source>Saved Image Size</source>
+        <translation>保存画像のサイズ</translation>
+    </message>
+    <message>
+        <source>These settings affect saved files; clipboard images keep their original size.</source>
+        <translation>ファイル出力にのみ適用されます。クリップボード画像は元のサイズを保持します。</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>元のサイズ</translation>
+    </message>
+    <message>
+        <source>50% size</source>
+        <translation>50% サイズ</translation>
+    </message>
+    <message>
+        <source>Specified width</source>
+        <translation>幅を指定</translation>
+    </message>
+    <message>
+        <source>Image Quality</source>
+        <translation>画像品質</translation>
+    </message>
+    <message>
+        <source>Applies to JPG and WebP only. PNG and BMP remain lossless.</source>
+        <translation>JPG と WebP にのみ適用。PNG と BMP は可逆圧縮のままです。</translation>
+    </message>
+    <message>
+        <source>Output Presets</source>
+        <translation>出力プリセット</translation>
+    </message>
+    <message>
+        <source>Original PNG</source>
+        <translation>元サイズの PNG</translation>
+    </message>
+    <message>
+        <source>Share WebP</source>
+        <translation>共有用 WebP</translation>
+    </message>
+    <message>
+        <source>Automatic File Names</source>
+        <translation>自動ファイル名</translation>
+    </message>
+    <message>
+        <source>Leave empty for the original naming. Fields: {date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}.</source>
+        <translation>空欄で従来の名前を使用。フィールド：{date}, {time}, {timestamp}, {index}, {project}, {prefix}, {suffix}。</translation>
+    </message>
+    <message>
+        <source>Project Name</source>
+        <translation>プロジェクト名</translation>
+    </message>
+    <message>
+        <source>Optional text for the {project} field. Window titles are never added automatically.</source>
+        <translation>{project} に使う任意の文字列。ウィンドウタイトルは自動で追加されません。</translation>
+    </message>
+    <message>
+        <source>Date Subfolders</source>
+        <translation>日付別サブフォルダー</translation>
+    </message>
+    <message>
+        <source>Place automatically named images in a YYYY-MM-DD folder.</source>
+        <translation>自動命名した画像を YYYY-MM-DD フォルダーに保存します。</translation>
+    </message>
+    <message>
+        <source>File Name Preview</source>
+        <translation>ファイル名のプレビュー</translation>
+    </message>
+    <message>
+        <source>Example for a normal screenshot; capture time and collisions determine the final name.</source>
+        <translation>通常撮影の例です。実際の名前は撮影時刻と既存ファイルにより決まります。</translation>
+    </message>
+    <message>
+        <source>Invalid template: use only the listed fields, without formatting.</source>
+        <translation>無効なテンプレートです。指定フィールドのみ使用でき、書式指定はできません。</translation>
+    </message>
+    <message>
+        <source>Invalid File Name Template</source>
+        <translation>無効なファイル名テンプレート</translation>
+    </message>
+    <message>
+        <source>Use only the listed filename fields, without formatting.</source>
+        <translation>指定されたファイル名フィールドのみ使用し、書式指定はしないでください。</translation>
+    </message>
+    <message>
+        <source>Transparent areas use white in JPG, BMP and PDF.</source>
+        <translation>JPG・BMP・PDF では透明な領域を白で合成します。</translation>
+    </message>
+    <message>
+        <source>Include Mouse Pointer</source>
+        <translation>マウスポインターを含める</translation>
+    </message>
+    <message>
+        <source>Capture the real pointer at its current position. Applies to static captures, not GIF or scrolling capture.</source>
+        <translation>現在位置の実際のポインターを撮影します。静止画に適用し、GIFやスクロール撮影には影響しません。</translation>
+    </message>
 </context>
 
 <context>
@@ -970,6 +1222,26 @@ Replace it?</source>
         <source>Please configure DeepL API key in Settings.</source>
         <translation>設定で DeepL API キーを設定してください。</translation>
     </message>
+    <message>
+        <source>Save Failed</source>
+        <translation>保存に失敗</translation>
+    </message>
+    <message>
+        <source>Failed to save image.</source>
+        <translation>画像を保存できませんでした。</translation>
+    </message>
+    <message>
+        <source>Screenshot %1</source>
+        <translation>スクリーンショット %1</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>収集できません</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images from the collection before adding more.</source>
+        <translation>出力を完了するか画像を除外してから追加してください。</translation>
+    </message>
 </context>
 
 <context>
@@ -987,6 +1259,14 @@ Replace it?</source>
 <!-- ========== Toolbar ========== -->
 <context>
     <name>Toolbar</name>
+    <message>
+        <source>Presets</source>
+        <translation>プリセット</translation>
+    </message>
+    <message>
+        <source>Insert image…</source>
+        <translation>画像を挿入…</translation>
+    </message>
     <message>
         <source>More</source>
         <translation>その他</translation>
@@ -1006,6 +1286,14 @@ Replace it?</source>
     <message>
         <source>Spotlight (dim outside the box)</source>
         <translation>スポットライト（枠の外を暗くする）</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>範囲を拡大</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>吹き出し注釈（吹き出しから対象へドラッグ）</translation>
     </message>
     <message>
         <source>Long screenshot (scroll)</source>
@@ -1153,6 +1441,22 @@ Replace it?</source>
         <source>Record</source>
         <translation>録画</translation>
     </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>収集して次を撮影</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>収集して画像を確認</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>静止画面から複数範囲を撮影</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>プロジェクトを編集・保存…</translation>
+    </message>
 </context>
 
 <!-- ========== Pin Window ========== -->
@@ -1266,6 +1570,22 @@ Replace it?</source>
         <source>Save Pin Image</source>
         <translation>ピン画像を保存</translation>
     </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>プロジェクトを編集・保存…</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>プロジェクトを利用できません</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>編集可能な画像を移せませんでした。元の内容は保持しています。</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>この画像を比較…</translation>
+    </message>
 </context>
 
 <!-- ========== Scroll Screenshot (Long Screenshot) ========== -->
@@ -1331,6 +1651,22 @@ Replace it?</source>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
+    <message>
+        <source>Undo last stitch</source>
+        <translation>最後の結合を取り消す</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>最新の継ぎ目を調整</translation>
+    </message>
+    <message>
+        <source>Ignore fixed header / scrollbar</source>
+        <translation>固定ヘッダー／スクロールバーを除外</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>自動スクロール</translation>
+    </message>
 </context>
 
 <!-- ========== System Tray ========== -->
@@ -1374,6 +1710,51 @@ Replace it?</source>
     <message><source>Choose folder to save pinned images</source><translation>ピン留め画像の保存先フォルダーを選択</translation></message>
     <message><source>Save Failed</source><translation>保存に失敗しました</translation></message>
     <message><source>Saved {saved} pinned images, failed {failed}.</source><translation>{saved} 個のピン留め画像を保存し、{failed} 個失敗しました。</translation></message>
+    <message>
+        <source>Delayed screenshot</source>
+        <translation>遅延スクリーンショット</translation>
+    </message>
+    <message>
+        <source>After %1 seconds</source>
+        <translation>%1 秒後に撮影</translation>
+    </message>
+    <message>
+        <source>Quick capture</source>
+        <translation>クイック撮影</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>カーソルのある画面を撮影</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>アクティブウィンドウを撮影</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>前回の範囲を再撮影</translation>
+    </message>
+    <message>
+        <source>Image layout / PDF</source>
+        <translation>画像レイアウト / PDF</translation>
+    </message>
+    <message>
+        <source>Arrange pinned images…</source>
+        <translation>貼り付け画像を並べて出力…</translation>
+    </message>
+    <message>
+        <source>Open image editor…</source>
+        <translation>画像エディターを開く…</translation>
+    </message>
+    <message>
+        <source>Pin workspaces…</source>
+        <translation>貼り付け画像ワークスペース…</translation>
+    </message>
+    <message>
+        <source>Compare images…</source>
+        <translation>画像を比較…</translation>
+    </message>
+<message><source>Sensitive screenshot (once)</source><translation>機密キャプチャ（今回のみ）</translation></message>
 </context>
 
 <!-- ========== Main App (Tray Menu) ========== -->
@@ -1434,6 +1815,38 @@ Replace it?</source>
     <message>
         <source>The hotkey may be occupied by other programs. Please try a different combination.</source>
         <translation>ホットキーが他のプログラムで使用されている可能性があります。別の組み合わせをお試しください。</translation>
+    </message>
+    <message>
+        <source>Screenshot failed</source>
+        <translation>スクリーンショットに失敗</translation>
+    </message>
+    <message>
+        <source>Could not capture the screen. Please try again.</source>
+        <translation>画面を取得できませんでした。もう一度お試しください。</translation>
+    </message>
+    <message>
+        <source>Capture Current Screen</source>
+        <translation>カーソルのある画面を撮影</translation>
+    </message>
+    <message>
+        <source>Capture Active Window</source>
+        <translation>アクティブウィンドウを撮影</translation>
+    </message>
+    <message>
+        <source>Capture Last Region</source>
+        <translation>前回の範囲を再撮影</translation>
+    </message>
+    <message>
+        <source>Capture target is unavailable or moved. Use region capture or choose another target.</source>
+        <translation>対象が利用できないか移動しました。範囲を指定するか対象を選び直してください。</translation>
+    </message>
+    <message>
+        <source>Save failed</source>
+        <translation>保存に失敗</translation>
+    </message>
+    <message>
+        <source>Could not save the image. Check the output size, folder permissions and free space.</source>
+        <translation>画像を保存できません。出力サイズ、フォルダーの権限と空き容量を確認してください。</translation>
     </message>
 </context>
 
@@ -2047,6 +2460,31 @@ This action cannot be undone.</source>
         <source>Use Move Up / Move Down in the context menu</source>
         <translation>右クリックメニューの「上へ」「下へ」で並べ替え</translation>
     </message>
+    <message>
+        <source>Add to image layout / PDF</source>
+        <translation>レイアウト / PDFに追加</translation>
+    </message>
+    <message>
+        <source>Compare image…</source>
+        <translation>この画像を比較…</translation>
+    </message>
+<message><source>OCR: waiting</source><translation>OCR：待機中</translation></message>
+<message><source>OCR: recognizing</source><translation>OCR：認識中</translation></message>
+<message><source>OCR: failed</source><translation>OCR：失敗</translation></message>
+<message><source>OCR: excluded</source><translation>OCR：対象外</translation></message>
+<message><source>OCR: indexed</source><translation>OCR：索引済み</translation></message>
+<message><source>OCR: no text</source><translation>OCR：文字なし</translation></message>
+<message><source>OCR engine unavailable</source><translation>OCR エンジンを利用できません</translation></message>
+<message><source>Image could not be read</source><translation>画像を読み込めません</translation></message>
+<message><source>OCR recognition failed</source><translation>OCR 認識に失敗</translation></message>
+<message><source>OCR interrupted; waiting to retry</source><translation>OCR が中断され再試行を待機中</translation></message>
+<message><source>Restore image text indexing</source><translation>この画像の文字索引を再開</translation></message>
+<message><source>Retry failed OCR</source><translation>失敗した OCR を再試行</translation></message>
+<message><source>Recognize image text again</source><translation>画像の文字を再認識</translation></message>
+<message><source>Exclude image from text index</source><translation>画像を文字索引から除外</translation></message>
+<message><source>Image text index</source><translation>画像の文字索引</translation></message>
+<message><source>Remove stored OCR text for this image and stop automatic indexing until restored? Original image and paste formats stay unchanged. Database backups and previously copied text are not erased.</source><translation>この画像の保存済み OCR テキストを削除し、再開するまで自動索引を停止しますか？元画像と貼り付け形式は変更しません。データベースのバックアップや以前コピーした文字は消去されません。</translation></message>
+<message><source>The image index could not be updated. Check that the item and database are still available.</source><translation>画像索引を更新できません。項目とデータベースが利用可能か確認してください。</translation></message>
 </context>
 
 <!-- ========== Clipboard Management Dialog ========== -->
@@ -2568,6 +3006,30 @@ This action cannot be undone.</source>
 
 <context>
     <name>ArrowSettingsPanel</name>
+    <message>
+        <source>Step note</source>
+        <translation>手順の説明</translation>
+    </message>
+    <message>
+        <source>Caption shown in the exported step list</source>
+        <translation>書き出す手順リストに表示する説明</translation>
+    </message>
+    <message>
+        <source>No caption list</source>
+        <translation>説明リストなし</translation>
+    </message>
+    <message>
+        <source>Caption list below</source>
+        <translation>説明リストを下に</translation>
+    </message>
+    <message>
+        <source>Caption list at right</source>
+        <translation>説明リストを右に</translation>
+    </message>
+    <message>
+        <source>Export numbered captions as a step list</source>
+        <translation>番号の説明を手順リストとして書き出す</translation>
+    </message>
     <message>
         <source>Solid Arrow</source>
         <translation>塗りつぶし矢印</translation>
@@ -3355,6 +3817,10 @@ This action cannot be undone.</source>
     <message><source>Rounded Corners</source><translation>角丸</translation></message>
     <message><source>Lock Aspect Ratio</source><translation>縦横比を固定</translation></message>
     <message><source>Refresh Background</source><translation>背景を更新</translation></message>
+    <message>
+        <source>Exact Region</source>
+        <translation>正確な範囲</translation>
+    </message>
 </context>
 
 <!-- ========== Border Shadow Popup ========== -->
@@ -3705,6 +4171,10 @@ SOFTWARE.</translation></message>
 <context>
     <name>ToolbarLayoutDialog</name>
     <message>
+        <source>Insert image…</source>
+        <translation>画像を挿入…</translation>
+    </message>
+    <message>
         <source>Customize Toolbar</source>
         <translation>ツールバーのカスタマイズ</translation>
     </message>
@@ -3781,8 +4251,20 @@ SOFTWARE.</translation></message>
         <translation>スポットライト</translation>
     </message>
     <message>
+        <source>Magnify region</source>
+        <translation>範囲を拡大</translation>
+    </message>
+    <message>
+        <source>Text callout (drag from bubble to target)</source>
+        <translation>吹き出し注釈（吹き出しから対象へドラッグ）</translation>
+    </message>
+    <message>
         <source>Arrow</source>
         <translation>矢印</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>吹き出し注釈</translation>
     </message>
     <message>
         <source>Number</source>
@@ -3823,6 +4305,22 @@ SOFTWARE.</translation></message>
     <message>
         <source>Confirm</source>
         <translation>確定</translation>
+    </message>
+    <message>
+        <source>Collect and capture next</source>
+        <translation>収集して次を撮影</translation>
+    </message>
+    <message>
+        <source>Collect and review images</source>
+        <translation>収集して画像を確認</translation>
+    </message>
+    <message>
+        <source>Multiple regions from frozen frame</source>
+        <translation>静止画面から複数範囲を撮影</translation>
+    </message>
+    <message>
+        <source>Edit or save project…</source>
+        <translation>プロジェクトを編集・保存…</translation>
     </message>
 </context>
 <context>
@@ -3890,6 +4388,10 @@ SOFTWARE.</translation></message>
         <source>Copied</source>
         <translation>コピーしました</translation>
     </message>
+<message><source>Review table…</source><translation>表を確認…</translation></message>
+<message><source>Table preview unavailable. Use an image up to 32 megapixels with positioned text.</source><translation>表のプレビューは利用できません。3200万画素以下で文字座標のある画像を使用してください。</translation></message>
+<message><source>PDF output…</source><translation>PDF 出力…</translation></message>
+<message><source>Current image</source><translation>現在の画像</translation></message>
 </context>
 <context>
     <name>InAppShortcut</name>
@@ -3979,6 +4481,106 @@ SOFTWARE.</translation></message>
     <message><source>%1 areas covered</source><translation>%1 個の範囲を非表示</translation></message>
     <message><source>Recognizing...</source><translation>認識中…</translation></message>
     <message><source>Copied</source><translation>コピーしました</translation></message>
+    <message>
+        <source>Chinese IDs (date + checksum)</source>
+        <translation>中国身分証（生年月日・検査符号）</translation>
+    </message>
+    <message>
+        <source>Bank cards (Luhn checksum)</source>
+        <translation>カード番号（Luhn 検査）</translation>
+    </message>
+    <message>
+        <source>Try OCR O/I/l substitutions</source>
+        <translation>OCR の O/I/l 誤読を補正</translation>
+    </message>
+    <message>
+        <source>Rule presets</source>
+        <translation>ルールプリセット</translation>
+    </message>
+    <message>
+        <source>Save rules…</source>
+        <translation>ルールを保存…</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>プリセットを削除</translation>
+    </message>
+    <message>
+        <source>Presets save rule switches only, never keywords, OCR text or images.</source>
+        <translation>プリセットはルールのオン・オフのみを保存し、キーワード、OCR テキスト、画像は保存しません。</translation>
+    </message>
+    <message>
+        <source>Candidates are not proof of identity or complete privacy detection. OCR errors, split lines and unchecked rules can miss data. Review every line; uncheck false positives and drag to cover missed areas. Exports flatten black covers into new files at this resolution.</source>
+        <translation>候補は身元の証明でも、すべての個人情報の検出保証でもありません。誤読、分割行、無効なルールで見逃す場合があります。各行を確認し、誤検出を外し、ドラッグで補ってください。元の解像度で黒塗りを画像に統合した新規ファイルを出力します。</translation>
+    </message>
+    <message>
+        <source>Current rules</source>
+        <translation>現在のルール</translation>
+    </message>
+    <message>
+        <source>Contact details</source>
+        <translation>連絡先</translation>
+    </message>
+    <message>
+        <source>Identity and bank cards</source>
+        <translation>身分証・カード</translation>
+    </message>
+    <message>
+        <source>All checks (strict)</source>
+        <translation>すべての検査（厳密）</translation>
+    </message>
+    <message>
+        <source>Saved rule presets could not be read. Existing settings were not changed.</source>
+        <translation>保存ルールを読み込めません。既存設定は変更されません。</translation>
+    </message>
+    <message>
+        <source>Save rule preset</source>
+        <translation>ルールプリセットを保存</translation>
+    </message>
+    <message>
+        <source>Preset name (rule switches only)</source>
+        <translation>名前（ルール設定のみ）</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>プリセット名</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <source>Rule switches saved. Keywords and image data were not saved.</source>
+        <translation>ルールを保存しました。キーワード・画像は保存していません。</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Use a unique name (1–40 characters), up to 20 presets, and writable settings.</source>
+        <translation>保存できません。重複しない1～40文字の名前を使用してください。最大20個で、設定への書き込み権限が必要です。</translation>
+    </message>
+    <message>
+        <source>Delete only this saved rule combination? Images and history will not be changed.</source>
+        <translation>このルールの組み合わせだけ削除しますか？画像と履歴は変更しません。</translation>
+    </message>
+    <message>
+        <source>Preset deleted. Current switches and images were kept.</source>
+        <translation>プリセットを削除しました。現在の設定と画像は保持されています。</translation>
+    </message>
+    <message>
+        <source>Could not delete preset. Existing data was kept.</source>
+        <translation>削除できません。既存データは保持されています。</translation>
+    </message>
+    <message>
+        <source>Choose a new filename. Redaction never overwrites an existing file.</source>
+        <translation>新しいファイル名を指定してください。既存ファイルは上書きしません。</translation>
+    </message>
+    <message>
+        <source>Save failed. Choose a new PNG, JPEG or PDF file.</source>
+        <translation>保存に失敗しました。新しいPNG、JPEG、PDFファイルを選んでください。</translation>
+    </message>
 </context>
 <context>
     <name>ClipboardWindow</name>
@@ -4043,4 +4645,1657 @@ SOFTWARE.</translation></message>
         <translation>キャプチャ設定をリセット</translation>
     </message>
 </context>
+<context>
+    <name>CaptureCountdown</name>
+    <message>
+        <source>Open a menu or tooltip. Esc cancels.</source>
+        <translation>メニューやヒントを開けます。Esc で中止。</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Screenshot in %1 s</source>
+        <translation>%1 秒後に撮影</translation>
+    </message>
+</context>
+<context>
+    <name>RegionGeometryDialog</name>
+    <message>
+        <source>Exact Region</source>
+        <translation>正確な範囲</translation>
+    </message>
+    <message>
+        <source>Physical pixels. Negative coordinates are valid on other screens.</source>
+        <translation>物理ピクセル単位です。他の画面では負の座標も有効です。</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X 座標</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y 座標</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>幅</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>高さ</translation>
+    </message>
+    <message>
+        <source>Aspect Ratio</source>
+        <translation>縦横比</translation>
+    </message>
+    <message>
+        <source>Free</source>
+        <translation>自由</translation>
+    </message>
+    <message>
+        <source>Current ratio</source>
+        <translation>現在の比率を維持</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>適用</translation>
+    </message>
+    <message>
+        <source>Ratio presets use whole-pixel multiples.</source>
+        <translation>比率プリセットは整数ピクセルの倍数に調整されます。</translation>
+    </message>
+    <message>
+        <source>The region or ratio does not fit the captured desktop.</source>
+        <translation>範囲または比率がキャプチャ済みのデスクトップを超えています。</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>出力サイズ：%1 × %2 px</translation>
+    </message>
+    <message>
+        <source> (including border/shadow)</source>
+        <translation>（枠線・影を含む）</translation>
+    </message>
+    <message>
+        <source>Saved Regions</source>
+        <translation>保存済みの範囲</translation>
+    </message>
+    <message>
+        <source>Preset name</source>
+        <translation>プリセット名</translation>
+    </message>
+    <message>
+        <source>Save preset</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <source>Update preset</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>名前の変更</translation>
+    </message>
+    <message>
+        <source>Delete preset</source>
+        <translation>削除</translation>
+    </message>
+    <message>
+        <source>Preset changes are saved immediately; Apply changes the selection.</source>
+        <translation>プリセット操作はすぐ保存されます。「適用」は選択範囲だけを変更します。</translation>
+    </message>
+    <message>
+        <source>Saved region data is invalid. Existing data was left unchanged.</source>
+        <translation>保存範囲のデータが無効です。既存データは変更していません。</translation>
+    </message>
+    <message>
+        <source>No preset</source>
+        <translation>プリセットなし</translation>
+    </message>
+    <message>
+        <source>Saved region loaded.</source>
+        <translation>保存範囲を読み込みました。</translation>
+    </message>
+    <message>
+        <source>Screen layout or scale changed. Review the current region and update the preset, or choose No preset.</source>
+        <translation>画面配置または倍率が変わりました。範囲を確認して更新するか、プリセットなしを選んでください。</translation>
+    </message>
+    <message>
+        <source>Preset saved.</source>
+        <translation>プリセットを保存しました。</translation>
+    </message>
+    <message>
+        <source>Could not save preset. Check the name and settings location.</source>
+        <translation>保存できません。名前と設定フォルダーを確認してください。</translation>
+    </message>
+    <message>
+        <source>Preset renamed.</source>
+        <translation>名前を変更しました。</translation>
+    </message>
+    <message>
+        <source>Could not rename preset. Names must be unique.</source>
+        <translation>名前を変更できません。重複しない名前を指定してください。</translation>
+    </message>
+    <message>
+        <source>Preset deleted.</source>
+        <translation>プリセットを削除しました。</translation>
+    </message>
+    <message>
+        <source>Could not delete preset.</source>
+        <translation>プリセットを削除できません。</translation>
+    </message>
+    <message>
+        <source>Saved file: %1 × %2 px</source>
+        <translation>保存ファイル：%1 × %2 px</translation>
+    </message>
+    <message>
+        <source>Saved file would be too large. Reduce the output width.</source>
+        <translation>保存ファイルが大きすぎます。出力幅を小さくしてください。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageSourcePicker</name>
+    <message>
+        <source>Choose Images</source>
+        <translation>画像を選択</translation>
+    </message>
+    <message>
+        <source>Search image history</source>
+        <translation>画像履歴を検索</translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation>検索</translation>
+    </message>
+    <message>
+        <source>Load more</source>
+        <translation>さらに読み込む</translation>
+    </message>
+    <message>
+        <source>Add selected</source>
+        <translation>選択した画像を追加</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Ctrl / Shift selects multiple images. Nothing is copied or deleted.</source>
+        <translation>Ctrl / Shift で複数選択できます。履歴はコピー・削除されません。</translation>
+    </message>
+    <message>
+        <source>Pinned image %1</source>
+        <translation>貼り付け画像 %1</translation>
+    </message>
+    <message>
+        <source>Image</source>
+        <translation>画像</translation>
+    </message>
+    <message>
+        <source>Showing up to 1000 records. Search to narrow the list.</source>
+        <translation>最大1000件を表示しています。検索で絞り込んでください。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageLayoutDialog</name>
+    <message>
+        <source>Markdown report…</source>
+        <translation>Markdown レポート…</translation>
+    </message>
+    <message>
+        <source>Image Layout and PDF</source>
+        <translation>画像レイアウトと PDF</translation>
+    </message>
+    <message>
+        <source>Add history images</source>
+        <translation>履歴から追加</translation>
+    </message>
+    <message>
+        <source>Add pinned images</source>
+        <translation>貼り付け画像を追加</translation>
+    </message>
+    <message>
+        <source>Add image files</source>
+        <translation>画像ファイルを追加</translation>
+    </message>
+    <message>
+        <source>Combined image</source>
+        <translation>1枚の結合画像</translation>
+    </message>
+    <message>
+        <source>One image per PDF page</source>
+        <translation>1画像につき1ページのPDF</translation>
+    </message>
+    <message>
+        <source>Vertical</source>
+        <translation>縦に並べる</translation>
+    </message>
+    <message>
+        <source>Horizontal</source>
+        <translation>横に並べる</translation>
+    </message>
+    <message>
+        <source>Original widths</source>
+        <translation>元の幅</translation>
+    </message>
+    <message>
+        <source>White</source>
+        <translation>白</translation>
+    </message>
+    <message>
+        <source>Transparent</source>
+        <translation>透明</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>ダーク</translation>
+    </message>
+    <message>
+        <source>Original size (96 pixels/inch)</source>
+        <translation>元サイズ（96ピクセル/インチ）</translation>
+    </message>
+    <message>
+        <source>A4</source>
+        <translation>A4</translation>
+    </message>
+    <message>
+        <source>Letter</source>
+        <translation>Letter</translation>
+    </message>
+    <message>
+        <source>Portrait</source>
+        <translation>縦向き</translation>
+    </message>
+    <message>
+        <source>Landscape</source>
+        <translation>横向き</translation>
+    </message>
+    <message>
+        <source>Output</source>
+        <translation>出力</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>方向</translation>
+    </message>
+    <message>
+        <source>Common width (px)</source>
+        <translation>共通の幅（px）</translation>
+    </message>
+    <message>
+        <source>Gap (px)</source>
+        <translation>間隔（px）</translation>
+    </message>
+    <message>
+        <source>Padding (px)</source>
+        <translation>余白（px）</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation>背景色</translation>
+    </message>
+    <message>
+        <source>PDF paper</source>
+        <translation>PDF用紙</translation>
+    </message>
+    <message>
+        <source>Orientation</source>
+        <translation>用紙の向き</translation>
+    </message>
+    <message>
+        <source>Page margins</source>
+        <translation>ページ余白</translation>
+    </message>
+    <message>
+        <source>Drag images to reorder. Layout size is used exactly; file quality follows settings. PDF pages have a white background and no OCR text layer.</source>
+        <translation>画像をドラッグして並べ替えます。表示サイズで出力し、画質は設定に従います。PDFは白背景でOCRテキスト層は含みません。</translation>
+    </message>
+    <message>
+        <source>Image order</source>
+        <translation>画像の順序</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>上へ</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>下へ</translation>
+    </message>
+    <message>
+        <source>Remove image</source>
+        <translation>画像を除外</translation>
+    </message>
+    <message>
+        <source>Clear collection</source>
+        <translation>コレクションを空にする</translation>
+    </message>
+    <message>
+        <source>Add images to begin. Up to 50 images and 64 megapixels in total.</source>
+        <translation>画像を追加してください。最大50枚、合計6400万ピクセルまで。</translation>
+    </message>
+    <message>
+        <source>Cancel export</source>
+        <translation>出力をキャンセル</translation>
+    </message>
+    <message>
+        <source>Export…</source>
+        <translation>出力…</translation>
+    </message>
+    <message>
+        <source>Image %1</source>
+        <translation>画像 %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>貼り付け画像</translation>
+    </message>
+    <message>
+        <source>%1 image(s) could not be added: missing, invalid, or over the collection limit.</source>
+        <translation>%1枚を追加できませんでした。画像が無効か見つからない、または上限を超えています。</translation>
+    </message>
+    <message>
+        <source>%1 pages · Previewing page %2</source>
+        <translation>全%1ページ · %2ページをプレビュー</translation>
+    </message>
+    <message>
+        <source>%1 images · %2 × %3 px</source>
+        <translation>%1枚 · %2 × %3 px</translation>
+    </message>
+    <message>
+        <source>This layout exceeds the image or page size limit. Reduce the width or choose A4 / Letter.</source>
+        <translation>画像またはページサイズの上限を超えています。幅を小さくするかA4 / Letterを選んでください。</translation>
+    </message>
+    <message>
+        <source>Export collection</source>
+        <translation>画像コレクションを出力</translation>
+    </message>
+    <message>
+        <source>Choose a file extension matching the selected output.</source>
+        <translation>出力形式に合う拡張子を選んでください。</translation>
+    </message>
+    <message>
+        <source>Exporting…</source>
+        <translation>出力中…</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>キャンセル中…</translation>
+    </message>
+    <message>
+        <source>Export saved.</source>
+        <translation>出力を保存しました。</translation>
+    </message>
+    <message>
+        <source>Export cancelled.</source>
+        <translation>出力をキャンセルしました。</translation>
+    </message>
+    <message>
+        <source>Export failed. Check image limits, folder permissions and free space.</source>
+        <translation>出力に失敗しました。画像の上限、フォルダー権限と空き容量を確認してください。</translation>
+    </message>
+    <message>
+        <source>Choose Images</source>
+        <translation>画像を選択</translation>
+    </message>
+<message><source>%1° clockwise</source><translation>時計回り %1°</translation></message>
+<message><source>Searchable PDF (fresh local OCR)</source><translation>検索可能PDF（新しくローカルOCR）</translation></message>
+<message><source>Rotate PDF images</source><translation>PDF 画像を回転</translation></message>
+<message><source>PDF text report</source><translation>PDF テキストレポート</translation></message>
+<message><source>Searchable PDF re-runs OCR on the exact rotated output pixels. Never reuses cached text. Blank/failed pages or missing glyphs fall back to image-only and are reported. OCR can be wrong; review the result. Redacted exports never reuse pre-redaction text.</source><translation>検索PDFは回転後の出力ピクセルにOCRを再実行し、キャッシュを使いません。空白・失敗・字形不足は画像のみで保存し報告します。OCRには誤りがあります。墨消し前のテキストは再利用しません。</translation></message>
+<message><source>Recognizing PDF pages and exporting… Cancellation waits for the current local OCR call.</source><translation>PDF を認識・出力中… キャンセルは現在のOCR処理を待ちます。</translation></message>
+<message><source>PDF saved: %1 of %2 pages have searchable text. Review the PDF text report.</source><translation>PDF 保存済み：%2 ページ中 %1 ページに検索文字があります。レポートを確認してください。</translation></message>
+<message><source>OCR failed or unavailable</source><translation>OCR 失敗または利用不可</translation></message>
+<message><source>Invalid OCR result</source><translation>無効な OCR 結果</translation></message>
+<message><source>Text limit exceeded</source><translation>文字数制限を超過</translation></message>
+<message><source>Unsupported or invalid text box</source><translation>未対応・無効な文字枠</translation></message>
+<message><source>Low confidence text</source><translation>信頼度の低いテキスト</translation></message>
+<message><source>Missing font glyphs</source><translation>フォント字形が不足</translation></message>
+<message><source>Page %1: %2 text lines</source><translation>ページ %1：%2 行</translation></message>
+<message><source>Image-only page</source><translation>画像のみのページ</translation></message>
+<message><source>No text recognized</source><translation>文字を認識できません</translation></message>
+</context>
+<context>
+    <name>MultiRegionDialog</name>
+    <message>
+        <source>Multiple Regions</source>
+        <translation>複数範囲の撮影</translation>
+    </message>
+    <message>
+        <source>Drag to add regions from this frozen frame. Overlaps are exported separately. Existing annotations are not included.</source>
+        <translation>この静止画面上でドラッグして範囲を追加します。重なる範囲は個別に出力され、既存の注釈は含まれません。</translation>
+    </message>
+    <message>
+        <source>Region order</source>
+        <translation>範囲の順序</translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>上へ</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>下へ</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>除外</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation>元に戻す</translation>
+    </message>
+    <message>
+        <source>Redo</source>
+        <translation>やり直す</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>クリア</translation>
+    </message>
+    <message>
+        <source>Move controls</source>
+        <translation>操作パネルを移動</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Collect regions</source>
+        <translation>範囲を収集</translation>
+    </message>
+    <message>
+        <source>Region is too small or exceeds the remaining collection capacity.</source>
+        <translation>範囲が小さすぎるか、コレクションの残り容量を超えています。</translation>
+    </message>
+    <message>
+        <source>%1 regions · Tab hides controls · Enter collects · Esc cancels</source>
+        <translation>%1範囲 · Tabでパネル切替 · Enterで収集 · Escで中止</translation>
+    </message>
+</context>
+<context>
+    <name>ScreenshotWindow</name>
+    <message>
+        <source>Insert image</source>
+        <translation>画像を挿入</translation>
+    </message>
+    <message>
+        <source>Images (*.png *.jpg *.jpeg *.bmp *.webp);;All files (*)</source>
+        <translation>画像 (*.png *.jpg *.jpeg *.bmp *.webp);;すべてのファイル (*)</translation>
+    </message>
+    <message>
+        <source>Insert image failed</source>
+        <translation>画像の挿入に失敗</translation>
+    </message>
+    <message>
+        <source>The image is missing, too large, or not a supported bitmap.</source>
+        <translation>画像が見つからない、大きすぎる、または対応していないビットマップです。</translation>
+    </message>
+    <message>
+        <source>Collection unavailable</source>
+        <translation>収集できません</translation>
+    </message>
+    <message>
+        <source>Finish exporting or remove images before selecting more regions.</source>
+        <translation>出力を完了するか画像を除外してから範囲を追加してください。</translation>
+    </message>
+    <message>
+        <source>Region %1</source>
+        <translation>範囲 %1</translation>
+    </message>
+    <message>
+        <source>Regions could not be collected. Existing images were kept.</source>
+        <translation>範囲を収集できませんでした。既存の画像は保持されています。</translation>
+    </message>
+    <message>
+        <source>Project unavailable</source>
+        <translation>プロジェクトを利用できません</translation>
+    </message>
+    <message>
+        <source>Could not transfer the editable image. Original content was kept.</source>
+        <translation>編集可能な画像を移せませんでした。元の内容は保持しています。</translation>
+    </message>
+</context>
+<context>
+    <name>StitchAdjustmentDialog</name>
+    <message>
+        <source>Matching exclusions</source>
+        <translation>照合から除外する領域</translation>
+    </message>
+    <message>
+        <source>Adjust latest seam</source>
+        <translation>最新の継ぎ目を調整</translation>
+    </message>
+    <message>
+        <source>Highlighted pixels are excluded from matching only, not removed from the output. Coordinates follow the original screen, even for horizontal or reverse capture.</source>
+        <translation>強調領域は照合からのみ除外され、出力は切り取りません。横方向や逆方向でも座標は元の画面に対応します。</translation>
+    </message>
+    <message>
+        <source>Review the two latest frames. Overlap counts pixels already present; adjust it to remove duplicate rows or restore missing content. Capturing is paused while this window is open.</source>
+        <translation>直近2枚を確認してください。重なりは既存のピクセル数です。重複や欠落を調整できます。この画面を開いている間は撮影を停止します。</translation>
+    </message>
+    <message>
+        <source>Click to set header height</source>
+        <translation>クリックでヘッダー高さを指定</translation>
+    </message>
+    <message>
+        <source>Click to set scrollbar width</source>
+        <translation>クリックで右側の幅を指定</translation>
+    </message>
+    <message>
+        <source>Top exclusion (px)</source>
+        <translation>上端除外（px）</translation>
+    </message>
+    <message>
+        <source>Right exclusion (px)</source>
+        <translation>右端除外（px）</translation>
+    </message>
+    <message>
+        <source>Preview action</source>
+        <translation>プレビュー操作</translation>
+    </message>
+    <message>
+        <source>Append below / right</source>
+        <translation>下／右に追加</translation>
+    </message>
+    <message>
+        <source>Prepend above / left</source>
+        <translation>上／左に追加</translation>
+    </message>
+    <message>
+        <source>Overlap (px)</source>
+        <translation>重なり（px）</translation>
+    </message>
+    <message>
+        <source>New frame direction</source>
+        <translation>新しい画像の方向</translation>
+    </message>
+    <message>
+        <source>No exclusions</source>
+        <translation>除外しない</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>適用</translation>
+    </message>
+    <message>
+        <source>These settings affect future matching; the existing stitched image stays unchanged.</source>
+        <translation>設定は以後の照合に適用されます。結合済み画像は変更しません。</translation>
+    </message>
+    <message>
+        <source>New content: %1 px. Red line marks the join; only this preview includes it.</source>
+        <translation>新しい内容：%1 px。赤線は継ぎ目で、プレビューだけに表示されます。</translation>
+    </message>
+</context>
+<context>
+    <name>ScrollCaptureWindow</name>
+    <message>
+        <source>Undo last stitch (%1 retained; up to 3 checkpoints / 96 MiB)</source>
+        <translation>最後の結合を取り消す（%1件保持、最大3件／96 MiB）</translation>
+    </message>
+    <message>
+        <source>No reliable overlap. Scroll less and retry, or adjust the latest seam.</source>
+        <translation>確かな重なりが見つかりません。スクロール量を減らすか継ぎ目を調整してください。</translation>
+    </message>
+    <message>
+        <source>The frame is unchanged. Scroll to new content before capturing again.</source>
+        <translation>画面が変わっていません。新しい内容へスクロールしてから再撮影してください。</translation>
+    </message>
+    <message>
+        <source>Could not stitch this frame. Existing content was kept; reduce the region or repair the seam.</source>
+        <translation>この画像を結合できませんでした。既存の内容は保持しました。範囲を狭めるか継ぎ目を調整してください。</translation>
+    </message>
+    <message>
+        <source>Last stitch undone. Return the page to this preview before continuing.</source>
+        <translation>最後の結合を取り消しました。続ける前に、このプレビューの位置までページを戻してください。</translation>
+    </message>
+    <message>
+        <source>Undo all seams or start a new capture before switching direction.</source>
+        <translation>方向を切り替える前に、すべての継ぎ目を取り消すか新しく撮影してください。</translation>
+    </message>
+    <message>
+        <source>Matching exclusions updated. Existing output pixels were not cropped.</source>
+        <translation>照合除外領域を更新しました。既存の出力は切り取っていません。</translation>
+    </message>
+    <message>
+        <source>Seam updated. Check the preview before continuing.</source>
+        <translation>継ぎ目を更新しました。続ける前にプレビューを確認してください。</translation>
+    </message>
+    <message>
+        <source>Adjustment failed. Existing content was kept.</source>
+        <translation>調整に失敗しました。既存の内容は保持しています。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: the cancel key is unavailable.</source>
+        <translation>停止キーを利用できないため自動スクロールを開始できません。</translation>
+    </message>
+    <message>
+        <source>Activate the target and put the pointer inside the capture region within 3 seconds. Esc stops.</source>
+        <translation>3秒以内に対象を有効にし、範囲内にポインターを置いてください。Escで停止します。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped because the cancel key became unavailable.</source>
+        <translation>停止キーが利用できなくなったため停止しました。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the starting frame did not match the preview.</source>
+        <translation>開始画像がプレビューと一致しないため停止しました。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the time limit.</source>
+        <translation>自動スクロールの時間上限に達しました。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: the frame did not change (end of page or unsupported target).</source>
+        <translation>画像が変わらないため停止しました（ページ末尾または非対応の対象）。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: overlap failed. Review or repair the last seam.</source>
+        <translation>重なりの照合に失敗しました。最新の継ぎ目を確認・修正してください。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling is running. Esc or Stop ends it without discarding images.</source>
+        <translation>自動スクロール中。Escまたは停止で終了し、画像は保持します。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped: target focus, position, or input access changed.</source>
+        <translation>対象のフォーカス、位置、入力権限が変わったため停止しました。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling stopped. Existing content was kept.</source>
+        <translation>自動スクロールを停止しました。内容は保持しています。</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <source>Auto scroll</source>
+        <translation>自動スクロール</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling could not start: check the current direction and starting frame.</source>
+        <translation>方向と開始画像を確認してください。自動スクロールを開始できません。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the frame limit.</source>
+        <translation>自動スクロールの回数上限に達しました。</translation>
+    </message>
+    <message>
+        <source>Automatic scrolling reached the image length limit.</source>
+        <translation>自動スクロールの画像長上限に達しました。</translation>
+    </message>
+</context>
+<context>
+    <name>AutoScrollDialog</name>
+    <message>
+        <source>Automatic scrolling</source>
+        <translation>自動スクロール</translation>
+    </message>
+    <message>
+        <source>After Start, activate the intended app and put the pointer inside the selected capture area within 3 seconds. Scrolling is addressed only to that window. Keep it visible and focused. Esc stops; some applications may not support this input.</source>
+        <translation>開始後3秒以内に対象アプリを有効にし、選択範囲内にポインターを置いてください。そのウィンドウだけにスクロールを送ります。表示とフォーカスを維持してください。Escで停止します。一部アプリは対応していません。</translation>
+    </message>
+    <message>
+        <source>Down / right</source>
+        <translation>下／右</translation>
+    </message>
+    <message>
+        <source>Up / left</source>
+        <translation>上／左</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>方向</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Start in 3 seconds</source>
+        <translation>3秒後に開始</translation>
+    </message>
+    <message>
+        <source>Wheel notches per step</source>
+        <translation>1回のホイール段階</translation>
+    </message>
+    <message>
+        <source>Wait after each scroll (ms)</source>
+        <translation>スクロール後の待機（ms）</translation>
+    </message>
+    <message>
+        <source>Maximum scroll steps</source>
+        <translation>最大スクロール回数</translation>
+    </message>
+    <message>
+        <source>Maximum duration (seconds)</source>
+        <translation>最大時間（秒）</translation>
+    </message>
+    <message>
+        <source>Maximum image length (px)</source>
+        <translation>最大画像長（px）</translation>
+    </message>
+</context>
+<context>
+    <name>GeometryEditor</name>
+    <message>
+        <source>Crop and Resize</source>
+        <translation>切り抜きとサイズ変更</translation>
+    </message>
+    <message>
+        <source>Crop coordinates refer to the original image. Rotation and flipping preserve editable annotations. Output width 0 keeps the cropped image size.</source>
+        <translation>切り抜き座標は元画像基準です。回転や反転後も注釈を編集できます。出力幅0で切り抜きサイズを維持します。</translation>
+    </message>
+    <message>
+        <source>X</source>
+        <translation>X 座標</translation>
+    </message>
+    <message>
+        <source>Y</source>
+        <translation>Y 座標</translation>
+    </message>
+    <message>
+        <source>Crop width</source>
+        <translation>切り抜き幅</translation>
+    </message>
+    <message>
+        <source>Crop height</source>
+        <translation>切り抜き高さ</translation>
+    </message>
+    <message>
+        <source>Output width (0 = original)</source>
+        <translation>出力幅（0＝元サイズ）</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>適用</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px</source>
+        <translation>出力：%1 × %2 px</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>切り抜きまたは出力サイズが画像の制限を超えています。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageEditor</name>
+    <message>
+        <source>Crop</source>
+        <translation>切り抜き</translation>
+    </message>
+    <message>
+        <source>Crop or output dimensions are outside the image limits.</source>
+        <translation>切り抜きまたは出力サイズが画像の制限を超えています。</translation>
+    </message>
+    <message>
+        <source>Image Editor</source>
+        <translation>画像エディター</translation>
+    </message>
+    <message>
+        <source>Crop by dragging</source>
+        <translation>ドラッグで切り抜く</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>画面に合わせる</translation>
+    </message>
+    <message>
+        <source>Open or drop one PNG, JPEG, BMP or WebP image. The source file is never overwritten.</source>
+        <translation>PNG、JPEG、BMP、WebP画像を1枚開くかドロップしてください。元ファイルは上書きしません。</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>保存をキャンセル</translation>
+    </message>
+    <message>
+        <source>Unsaved image</source>
+        <translation>未保存の画像</translation>
+    </message>
+    <message>
+        <source>Discard the unsaved edits? The source image will stay unchanged.</source>
+        <translation>未保存の編集を破棄しますか？元画像は変更されません。</translation>
+    </message>
+    <message>
+        <source>Open image</source>
+        <translation>画像を開く</translation>
+    </message>
+    <message>
+        <source>Open image…</source>
+        <translation>画像を開く…</translation>
+    </message>
+    <message>
+        <source>Save as…</source>
+        <translation>名前を付けて保存…</translation>
+    </message>
+    <message>
+        <source>Recognize text</source>
+        <translation>文字認識</translation>
+    </message>
+    <message>
+        <source>Crop / resize…</source>
+        <translation>切り抜き／サイズ…</translation>
+    </message>
+    <message>
+        <source>Rotate left</source>
+        <translation>左に回転</translation>
+    </message>
+    <message>
+        <source>Rotate right</source>
+        <translation>右に回転</translation>
+    </message>
+    <message>
+        <source>Flip horizontal</source>
+        <translation>左右反転</translation>
+    </message>
+    <message>
+        <source>Flip vertical</source>
+        <translation>上下反転</translation>
+    </message>
+    <message>
+        <source>Could not open image. Use one supported local image within 32 megapixels and 64 MiB.</source>
+        <translation>画像を開けません。対応するローカル画像（3200万ピクセル、64 MiB以内）を選んでください。</translation>
+    </message>
+    <message>
+        <source>Could not allocate the editor canvas. Existing edits were kept.</source>
+        <translation>編集キャンバスを作成できませんでした。既存の編集は保持されています。</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Cropping preserves hidden source pixels only in this session.</source>
+        <translation>出力：%1 × %2 px · 切り抜いた外側の元画素はこのセッション内だけ保持します。</translation>
+    </message>
+    <message>
+        <source>Transform image</source>
+        <translation>画像を変換</translation>
+    </message>
+    <message>
+        <source>Crop and resize</source>
+        <translation>切り抜きとサイズ変更</translation>
+    </message>
+    <message>
+        <source>Save edited image</source>
+        <translation>編集画像を保存</translation>
+    </message>
+    <message>
+        <source>Choose a different file. The source image cannot be overwritten.</source>
+        <translation>別のファイルを選んでください。元画像は上書きできません。</translation>
+    </message>
+    <message>
+        <source>Choose PNG, JPEG, WebP, BMP or PDF for the output.</source>
+        <translation>出力形式はPNG、JPEG、WebP、BMP、PDFから選んでください。</translation>
+    </message>
+    <message>
+        <source>Could not render this image. Reduce the output dimensions.</source>
+        <translation>画像を描画できません。出力サイズを小さくしてください。</translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation>保存中…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>保存をキャンセル中…</translation>
+    </message>
+    <message>
+        <source>Edited image saved. Source file unchanged.</source>
+        <translation>編集画像を保存しました。元ファイルは変更していません。</translation>
+    </message>
+    <message>
+        <source>Save cancelled. Edits are still available.</source>
+        <translation>保存をキャンセルしました。編集内容は保持されています。</translation>
+    </message>
+    <message>
+        <source>Save failed. Edits and the existing file were kept.</source>
+        <translation>保存に失敗しました。編集内容と既存ファイルは保持しています。</translation>
+    </message>
+    <message>
+        <source>Edited image copied.</source>
+        <translation>編集画像をコピーしました。</translation>
+    </message>
+    <message>
+        <source>Save project…</source>
+        <translation>プロジェクトを保存…</translation>
+    </message>
+    <message>
+        <source>Untitled project</source>
+        <translation>名称未設定のプロジェクト</translation>
+    </message>
+    <message>
+        <source>Could not open image or project. Check the format, version and resource limits.</source>
+        <translation>画像またはプロジェクトを開けません。形式、バージョン、サイズ制限を確認してください。</translation>
+    </message>
+    <message>
+        <source>Editable project contains original pixels</source>
+        <translation>編集可能なプロジェクトには元画像が含まれます</translation>
+    </message>
+    <message>
+        <source>Projects retain the original image, cropped-out pixels and removable annotations. Do not share them as redacted images. Continue?</source>
+        <translation>プロジェクトには元画像、切り抜きの外側の画素、削除可能な注釈が含まれます。墨消し済み画像として共有しないでください。続けますか？</translation>
+    </message>
+    <message>
+        <source>Save editable project</source>
+        <translation>編集可能なプロジェクトを保存</translation>
+    </message>
+    <message>
+        <source>Could not save this project: unsupported annotation or resource limit. Edits were kept.</source>
+        <translation>対応しない注釈またはリソース制限のため保存できません。編集内容は保持しています。</translation>
+    </message>
+    <message>
+        <source>Saving editable project…</source>
+        <translation>編集プロジェクトを保存中…</translation>
+    </message>
+    <message>
+        <source>Editable project saved. It contains original pixels; use image export for sharing.</source>
+        <translation>プロジェクトを保存しました。元画素を含みます。共有には画像出力を使ってください。</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 px · Images are flattened; projects retain original pixels and annotations.</source>
+        <translation>出力：%1 × %2 px · 画像は合成出力、プロジェクトは元画素と注釈を保持します。</translation>
+    </message>
+</context>
+<context>
+    <name>PinWorkspaceDialog</name>
+    <message>
+        <source>Pin Workspaces</source>
+        <translation>貼り付け画像ワークスペース</translation>
+    </message>
+    <message>
+        <source>Select the pins to keep. Saving is manual; workspaces contain original images and editable annotations. Restoring adds pins without closing existing ones.</source>
+        <translation>保存する画像を選んでください。保存は手動のみで、元画像と編集可能な注釈を含みます。復元時は既存ウィンドウを閉じずに追加します。</translation>
+    </message>
+    <message>
+        <source>Workspace name</source>
+        <translation>ワークスペース名</translation>
+    </message>
+    <message>
+        <source>Reference board</source>
+        <translation>参考画像ボード</translation>
+    </message>
+    <message>
+        <source>Pins to save</source>
+        <translation>保存する画像</translation>
+    </message>
+    <message>
+        <source>Refresh pins</source>
+        <translation>画像を更新</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>すべて選択</translation>
+    </message>
+    <message>
+        <source>Select none</source>
+        <translation>選択解除</translation>
+    </message>
+    <message>
+        <source>Up to 20 pins, 64 megapixels in total. Closing this dialog does not save anything automatically.</source>
+        <translation>最大20枚、合計6400万ピクセルまで。この画面を閉じても自動保存しません。</translation>
+    </message>
+    <message>
+        <source>Save selected…</source>
+        <translation>選択画像を保存…</translation>
+    </message>
+    <message>
+        <source>Open workspace…</source>
+        <translation>ワークスペースを開く…</translation>
+    </message>
+    <message>
+        <source>Delete workspace…</source>
+        <translation>ワークスペースを削除…</translation>
+    </message>
+    <message>
+        <source>Cancel save</source>
+        <translation>保存をキャンセル</translation>
+    </message>
+    <message>
+        <source>Thumbnail</source>
+        <translation>サムネイル</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>貼り付け画像</translation>
+    </message>
+    <message>
+        <source>Enter a name and select between 1 and 20 pins.</source>
+        <translation>名前を入力し、1～20枚を選んでください。</translation>
+    </message>
+    <message>
+        <source>Workspace contains original images</source>
+        <translation>ワークスペースに元画像が含まれます</translation>
+    </message>
+    <message>
+        <source>This file keeps original pixels and removable annotations. It is not a redacted sharing format. Save the selected pins?</source>
+        <translation>元画素と削除可能な注釈を保持するため、墨消し済み画像の共有形式ではありません。選択画像を保存しますか？</translation>
+    </message>
+    <message>
+        <source>Save pin workspace</source>
+        <translation>画像ワークスペースを保存</translation>
+    </message>
+    <message>
+        <source>Use the .vpins extension for pin workspaces.</source>
+        <translation>拡張子 .vpins を使ってください。</translation>
+    </message>
+    <message>
+        <source>Could not prepare workspace. Check selected pins, name and resource limits. Nothing was saved.</source>
+        <translation>準備できません。選択画像、名前、容量制限を確認してください。保存はしていません。</translation>
+    </message>
+    <message>
+        <source>Saving workspace…</source>
+        <translation>ワークスペースを保存中…</translation>
+    </message>
+    <message>
+        <source>Cancelling save…</source>
+        <translation>保存をキャンセル中…</translation>
+    </message>
+    <message>
+        <source>Workspace saved. Source images and existing pins were not changed.</source>
+        <translation>保存しました。元画像と既存の貼り付け画像は変更していません。</translation>
+    </message>
+    <message>
+        <source>Workspace save cancelled. Existing files were kept.</source>
+        <translation>保存をキャンセルしました。既存ファイルは保持しています。</translation>
+    </message>
+    <message>
+        <source>Could not save workspace. Existing files and pins were kept.</source>
+        <translation>保存できませんでした。既存ファイルと画像は保持しています。</translation>
+    </message>
+    <message>
+        <source>Open pin workspace</source>
+        <translation>画像ワークスペースを開く</translation>
+    </message>
+    <message>
+        <source>Workspace format or resource limits are invalid. Existing pins were not changed.</source>
+        <translation>形式または容量制限が無効です。既存画像は変更していません。</translation>
+    </message>
+    <message>
+        <source>No valid pins could be restored. The workspace may be missing or contain damaged projects.</source>
+        <translation>復元できる有効な画像がありません。プロジェクトが欠落または破損している可能性があります。</translation>
+    </message>
+    <message>
+        <source>Restore %1 pins from '%2'? Existing pins stay open. The saved original images will be visible on screen.</source>
+        <translation>「%2」から%1枚を復元しますか？既存画像は閉じません。保存した元画像が画面に表示されます。</translation>
+    </message>
+    <message>
+        <source>Restore pin workspace</source>
+        <translation>画像ワークスペースを復元</translation>
+    </message>
+    <message>
+        <source>Restored %1 pins; %2 failed; %3 moved onto an available screen.</source>
+        <translation>%1枚を復元、%2枚が失敗、%3枚を利用可能な画面へ移動しました。</translation>
+    </message>
+    <message>
+        <source>Failed entries: %1. Missing, invalid or over the resource limit.</source>
+        <translation>失敗した項目：%1。欠落、無効、または容量制限を超えています。</translation>
+    </message>
+    <message>
+        <source>Delete pin workspace</source>
+        <translation>画像ワークスペースを削除</translation>
+    </message>
+    <message>
+        <source>Move this workspace file to the Recycle Bin? Open pins and source image files will not be deleted.
+%1</source>
+        <translation>このファイルをごみ箱へ移動しますか？開いている画像と元画像ファイルは削除しません。
+%1</translation>
+    </message>
+    <message>
+        <source>Workspace moved to the Recycle Bin. Open pins were kept.</source>
+        <translation>ワークスペースをごみ箱へ移動しました。開いている画像は保持しています。</translation>
+    </message>
+    <message>
+        <source>Could not move the workspace to the Recycle Bin. Nothing was permanently deleted.</source>
+        <translation>ごみ箱へ移動できませんでした。ファイルは完全削除していません。</translation>
+    </message>
+</context>
+<context>
+    <name>ImageCompareWindow</name>
+    <message>
+        <source>Image A</source>
+        <translation>画像 A</translation>
+    </message>
+    <message>
+        <source>Image B</source>
+        <translation>画像 B</translation>
+    </message>
+    <message>
+        <source>Image Comparison</source>
+        <translation>画像の比較</translation>
+    </message>
+    <message>
+        <source>Replace image A</source>
+        <translation>画像 A を置き換え</translation>
+    </message>
+    <message>
+        <source>Replace image B</source>
+        <translation>画像 B を置き換え</translation>
+    </message>
+    <message>
+        <source>Original pixels, align top-left</source>
+        <translation>元のピクセル、左上揃え</translation>
+    </message>
+    <message>
+        <source>Resize B to A (may distort)</source>
+        <translation>B を A にリサイズ（変形あり）</translation>
+    </message>
+    <message>
+        <source>Pixel difference threshold</source>
+        <translation>ピクセル差分しきい値</translation>
+    </message>
+    <message>
+        <source>Threshold</source>
+        <translation>しきい値</translation>
+    </message>
+    <message>
+        <source>Fit</source>
+        <translation>全体表示</translation>
+    </message>
+    <message>
+        <source>Read-only comparison. Original pixels align at the top-left; missing areas are differences. Wheel zooms both views; drag pans. Resizing B may introduce interpolation differences. Pixel differences are not a correctness verdict.</source>
+        <translation>読み取り専用。元のピクセルは左上揃えで、欠落領域も差分です。ホイールで同期ズーム、ドラッグで移動します。B のリサイズは補間差を生む場合があります。差分は正誤判定ではありません。</translation>
+    </message>
+    <message>
+        <source>A / B split position</source>
+        <translation>A / B 分割位置</translation>
+    </message>
+    <message>
+        <source>Choose two images to compare. No source files are changed.</source>
+        <translation>比較する画像を2枚選んでください。元ファイルは変更しません。</translation>
+    </message>
+    <message>
+        <source>Could not load image: missing data, unsupported format or comparison limit (32 megapixels total). Existing images were kept.</source>
+        <translation>読み込めません。画像の欠落、非対応形式、または合計3200万ピクセルの制限超過です。既存画像は保持しました。</translation>
+    </message>
+    <message>
+        <source>Choose comparison image</source>
+        <translation>比較画像を選択</translation>
+    </message>
+    <message>
+        <source>History image %1</source>
+        <translation>履歴画像 %1</translation>
+    </message>
+    <message>
+        <source>Pinned image</source>
+        <translation>貼り付け画像</translation>
+    </message>
+    <message>
+        <source>Comparison canvas exceeds 32 megapixels. Use another image pair or resize B to A.</source>
+        <translation>比較領域が3200万ピクセルを超えます。画像を変更するか B を A にリサイズしてください。</translation>
+    </message>
+    <message>
+        <source>Comparing pixels…</source>
+        <translation>ピクセルを比較中…</translation>
+    </message>
+    <message>
+        <source>%1 of %2 pixels differ (%3%). Alpha is compared; invisible RGB is ignored.</source>
+        <translation>%2 ピクセル中 %1 が異なります（%3%）。透明度も比較し、不可視 RGB は無視します。</translation>
+    </message>
+    <message>
+        <source>Read-only · %1 × %2 comparison pixels · A on the left, B on the right.</source>
+        <translation>読み取り専用 · %1 × %2 ピクセル · 左 A、右 B。</translation>
+    </message>
+    <message>
+        <source>Comparison failed. Reduce image sizes or choose another pair.</source>
+        <translation>比較できません。画像サイズを小さくするか他の画像を選んでください。</translation>
+    </message>
+    <message>
+        <source>Choose file…</source>
+        <translation>ファイルから…</translation>
+    </message>
+    <message>
+        <source>Choose history image…</source>
+        <translation>履歴画像から…</translation>
+    </message>
+    <message>
+        <source>Choose pinned image…</source>
+        <translation>貼り付け画像から…</translation>
+    </message>
+    <message>
+        <source>Swap A / B</source>
+        <translation>A / B を交換</translation>
+    </message>
+    <message>
+        <source>Clear images</source>
+        <translation>画像をクリア</translation>
+    </message>
+    <message>
+        <source>Side by side</source>
+        <translation>並べて比較</translation>
+    </message>
+    <message>
+        <source>Slider comparison</source>
+        <translation>スライダー比較</translation>
+    </message>
+    <message>
+        <source>Difference overlay</source>
+        <translation>差分を強調</translation>
+    </message>
+</context>
+<context>
+    <name>GifExportDialog</name>
+    <message>
+        <source>Export GIF</source>
+        <translation>GIF をエクスポート</translation>
+    </message>
+    <message>
+        <source>GIF output</source>
+        <translation>GIF 出力</translation>
+    </message>
+    <message>
+        <source>Frames %1–%2 · speed %3× · cursor %4</source>
+        <translation>フレーム %1–%2 · 速度 %3× · カーソル %4</translation>
+    </message>
+    <message>
+        <source>on</source>
+        <translation>オン</translation>
+    </message>
+    <message>
+        <source>off</source>
+        <translation>オフ</translation>
+    </message>
+    <message>
+        <source>Original size</source>
+        <translation>元のサイズ</translation>
+    </message>
+    <message>
+        <source>Custom width</source>
+        <translation>幅を指定</translation>
+    </message>
+    <message>
+        <source>Keep timing (up to 50 fps)</source>
+        <translation>時間を維持（最大 50 fps）</translation>
+    </message>
+    <message>
+        <source>Limit to %1 fps</source>
+        <translation>最大 %1 fps</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>サイズ</translation>
+    </message>
+    <message>
+        <source>Width</source>
+        <translation>幅</translation>
+    </message>
+    <message>
+        <source>Frame rate</source>
+        <translation>フレームレート</translation>
+    </message>
+    <message>
+        <source>Frame-rate limits drop frames, never add frames. GIF uses 10 ms timing steps and at least 20 ms per frame. Total time is rounded once; very short clips last at least 20 ms. File size is shown after export, not estimated.</source>
+        <translation>フレームは間引くだけで追加しません。GIF の時間単位は 10 ms、各フレームは最低 20 ms です。合計時間を一度丸め、短いクリップも最低 20 ms 再生します。容量は推定せず、出力後の実測値を表示します。</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation>エクスポート</translation>
+    </message>
+    <message>
+        <source>Output: %1 × %2 pixels</source>
+        <translation>出力: %1 × %2 ピクセル</translation>
+    </message>
+    <message>
+        <source>Choose a smaller size: maximum 16 megapixels, 65535 pixels per edge and 16× enlargement.</source>
+        <translation>小さいサイズを選んでください。最大 1600 万画素、各辺 65535 ピクセル、拡大は 16 倍までです。</translation>
+    </message>
+    <message>
+        <source>The installed GIF encoder is outdated. Build/install rust_libs/gifrecorder from this checkout before exporting.</source>
+        <translation>GIF エンコーダーが古いため、このソースの rust_libs/gifrecorder をビルド・インストールしてください。</translation>
+    </message>
+    <message>
+        <source>Export silent MP4</source>
+        <translation>無音 MP4 を出力</translation>
+    </message>
+    <message>
+        <source>Silent MP4 output</source>
+        <translation>無音 MP4 出力</translation>
+    </message>
+    <message>
+        <source>Original timing (no audio)</source>
+        <translation>元の時間（音声なし）</translation>
+    </message>
+    <message>
+        <source>Silent H.264 video, with no audio track. Trim and speed are retained. Odd dimensions add one black row or column on the bottom or right, without stretching. Timing uses 1 ms steps; equal timestamps are merged. File size is shown after export.</source>
+        <translation>音声トラックのない H.264 動画です。トリムと速度を維持します。奇数サイズは右端または下端に黒い1列・1行を追加し、引き伸ばしません。時間精度は1msで同時刻は統合します。出力後に実際の容量を表示します。</translation>
+    </message>
+    <message>
+        <source>Choose a smaller MP4 size: maximum 16 megapixels, 8192 pixels per edge and 16× enlargement.</source>
+        <translation>MP4 サイズを小さくしてください。最大1600万画素、各辺8192ピクセル、拡大16倍です。</translation>
+    </message>
+    <message>
+        <source>H.264 encoding is unavailable. Install the required PyAV package or use GIF instead.</source>
+        <translation>H.264 エンコーダーがありません。必要な PyAV をインストールするか、GIF を使用してください。</translation>
+    </message>
+</context>
+<context>
+    <name>ComposerProgressDialog</name>
+    <message>
+        <source>Exporting GIF</source>
+        <translation>GIF を出力中</translation>
+    </message>
+    <message>
+        <source>Encoding GIF…</source>
+        <translation>GIF をエンコード中…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>キャンセル中…</translation>
+    </message>
+    <message>
+        <source>GIF export failed</source>
+        <translation>GIF の出力に失敗</translation>
+    </message>
+    <message>
+        <source>The GIF could not be exported. Check output size, encoder version, disk space and file permissions. Existing files were kept.</source>
+        <translation>GIF を出力できませんでした。サイズ、エンコーダー、空き容量と権限を確認してください。既存ファイルは保持されました。</translation>
+    </message>
+    <message>
+        <source>Exporting silent MP4</source>
+        <translation>無音 MP4 を出力中</translation>
+    </message>
+    <message>
+        <source>Encoding silent MP4…</source>
+        <translation>無音 MP4 をエンコード中…</translation>
+    </message>
+    <message>
+        <source>MP4 export failed</source>
+        <translation>MP4 出力に失敗</translation>
+    </message>
+    <message>
+        <source>The silent MP4 could not be exported. Check the H.264 encoder, output size, disk space and permissions. Existing files were kept.</source>
+        <translation>無音 MP4 を出力できません。H.264 エンコーダー、サイズ、空き容量、権限を確認してください。既存ファイルは保持されました。</translation>
+    </message>
+</context>
+<context>
+    <name>PlaybackController</name>
+    <message>
+        <source>Clipboard copy failed</source>
+        <translation>クリップボードへのコピーに失敗</translation>
+    </message>
+    <message>
+        <source>The GIF was saved, but could not be copied to the clipboard.</source>
+        <translation>GIF は保存されましたが、クリップボードにコピーできませんでした。</translation>
+    </message>
+    <message>
+        <source>GIF saved: %1 × %2 pixels</source>
+        <translation>GIF を保存しました: %1 × %2 ピクセル</translation>
+    </message>
+    <message>
+        <source>Actual file size: %1 bytes</source>
+        <translation>実際のファイルサイズ: %1 バイト</translation>
+    </message>
+    <message>
+        <source>File size could not be read.</source>
+        <translation>ファイルサイズを取得できませんでした。</translation>
+    </message>
+    <message>
+        <source>GIF exported</source>
+        <translation>GIF の出力が完了</translation>
+    </message>
+    <message>
+        <source>Save recording</source>
+        <translation>録画を保存</translation>
+    </message>
+    <message>
+        <source>Silent MP4 saved: %1 × %2 pixels</source>
+        <translation>無音 MP4 を保存しました: %1 × %2 ピクセル</translation>
+    </message>
+    <message>
+        <source>MP4 exported</source>
+        <translation>MP4 出力完了</translation>
+    </message>
+</context>
+<context>
+<name>CapturePrivacy</name>
+<message><source>Sensitive capture · memory only. Only Copy writes to the system clipboard. Save, collection, projects, recording, text extraction and translation are unavailable. Pins and redaction keep this policy. Other apps may read copied pixels; no secure-erasure guarantee.</source><translation>機密キャプチャ・メモリ内のみ。「コピー」のみがクリップボードに書き込みます。保存、収集、プロジェクト、録画、テキスト抽出、翻訳は使用できません。ピン留めと墨消しにも適用されます。他のアプリがコピーした画像を読む場合があり、安全な消去は保証しません。</translation></message>
+<message><source>Sensitive capture</source><translation>機密キャプチャ</translation></message>
+<message><source>Sensitive capture unavailable</source><translation>機密キャプチャを利用できません</translation></message>
+<message><source>The private clipboard protocol is unavailable. Rebuild/install this checkout's pyclipboard module. No sensitive capture was started.</source><translation>機密クリップボードのプロトコルがありません。このソースの pyclipboard をビルド・インストールしてください。キャプチャは開始していません。</translation></message>
+<message><source>Sensitive copy failed</source><translation>機密コピーに失敗</translation></message>
+<message><source>The image was not copied successfully. It was not saved or retried as an ordinary copy.</source><translation>画像をコピーできませんでした。保存や通常コピーへの切り替えは行っていません。</translation></message>
+<message><source>Sensitive capture · no files or history · only explicit Copy</source><translation>機密キャプチャ · ファイル・履歴なし · 明示的なコピーのみ</translation></message>
+</context>
+<context>
+<name>TableRecognitionWindow</name>
+<message><source>Review recognized table</source><translation>認識した表を確認</translation></message>
+<message><source>For clear, regular tables with separated OCR cells only. Merged cells, wrapped rows, missing cells and joined OCR lines need manual correction. Click a cell to compare its source region; edit in the cell or the editor below. No cloud upload.</source><translation>明瞭で規則的かつ OCR セルが分離した表向けです。結合セル、折返し、欠落、連結行は手動で修正してください。セルを選択して原画像と比較し、セル内または下の欄で編集できます。クラウドに送信しません。</translation></message>
+<message><source>Tight row grouping</source><translation>狭い行グループ</translation></message>
+<message><source>Normal row grouping</source><translation>通常の行グループ</translation></message>
+<message><source>Loose row grouping</source><translation>広い行グループ</translation></message>
+<message><source>Rebuild from OCR</source><translation>OCR から再構築</translation></message>
+<message><source>Fit source</source><translation>原画像を合わせる</translation></message>
+<message><source>Editable recognized table</source><translation>編集可能な認識表</translation></message>
+<message><source>Selected cell text</source><translation>選択セルの文字</translation></message>
+<message><source>Select a cell to edit multiline text</source><translation>セルを選択して複数行を編集</translation></message>
+<message><source>Insert row</source><translation>行を挿入</translation></message>
+<message><source>Delete row</source><translation>行を削除</translation></message>
+<message><source>Insert column</source><translation>列を挿入</translation></message>
+<message><source>Delete column</source><translation>列を削除</translation></message>
+<message><source>Protect spreadsheet formula prefixes</source><translation>数式プレフィックスを保護</translation></message>
+<message><source>TSV cells starting with =, +, - or @ are prefixed with an apostrophe. Spreadsheets may auto-convert dates and leading zeros; format destination cells as text when needed.</source><translation>=、+、-、@ で始まる TSV セルにはアポストロフィを付加します。日付や先頭ゼロが自動変換される場合があるため、必要に応じて貼り付け先を文字列形式にしてください。</translation></message>
+<message><source>First row is Markdown header</source><translation>先頭行を Markdown 見出しにする</translation></message>
+<message><source>Copy TSV</source><translation>TSV をコピー</translation></message>
+<message><source>Save Markdown…</source><translation>Markdown を保存…</translation></message>
+<message><source>Close</source><translation>閉じる</translation></message>
+<message><source>Rebuild table</source><translation>表を再構築</translation></message>
+<message><source>Discard table edits and reconstruct from the original OCR boxes?</source><translation>編集内容を破棄して元の OCR 枠から再構築しますか？</translation></message>
+<message><source>Could not reconstruct a table: no valid positioned text or table limits exceeded.</source><translation>表を再構築できません。有効な文字座標がないか制限を超えています。</translation></message>
+<message><source>Low confidence or ambiguous geometry. Check the source image.</source><translation>信頼度が低いか配置が曖昧です。原画像を確認してください。</translation></message>
+<message><source>Review required: %1 warning categories, %2 uncertain cells. Complex layouts are not reconstructed reliably.</source><translation>要確認：警告 %1 種類、不確かなセル %2 個。複雑な配置は正確に再構築できません。</translation></message>
+<message><source>%1 rows × %2 columns · source image is unchanged</source><translation>%1 行 × %2 列 · 原画像は変更なし</translation></message>
+<message><source>Table structure changed. Review empty and shifted cells before export.</source><translation>表構造を変更しました。出力前に空白や移動したセルを確認してください。</translation></message>
+<message><source>Export exceeds table limits.</source><translation>出力が表の制限を超えています。</translation></message>
+<message><source>TSV copied. Verify cell placement and data types in the destination spreadsheet.</source><translation>TSV をコピーしました。貼り付け先でセル位置とデータ型を確認してください。</translation></message>
+<message><source>Save Markdown table</source><translation>Markdown 表を保存</translation></message>
+<message><source>Markdown saved</source><translation>Markdown を保存しました</translation></message>
+<message><source>Markdown save failed</source><translation>Markdown の保存に失敗</translation></message>
+<message><source>Invalid OCR boxes skipped</source><translation>無効なOCR枠を除外</translation></message>
+<message><source>Rotated text</source><translation>傾いた文字</translation></message>
+<message><source>Too few rows or columns</source><translation>行・列が不足</translation></message>
+<message><source>Overlapping columns</source><translation>列の重なり</translation></message>
+<message><source>Text spans column boundaries</source><translation>列境界を跨ぐ文字</translation></message>
+<message><source>Multiple boxes in one cell</source><translation>1セルに複数の枠</translation></message>
+<message><source>Missing or uneven cells</source><translation>欠落・不揃いのセル</translation></message>
+<message><source>Uncertain cells highlighted</source><translation>不確かなセルを強調</translation></message>
+</context>
+  <context>
+    <name>AnnotationPresetDialog</name>
+    <message>
+        <source>Annotation Presets</source>
+        <translation>注釈スタイルのプリセット</translation>
+    </message>
+    <message>
+        <source>Tool</source>
+        <translation>ツール</translation>
+    </message>
+    <message>
+        <source>Preset</source>
+        <translation>プリセット</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>名前</translation>
+    </message>
+    <message>
+        <source>Save current style</source>
+        <translation>現在のスタイルを保存</translation>
+    </message>
+    <message>
+        <source>Apply</source>
+        <translation>適用</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>名前を変更</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>削除</translation>
+    </message>
+    <message>
+        <source>With a matching item selected, Apply edits that item (undoable). Otherwise it changes the defaults for new annotations.</source>
+        <translation>同じツールの図元を選択している場合、「適用」はその図元を変更します（取り消し可）。それ以外は新規注釈の既定値を変更します。</translation>
+    </message>
+    <message>
+        <source>Give the preset a name first.</source>
+        <translation>先にプリセット名を入力してください。</translation>
+    </message>
+    <message>
+        <source>Could not save this preset.</source>
+        <translation>このプリセットを保存できませんでした。</translation>
+    </message>
+    <message>
+        <source>Saved.</source>
+        <translation>保存しました。</translation>
+    </message>
+    <message>
+        <source>Pick a preset first.</source>
+        <translation>先にプリセットを選んでください。</translation>
+    </message>
+    <message>
+        <source>Applied to the selected item (undoable).</source>
+        <translation>選択中の図元に適用しました（取り消し可）。</translation>
+    </message>
+    <message>
+        <source>Applied to the defaults for new annotations.</source>
+        <translation>新規注釈の既定値に適用しました。</translation>
+    </message>
+    <message>
+        <source>Nothing to apply.</source>
+        <translation>適用できる内容がありません。</translation>
+    </message>
+    <message>
+        <source>Renamed.</source>
+        <translation>名前を変更しました。</translation>
+    </message>
+    <message>
+        <source>Rename failed: empty or duplicate name.</source>
+        <translation>名前の変更に失敗：空か重複しています。</translation>
+    </message>
+    <message>
+        <source>Deleted.</source>
+        <translation>削除しました.</translation>
+    </message>
+    <message>
+        <source>Could not delete this preset.</source>
+        <translation>このプリセットを削除できませんでした。</translation>
+    </message>
+    <message>
+        <source>Arrow</source>
+        <translation>矢印</translation>
+    </message>
+    <message>
+        <source>Pen</source>
+        <translation>ペン</translation>
+    </message>
+    <message>
+        <source>Highlighter</source>
+        <translation>蛍光ペン</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>矩形</translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation>楕円</translation>
+    </message>
+    <message>
+        <source>Number</source>
+        <translation>番号</translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation>テキスト</translation>
+    </message>
+    <message>
+        <source>Mosaic</source>
+        <translation>モザイク</translation>
+    </message>
+    <message>
+        <source>Text callout</source>
+        <translation>吹き出し注釈</translation>
+    </message>
+    <message>
+        <source>Magnify region</source>
+        <translation>拡大枠</translation>
+    </message>
+  </context>
+  <context>
+    <name>MarkdownReportDialog</name>
+    <message>
+        <source>Markdown report</source>
+        <translation>Markdown 問題レポート</translation>
+    </message>
+    <message>
+        <source>Report title</source>
+        <translation>レポートのタイトル</translation>
+    </message>
+    <message>
+        <source>Issue report</source>
+        <translation>問題レポート</translation>
+    </message>
+    <message>
+        <source>Steps / description</source>
+        <translation>手順 / 説明</translation>
+    </message>
+    <message>
+        <source>Include approved source</source>
+        <translation>承認済みの来源を含める</translation>
+    </message>
+    <message>
+        <source>Include time</source>
+        <translation>時刻を含める</translation>
+    </message>
+    <message>
+        <source>Note for</source>
+        <translation>メモの対象</translation>
+    </message>
+    <message>
+        <source>Writes report.md plus an images/ folder next to it. Only the images in this collection are attached.</source>
+        <translation>report.md と同じ場所に images/ を作成します。添付されるのはこのコレクションの画像だけです。</translation>
+    </message>
+    <message>
+        <source>Export report</source>
+        <translation>レポートを出力</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Export Markdown report</source>
+        <translation>Markdown レポートを出力</translation>
+    </message>
+    <message>
+        <source>Could not write the report. Check the target folder and that images are still loaded.</source>
+        <translation>レポートを書き出せませんでした。保存先と画像が残っているか確認してください。</translation>
+    </message>
+    <message>
+        <source>Report written:</source>
+        <translation>レポートを書き出しました：</translation>
+    </message>
+  </context>
 </TS>

@@ -1,0 +1,341 @@
+{
+  "base_graph_hash": "befe3a837d77e48962471c7d9ac7c9f0e39c878e14912a8d361c29761f269a85",
+  "base_summary": {
+    "edge_count": 61,
+    "node_count": 45,
+    "workspace_path": "C:\\Users\\27933\\Desktop\\versepixpin\\jietuba"
+  },
+  "changes": [
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0001"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0002"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0007"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/ui/tray_menu.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0008"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/main_app.py",
+          "当前相关实现或测试：main/capture/capture_service.py",
+          "当前相关实现或测试：main/capture/window_finder.py",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/core/shortcut_manager.py",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0009"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/ui/selection_info/panel.py",
+          "当前相关实现或测试：main/ui/selection_info/lock_ratio.py",
+          "当前相关实现或测试：main/canvas/selection_model.py",
+          "当前相关实现或测试：main/core/export.py",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0010"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/last_capture_region.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "命名区域的保存、更新、重命名、删除已实现；原生 UI 写入由新进程恢复。DPI 失配保护采用模拟差异验证，不冒充真实多屏硬件矩阵。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0011"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/core/export.py",
+          "当前相关实现或测试：main/tools/action.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "原始/50%/指定宽度、JPG/WebP 质量与分享预设已接到 Qt/Pillow 编码；长截图遵循所选格式。PNG/WebP 保留透明，JPG/BMP/PDF 白底；文件输出不改原始剪贴板位图。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0012"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "本地实现及节点验证完成",
+          "待用户复核"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/core/save.py",
+          "当前相关实现或测试：main/settings/tool_settings.py",
+          "当前相关实现或测试：main/ui/settings_ui/page_capture.py",
+          "文件名字段白名单、日期目录、安全文件名、并发与截断序号碰撞、原子写入及失败原文件保护均有验证；手动另存为尊重用户指定路径。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 100,
+        "status": "review_needed"
+      },
+      "id": "TF-0013"
+    },
+    {
+      "action": "update_node",
+      "fields": {
+        "assumptions": [
+          "用户已确认开始完整开发与测试验收；目前 6 个具体节点有实现及验证，其余 32 项仍未完成。",
+          "代码尚未提交、打包或发布；模拟条件与原生交互、全硬件矩阵保持区分。"
+        ],
+        "context_tags": [
+          "截图拓展",
+          "近期或后续重点",
+          "完整范围持续推进"
+        ],
+        "evidence": [
+          "依据 2026-10-08 源码探索与当前 HEAD d6221be，仅为规划来源，不是功能验收证据。",
+          "当前相关实现或测试：main/tests",
+          "当前相关实现或测试：run_dev.py",
+          "当前相关实现或测试：docs/screen-assistant-phase1.md",
+          "前 6 个具体节点已实现并验证，完整目标与后续逐批验收仍在推进。",
+          "记录：docs/screenshot-expansion-progress.md",
+          "最终全量：2686 passed、2 skipped、640 warnings；149.34 秒；exit 0。",
+          "第三批定向：379 passed、2 warnings；exit 0。全库 Ruff 通过。",
+          "中文 100% 与英文 150% 原生设置/导出/预设流程各 6 项通过，跨进程恢复为真实读取；DPI 失配为模拟条件。",
+          "证据：.ui_review/screenshot-expansion/output-presets-full-accepted.log",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-zh100/result.json",
+          ".ui_review/screenshot-expansion/native-output-presets-accepted-en150/result.json",
+          ".ui_review/screenshot-expansion/output-presets-source-hashes-accepted.json"
+        ],
+        "progress": 0,
+        "status": "in_progress"
+      },
+      "id": "TF-0044"
+    }
+  ],
+  "created_at": "2026-10-08T19:26:30.019090Z",
+  "proposal_id": "TFP-20261009-output-region-presets-review",
+  "rationale": "累计回写前 6 个已实现且完成节点对应验证的任务，并更新必要祖先和逐批回归状态。本份包含此前两个未应用的回写提案范围，确认后只应用本份累计提案；不得将其余 32 项或完整交付目标视为完成。",
+  "replaces_unapplied_proposals": [
+    "TFP-20261009-delayed-capture-review",
+    "TFP-20261009-capture-entry-geometry-review"
+  ],
+  "session_id": "session-20261009-output-region-presets",
+  "status": "proposed"
+}

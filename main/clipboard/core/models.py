@@ -85,6 +85,8 @@ class ClipboardItem:
     updated_at: datetime = None
     tags: list = None  # List[Tag]，UI 只读展示
     ocr_text: str = ""  # 本地检索元数据，不替代图片内容或粘贴格式。
+    ocr_status: str = "pending"
+    ocr_error: str = ""
 
     def __post_init__(self):
         if self.tags is None:

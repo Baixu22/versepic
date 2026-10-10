@@ -376,6 +376,9 @@ def test_canvas_view_export_and_close_dispatches_async(monkeypatch):
             seen["selection_rect"] = selection_rect
             return image
 
+        def export_with_legend(self, selection_rect, options=None):
+            return self.export(selection_rect)
+
     class FakeSelectionModel:
         def rect(self):
             return "selection-rect"

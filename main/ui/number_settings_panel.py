@@ -14,9 +14,16 @@ from PySide6.QtWidgets import (
 )
 
 from canvas.items import NumberItem
+from core.number_legend import (
+    PLACEMENT_BOTTOM,
+    PLACEMENT_OFF,
+    PLACEMENT_SIDE,
+    normalize_placement,
+)
 from tools.number import NumberTool
 
 from core.i18n import make_tr
+from ui.fluent_lite import ComboBox, LineEdit
 from core.ui_scale import scaled
 from .base_settings_panel import BaseSettingsPanel, HoverPopup, set_step_button_icon
 
@@ -122,6 +129,8 @@ class NumberSettingsPanel(BaseSettingsPanel):
 
     next_number_changed = Signal(int)
     style_changed = Signal(str)
+    caption_changed = Signal(str)
+    legend_placement_changed = Signal(str)
 
     # 与 NumberTool 共用同一个范围：面板显示什么大小，就必须画出什么大小
     SIZE_RANGE = (NumberTool.MIN_WIDTH, NumberTool.MAX_WIDTH)
@@ -165,6 +174,25 @@ class NumberSettingsPanel(BaseSettingsPanel):
 
         self.next_up_btn.clicked.connect(lambda: self._change_next_number(1))
         self.next_down_btn.clicked.connect(lambda: self._change_next_number(-1))
+
+        # 说明只属于"当前选中的那个编号"：在画布上选中编号后在这里填文字，
+        # 导出时按编号顺序排成步骤列表；没有选中编号时输入不生效。
+        self.caption_edit = LineEdit()
+        self.caption_edit.setPlaceholderText(self._tr("Step note"))
+        self.caption_edit.setToolTip(self._tr("Caption shown in the exported step list"))
+        self.caption_edit.setFixedWidth(scaled(150))
+        self.caption_edit.editingFinished.connect(self._emit_caption_changed)
+        layout.addWidget(self.caption_edit)
+
+        self.legend_combo = ComboBox()
+        self.legend_combo.addItem(self._tr("No caption list"), PLACEMENT_OFF)
+        self.legend_combo.addItem(self._tr("Caption list below"), PLACEMENT_BOTTOM)
+        self.legend_combo.addItem(self._tr("Caption list at right"), PLACEMENT_SIDE)
+        self.legend_combo.setToolTip(self._tr("Export numbered captions as a step list"))
+        self.legend_combo.setFixedWidth(scaled(124))
+        self.legend_combo.currentIndexChanged.connect(self._emit_legend_placement)
+        layout.addWidget(self.legend_combo)
+        self.refresh_legend_placement()
 
     def _apply_scale_sizes(self):
         super()._apply_scale_sizes()
@@ -247,6 +275,39 @@ class NumberSettingsPanel(BaseSettingsPanel):
         if self._style_popup is not None:
             self._style_popup.set_current_style(style)
         self._update_next_preview()
+
+    def _emit_caption_changed(self):
+        self.caption_changed.emit(self.caption_edit.text())
+
+    def _emit_legend_placement(self, _index: int = None):
+        self.legend_placement_changed.emit(self.legend_combo.currentData())
+
+    def set_caption(self, text):
+        """回填选中编号的说明；没有选中编号时调用方传空串。"""
+        if not hasattr(self, "caption_edit"):
+            return
+        value = "" if text is None else str(text)
+        if value != self.caption_edit.text():
+            self.caption_edit.blockSignals(True)
+            self.caption_edit.setText(value)
+            self.caption_edit.blockSignals(False)
+
+    def refresh_legend_placement(self):
+        """从应用设置读回导出位置；读不到就保持"不附带"。"""
+        if not hasattr(self, "legend_combo"):
+            return
+        try:
+            from settings import get_tool_settings_manager
+
+            manager = get_tool_settings_manager()
+            value = manager.get_app_setting("number_legend_placement", PLACEMENT_OFF) if manager else PLACEMENT_OFF
+        except Exception:
+            value = PLACEMENT_OFF
+        index = self.legend_combo.findData(normalize_placement(value))
+        if index >= 0 and index != self.legend_combo.currentIndex():
+            self.legend_combo.blockSignals(True)
+            self.legend_combo.setCurrentIndex(index)
+            self.legend_combo.blockSignals(False)
 
     @property
     def current_style(self) -> str:

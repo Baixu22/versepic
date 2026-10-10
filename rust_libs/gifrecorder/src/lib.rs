@@ -276,7 +276,7 @@ impl PyFrameStore {
     ///
     /// Raises:
     ///     ValueError: 导出失败或被取消
-    #[pyo3(signature = (path, width=0, height=0, repeat=0, frame_start=0, frame_end=0, progress_callback=None, cursor_sprites=None, cursor_infos=None, speed=None))]
+    #[pyo3(signature = (path, width=0, height=0, repeat=0, frame_start=0, frame_end=None, progress_callback=None, cursor_sprites=None, cursor_infos=None, speed=None, fps=0))]
     fn export_gif(
         &self,
         py: Python<'_>,
@@ -285,11 +285,12 @@ impl PyFrameStore {
         height: u32,
         repeat: u16,
         frame_start: usize,
-        frame_end: usize,
+        frame_end: Option<usize>,
         progress_callback: Option<PyObject>,
         cursor_sprites: Option<Bound<'_, PyDict>>,
         cursor_infos: Option<Vec<Option<(i32, i32, u8, i8, u8, u8)>>>,
         speed: Option<f32>,
+        fps: u32,
     ) -> PyResult<()> {
         // 解析 cursor_sprites dict → CursorSprites
         let parsed_sprites = match cursor_sprites {
@@ -317,6 +318,7 @@ impl PyFrameStore {
             repeat,
             frame_start,
             frame_end,
+            fps,
             cursor_sprites: parsed_sprites,
             cursor_infos: parsed_infos,
             speed_multiplier: speed.unwrap_or(1.0),

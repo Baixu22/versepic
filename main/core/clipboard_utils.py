@@ -23,12 +23,25 @@ if TYPE_CHECKING:
     from core.save import SaveService
 
 
+PRIVATE_CAPTURE_FORMAT = "VersePic.PrivateCapture.v1"
+
+
+def private_clipboard_supported() -> bool:
+    if sys.platform != "win32":
+        return False
+    try:
+        import pyclipboard
+        return type(pyclipboard.PRIVATE_CAPTURE_PROTOCOL) is int and pyclipboard.PRIVATE_CAPTURE_PROTOCOL == 1
+    except (ImportError, AttributeError, OSError):
+        return False
+
+
 _CLIPBOARD_WRITE_LOCK = threading.Lock()
 _CLIPBOARD_BUSY_HRESULT = -2147221040  # 0x800401D0 = CLIPBRD_E_CANT_OPEN
 _CLIPBOARD_WRITE_RETRY_DELAYS = (0.0, 0.02, 0.05, 0.1, 0.2, 0.35)
 
 
-def copy_image_to_clipboard(image: QImage, file_reference: str | None = None) -> None:
+def copy_image_to_clipboard(image: QImage, file_reference: str | None = None, *, sensitive: bool = False) -> None:
     """将 QImage 复制到系统剪切板。
 
     Windows 下使用 Win32 方式写入 `CF_DIBV5 + PNG`，
@@ -39,6 +52,24 @@ def copy_image_to_clipboard(image: QImage, file_reference: str | None = None) ->
     写入会被剪切板历史一类的监听者当成两条独立记录。调用方需确保
     该路径此时已经存在（哪怕是空文件），否则粘贴目标可能读到空内容。
     """
+    if sensitive:
+        if file_reference is not None:
+            raise ValueError("Sensitive copies cannot contain a file reference")
+        if not private_clipboard_supported():
+            raise RuntimeError("Private clipboard protocol is unavailable; image was not copied")
+        if image.isNull():
+            raise ValueError("Cannot copy an empty sensitive image")
+        # Build from pixel storage only: discard text/EXIF-like QImage metadata
+        # without mutating the source or depending on its device pixel ratio.
+        rgba = image.convertToFormat(QImage.Format.Format_RGBA8888)
+        pixels = QImage(rgba.constBits(), rgba.width(), rgba.height(), rgba.bytesPerLine(),
+                        QImage.Format.Format_RGBA8888).copy()
+        if pixels.isNull():
+            raise MemoryError("Could not allocate private clipboard pixels")
+        # Never fall back to an unmarked Qt write if native copying fails.
+        _run_clipboard_write_with_retry(
+            lambda: _copy_win32_legacy(pixels, None, sensitive=True), "Private Win32")
+        return
     if image.isNull():
         log_warning(T("剪切板: 图像为空"), "Clipboard")
         return
@@ -61,6 +92,7 @@ def deliver_image_async(
     save_service: "SaveService | None" = None,
     save_kwargs: dict | None = None,
     write_file_reference: bool = True,
+    sensitive: bool = False,
 ) -> threading.Thread | None:
     """复制到剪贴板并可选在后台线程中保存图像。
 
@@ -70,6 +102,14 @@ def deliver_image_async(
     图像真正编码落盘。write_file_reference=False 时跳过这一步，
     剪切板上只有位图格式，不带文件路径。
     """
+    if sensitive:
+        # Single-call policy: no setting mutation, filename reservation, worker,
+        # file reference or auto-save. Only an explicitly requested copy writes.
+        if copy_to_clipboard:
+            if image is None:
+                raise ValueError("Cannot copy an empty sensitive image")
+            copy_image_to_clipboard(image, sensitive=True)
+        return None
     if image is None or image.isNull():
         log_warning(T("图像投递: 图像为空，跳过"), "Clipboard")
         return None
@@ -79,6 +119,8 @@ def deliver_image_async(
         return None
 
     save_kwargs = dict(save_kwargs or {})
+    if save_service is not None and "output_options" not in save_kwargs:
+        save_kwargs["output_options"] = save_service.output_options()
 
     target_path = None
     if copy_to_clipboard and save_service is not None and write_file_reference and sys.platform == "win32":
@@ -192,7 +234,7 @@ def _is_clipboard_busy_error(exc: Exception) -> bool:
     return False
 
 
-def _copy_win32_legacy(image: QImage, file_reference: str | None) -> None:
+def _copy_win32_legacy(image: QImage, file_reference: str | None, *, sensitive: bool = False) -> None:
     """用 Win32 API 直接写入 CF_DIBV5 + PNG（可选 CF_HDROP）到系统剪切板。"""
     import win32clipboard
 
@@ -210,10 +252,25 @@ def _copy_win32_legacy(image: QImage, file_reference: str | None) -> None:
     fmt_png = win32clipboard.RegisterClipboardFormat("PNG")
     hdrop_data = _build_hdrop(file_reference) if file_reference else None
 
+    private_formats = []
+    if sensitive:
+        # Markers precede pixels in the same clipboard-open transaction. A
+        # failed marker write aborts before any sensitive payload is published.
+        for name, value in ((PRIVATE_CAPTURE_FORMAT, b"\x01"),
+                            ("ExcludeClipboardContentFromMonitorProcessing", b"\x01"),
+                            ("CanIncludeInClipboardHistory", struct.pack("<I", 0)),
+                            ("CanUploadToCloudClipboard", struct.pack("<I", 0))):
+            identifier = win32clipboard.RegisterClipboardFormat(name)
+            if not identifier:
+                raise RuntimeError("Could not register a private clipboard marker")
+            private_formats.append((identifier, value))
+
     with _CLIPBOARD_WRITE_LOCK:
         win32clipboard.OpenClipboard(0)
         try:
             win32clipboard.EmptyClipboard()
+            for identifier, value in private_formats:
+                win32clipboard.SetClipboardData(identifier, value)
             win32clipboard.SetClipboardData(fmt_png, png_data)     # "PNG"
             win32clipboard.SetClipboardData(17, dibv5_data)       # CF_DIBV5 = 17
             if hdrop_data is not None:

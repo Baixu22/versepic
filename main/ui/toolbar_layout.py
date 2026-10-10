@@ -16,14 +16,14 @@ MODES = (SHOW, MORE, HIDE)
 
 # 可配置按钮的全集，也是默认顺序
 DEFAULT_ORDER = (
-    "long_screenshot", "save", "screenshot_translate", "text_recognize", "smart_redact", "scan_code", "gif",
-    "pen", "highlighter", "mosaic", "spotlight", "arrow", "number", "rect", "ellipse", "text", "eraser",
+    "long_screenshot", "save", "screenshot_translate", "text_recognize", "smart_redact", "scan_code", "gif", "insert_image", "collect_next", "collect_review", "multi_region", "editable_project",
+    "pen", "highlighter", "mosaic", "spotlight", "magnify", "arrow", "callout", "number", "rect", "ellipse", "text", "eraser",
     "undo", "redo",
     "cancel", "pin", "confirm",
 )
 
 # 默认收进「…」的按钮，其余默认始终显示。后加的低频功能放这里，免得把工具栏默认宽度越撑越宽
-DEFAULT_MORE = frozenset({"text_recognize", "smart_redact", "scan_code", "spotlight"})
+DEFAULT_MORE = frozenset({"text_recognize", "smart_redact", "scan_code", "spotlight", "magnify", "callout", "insert_image", "collect_next", "collect_review", "multi_region", "editable_project"})
 
 # 确定按钮固定显示、不可调整，也不出现在工具栏调整界面中：截图必须始终有办法收尾。
 # 其余按钮都是普通编辑操作，用户可以自由排序、收进「…」或隐藏。

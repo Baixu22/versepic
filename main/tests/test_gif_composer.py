@@ -10,9 +10,9 @@ _ComposeWorker (GIF 合成) 单元测试
 - cursor_sprites/cursor_infos 只在两者都提供时才传给 export_gif
 - gifrecorder 不可用或 store 为 None 时直接失败
 
-真实的 Rust gifrecorder.FrameStore.export_gif() 不在本文件覆盖范围内，
-用 MagicMock 替身模拟其接口（path/width/height/repeat/... kwargs 与
-progress_callback 的调用约定）。
+多数用例用 MagicMock 替身模拟 path/width/height/repeat 等接口；
+末尾的原生回归使用真实 FrameStore，验证取消后保留目标文件，
+并用 Pillow 独立打开再次成功导出的 GIF。
 """
 import os
 import pytest
@@ -63,7 +63,7 @@ class TestComposeToExplicitPath:
         out_path = str(tmp_path / "out.gif")
 
         def _fake_export(**kwargs):
-            with open(out_path, "wb") as f:
+            with open(kwargs["path"], "wb") as f:
                 f.write(b"GIF89a")
         fake_store.export_gif.side_effect = _fake_export
 
@@ -126,20 +126,17 @@ class TestGifWidthScaling:
         assert call_kwargs["height"] == 240
         os.unlink("scaled.gif") if os.path.isfile("scaled.gif") else None
 
-    def test_scaled_height_forced_to_even_number(self, qapp, fake_store):
-        # 640x481 缩放到 320 → 481*0.5=240.5 -> int=240 (已是偶数，不需要-1)
-        # 换一组会产生奇数的比例来验证强制偶数逻辑
+    def test_gif_keeps_nearest_odd_height_without_video_alignment(self, qapp, fake_store):
         fake_store.width = 100
-        fake_store.height = 33  # ratio=0.5 -> 16.5 -> int=16 (偶数，跳过分支)；换成会产生奇数的场景
+        fake_store.height = 33
         fake_store.export_gif.side_effect = lambda **kw: open(kw["path"], "wb").close()
 
         worker = _ComposeWorker(path="odd.gif", store=fake_store, gif_width=50)
         worker._do_compose("odd.gif")
 
         call_kwargs = fake_store.export_gif.call_args.kwargs
-        # 无论计算结果奇偶，最终宽高必须是偶数（GIF/编码器通常要求偶数尺寸）
-        assert call_kwargs["height"] % 2 == 0
-        assert call_kwargs["height"] >= 2
+        # GIF允许奇数尺寸，33 * .5 = 16.5，取最近整数17，不强制减为16。
+        assert call_kwargs["height"] == 17
         os.unlink("odd.gif") if os.path.isfile("odd.gif") else None
 
 
@@ -253,10 +250,7 @@ class TestRunEntryPoint:
         assert result == out_path
 
     def test_generic_export_failure_is_handled_internally_not_as_crash(self, qapp, fake_store):
-        """export_gif 抛普通异常时，_do_compose 内部 except 已捕获并返回 False；
-        run() 的外层 try/except 只兜底 _compose() 之外真正逃逸的异常（如 bug），
-        所以这里 finished 应发出 (True, None) —— ok=True 因为未被 cancel()，
-        但 result=None 因为 _do_compose 返回了 False。"""
+        """编码失败不是成功；仅提交了有效输出才发出 finished(True, result)。"""
         fake_store.export_gif.side_effect = Exception("boom, totally unexpected")
         worker = _ComposeWorker(path="boom.gif", store=fake_store)
         received = []
@@ -264,7 +258,7 @@ class TestRunEntryPoint:
 
         worker.run()  # 不应向外抛异常
 
-        assert received == [(True, None)]
+        assert received == [(False, None)]
 
     def test_run_catches_exception_escaping_compose_entirely(self, qapp, fake_store):
         """当异常发生在 _compose() 自身（不是 export_gif 内部），run() 的外层
@@ -286,3 +280,117 @@ class TestSpeedMultiplierClamp:
     def test_speed_multiplier_passed_through_when_valid(self, qapp, fake_store):
         worker = _ComposeWorker(path="x.gif", store=fake_store, speed_multiplier=2.5)
         assert worker._speed_multiplier == 2.5
+
+
+@pytest.mark.parametrize("failure", ["cancel", "error", "empty", "late_cancel"])
+def test_path_export_failure_keeps_existing_file_and_removes_staging(qapp, fake_store, tmp_path, failure):
+    from pathlib import Path
+    destination = tmp_path / "existing.gif"
+    destination.write_bytes(b"ORIGINAL")
+    worker = _ComposeWorker(str(destination), store=fake_store)
+    stages = []
+
+    def export(**kwargs):
+        stage = Path(kwargs["path"])
+        stages.append(stage)
+        assert stage != destination and stage.parent == destination.parent
+        assert destination.read_bytes() == b"ORIGINAL"
+        if failure != "empty":
+            stage.write_bytes(b"PARTIAL")
+        if failure == "cancel":
+            worker.cancel()
+            raise ValueError("cancelled")
+        if failure == "error":
+            raise OSError("disk full")
+        if failure == "late_cancel":
+            worker.cancel()
+
+    fake_store.export_gif.side_effect = export
+    assert worker._compose() is None
+    assert destination.read_bytes() == b"ORIGINAL"
+    assert stages and all(not stage.exists() for stage in stages)
+    assert list(tmp_path.iterdir()) == [destination]
+
+
+@pytest.mark.parametrize("to_bytes", [False, True])
+def test_cancel_before_export_does_not_start_encoder(qapp, fake_store, tmp_path, to_bytes):
+    destination = tmp_path / "existing.gif"
+    destination.write_bytes(b"ORIGINAL")
+    worker = _ComposeWorker(None if to_bytes else str(destination), store=fake_store)
+    worker.cancel()
+    assert worker._compose() is None
+    fake_store.export_gif.assert_not_called()
+    assert destination.read_bytes() == b"ORIGINAL"
+    assert list(tmp_path.iterdir()) == [destination]
+
+
+def test_replace_failure_keeps_original_and_removes_staging(qapp, fake_store, tmp_path, monkeypatch):
+    from pathlib import Path
+    destination = tmp_path / "existing.gif"
+    destination.write_bytes(b"ORIGINAL")
+    fake_store.export_gif.side_effect = lambda **kw: Path(kw["path"]).write_bytes(b"NEW GIF")
+    worker = _ComposeWorker(str(destination), store=fake_store)
+    def denied(*args):
+        raise PermissionError("destination locked")
+    monkeypatch.setattr("core.save.os.replace", denied)
+    assert worker._compose() is None
+    assert destination.read_bytes() == b"ORIGINAL"
+    assert list(tmp_path.iterdir()) == [destination]
+
+
+def test_success_commits_only_after_encoder_finished(qapp, fake_store, tmp_path):
+    from pathlib import Path
+    destination = tmp_path / "existing.gif"
+    destination.write_bytes(b"ORIGINAL")
+    def export(**kw):
+        Path(kw["path"]).write_bytes(b"COMPLETE GIF")
+        assert destination.read_bytes() == b"ORIGINAL"
+    fake_store.export_gif.side_effect = export
+    worker = _ComposeWorker(str(destination), store=fake_store)
+    assert worker._compose() == str(destination)
+    assert destination.read_bytes() == b"COMPLETE GIF"
+    assert list(tmp_path.iterdir()) == [destination]
+
+
+def test_unexpected_compose_error_still_removes_bytes_staging(qapp, fake_store, monkeypatch):
+    from pathlib import Path
+    stages = []
+    worker = _ComposeWorker(None, store=fake_store)
+    def explode(filename):
+        stages.append(Path(filename))
+        raise RuntimeError("unexpected encoder bug")
+    monkeypatch.setattr(worker, "_do_compose", explode)
+    received = []
+    worker.finished.connect(lambda ok, result: received.append((ok, result)))
+    worker.run()
+    assert received == [(False, None)]
+    assert stages and all(not stage.exists() for stage in stages)
+
+
+def test_empty_bytes_is_not_success(qapp, fake_store):
+    worker = _ComposeWorker(None, store=fake_store)
+    # Existing empty mkstemp file must not become a successful b"" result.
+    assert worker._compose() is None
+
+
+def test_native_cancel_preserves_file_and_leaves_store_reusable(qapp, tmp_path):
+    import gifrecorder
+    from PIL import Image
+    destination = tmp_path / "existing.gif"
+    destination.write_bytes(b"ORIGINAL")
+    store = gifrecorder.FrameStore(81, 61, 10)
+    for index in range(6):
+        store.push_rgb(bytes((index * 40, 60, 180)) * (81 * 61), index * 100)
+    worker = _ComposeWorker(str(destination), store=store)
+    # Direct connection: deterministic cancellation inside the native progress callback.
+    worker.progress.connect(lambda done, total: worker.cancel())
+    assert worker._compose() is None
+    assert destination.read_bytes() == b"ORIGINAL"
+    assert list(tmp_path.iterdir()) == [destination]
+    second = _ComposeWorker(str(destination), store=store)
+    assert second._compose() == str(destination)
+    with Image.open(destination) as image:
+        assert image.size == (81, 61) and image.n_frames == 6
+        image.seek(5)
+        image.load()
+    assert list(tmp_path.iterdir()) == [destination]

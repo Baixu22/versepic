@@ -121,6 +121,17 @@ class PinContextMenu:
         save_action = QAction(self.parent.tr("Save as"), self.parent)
         save_action.triggered.connect(self.parent.save_image)
         menu.addAction(save_action)
+        project_action=QAction(self.parent.tr("Edit or save project…"),self.parent)
+        project_action.triggered.connect(self.parent.open_editable_project)
+        menu.addAction(project_action)
+        compare_action=QAction(self.parent.tr("Compare image…"),self.parent)
+        compare_action.triggered.connect(self.parent.compare_image)
+        menu.addAction(compare_action)
+        from core.capture_privacy import is_sensitive
+        if is_sensitive(self.parent):
+            save_action.setEnabled(False)
+            project_action.setEnabled(False)
+            compare_action.setEnabled(False)
         
         # --- 以下项目在缩略图模式下隐藏 ---
         if not is_thumbnail:
@@ -128,6 +139,7 @@ class PinContextMenu:
             translate_action = QAction(
                 self.parent.tr("Translate (Text Recognition)"), self.parent
             )
+            translate_action.setEnabled(not is_sensitive(self.parent))
             translate_action.triggered.connect(self.parent._on_translate_clicked)
             menu.addAction(translate_action)
             

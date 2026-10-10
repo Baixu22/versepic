@@ -82,7 +82,9 @@ _INAPP_ICONS = {
 _CURSOR_MOVE_ICON = "移动窗口.svg"
 
 # 全局快捷键同属一个冲突域；任意两个业务不能占用同一个实际按键。
-GLOBAL_HOTKEY_EDIT_ATTRS = (
+from settings.tool_settings import QUICK_CAPTURE_ACTIONS, QUICK_CAPTURE_HOTKEY_FIELDS
+
+GLOBAL_HOTKEY_EDIT_ATTRS = tuple(attr for attr, _key in QUICK_CAPTURE_HOTKEY_FIELDS) + (
     "hotkey_input",
     "hotkey_input_2",
     "clipboard_hotkey_edit",
@@ -106,6 +108,13 @@ _GLOBAL_ROWS = (
     ("translation_hotkey_edit", "translation_hotkey_edit_2", "Translation Hotkey", "translate", FluentIcon.LANGUAGE,
      lambda d: d.config_manager.get_translation_hotkey(),
      lambda d: d.config_manager.get_translation_hotkey_2()),
+)
+
+_GLOBAL_ROWS += tuple(
+    (f"quick_{kind}_hotkey_edit", f"quick_{kind}_hotkey_2_edit", label, "capture", FluentIcon.CAMERA,
+     lambda d, k=kind: d.config_manager.get_app_setting(f"quick_{k}_hotkey", ""),
+     lambda d, k=kind: d.config_manager.get_app_setting(f"quick_{k}_hotkey_2", ""))
+    for kind, label in QUICK_CAPTURE_ACTIONS
 )
 
 _INAPP_ROW_HEIGHT = 44

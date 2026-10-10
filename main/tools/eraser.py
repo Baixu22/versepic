@@ -6,7 +6,7 @@
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QPainterPath, QPainterPathStroker
 from .base import Tool, ToolContext
-from canvas.items import StrokeItem, RectItem, EllipseItem, ArrowItem, TextItem, NumberItem, MosaicItem
+from canvas.items import StrokeItem, RectItem, EllipseItem, ArrowItem, TextItem, NumberItem, MosaicItem, MagnifyCalloutItem
 from canvas.items import BackgroundItem, SelectionItem
 from canvas.undo import BatchRemoveCommand
 from core.logger import log_debug, log_info, T
@@ -101,7 +101,7 @@ class EraserTool(Tool):
             return
         
         # 只删除可擦除的绘图图元
-        if isinstance(item, (StrokeItem, RectItem, EllipseItem, ArrowItem, TextItem, NumberItem, MosaicItem)):
+        if isinstance(item, (StrokeItem, RectItem, EllipseItem, ArrowItem, TextItem, NumberItem, MosaicItem, MagnifyCalloutItem)):
             # 添加到待删除列表（使用 set 自动去重）
             self.erased_items.add(item)
             

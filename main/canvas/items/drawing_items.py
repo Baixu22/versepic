@@ -554,6 +554,8 @@ class NumberItem(DrawingItemMixin, QGraphicsItem):
         self.radius = radius
         self.color = color
         self.style = self.normalize_style(style)
+        # 编号对应的说明文字：空串表示没有说明，导出步骤列表时跳过。
+        self.caption = ""
         self.setPos(pos)
         self.setZValue(20)
         self._hovered = False
@@ -583,6 +585,13 @@ class NumberItem(DrawingItemMixin, QGraphicsItem):
         style = self.normalize_style(style)
         if style != self.style:
             self.style = style
+            self.update()
+
+    def set_caption(self, text) -> None:
+        """设置编号说明；与编号值一起放在图元上，删除/撤销/重排都不会错配。"""
+        caption = "" if text is None else str(text)
+        if caption != getattr(self, "caption", ""):
+            self.caption = caption
             self.update()
 
     @property
