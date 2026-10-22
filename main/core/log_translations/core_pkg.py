@@ -65,12 +65,15 @@ TRANSLATIONS: dict[str, str] = {
     "翻译文件不存在: {xml_file}，使用默认文本": "Translation file not found: {xml_file}, using default text",
 
     # core/bootstrap.py
-    "已终止旧实例 (PID {old_pid})": "Terminated previous instance (PID {old_pid})",
-    "旧实例 (PID {old_pid}) 终止失败": "Failed to terminate previous instance (PID {old_pid})",
-    "实例记录 (PID {old_pid}) 未通过身份校验，不终止": "Instance record (PID {old_pid}) failed identity verification, not terminating",
-    "终止旧实例": "Terminating previous instance",
     "写入实例记录": "Writing instance record",
     "清理实例记录": "Cleaning up instance record",
+    "检测到已有实例在运行 (PID {pid})，本次启动已取消": "Another instance is already running (PID {pid}), this launch was cancelled",
+    "检测到已有实例在运行，本次启动已取消": "Another instance is already running, this launch was cancelled",
+    "单实例检查失败": "Single-instance check failed",
+    "已取得单实例身份": "Acquired the single-instance identity",
+    "提示已在运行": "Notifying that an instance is already running",
+    "打开日志系统": "Opening the logging system",
+
     "资源锁定：成功 {pinned} 个，失败 {failed} 个": "Resource pinning: {pinned} succeeded, {failed} failed",
     "资源锁定：已保护 {pinned} 个打包资源文件": "Resource pinning: protected {pinned} bundled resource file(s)",
     "预加载步骤执行失败": "Preload step execution failed",

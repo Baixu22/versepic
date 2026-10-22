@@ -144,7 +144,6 @@ def set_app_user_model_id(app_id: str = "jietuba.app"):
 # 进程管理
 # ──────────────────────────────────────────────
 
-PROCESS_TERMINATE = 0x0001
 PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
 
 _kernel32_ref = None
@@ -165,8 +164,6 @@ def _kernel32():
     k = ctypes.windll.kernel32
     k.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
     k.OpenProcess.restype = wintypes.HANDLE
-    k.TerminateProcess.argtypes = [wintypes.HANDLE, wintypes.UINT]
-    k.TerminateProcess.restype = wintypes.BOOL
     k.CloseHandle.argtypes = [wintypes.HANDLE]
     k.CloseHandle.restype = wintypes.BOOL
     k.GetProcessTimes.argtypes = [
@@ -240,25 +237,6 @@ def get_process_identity(pid: int):
     finally:
         k.CloseHandle(handle)
 
-
-def terminate_process_by_pid(pid: int) -> bool:
-    """终止指定 PID 的进程。成功返回 True，失败返回 False。
-
-    本函数不校验目标身份。Windows 会回收复用 PID，调用方必须先用
-    get_process_identity() 确认目标确实是预期的那个进程，否则可能误杀无关进程。
-    """
-    try:
-        k = _kernel32()
-        handle = k.OpenProcess(PROCESS_TERMINATE, False, pid)
-        if not handle:
-            return False
-        try:
-            return bool(k.TerminateProcess(handle, 0))
-        finally:
-            k.CloseHandle(handle)
-    except Exception as e:
-        log_exception(e, T("终止进程"))
-        return False
 
 
 # ──────────────────────────────────────────────

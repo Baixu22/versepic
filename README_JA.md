@@ -234,6 +234,7 @@ clipboard/
 ```text
 core/
 ├── bootstrap.py             # PreloadManager — 起動ブートストラップ、環境初期化、DPI、シングルインスタンス
+├── single_instance.py       # SingleInstanceGuard — 名前付きミューテックスの単一実行ガード（並列性の確保を事前に保証）
 ├── logger.py                # Logger — ファイル＋コンソールログ（debug/info/warning/error/exception）
 ├── crash_handler.py         # install_crash_hooks() — グローバル例外キャッチ
 ├── resource_manager.py      # ResourceManager — SVG/画像リソースローディング

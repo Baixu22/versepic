@@ -53,116 +53,82 @@ def ensure_module_path():
         sys.path.insert(0, current_dir)
 
 
-def _read_instance_record(pid_file: str):
-    """读取实例记录文件，返回 (pid, create_time)；解析失败返回 None。
-
-    create_time 为 None 表示这是旧版本写下的、只有 PID 的记录。
-    """
-    try:
-        with open(pid_file, 'r', encoding='utf-8') as f:
-            lines = [ln.strip() for ln in f.read().splitlines() if ln.strip()]
-        if not lines:
-            return None
-        pid = int(lines[0])
-        create_time = int(lines[1]) if len(lines) > 1 else None
-        return pid, create_time
-    except Exception:
-        # 文件损坏或格式不认识：当作没有记录处理，交由调用方覆盖重写
-        return None
-
-
-def _is_our_old_instance(record, my_pid: int, my_image_name: str, frozen: bool) -> bool:
-    """判断记录指向的进程是否确实是本程序的旧实例。
-
-    这个校验是必需的：PID 文件很容易变成陈旧文件——它的清理挂在 atexit 上，
-    而被 TerminateProcess 杀死（本模块终止旧实例正是这么做的）或崩溃退出时
-    atexit 都不会执行。Windows 又会激进地回收 PID，若只凭 PID 就终止，
-    很可能误杀一个恰好复用了该 PID 的无关进程。
-    """
-    from core.platform_utils import get_process_identity
-
-    pid, create_time = record
-    if pid == my_pid:
-        return False
-
-    live = get_process_identity(pid)
-    if live is None:
-        return False  # 进程已不存在或无权访问 —— 陈旧记录，忽略
-    live_create_time, live_image_name = live
-
-    if create_time is not None:
-        # (PID, 创建时间) 唯一确定一个进程，这是最可靠的判据
-        return live_create_time == create_time
-
-    # 旧版本写的记录没有创建时间，退化到核对映像名：目标必须和自己是同一个可执行文件。
-    # 开发环境下映像名是 python.exe，这个判据太弱（会命中任何无关的 python 进程），
-    # 因此只在打包后启用；开发环境宁可放过旧实例，也不冒误杀的风险。
-    if not frozen or not my_image_name:
-        return False
-    return live_image_name.lower() == my_image_name.lower()
-
-
 def ensure_single_instance():
+    """确保单实例运行：已经有实例在跑时，本次启动直接放弃。
+
+    实现要点
+    --------
+    互斥由 Win32 命名互斥体（CreateMutexW）承担，而不是 PID 文件。
+    互斥体的所有权由内核原子地授予且只授予一个进程，不存在"两边同时
+    认为自己赢了"的窗口；句柄随进程退出自动释放，崩溃或强杀都不会
+    留下需要手工清理的"僵尸锁"。
+
+    旧实现是"读 PID 文件 -> 校验 -> 终止旧实例 -> 写入自己的 PID"，
+    属于典型的 check-then-act 竞态：两次启动落在同一时间窗时，两边都
+    会读到同一份记录、都判定"没有别人在跑"，于是两个实例都活了下来，
+    互相抢同一个全局热键（表现为"截图热键注册失败"）。
+
+    与旧实现相反，这里**不终止**已在运行的实例：用户要的是"限制实例
+    数量"，不是"用新实例顶掉旧实例"。杀掉旧实例会连带丢掉它的剪贴板
+    监听状态、钉图窗口和未保存的编辑内容。
+
+    返回 True 表示可以继续启动，返回 False 表示已有实例、本次启动应退出。
     """
-    确保单实例运行：确认有本程序的旧实例在运行时，终止它再继续启动。
+    from core import single_instance
+    from core.logger import log_debug, log_exception, log_info, T
 
-    实例记录文件（系统临时目录下）除 PID 外还记录进程创建时间，
-    因为 PID 在 Windows 上会被回收复用，单凭 PID 无法判断目标是不是
-    当初写入记录的那个进程。校验之后，陈旧的记录文件就只是无害的垃圾。
-    """
-    import tempfile
-    from core.platform_utils import terminate_process_by_pid, get_process_identity
-    from core.logger import log_debug, log_exception, log_info, log_warning, T
-
-    frozen = getattr(sys, 'frozen', False)
-    exe_name = os.path.basename(sys.executable if frozen else sys.argv[0])
-    # 打包后用 exe 名，开发时固定用 jietuba_app，避免与其他 python 进程冲突
-    pid_name = exe_name if frozen else "jietuba_app"
-    pid_file = os.path.join(tempfile.gettempdir(), f"{pid_name}.pid")
-
-    my_pid = os.getpid()
-    my_identity = get_process_identity(my_pid)
-    my_create_time = my_identity[0] if my_identity else None
-    my_image_name = my_identity[1] if my_identity else os.path.basename(sys.executable)
-
-    # 确认旧实例身份后再终止
-    record = _read_instance_record(pid_file) if os.path.exists(pid_file) else None
-    if record:
-        try:
-            if _is_our_old_instance(record, my_pid, my_image_name, frozen):
-                if terminate_process_by_pid(record[0]):
-                    log_info(T("已终止旧实例 (PID {old_pid})", old_pid=record[0]), "SingleInstance")
-                else:
-                    log_warning(T("旧实例 (PID {old_pid}) 终止失败", old_pid=record[0]), "SingleInstance")
-            else:
-                log_debug(
-                    T("实例记录 (PID {old_pid}) 未通过身份校验，不终止", old_pid=record[0]),
-                    "SingleInstance",
-                )
-        except Exception as e:
-            log_exception(e, T("终止旧实例"))
-
-    # 写入当前实例记录：PID + 创建时间
     try:
-        with open(pid_file, 'w', encoding='utf-8') as f:
-            print(my_pid, file=f)
-            if my_create_time is not None:
-                print(my_create_time, file=f)
+        acquired = single_instance.acquire()
+    except Exception as e:
+        # 守卫本身出错不能挡住启动——单实例是保护措施，不是功能前提。
+        log_exception(e, T("单实例检查失败"))
+        return True
+
+    if not acquired:
+        pid = single_instance.running_instance_pid()
+        # 日志系统正常是 MainApp 里才启动的，而被拒绝的进程毫无会到那一步。
+        # 所以先把日志打开再记，否则这次启动在日志里会消失——
+        # 用户看到“双击没反应”时无法判断是被拒绝了还是崩了。
+        try:
+            from core.logger import setup_logger
+            from settings import get_tool_settings_manager
+            setup_logger(get_tool_settings_manager())
+        except Exception as e:
+            log_exception(e, T("打开日志系统"))
+
+        if pid:
+            log_info(
+                T("检测到已有实例在运行 (PID {pid})，本次启动已取消", pid=pid),
+                "SingleInstance",
+            )
+        else:
+            log_info(T("检测到已有实例在运行，本次启动已取消"), "SingleInstance")
+        # 告知用户：否则双击图标后静默无反应，用户会认为程序死了。
+        try:
+            single_instance.notify_already_running()
+        except Exception as e:
+            log_exception(e, T("提示已在运行"))
+        return False
+
+    # 记录自己的 PID：只用于定位已有实例（唤起窗口）和排查问题，
+    # 不再承担互斥职责。
+    try:
+        single_instance.write_pid_record()
     except Exception as e:
         log_exception(e, T("写入实例记录"))
 
-    # 程序正常退出时删除记录文件（被强杀或崩溃时不会执行，此时留下的陈旧记录由上面的校验兜住）
     import atexit
 
     def _cleanup():
         try:
-            current = _read_instance_record(pid_file)
-            if current and current[0] == my_pid:
-                os.remove(pid_file)
+            single_instance.clear_pid_record()
+            single_instance.release()
         except Exception as e:
             log_exception(e, T("清理实例记录"))
 
     atexit.register(_cleanup)
+    log_debug(T("已取得单实例身份"), "SingleInstance")
+    return True
 
 
 # 持有 onefile 资源文件的 fd。必须是模块级变量：一旦被回收，
@@ -520,8 +486,11 @@ def run():
     # 4. Windows 任务栏图标（必须在 QApplication 创建之前）
     set_app_user_model_id("versepic.app")
 
-    # 5. 单实例检查
-    ensure_single_instance()
+    # 5. 单实例检查：已有实例在跑时，本次启动直接退出，不创建任何窗口、
+    #    不注册全局热键、也不监听剪贴板。否则两个实例会互相抢同一个
+    #    全局热键（表现为"截图热键注册失败"）并同时写同一个剪贴板库。
+    if not ensure_single_instance():
+        sys.exit(0)
 
     # 6. 启动主应用
     from main_app import MainApp

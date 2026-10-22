@@ -30,11 +30,11 @@
 
 ## 下载与使用
 
-1. 在 [Releases](https://github.com/Baixu22/versepic/releases) 下载 Windows x64 ZIP。仓库为私有，需要有访问权限的 GitHub 账号。
+1. 在 [Releases](https://github.com/Baixu22/versepic/releases) 下载 Windows x64 ZIP。仓库已公开，无需登录。
 2. 完整解压，运行 **versepic.exe**，保持 **models/** 与程序在同一目录。
 3. 从系统托盘打开截图、剪贴板及设置；快捷键可在设置中调整。
 
-压缩包已包含两份 OCR 模型，无需安装 Python。当前提供 x64 版本；ARM64 属于源码构建目标，本次未提供经过验证的 ARM64 安装包。程序未签名。私有仓库无法被应用匿名查询更新，请直接使用 Releases 页面。
+压缩包已包含两份 OCR 模型，无需安装 Python。当前提供 x64 版本；ARM64 属于源码构建目标，本次未提供经过验证的 ARM64 安装包。程序未签名。应用内的更新查询读取公开的 Releases API，无需登录。
 
 ## 数据与兼容性
 
@@ -303,6 +303,7 @@ clipboard/
 core/
 ├── __init__.py
 ├── bootstrap.py             # PreloadManager — 启动引导，环境初始化、DPI感知、单实例控制、链式预加载
+├── single_instance.py       # SingleInstanceGuard — 命名互斥体单实例守卫，原子性保证同时只有一个实例
 ├── logger.py                # Logger — 文件+控制台日志系统，支持多级别 (debug/info/warning/error/exception)
 ├── crash_handler.py         # install_crash_hooks() — 全局异常和线程异常捕获
 ├── resource_manager.py      # ResourceManager — SVG/图片等资源加载管理

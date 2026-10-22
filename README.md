@@ -28,12 +28,12 @@ Screenshots below show real application windows with isolated demonstration data
 
 ## Download and run
 
-1. Open [Releases](https://github.com/Baixu22/versepic/releases). This private repository requires an authorized GitHub account.
+1. Open [Releases](https://github.com/Baixu22/versepic/releases).
 2. Download the Windows x64 ZIP and extract the entire archive.
 3. Run **versepic.exe**. Keep **models/** beside the executable; both OCR models are included.
 4. Open the system tray icon to capture, open clipboard history, or change settings and shortcuts.
 
-No Python installation is needed for the packaged build. The executable is unsigned. This release is x64; ARM64 is a source/build target, not a tested binary supplied by this release. In-app update checks cannot anonymously read a private repository: use its Releases page.
+No Python installation is needed for the packaged build. The executable is unsigned. This release is x64; ARM64 is a source/build target, not a tested binary supplied by this release. In-app update checks read the public Releases API, so they work without a GitHub account.
 
 ## Data and compatibility
 
@@ -286,6 +286,7 @@ Logging, resource loading, theme management, i18n, hotkeys, and other infrastruc
 ```text
 core/
 ├── bootstrap.py             # PreloadManager — startup bootstrap, env init, DPI, single instance
+├── single_instance.py       # SingleInstanceGuard — atomic named-mutex guard, one instance at a time
 ├── logger.py                # Logger — file + console logging (debug/info/warning/error/exception)
 ├── crash_handler.py         # install_crash_hooks() — global exception catching
 ├── resource_manager.py      # ResourceManager — SVG/image resource loading
