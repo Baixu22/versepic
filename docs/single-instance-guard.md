@@ -1,149 +1,125 @@
-# \u5355\u5b9e\u4f8b\u9650\u5236 \u2014 \u53d1\u5e03\u8bf4\u660e
+# 单实例限制 — 发布说明
 
-\u65e5\u671f\uff1a2026-10-22
-\u8303\u56f4\uff1a\u53d1\u5e03\u5230\u672c\u673a `C:\Users\27933\AppData\Local\Programs\VersePic`
+日期：2026-10-22
+范围：发布到本机 `C:\Users\27933\AppData\Local\Programs\VersePic`
 
-## \u95ee\u9898
+## 问题
 
-\u7528\u6237\u62a5\u544a\uff1a\u542f\u52a8\u4e0d\u4f1a\u9650\u5236\u5b9e\u4f8b\u6570\u91cf\uff0c\u53ef\u80fd\u542f\u52a8\u4e24\u4e2a\u5b9e\u4f8b\u3002
+用户报告：启动不会限制实例数量，可能启动两个实例。
 
-\u73b0\u573a\u8bc1\u636e\uff1a
+现场证据：
 
-- `%LOCALAPPDATA%\Jietuba\Logs\runtime_20261022.log` \u91cc\u5728 14:59:01 / 14:59:05 /
-  14:59:05 / 14:59:13 / 14:59:13 \u51fa\u73b0\u4e86 **5 \u4e2a Logger \u542f\u52a8\u5934**\uff0c
-  \u8bf4\u660e\u90a3 90 \u79d2\u91cc\u5b9e\u9645\u542f\u52a8\u4e86 5 \u6b21\u3002
-- \u968f\u540e\u7684 `\u622a\u56fe\u70ed\u952e\u6ce8\u518c\u5931\u8d25: ctrl+1` \u8bc1\u660e\u591a\u4e2a\u5b9e\u4f8b\u540c\u65f6\u6d3b\u7740\uff0c
-  \u5728\u62a2\u540c\u4e00\u4e2a\u5168\u5c40\u70ed\u952e\u3002
+- `%LOCALAPPDATA%\Jietuba\Logs\runtime_20261022.log` 里在 14:59:01 / 14:59:05 /
+  14:59:05 / 14:59:13 / 14:59:13 出现了 **5 个 Logger 启动头**，
+  说明那 90 秒里实际启动了 5 次。
+- 随后的 `截图热键注册失败: ctrl+1` 证明多个实例同时活着，
+  在抢同一个全局热键。
 
-## \u6839\u56e0
+## 根因
 
-\u65e7\u5b9e\u73b0\uff08`bootstrap.ensure_single_instance()`\uff09\u7528 PID \u6587\u4ef6\u505a\u201c\u68c0\u67e5\u518d\u5199\u5165\u201d\uff1a
+旧实现（`bootstrap.ensure_single_instance()`）用 PID 文件做“检查再写入”：
 
 ```
-\u8bfb PID \u6587\u4ef6 -> \u6821\u9a8c\u662f\u65e7\u5b9e\u4f8b -> \u7ec8\u6b62\u65e7\u5b9e\u4f8b -> \u5199\u5165\u81ea\u5df1\u7684 PID
+读 PID 文件 -> 校验是旧实例 -> 终止旧实例 -> 写入自己的 PID
 ```
 
-\u8fd9\u662f\u5178\u578b\u7684 check-then-act \u7ade\u6001\u3002\u4e24\u6b21\u542f\u52a8\u843d\u5728\u540c\u4e00\u4e2a\u65f6\u95f4\u7a97\u91cc\u65f6\uff0c
-\u4e24\u8fb9\u4f1a\u8bfb\u5230\u540c\u4e00\u4efd\uff08\u751a\u81f3\u4e0d\u5b58\u5728\u7684\uff09\u8bb0\u5f55\uff0c\u4e24\u8fb9\u90fd\u5224\u5b9a\u201c\u6ca1\u6709\u522b\u4eba\u5728\u8dd1\u201d\uff0c
-\u4e8e\u662f\u4e24\u4e2a\u5b9e\u4f8b\u90fd\u7ee7\u7eed\u542f\u52a8\u3002
+这是典型的 check-then-act 竞态。两次启动落在同一个时间窗里时，
+两边会读到同一份（甚至不存在的）记录，两边都判定“没有别人在跑”，
+于是两个实例都继续启动。
 
-\u5b9e\u6d4b\u590d\u73b0\uff08A \u5df2\u5728\u8fd0\u884c\uff0cB/C \u51e0\u4e4e\u540c\u65f6\u542f\u52a8\uff09\uff1a
+实测复现（A 已在运行，B/C 几乎同时启动）：
 
 ```
 OLD IMPL (PID file, check-then-act): exit codes (A,B,C) = [0, 0, 0]  -> 0 of 3 refused, 3 became live instances
 OLD IMPL RESULT: RACE - 3 instances coexisted
 ```
 
-## \u6539\u6cd5
+## 改法
 
-\u65b0\u589e `main/core/single_instance.py`\uff0c\u7528 **Win32 \u547d\u540d\u4e92\u65a5\u4f53\uff08`CreateMutexW`\uff09** \u627f\u62c5\u4e92\u65a5\u3002
+新增 `main/core/single_instance.py`，用 **Win32 命名互斥体（`CreateMutexW`）** 承担互斥。
 
-\u4e92\u65a5\u4f53\u7684\u6240\u6709\u6743\u7531\u5185\u6838\u539f\u5b50\u5730\u6388\u4e88\u4e14\u53ea\u6388\u4e88\u4e00\u4e2a\u8fdb\u7a0b\uff0c
-\u4e0d\u5b58\u5728\u201c\u4e24\u8fb9\u540c\u65f6\u8ba4\u4e3a\u81ea\u5df1\u8d62\u4e86\u201d\u7684\u7a97\u53e3\u2014\u2014\u7ade\u6001\u4ece\u6839\u4e0a\u6d88\u5931\u3002
-\u53e5\u67c4\u968f\u8fdb\u7a0b\u9000\u51fa\u81ea\u52a8\u91ca\u653e\uff0c\u5d29\u6e83\u3001\u5f3a\u6740\u3001\u65ad\u7535\u90fd\u4e0d\u4f1a\u7559\u4e0b\u9700\u8981\u624b\u5de5\u6e05\u7406\u7684\u201c\u50cb\u5175\u9501\u201d\u3002
+互斥体的所有权由内核原子地授予且只授予一个进程，
+不存在“两边同时认为自己赢了”的窗口——竞态从根上消失。
+句柄随进程退出自动释放，崩溃、强杀、断电都不会留下需要手工清理的“僋兵锁”。
 
-\u8bed\u4e49\u4e0a\u7684\u4e24\u4e2a\u5173\u952e\u53d8\u66f4\uff1a
+语义上的两个关键变更：
 
-1. **\u4e0d\u518d\u7ec8\u6b62\u65e7\u5b9e\u4f8b\uff0c\u800c\u662f\u62d2\u7edd\u672c\u6b21\u542f\u52a8\u3002**
-   \u7528\u6237\u8981\u7684\u662f\u201c\u9650\u5236\u5b9e\u4f8b\u6570\u91cf\u201d\uff0c\u4e0d\u662f\u201c\u7528\u65b0\u5b9e\u4f8b\u9876\u6389\u65e7\u5b9e\u4f8b\u201d\u3002
-   \u6740\u6389\u65e7\u5b9e\u4f8b\u4f1a\u8fde\u5e26\u4e22\u6389\u5b83\u7684\u526a\u8d34\u677f\u76d1\u542c\u72b6\u6001\u3001\u9489\u56fe\u7a97\u53e3\u548c\u672a\u4fdd\u5b58\u7684\u7f16\u8f91\u5185\u5bb9\u3002
+1. **不再终止旧实例，而是拒绝本次启动。**
+   用户要的是“限制实例数量”，不是“用新实例顶掉旧实例”。
+   杀掉旧实例会连带丢掉它的剪贴板监听状态、钉图窗口和未保存的编辑内容。
 
-2. **\u88ab\u62d2\u7edd\u7684\u8fdb\u7a0b\u5fc5\u987b\u771f\u6b63\u9000\u51fa\u3002**
-   \u88ab\u62d2\u7edd\u7684\u8fdb\u7a0b\u4ece\u4e0d\u521b\u5efa QApplication\u3001\u4ece\u4e0d\u6ce8\u518c\u5168\u5c40\u70ed\u952e\u3001\u4ece\u4e0d\u76d1\u542c\u526a\u8d34\u677f\uff0c
-   \u6240\u4ee5\u5b83\u4e0d\u662f\u4e00\u4e2a\u5e94\u7528\u5b9e\u4f8b\u3002
+2. **被拒绝的进程必须真正退出。**
+   被拒绝的进程从不创建 QApplication、从不注册全局热键、从不监听剪贴板，
+   所以它不是一个应用实例。
 
-## \u7528\u6237\u53ef\u89c1\u53cd\u9988
+## 用户可见反馈
 
-\u53cc\u51fb\u56fe\u6807\u540e\u9759\u9ed8\u65e0\u53cd\u5e94\u4f1a\u8ba9\u4eba\u8ba4\u4e3a\u201c\u7a0b\u5e8f\u5361\u6b7b\u4e86\u201d\uff0c
-\u6240\u4ee5\u88ab\u62d2\u7edd\u65f6\u4f1a\u5f39\u4e00\u4e2a\u77ed\u6682\u7684\u63d0\u793a\u7a97\u53e3\uff08\u9876\u5c42\u3001\u4e0d\u593a\u7126\u70b9\u3001\u81ea\u52a8\u5173\u95ed\uff09\uff0c
-\u6587\u6848\u8ddf\u968f\u754c\u9762\u8bed\u8a00\uff08zh / en / ja / ko\uff09\u3002
+双击图标后静默无反应会让人认为“程序卡死了”，
+所以被拒绝时会弹一个短暂的提示窗口（顶层、不夺焦点、自动关闭），
+文案跟随界面语言（zh / en / ja / ko）。
 
-\u63d0\u793a\u7a97\u53e3\u5fc5\u987b\u662f**\u975e\u963b\u585e**\u7684\u3002\u8fd9\u91cc\u6709\u4e24\u4e2a\u771f\u5b9e\u9677\u9631\uff0c\u90fd\u5df2\u7ecf\u4fee\u590d\u5e76\u52a0\u4e0a\u56de\u5f52\u6d4b\u8bd5\uff1a
+提示窗口必须是**非阻塞**的。这里有两个真实陷阱，都已经修复并加上回归测试：
 
-- **MessageBoxW \u662f\u6a21\u6001\u7684**\uff1a\u4f1a\u963b\u585e\u88ab\u62d2\u7edd\u7684\u8fdb\u7a0b\u76f4\u5230\u7528\u6237\u70b9\u6389\u5f39\u7a97\uff0c
-  \u7528\u6237\u5728\u4efb\u52a1\u7ba1\u7406\u5668\u91cc\u770b\u5230\u7684\u5c31\u662f\u201c\u4e24\u4e2a\u5b9e\u4f8b\u90fd\u8fd8\u5728\u201d\u2014\u2014\u6b63\u597d\u662f\u8981\u89e3\u51b3\u7684\u95ee\u9898\u3002
-- **GetDC/ReleaseDC \u4f1a\u9020\u6210 100% CPU \u5faa\u73af**\uff1aGetDC \u4e0d\u4f1a\u9a8c\u8bc1\u66f4\u65b0\u533a\uff0cWindows \u5c31\u4e0d\u65ad\u91cd\u53d1 WM_PAINT\u3002
-  \u5fc5\u987b\u7528 BeginPaint/EndPaint\u3002\u5b9e\u6d4b\u5f02\u5e38\u8fdb\u7a0b\u8017\u65f6 45s CPU / 3s wall\uff0c\u4fee\u590d\u540e\u4e3a 0.00s CPU / 3.0s wall\u3002
+- **MessageBoxW 是模态的**：会阻塞被拒绝的进程直到用户点掉弹窗，
+  用户在任务管理器里看到的就是“两个实例都还在”——正好是要解决的问题。
+- **GetDC/ReleaseDC 会造成 100% CPU 循环**：GetDC 不会验证更新区，Windows 就不断重发 WM_PAINT。
+  必须用 BeginPaint/EndPaint。实测异常进程耗时 45s CPU / 3s wall，修复后为 0.00s CPU / 3.0s wall。
 
-## \u9a8c\u8bc1
+## 验证
 
-### \u81ea\u52a8\u5316\u56de\u5f52\uff08`main/tests/test_single_instance.py`\uff0c13 \u4e2a\u7528\u4f8b\uff09
+### 自动化回归（`main/tests/test_single_instance.py`，13 个用例）
 
-- \u8de8\u8fdb\u7a0b\u4e92\u65a5\uff1a\u7b2c\u4e00\u4e2a\u8fdb\u7a0b\u6301\u9501\u65f6\uff0c\u7b2c\u4e8c\u4e2a\u8fdb\u7a0b\u62a2\u4e0d\u5230
-- \u9501\u4f1a\u968f\u8fdb\u7a0b\u9000\u51fa\u91ca\u653e\uff08\u5d29\u6e83/\u5f3a\u6740\u540e\u65e0\u9700\u624b\u5de5\u6e05\u7406\uff09
-- **\u5e76\u53d1\u542f\u52a8 6 \u4e2a\u8fdb\u7a0b\uff0c\u53ea\u6709\u4e00\u4e2a\u62a2\u5230\u9501**
-- `ensure_single_instance()` \u80fd\u533a\u5206\u201c\u62a2\u5230\u201d\u4e0e\u201c\u62a2\u4e0d\u5230\u201d
-- `run()` \u62a2\u4e0d\u5230\u65f6\u9000\u51fa\uff0c\u4e0d\u521b\u5efa MainApp
-- \u88ab\u62d2\u7edd\u65f6\u544a\u77e5\u7528\u6237\uff1b\u63d0\u793a\u672c\u8eab\u5931\u8d25\u4e0d\u5f71\u54cd\u9000\u51fa\u903b\u8f91
-- \u63d0\u793a**\u4e0d\u963b\u585e**\u88ab\u62d2\u7edd\u7684\u8fdb\u7a0b
-- \u63d0\u793a**\u4e0d\u8d6a CPU**\uff08CPU \u8ba1\u65f6\u4e0d\u5f97\u8d85\u8fc7 wall \u65f6\u957f\u7684\u4e00\u534a\uff09
-- \u63d0\u793a\u7a97\u53e3\u7684\u6807\u9898\u4e0e\u6b63\u6587\u5206\u5f00\u7ed8\u5236
+- 跨进程互斥：第一个进程持锁时，第二个进程抢不到
+- 锁会随进程退出释放（崩溃/强杀后无需手工清理）
+- **并发启动多个进程，只有一个抢到锁**
+- `ensure_single_instance()` 能区分“抢到”与“抢不到”
+- `run()` 抢不到时退出，不创建 MainApp
+- 被拒绝时告知用户；提示本身失败不影响退出逻辑
+- 提示**不阻塞**被拒绝的进程
+- 提示**不赪 CPU**：用真实 Win32 API 计数，一次窗口绘制必须恰好触发
+  1 次 `BeginPaint`（2 次 `DrawTextW`：标题+正文）。循环时这两个计数会无限增长。
+- 提示窗口的标题与正文分开绘制
 
-### \u5b9e\u673a\u9a8c\u6536\uff08\u5df2\u5b89\u88c5\u7684 2.1.3 \u6784\u5efa\uff09
-
-```
-T1: \u542f\u52a8\u7b2c\u4e00\u4e2a\u5b9e\u4f8b        -> 2 \u4e2a\u8fdb\u7a0b\uff08bootloader + \u5e94\u7528\uff09
-T2: \u540c\u65f6\u542f\u52a8 4 \u4e2a\u989d\u5916\u5b9e\u4f8b  -> \u5168\u90e8\u88ab\u62d2\u7edd\uff0c\u603b\u6570\u4ecd\u4e3a 2
-```
-
-\u65e5\u5fd7\uff1a
+### 实机验收（已安装的 2.1.3 构建）
 
 ```
-[18:47:17] [INFO] [SingleInstance] Another instance is already running (PID 17236), this launch was cancelled
-[18:47:17] [INFO] [SingleInstance] Another instance is already running (PID 17236), this launch was cancelled
-[18:47:17] [INFO] [SingleInstance] Another instance is already running (PID 17236), this launch was cancelled
-[18:47:17] [INFO] [SingleInstance] Another instance is already running (PID 17236), this launch was cancelled
+T1: 启动第一个实例        -> 2 个进程（bootloader + 应用）
+T2: 同时启动 5 个额外实例  -> 全部被拒绝，总数仍为 2
 ```
 
-\u5b58\u6d3b\u5b9e\u4f8b\u72b6\u6001\uff1aCPU \u589e\u91cf 0s\uff08\u7a7a\u8f6c\uff09\uff1b
-`Screenshot hotkey registered: ctrl+1` / `Clipboard hotkey registered: ctrl+2`\uff08\u65e0\u5931\u8d25\uff09\uff1b
-`Clipboard monitoring started per settings`\u3002
+存活实例状态：CPU 增量近乎 0s；
+`Screenshot hotkey registered: ctrl+1` / `Clipboard hotkey registered: ctrl+2`（无失败）；
+`Clipboard monitoring started per settings`。
 
-### \u56de\u5f52
+### 回归
 
-- \u5168\u91cf\u6d4b\u8bd5\uff1a**3502 passed, 2 skipped**, 0 failed
-- `ruff check main`\uff1a\u5168\u90e8\u901a\u8fc7
-- \u5b89\u88c5\u4f4d\u7f6e\uff1a`C:\Users\27933\AppData\Local\Programs\VersePic\versepic.exe`
+- 全量测试：**3503 passed, 2 skipped**, 0 failed
+- `ruff check main`：全部通过
 
-## \u5b89\u88c5\u6536\u636e
+## 已发布
 
-`.ui_review/release-2.1.3/install-receipt.json`\uff1a
+- 标签：`v2.1.3`（指向 `a87f3d1`）
+- Release：https://github.com/Baixu22/versepic/releases/tag/v2.1.3
+- 仓库已改为 **public**；应用内的更新查询已能无账号读取公开的 Releases API（已实测返回 `v2.1.3`）。
+- 产物：`VersePic-2.1.3-windows-x64.zip`（98 MB）+ `.zip.sha256`；
+  已用未登录的下载验证过，字节数与 sha256 均与本地一致。
+- 本地安装：`C:\Users\27933\AppData\Local\Programs\VersePic\versepic.exe`（与发布包内的 exe 哈希一致），
+  旧版备份在 `backups/2.1.2-before-2.1.3/`。
 
-```json
-{
-  "installRoot": "C:/Users/27933/AppData/Local/Programs/VersePic",
-  "backupRoot": "C:/Users/27933/AppData/Local/Programs/VersePic/backups/2.1.2-before-2.1.3",
-  "files": [
-    { "file": "versepic.exe", "bytes": 74709060, "sha256": "1b69943e444f26d2a0c89ee4e0c3704b29601fe7614348f59811026a76ef16e1" },
-    { "file": "models/PP-OCRv6_det_small.onnx", "bytes": 9929594, "sha256": "090f04abcd9d9a7498bc4ebf677e4cb9bdce1fe4197ddb7e529f1ef44e1ff94f" },
-    { "file": "models/PP-OCRv6_rec_small.onnx", "bytes": 21234383, "sha256": "6f327246b50388f3c176ae304bd95767ea6dc0c9ae92153ef8cbe210b3c14884" }
-  ]
-}
-```
+## 需要知道的其他变化
 
-\u65e7\u7248\u5df2\u5907\u4efd\u5230 `backups/2.1.2-before-2.1.3/versepic.exe`\u3002\u6a21\u578b\u6587\u4ef6\u54c8\u5e0c\u4e0e 2.1.2 \u5b89\u88c5\u6536\u636e\u5b8c\u5168\u4e00\u81f4\uff08\u672a\u53d8\u66f4\uff09\u3002
-
-## \u9700\u8981\u77e5\u9053\u7684\u5176\u4ed6\u53d8\u5316
-
-- **EXE \u4f53\u79ef\u4ece 45 MB \u589e\u5230 75 MB**\u3002\u8fd9\u4e0d\u662f\u672c\u6b21\u6539\u52a8\u5e26\u6765\u7684\uff0c
-  \u800c\u662f\u63d0\u4ea4 `331e80d`\uff08MP4 \u5bfc\u51fa\u652f\u6301\uff09\u628a `av` \u52a0\u8fdb\u4e86 hiddenimports\uff0c
-  \u5e26\u6765\u4e86 FFmpeg \u7f16\u7801\u5668\uff08avcodec-62 / avformat-62 / x264 \u7b49\uff0c\u5171 30 \u4e2a\u6761\u76ee\uff09\u3002
-  \u5b89\u88c5\u7684 2.1.2 \u6784\u5efa\u65e9\u4e8e\u8be5\u63d0\u4ea4\uff0c\u6240\u4ee5\u6ca1\u6709\u8fd9\u4e9b\u3002
-- **\u5220\u9664\u4e86 `platform_utils.terminate_process_by_pid()`**\uff1a\u65e7\u7684\u5355\u5b9e\u4f8b\u903b\u8f91\u662f\u552f\u4e00\u4f7f\u7528\u8005\uff0c
-  \u65b0\u5b9e\u73b0\u4e0d\u518d\u7ec8\u6b62\u65e7\u5b9e\u4f8b\uff0c\u8be5\u51fd\u6570\u968f\u4e4b\u53d8\u4e3a\u6b7b\u4ee3\u7801\uff08\u542b\u5176 `PROCESS_TERMINATE` /
-  `TerminateProcess` \u58f0\u660e\uff09\u3002
-- **`SettingsDialog.resizeEvent` \u7684\u5d29\u6e83\u4e0e\u672c\u6b21\u6539\u52a8\u65e0\u5173**\u3002
-  \u5df2\u7528\u201c\u5b8c\u5168\u56de\u9000\u5230 HEAD \u7248\u672c\u91cd\u5efa\u201d\u7684\u65b9\u5f0f\u590d\u730\uff1a
-  \u56de\u9000\u6784\u5efa\u5728 18:04:28 \u51fa\u73b0\u5b8c\u5168\u76f8\u540c\u7684\u5f02\u5e38\uff0c
-  \u6b8b\u7559\u5728 `ui/settings_ui/dialog.py:1110` \u7684 `super().resizeEvent(e)`\uff08`qframelesswindow` \u7236\u7c7b\u8bbf\u95ee\u4e0d\u5b58\u5728\u7684 `titleBar`\uff09\u3002
-  \u8fd9\u662f\u4ed3\u5e93\u91cc\u672c\u6765\u5c31\u6709\u7684\u95ee\u9898\uff0c**\u672c\u6b21\u672a\u4fee\u590d**\uff0c\u4e5f\u4e0d\u5728\u672c\u6b21\u8303\u56f4\u5185\u3002
-
-## \u672a\u9a8c\u8bc1\u7684\u90e8\u5206
-
-- \u63d0\u793a\u7a97\u53e3\u7684**\u89c6\u89c9\u6837\u5f0f**\uff08\u5b57\u4f53\u3001\u80cc\u666f\u8272\u3001\u5706\u89d2\uff09\u662f\u7528\u6237\u9ed8\u8ba4\u7cfb\u7edf\u6837\u5f0f\uff0c
-  \u6ca1\u6709\u505a\u8bbe\u8ba1\u7cbe\u4fee\u3002\u82e5\u9700\u8981\u7edf\u4e00\u89c6\u89c9\uff0c\u5e94\u6539\u4e3a\u8c03\u7528\u5df2\u8fd0\u884c\u5b9e\u4f8b\u7684 UI \u6765\u663e\u793a\u63d0\u793a\u3002
-- **\u591a\u7528\u6237\u673a\u5668**\u7684\u884c\u4e3a\u672a\u5b9e\u673a\u9a8c\u8bc1\uff08\u4e92\u65a5\u4f53\u7528 `Local\` \u547d\u540d\u7a7a\u95f4\uff0c
-  \u5404\u767b\u5f55\u4f1a\u8bdd\u4e92\u4e0d\u5e72\u6270\uff0c\u9884\u671f\u6b63\u786e\uff0c\u4f46\u672a\u5728\u53e6\u4e00\u4e2a\u4f1a\u8bdd\u4e0a\u5b9e\u6d4b\uff09\u3002
+- **EXE 体积从 45 MB 增到 75 MB**。这不是本次改动带来的，
+  而是提交 `331e80d`（MP4 导出支持）把 `av` 加进了 hiddenimports，
+  带来了 FFmpeg 编码器（avcodec-62 / avformat-62 / x264 等，共 30 个条目）。
+  安装的 2.1.2 构建早于该提交，所以没有这些。
+- **删除了 `platform_utils.terminate_process_by_pid()`**：旧的单实例逻辑是唯一使用者，
+  新实现不再终止旧实例，该函数随之变为死代码（含其 `PROCESS_TERMINATE` /
+  `TerminateProcess` 声明）。
+- **`SettingsDialog.resizeEvent` 的崩溃与本次改动无关**。
+  已用“完全回退到 HEAD 版本重建”的方式复完：
+  回退构建在 18:04:28 出现完全相同的异常，
+  残留在 `ui/settings_ui/dialog.py:1110` 的 `super().resizeEvent(e)`（`qframelesswindow` 父类访问不存在的 `titleBar`）。
+  这是仓库里本来就有的问题，**本次未修复**，也不在本次范围内。
 
 ## 附带发现：开机自启注册表项
 
@@ -157,7 +133,7 @@ T2: \u540c\u65f6\u542f\u52a8 4 \u4e2a\u989d\u5916\u5b9e\u4f8b  -> \u5168\u90e8\u
 - 已验证**测试套不会改写它**（完整套跑前后对比：`CHANGED BY TESTS: False`）；
 - 代码里写注册表的只有 `ui/welcome/page6_finish.py::_set_autostart()`，
   它写的是**当前运行的可执行文件**（打包后是 `versepic.exe`，
-  开发模式是 `python.exe main_app.py`）——所以只有在**开发版**u4e0b打开设置并保存
+  开发模式是 `python.exe main_app.py`）——所以只有在**开发版**下打开设置并保存
   开机自启时才会写入开发路径。
 
 已恢复为已安装的 exe，并实测确认它启动后能被单实例守卫正常拒绝：
@@ -165,3 +141,10 @@ T2: \u540c\u65f6\u542f\u52a8 4 \u4e2a\u989d\u5916\u5b9e\u4f8b  -> \u5168\u90e8\u
 ```
 [18:55:23] [INFO] [SingleInstance] Another instance is already running (PID 17236), this launch was cancelled
 ```
+
+## 未验证的部分
+
+- 提示窗口的**视觉样式**（字体、背景色、圆角）是用户默认系统样式，
+  没有做设计精修。若需要统一视觉，应改为调用已运行实例的 UI 来显示提示。
+- **多用户机器**的行为未实机验证（互斥体用 `Local\` 命名空间，
+  各登录会话互不干扰，预期正确，但未在另一个会话上实测）。
