@@ -1,10 +1,25 @@
 //! PP-OCR 引擎：det(DBNet) + rec(CRNN/CTC)，纯 Rust + ort。
+//!
+//! 截图尺寸每次都不同，不能沿用 ONNX Runtime 默认的静态 memory pattern
+//! 和 CPU arena。这里关闭两者并使用固定的小线程池，避免一次大图推理把
+//! 数百 MB 工作区长期留在常驻进程里。
 
-
-use ort::session::Session;
+use ort::session::{builder::GraphOptimizationLevel, Session};
 use ort::value::Tensor;
 
 use crate::geometry::{self, Pt};
+
+/// 截图 OCR 是间歇性任务。4 个 intra-op 线程在测试机上兼顾速度与
+/// 工作区上限；inter-op 保持串行，避免分支工作区叠加。
+const OCR_INTRA_THREADS: usize = 4;
+
+fn cpu_session_builder() -> ort::Result<ort::session::builder::SessionBuilder> {
+    Ok(Session::builder()?
+        .with_optimization_level(GraphOptimizationLevel::Level3)?
+        .with_memory_pattern(false)?
+        .with_intra_threads(OCR_INTRA_THREADS)?
+        .with_inter_threads(1)?)
+}
 
 // ====================== 打包的 RGB 图像 ======================
 
@@ -245,11 +260,15 @@ impl Engine {
     /// 每个实例自带模型、互不干扰，生命周期由调用方持有；原先的进程级全局
     /// 单例无法同时跑两套模型，也无法在 release 与 recognize 并发时自保。
     pub fn open(det_path: &str, rec_path: &str) -> Result<Self, String> {
-    let det = Session::builder()
+    let det = cpu_session_builder()
+        .map_err(|e| e.to_string())?
+        .with_execution_providers([ort::ep::CPU::default().with_arena_allocator(false).build()])
         .map_err(|e| e.to_string())?
         .commit_from_file(det_path)
         .map_err(|e| format!("加载 det 模型失败: {e}"))?;
-    let rec = Session::builder()
+    let rec = cpu_session_builder()
+        .map_err(|e| e.to_string())?
+        .with_execution_providers([ort::ep::CPU::default().with_arena_allocator(false).build()])
         .map_err(|e| e.to_string())?
         .commit_from_file(rec_path)
         .map_err(|e| format!("加载 rec 模型失败: {e}"))?;

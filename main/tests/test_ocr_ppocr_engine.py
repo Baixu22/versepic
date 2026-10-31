@@ -131,30 +131,71 @@ class TestRecognize:
         assert len(fake_ppocr.instances) == 1
         assert fake_ppocr.instances[0].recognize_calls
 
+    def test_engine_is_released_after_each_recognition(self, manager, fake_ppocr, qapp):
+        """识别后立即 close，下一次按需重建，避免峰值工作区留在常驻进程。"""
+        manager._recognize_with_ppocr_rust(_image(), "text")
+        assert fake_ppocr.instances[0].closed is True
+        assert manager._pp_engine is None
+
+        manager._recognize_with_ppocr_rust(_image(), "text")
+        assert len(fake_ppocr.instances) == 2
+        assert fake_ppocr.instances[0].recognize_calls
+        assert fake_ppocr.instances[1].recognize_calls
+
+    def test_engine_is_released_when_recognition_raises(self, manager, fake_ppocr, qapp):
+        manager._initialize_ppocr_rust()
+        fake_ppocr.instances[0].recognize = lambda *_a, **_k: (_ for _ in ()).throw(RuntimeError("推理失败"))
+        assert "推理失败" in manager._recognize_with_ppocr_rust(_image(), "text")
+        assert fake_ppocr.instances[0].closed is True
+        assert manager._pp_engine is None
+
     def test_blank_lines_are_dropped(self, manager, fake_ppocr, qapp):
         manager._initialize_ppocr_rust()
         fake_ppocr.instances[0].lines = [_FakeTextLine([(0.0, 0.0)] * 4, "", 0.5)]
         assert manager._recognize_with_ppocr_rust(_image(), "text") == "[未识别到文字]"
+        assert fake_ppocr.instances[0].closed is True
 
     def test_no_lines_at_all(self, manager, fake_ppocr, qapp):
         manager._initialize_ppocr_rust()
         fake_ppocr.instances[0].lines = []
         assert manager._recognize_with_ppocr_rust(_image(), "text") == "[未识别到文字]"
+        assert fake_ppocr.instances[0].closed is True
 
-    def test_engine_released_concurrently_reports_error(self, manager, fake_ppocr, qapp):
-        """引擎在另一线程被释放时走错误分支，而不是对 None 取属性崩掉。"""
+    def test_release_waits_for_recognition_lock(self, manager, fake_ppocr, qapp):
+        """release_engine 与 recognize 共用锁，不能关闭正在推理的引擎。"""
+        import threading
         manager._initialize_ppocr_rust()
-        manager._pp_engine = None
-        monkey_done = {"called": False}
+        engine = fake_ppocr.instances[0]
+        started = threading.Event()
+        unblock = threading.Event()
+        release_started = threading.Event()
+        release_done = threading.Event()
+        original_recognize = engine.recognize
 
-        def _no_reinit():
-            monkey_done["called"] = True
-            return True   # 谎称初始化成功但不真的建引擎，模拟竞态窗口
+        def _blocked_recognize(*args):
+            started.set()
+            assert unblock.wait(2)
+            return original_recognize(*args)
 
-        manager._initialize_ppocr_rust = _no_reinit
-        out = manager._recognize_with_ppocr_rust(_image(), "text")
-        assert monkey_done["called"]
-        assert "已释放" in out
+        def _release():
+            release_started.set()
+            manager.release_engine()
+            release_done.set()
+
+        engine.recognize = _blocked_recognize
+        worker = threading.Thread(target=lambda: manager._recognize_with_ppocr_rust(_image(), "text"))
+        releaser = threading.Thread(target=_release)
+        worker.start()
+        assert started.wait(2)
+        releaser.start()
+        assert release_started.wait(2)
+        assert not release_done.wait(0.1)
+        unblock.set()
+        worker.join(2)
+        releaser.join(2)
+        assert release_done.is_set()
+        assert engine.closed is True
+        assert manager._pp_engine is None
 
     def test_recognize_failure_is_reported(self, manager, fake_ppocr, qapp):
         manager._initialize_ppocr_rust()

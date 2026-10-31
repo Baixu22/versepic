@@ -192,7 +192,10 @@ class OCRManager:
             self._current_engine = None  # 当前使用的引擎类型
             self._windows_ocr_language = None  # windows_media_ocr 语言设置
             self._pp_engine = None  # ppocr_rust.Engine 实例，None 即未初始化
-            self._init_lock = threading.Lock()  # 线程锁，防止重复初始化
+            # 初始化、识别与关闭必须共用同一把锁。ONNX 推理工作区可达数百 MB，
+            # 若并发启动两次推理，峰值会叠加；若 close() 与 recognize() 相撞，
+            # 还会因为两个线程同时操作同一个原生引擎而出错。
+            self._init_lock = threading.RLock()
     
     @property
     def is_available(self) -> bool:
@@ -423,47 +426,56 @@ class OCRManager:
         """使用 ppocr_rust (Rust + ort PP-OCR) 引擎识别。
 
         Rust 内部用 allow_threads 释放 GIL，推理跑在原生线程，不会拖慢主线程 UI。
+        识别结束后立即关闭引擎：ONNX Runtime 的动态 shape 工作区在峰值后不会
+        自动归还，常驻进程只要识别一次大图就会背着数百 MB。下一次调用按需
+        重建，模型加载成本几百毫秒，远小于长期占用。
         """
         if not PP_RUST_AVAILABLE:
             return self._format_error(return_format, "ppocr_rust 不可用")
-        if self._pp_engine is None:
-            if not self._initialize_ppocr_rust():
-                return self._format_error(return_format)
-        try:
-            start_time = time.time()
-            conv = self._qimage_to_rgb_bytes(pixmap)
-            if conv is None:
-                return self._format_empty_result(return_format)
-            raw, w, h, stride = conv
 
-            # 取到局部变量：release() 可能在别的线程把 self._pp_engine 置空
-            engine = self._pp_engine
-            if engine is None:
-                return self._format_error(return_format, "ppocr_rust 引擎已释放")
-            lines = engine.recognize(raw, w, h, stride)
-            elapse = time.time() - start_time
+        # 同一把锁覆盖初始化、推理和 close。Qt 的多个 OCR 入口（截图翻译、
+        # 剪贴板索引、钉图）各自在 QThread 中调用这里，不能并发碰原生引擎。
+        with self._init_lock:
+            if self._pp_engine is None:
+                if not self._initialize_ppocr_rust():
+                    return self._format_error(return_format)
+            try:
+                start_time = time.time()
+                conv = self._qimage_to_rgb_bytes(pixmap)
+                if conv is None:
+                    return self._format_empty_result(return_format)
+                raw, w, h, stride = conv
 
-            if not lines:
-                return self._format_empty_result(return_format)
+                engine = self._pp_engine
+                if engine is None:
+                    return self._format_error(return_format, "ppocr_rust 引擎已释放")
+                lines = engine.recognize(raw, w, h, stride)
+                elapse = time.time() - start_time
 
-            # ppocr_rust 返回 list[TextLine]，.points 是四个角点
-            ocr_results = []
-            for line in lines:
-                if not line.text:
-                    continue
-                ocr_results.append([
-                    [[float(x), float(y)] for x, y in line.points],
-                    line.text,
-                    float(line.score),
-                ])
-            if not ocr_results:
-                return self._format_empty_result(return_format)
-            return self._format_result(ocr_results, return_format, elapse)
-        except Exception as e:
-            error_msg = f"ppocr_rust 识别失败: {str(e)}"
-            tb_str = _tb.format_exc()
-            _ocr_log(T("ppocr_rust 识别失败: {e}\n{tb}", e=str(e), tb=tb_str), "ERROR")
-            return self._format_error(return_format, error_msg)
+                if not lines:
+                    return self._format_empty_result(return_format)
+
+                # ppocr_rust 返回 list[TextLine]，.points 是四个角点
+                ocr_results = []
+                for line in lines:
+                    if not line.text:
+                        continue
+                    ocr_results.append([
+                        [[float(x), float(y)] for x, y in line.points],
+                        line.text,
+                        float(line.score),
+                    ])
+                if not ocr_results:
+                    return self._format_empty_result(return_format)
+                return self._format_result(ocr_results, return_format, elapse)
+            except Exception as e:
+                error_msg = f"ppocr_rust 识别失败: {str(e)}"
+                tb_str = _tb.format_exc()
+                _ocr_log(T("ppocr_rust 识别失败: {e}\n{tb}", e=str(e), tb=tb_str), "ERROR")
+                return self._format_error(return_format, error_msg)
+            finally:
+                self._close_ppocr_rust_engine()
+
     
     def _recognize_with_windos_ocr(
         self,
@@ -714,24 +726,32 @@ class OCRManager:
         """关闭 OCR 引擎"""
         self.release_engine()
     
+    def _close_ppocr_rust_engine(self):
+        """关闭并忘记 ppocr_rust 引擎；调用方必须持有 _init_lock。"""
+        engine = self._pp_engine
+        if engine is None:
+            return
+        # 先清掉管理器引用，即使原生 close 抛错也不会继续复用半个引擎。
+        self._pp_engine = None
+        try:
+            engine.close()
+        except Exception as e:
+            _ocr_log(T("释放 ppocr_rust 引擎失败: {e}", e=e), "WARN")
+
     def release_engine(self):
         """
         内存优化：释放 OCR 相关资源
 
         注意：高精度引擎使用 Rust OnceLock 全局单例，
         生命周期与进程相同，不支持运行时释放。
-        此方法仅重置 Python 侧状态。
+        ppocr_rust 引擎由本管理器持有，必须与识别共用锁关闭。
         """
         try:
-
-            # 此处仅做 Python 侧状态清理
-            self._windows_ocr_language = None
-            # 引擎实例持有 det/rec 两个 ONNX 模型（约 30 MB），close() 后立即
-            # 释放，不必再等进程退出
-            if self._pp_engine is not None:
-                self._pp_engine.close()
-                self._pp_engine = None
-            self._current_engine = None
+            # 等待正在进行的原生推理结束，避免 close 与 recognize 并发。
+            with self._init_lock:
+                self._windows_ocr_language = None
+                self._close_ppocr_rust_engine()
+                self._current_engine = None
             
             _ocr_log(T("OCR 管理器状态已重置"))
         except Exception as e:
